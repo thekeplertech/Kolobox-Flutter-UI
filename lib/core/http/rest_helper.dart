@@ -1,6 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:kolobox_new_app/feature/auth/forget_password/data/models/change_password_request_model.dart';
+import 'package:kolobox_new_app/feature/auth/forget_password/data/models/forget_password_request_model.dart';
+import 'package:kolobox_new_app/feature/auth/forget_password/data/models/validate_request_model.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../../feature/auth/login/data/models/login_request_model.dart';
+import '../../feature/auth/register/data/models/register_request_model.dart';
+import '../../feature/auth/register/data/models/validate_code_request_model.dart';
 import '../models/api_response.dart';
 import 'api_constants.dart';
 
@@ -11,6 +17,24 @@ part 'rest_helper.g.dart';
 abstract class RestHelper {
   factory RestHelper(Dio dio, {String? baseUrl}) = _RestHelper;
 
+  @POST(ApiUrls.registerAPI)
+  Future<ApiResponse> register(@Body() RegisterRequestModel model);
+
+  @POST(ApiUrls.validateCodeAPI)
+  Future<ApiResponse> validateCode(@Body() ValidateCodeRequestModel model);
+
+  @POST(ApiUrls.loginAPI)
+  Future<ApiResponse> login(@Body() LoginRequestModel model);
+
+  @POST(ApiUrls.forgetPasswordAPI)
+  Future<ApiResponse> forgetPassword(@Body() ForgetPasswordRequestModel model);
+
+  @POST(ApiUrls.passwordValidateAPI)
+  Future<ApiResponse> validate(@Body() ValidateRequestModel model);
+
+  @POST(ApiUrls.changePasswordAPI)
+  Future<ApiResponse> changePassword(@Body() ChangePasswordRequestModel model);
+
   @GET(USERS_API)
   Future<ApiResponse> fetchUsers();
 
@@ -19,9 +43,6 @@ abstract class RestHelper {
 
   @GET(ApiUrls.getSystemsAPI)
   Future<dynamic> getSystems();
-
-  // @POST(ApiUrls.loginAPI)
-  // Future<dynamic> login(@Body() LoginRequestModel model);
 
   @GET(ApiUrls.getPVSystemsAPI)
   Future<dynamic> getPVSystems();

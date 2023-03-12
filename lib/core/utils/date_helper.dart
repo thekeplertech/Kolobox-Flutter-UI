@@ -4,7 +4,7 @@ class DateHelper {
   DateHelper._();
 
   static String getTextFromDateTime(DateTime dateTime, String format) =>
-      DateFormat(format, 'es').format(dateTime);
+      DateFormat(format).format(dateTime);
 
   static bool isToday(DateTime dateTime) {
     DateTime now = DateTime.now();

@@ -4,8 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../routes/routes.dart';
 import '../bloc/master_bloc.dart';
 import '../bloc/master_state.dart';
+import '../colors/color_list.dart';
+import '../constants/image_constants.dart';
 import '../constants/message_constants.dart';
 import '../ui/widgets/loading_dialog.dart';
+import '../ui/widgets/toast_widget.dart';
+import '../utils/utils.dart';
 import 'base_screen.dart';
 
 abstract class BaseBlocWidget extends BaseScreen {
@@ -38,7 +42,20 @@ abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
             listener: (context, state) {
               if (state is ApiErrorState && isDialogShowing) {
                 hideDialog();
-                showToast(state.message!);
+                Utils.showToast(
+                    context,
+                    ToastWidget(
+                      state.message ?? '',
+                      borderColor: ColorList.redDarkColor,
+                      backgroundColor: ColorList.white,
+                      textColor: ColorList.black,
+                      messageIcon: imageCloseRed,
+                      closeWidget: Image.asset(
+                        imageClose,
+                        color: ColorList.black,
+                      ),
+                    ));
+                // showToast(state.message!);
               } else if (state is ApiLoadingState) {
                 if (!isDialogShowing && ModalRoute.of(context)!.isCurrent) {
                   showDialogView();

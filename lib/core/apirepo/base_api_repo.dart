@@ -26,24 +26,34 @@ abstract class BaseApiRepo {
     } on DioError catch (e) {
       logger?.d("Baseurl ${e.requestOptions.baseUrl}");
       logger?.d("DioError ${e.message}");
-      // if (e.response != null) {
-      //   int statusCode = e.response?.statusCode ?? 0;
-      //   if (statusCode == 500) {
-      //     return Left(Failure(
-      //         apiStatus: statusCode,
-      //         message: e.response?.statusMessage ?? '',
-      //         model: e.response?.data));
-      //   } else if (statusCode == 401) {
-      //     return Left(Failure(
-      //         apiStatus: statusCode,
-      //         message: e.response?.statusMessage ?? '',
-      //         model: ((e.response?.data?.toString() ?? '').isNotEmpty)
-      //             ? LoginErrorResponseModel.fromJson(e.response?.data)
-      //             : ''));
-      //   }
-      // }
+      if (e.response != null) {
+        int statusCode = e.response?.statusCode ?? 0;
+        if (statusCode == 500) {
+          return Left(Failure(
+              apiStatus: statusCode,
+              message: e.response?.statusMessage ?? '',
+              model: e.response?.data));
+        } else if (statusCode == 400) {
+          return Left(
+            Failure(
+              apiStatus: statusCode,
+              model: e.response?.data?.toString() ?? '',
+              message: e.response?.data?['message'] ?? '',
+            ),
+          );
+        }
+        // } else if (statusCode == 401) {
+        //   return Left(Failure(
+        //       apiStatus: statusCode,
+        //       message: e.response?.statusMessage ?? '',
+        //       model: ((e.response?.data?.toString() ?? '').isNotEmpty)
+        //           ? LoginErrorResponseModel.fromJson(e.response?.data)
+        //           : ''));
+        // }
+      }
       return internetConnectionException();
     } catch (e) {
+      logger?.d("Catch $e");
       return internetConnectionException();
     }
   }

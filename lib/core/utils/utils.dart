@@ -4,6 +4,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 class Utils {
   Utils._();
 
+  static RegExp numReg = RegExp(r".*[0-9].*");
+  static RegExp letterReg = RegExp(r".*[A-Za-z].*");
+
+  static bool emailValid(String email) => RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(email);
+
   static void showToast(BuildContext context, Widget child) {
     FToast fToast = FToast();
     fToast.init(context);
@@ -19,4 +26,12 @@ class Utils {
               child: child,
             ));
   }
+
+  static bool isNumber(String input) => numReg.hasMatch(input);
+
+  static bool isLetter(String input) => letterReg.hasMatch(input);
+
+  static bool isPasswordShort(String input) => input.length < 6;
+
+  static bool isPasswordLong(String input) => input.length < 8;
 }

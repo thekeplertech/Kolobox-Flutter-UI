@@ -8,12 +8,16 @@ class ToastWidget extends StatelessWidget {
     this.text, {
     Key? key,
     this.backgroundColor,
+    this.borderColor,
+    this.textColor,
     this.messageIcon,
     this.closeWidget,
   }) : super(key: key);
 
   final String text;
   final Color? backgroundColor;
+  final Color? borderColor;
+  final Color? textColor;
   final String? messageIcon;
   final Widget? closeWidget;
 
@@ -23,6 +27,8 @@ class ToastWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? ColorList.primaryColor,
         borderRadius: BorderRadius.circular(14),
+        border:
+            Border.all(color: borderColor ?? ColorList.primaryColor, width: 1),
       ),
       padding: const EdgeInsets.all(15),
       child: Row(
@@ -36,7 +42,7 @@ class ToastWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: ColorList.white,
+                  color: textColor ?? ColorList.white,
                 )),
           ),
           const SizedBox(

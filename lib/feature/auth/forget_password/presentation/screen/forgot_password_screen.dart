@@ -2,15 +2,23 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kolobox_new_app/config/flavor_config.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import 'package:kolobox_new_app/feature/auth/forget_password/presentation/bloc/forgot_password_bloc.dart';
+import 'package:kolobox_new_app/feature/auth/forget_password/presentation/bloc/forgot_password_state.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/button.dart';
 import '../../../../../core/ui/widgets/custom_text_field.dart';
+import '../../../../../core/ui/widgets/toast_widget.dart';
+import '../../../../../core/utils/utils.dart';
+import '../../data/models/forget_password_request_model.dart';
+import '../bloc/forgot_password_event.dart';
 
 class ForgotPasswordScreen extends BaseBlocWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -21,6 +29,9 @@ class ForgotPasswordScreen extends BaseBlocWidget {
 
 class ForgotPasswordScreenState
     extends BaseBlocWidgetState<ForgotPasswordScreen> {
+  final TextEditingController emailTextEditingController =
+      TextEditingController();
+
   StreamController<int> pageIndicatorStreamController =
       StreamController<int>.broadcast();
 
@@ -32,6 +43,9 @@ class ForgotPasswordScreenState
   @override
   void initState() {
     super.initState();
+    if (FlavorConfig.isDev()) {
+      emailTextEditingController.text = 'tulbadex@gmail.com';
+    }
   }
 
   @override
@@ -47,122 +61,161 @@ class ForgotPasswordScreenState
             statusBarBrightness: Brightness.light,
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            StreamBuilder<int>(
+        body: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
+          listener: (_, state) {
+            if (state is CallForgotPasswordState) {
+              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+                Utils.showToast(
+                    context,
+                    ToastWidget(
+                      state.model.message ?? '',
+                      closeWidget: Image.asset(
+                        imageClose,
+                        color: ColorList.white,
+                      ),
+                    ));
+
+                pageController.animateToPage(
+                  ++pageIndicatorPosition,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                );
+              });
+            }
+            if (state is ForgotPasswordValidateState) {}
+            if (state is ChangePasswordState) {}
+          },
+          child: getChildWidget(),
+        ),
+      );
+
+  Widget getChildWidget() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          StreamBuilder<int>(
+              initialData: pageIndicatorPosition,
+              stream: pageIndicatorStreamController.stream,
+              builder: (context, snapshot) {
+                return (pageIndicatorPosition != pageIndicatorCount - 1)
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: _buildPageIndicator(),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 28,
+                              right: 28,
+                            ),
+                            child: GestureDetector(
+                              onTap: () => goBack(context),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
+                                  right: 10,
+                                ),
+                                child: Image.asset(imageClose),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox();
+              }),
+          const SizedBox(
+            height: 15,
+          ),
+          Expanded(
+              child: PageView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: pageController,
+            onPageChanged: (int page) {
+              pageIndicatorPosition = page;
+              pageIndicatorStreamController.add(pageIndicatorPosition);
+            },
+            itemCount: pageIndicatorCount,
+            itemBuilder: (_, index) {
+              Widget? page;
+              if (index == 0) {
+                page = stepOneEnterEmail();
+              } else if (index == 1) {
+                page = stepTwoEnterCode();
+              } else if (index == 2) {
+                page = stepThreeEnterPassword();
+              } else if (index == 3) {
+                page = stepFourSuccess();
+              }
+
+              if (page != null) {
+                return Padding(
+                  padding: const EdgeInsets.only(
+                    left: 28,
+                    right: 28,
+                  ),
+                  child: page,
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          )),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 28,
+              right: 28,
+              top: 20,
+              bottom: 31,
+            ),
+            child: StreamBuilder<int>(
                 initialData: pageIndicatorPosition,
                 stream: pageIndicatorStreamController.stream,
-                builder: (context, snapshot) {
-                  return (pageIndicatorPosition != pageIndicatorCount - 1)
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: _buildPageIndicator(),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 28,
-                                right: 28,
-                              ),
-                              child: GestureDetector(
-                                onTap: () => goBack(context),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 10,
-                                    right: 10,
-                                  ),
-                                  child: Image.asset(imageClose),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : const SizedBox();
-                }),
-            const SizedBox(
-              height: 15,
-            ),
-            Expanded(
-                child: PageView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: pageController,
-              onPageChanged: (int page) {
-                pageIndicatorPosition = page;
-                pageIndicatorStreamController.add(pageIndicatorPosition);
-              },
-              itemCount: pageIndicatorCount,
-              itemBuilder: (_, index) {
-                Widget? page;
-                if (index == 0) {
-                  page = stepOneEnterEmail();
-                } else if (index == 1) {
-                  page = stepTwoEnterCode();
-                } else if (index == 2) {
-                  page = stepThreeEnterPassword();
-                } else if (index == 3) {
-                  page = stepFourSuccess();
-                }
-
-                if (page != null) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 28,
-                      right: 28,
-                    ),
-                    child: page,
+                builder: (_, __) {
+                  String text = 'Next';
+                  switch (pageIndicatorPosition) {
+                    case 2:
+                      text = 'Create Password';
+                      break;
+                    case 3:
+                      text = 'Sign In';
+                      break;
+                  }
+                  return Button(
+                    text,
+                    borderRadius: 32,
+                    onPressed: () async {
+                      switch (pageIndicatorPosition) {
+                        case 0:
+                          onClickNext();
+                          break;
+                        case 1:
+                          break;
+                        case 2:
+                          break;
+                        case 3:
+                          break;
+                      }
+                      return;
+                      if (pageIndicatorPosition == pageIndicatorCount - 1) {
+                        goBack(context);
+                        return;
+                      }
+                      await Future.delayed(const Duration(milliseconds: 200));
+                      pageController.animateToPage(
+                        ++pageIndicatorPosition,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeIn,
+                      );
+                    },
                   );
-                } else {
-                  return const SizedBox();
-                }
-              },
-            )),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 28,
-                right: 28,
-                top: 20,
-                bottom: 31,
-              ),
-              child: StreamBuilder<int>(
-                  initialData: pageIndicatorPosition,
-                  stream: pageIndicatorStreamController.stream,
-                  builder: (_, __) {
-                    String text = 'Next';
-                    switch (pageIndicatorPosition) {
-                      case 2:
-                        text = 'Create Password';
-                        break;
-                      case 3:
-                        text = 'Sign In';
-                        break;
-                    }
-                    return Button(
-                      text,
-                      borderRadius: 32,
-                      onPressed: () async {
-                        if (pageIndicatorPosition == pageIndicatorCount - 1) {
-                          goBack(context);
-                          return;
-                        }
-                        await Future.delayed(const Duration(milliseconds: 200));
-                        pageController.animateToPage(
-                          ++pageIndicatorPosition,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeIn,
-                        );
-                      },
-                    );
-                  }),
-            ),
-          ],
-        ),
+                }),
+          ),
+        ],
       );
 
   Widget stepOneEnterEmail() => Column(
@@ -190,9 +243,54 @@ class ForgotPasswordScreenState
           const SizedBox(
             height: 7,
           ),
-          const CustomTextField('Enter email address'),
+          CustomTextField(
+            'Enter email address',
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            controller: emailTextEditingController,
+          ),
         ],
       );
+
+  onClickNext() {
+    if (emailTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter email address',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (!Utils.emailValid(emailTextEditingController.text)) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter valid email address',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+
+    BlocProvider.of<ForgotPasswordBloc>(context).add(CallForgotPasswordEvent(
+      model: ForgetPasswordRequestModel(
+          emailPhone: emailTextEditingController.text),
+    ));
+  }
 
   Widget stepTwoEnterCode() {
     return ScrollConfiguration(
@@ -245,9 +343,7 @@ class ForgotPasswordScreenState
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
               ],
-              onChanged: (value) {
-                print("asd fa fds $value");
-              },
+              onChanged: (value) {},
             ),
             const SizedBox(
               height: 25,
@@ -428,6 +524,7 @@ class ForgotPasswordScreenState
   void dispose() {
     super.dispose();
     pageController.dispose();
+    emailTextEditingController.dispose();
     pageIndicatorStreamController.close();
   }
 }

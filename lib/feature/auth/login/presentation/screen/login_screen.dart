@@ -1,14 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kolobox_new_app/config/flavor_config.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/custom_text_field.dart';
+import 'package:kolobox_new_app/core/utils/utils.dart';
+import 'package:kolobox_new_app/feature/auth/login/presentation/bloc/login_bloc.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../../core/ui/widgets/toast_widget.dart';
+import '../../data/models/login_request_model.dart';
+import '../bloc/login_event.dart';
+import '../bloc/login_state.dart';
 
 class LoginScreen extends BaseBlocWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,9 +26,20 @@ class LoginScreen extends BaseBlocWidget {
 }
 
 class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
+  final TextEditingController emailTextEditingController =
+      TextEditingController();
+  final TextEditingController passwordTextEditingController =
+      TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    if (FlavorConfig.isDev()) {
+      // emailTextEditingController.text = 'parthh2@mailinator.com';
+      // passwordTextEditingController.text = 'Parth@123';
+      emailTextEditingController.text = 'tulbadex@gmail.com';
+      passwordTextEditingController.text = 'password';
+    }
   }
 
   @override
@@ -36,161 +55,252 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
             statusBarBrightness: Brightness.dark,
           ),
         ),
-        body: Container(
-          height: double.maxFinite,
-          color: ColorList.white,
-          child: ScrollConfiguration(
-            behavior: NoOverFlowScrollbarBehaviour(),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    color: ColorList.primaryColor,
-                    padding: const EdgeInsets.only(top: 60, bottom: 60),
-                    child: Center(
-                      child: Image.asset(
-                        imageLogoMain,
-                        width: 204,
-                        height: 126,
+        body: BlocListener<LoginBloc, LoginState>(
+          listener: (_, state) {
+            if (state is CallLoginState) {
+              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+                Utils.showToast(
+                    context,
+                    ToastWidget(
+                      'Login successful',
+                      closeWidget: Image.asset(
+                        imageClose,
+                        color: ColorList.white,
+                      ),
+                    ));
+
+                navigateAndRemoveAll(
+                    context, Routes.dashboard, Routes.dashboard);
+              });
+            }
+          },
+          child: getChildWidget(),
+        ),
+      );
+
+  Widget getChildWidget() {
+    return Container(
+      height: double.maxFinite,
+      color: ColorList.white,
+      child: ScrollConfiguration(
+        behavior: NoOverFlowScrollbarBehaviour(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                color: ColorList.primaryColor,
+                padding: const EdgeInsets.only(top: 60, bottom: 60),
+                child: Center(
+                  child: Image.asset(
+                    imageLogoMain,
+                    width: 204,
+                    height: 126,
+                  ),
+                ),
+              ),
+              Container(
+                color: ColorList.white,
+                padding: const EdgeInsets.only(
+                  left: 28,
+                  right: 28,
+                  top: 25,
+                  bottom: 28,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Sign In to KoloBox',
+                      style: TextStyle(
+                        color: ColorList.blackSecondColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ),
-                  Container(
-                    color: ColorList.white,
-                    padding: const EdgeInsets.only(
-                      left: 28,
-                      right: 28,
-                      top: 25,
-                      bottom: 28,
+                    const SizedBox(
+                      height: 20,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Sign In to KoloBox',
-                          style: TextStyle(
-                            color: ColorList.blackSecondColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'Email',
-                          style: TextStyle(
-                            color: ColorList.blackSecondColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 7,
-                        ),
-                        const CustomTextField(
-                          'Enter email address',
-                          keyboardType: TextInputType.emailAddress,
-                          textInputAction: TextInputAction.next,
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        Text(
-                          'Password',
-                          style: TextStyle(
-                            color: ColorList.blackSecondColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 7,
-                        ),
-                        const CustomTextField(
-                          'Enter password',
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              navigateTo(context, Routes.forgotPassword);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, top: 10, bottom: 10),
-                              child: Text(
-                                'Forgot password?',
-                                style: TextStyle(
-                                  color: ColorList.primaryColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                    Text(
+                      'Email',
+                      style: TextStyle(
+                        color: ColorList.blackSecondColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    CustomTextField(
+                      'Enter email address',
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      controller: emailTextEditingController,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Text(
+                      'Password',
+                      style: TextStyle(
+                        color: ColorList.blackSecondColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 7,
+                    ),
+                    CustomTextField(
+                      'Enter password',
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      controller: passwordTextEditingController,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          navigateTo(context, Routes.forgotPassword);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, top: 10, bottom: 10),
+                          child: Text(
+                            'Forgot password?',
+                            style: TextStyle(
+                              color: ColorList.primaryColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Button(
-                          'Login',
-                          borderRadius: 32,
-                          onPressed: () {
-                            navigateAndRemoveAll(
-                                context, Routes.dashboard, Routes.dashboard);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: 'User Agreement',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorList.primaryColor,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => comingSoon(),
-                              ),
-                              TextSpan(
-                                text: ' & ',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorList.blackThirdColor,
-                                ),
-                              ),
-                              TextSpan(
-                                text: 'Privacy Policy',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: ColorList.primaryColor,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => comingSoon(),
-                              ),
-                            ]),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Button(
+                      'Login',
+                      borderRadius: 32,
+                      onPressed: () {
+                        onClickLogin();
+                        // navigateAndRemoveAll(
+                        //     context, Routes.dashboard, Routes.dashboard);
+                      },
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: 'User Agreement',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: ColorList.primaryColor,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => comingSoon(),
+                          ),
+                          TextSpan(
+                            text: ' & ',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: ColorList.blackThirdColor,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Privacy Policy',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: ColorList.primaryColor,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () => comingSoon(),
+                          ),
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
+
+  void onClickLogin() {
+    if (emailTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter email address',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (!Utils.emailValid(emailTextEditingController.text)) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter valid email address',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (passwordTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter password',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+
+    BlocProvider.of<LoginBloc>(context).add(CallLoginEvent(
+        model: LoginRequestModel(
+      username: emailTextEditingController.text,
+      password: passwordTextEditingController.text,
+    )));
+  }
+
+  @override
+  void dispose() {
+    emailTextEditingController.dispose();
+    passwordTextEditingController.dispose();
+    super.dispose();
+  }
 }

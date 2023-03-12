@@ -143,7 +143,8 @@ class OnBoardingScreenState extends BaseBlocWidgetState<OnBoardingScreen> {
                   stream: pageIndicatorStreamController.stream,
                   builder: (context, snapshot) => Row(
                     children: [
-                      if (pageIndicatorPosition != 0) ...[
+                      if (pageIndicatorPosition !=
+                          onBoardingModels.length - 1) ...[
                         Expanded(
                           child: Button(
                             'Previous',
@@ -169,17 +170,20 @@ class OnBoardingScreenState extends BaseBlocWidgetState<OnBoardingScreen> {
                       Expanded(
                         child: Button(
                           'Next',
-                          backgroundColor: pageIndicatorPosition == 0
-                              ? ColorList.primaryColor
-                              : ColorList.white,
-                          overlayColor: ColorList.blueColor,
-                          textColor: pageIndicatorPosition == 0
+                          backgroundColor: pageIndicatorPosition !=
+                                  onBoardingModels.length - 1
                               ? ColorList.white
                               : ColorList.primaryColor,
-                          borderSide: pageIndicatorPosition == 0
-                              ? BorderSide.none
-                              : BorderSide(
-                                  color: ColorList.primaryColor, width: 2),
+                          overlayColor: ColorList.blueColor,
+                          textColor: pageIndicatorPosition !=
+                                  onBoardingModels.length - 1
+                              ? ColorList.primaryColor
+                              : ColorList.white,
+                          borderSide: pageIndicatorPosition !=
+                                  onBoardingModels.length - 1
+                              ? BorderSide(
+                                  color: ColorList.primaryColor, width: 2)
+                              : BorderSide.none,
                           borderRadius: 32,
                           onPressed: () async {
                             await Future.delayed(

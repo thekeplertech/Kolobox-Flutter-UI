@@ -4,7 +4,7 @@ import 'flavor_config.dart';
 void main() {
   FlavorConfig(
     flavor: Flavor.prod,
-    baseUrl: "https://www.gidpower.com/api/",
+    baseUrl: "https://api-staging.kolobox.ng/",
   );
   mainDelegate();
 }

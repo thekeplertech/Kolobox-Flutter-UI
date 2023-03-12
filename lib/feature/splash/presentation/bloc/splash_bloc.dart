@@ -18,7 +18,11 @@ class SplashBloc extends BaseBloc<SplashEvent, SplashState> {
       : super(baseBlocObject, InitialState()) {
     on<WaitEvent>((event, emit) async {
       await Future.delayed(const Duration(seconds: 2));
-      emit(WaitState());
+      if (helper.isLoggedIn()) {
+        emit(GoToDashboardState());
+      } else {
+        emit(GoToLoginState());
+      }
     });
   }
 

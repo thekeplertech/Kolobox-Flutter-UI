@@ -1,8 +1,15 @@
 class ApiUrls {
   ApiUrls._();
 
+  static const String registerAPI = "auth/user/create";
+  static const String loginAPI = "auth/user/login";
+  static const String forgetPasswordAPI = "auth/user/forget_password";
+  static const String passwordValidateAPI = "auth/user/password_reset/validate";
+  static const String changePasswordAPI =
+      "auth/user/password_reset/change_password";
+  static const String validateCodeAPI = "auth/user/validate/code";
+
   static const String getSystemsAPI = "pvsystems";
-  static const String loginAPI = "api/User/Login";
   static const String getPVSystemsAPI = "api/PVSystem/GetPVSystems";
   static const String getPVSystemImageAPI =
       "api/PVSystem/GetPVsystemImagesId/{id}";

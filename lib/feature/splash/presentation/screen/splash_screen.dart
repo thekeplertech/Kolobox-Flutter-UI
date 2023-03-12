@@ -28,9 +28,12 @@ class SplashScreenState extends BaseBlocWidgetState<SplashScreen> {
   @override
   Widget getCustomBloc() => BlocListener<SplashBloc, SplashState>(
         listener: (_, state) {
-          if (state is WaitState) {
+          if (state is GoToLoginState) {
             navigateAndRemoveAll(
                 context, Routes.splashLoaded, Routes.splashLoaded);
+          }
+          if (state is GoToDashboardState) {
+            navigateAndRemoveAll(context, Routes.dashboard, Routes.dashboard);
           }
         },
         child: Scaffold(

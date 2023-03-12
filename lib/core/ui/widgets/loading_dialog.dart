@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../colors/color_list.dart';
 
-
 Future<Widget?> loadingDialog({
   required BuildContext context,
 }) =>
@@ -48,6 +47,6 @@ CircularProgressIndicator getCircularProgressIndicator() =>
     CircularProgressIndicator(
       backgroundColor: ColorList.white,
       valueColor: const AlwaysStoppedAnimation<Color>(
-        Color(0xff649136),
+        ColorList.primaryMaterialColor,
       ),
     );

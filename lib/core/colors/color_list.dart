@@ -48,6 +48,7 @@ class ColorList {
   static Color radialColor = const Color(0xFFDDEEEF);
   static Color lightBlueColor = const Color(0xFFDBEEC2);
   static Color greyLight3Color = const Color(0xFFB1B1B1);
+  static Color redDarkColor = const Color(0xFFF73737);
 
   static Color white = const Color(0xffFFFFFF);
   static Color lightGrey = const Color(0xffD1D1D1); // Border color
