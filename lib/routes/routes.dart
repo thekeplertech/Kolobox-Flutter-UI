@@ -184,6 +184,18 @@ navigatePushReplacement(BuildContext context, Widget? route) {
   }
 }
 
+// use this method to navigate screen with push and custom navigator
+Future<dynamic> popUntilWithNavigator(
+    NavigatorState navigatorState, Function(bool) onResult) async {
+  navigatorState.popUntil((route) {
+    var name = route.settings.name ?? "";
+    bool result = name == "/";
+    logger?.v("popUntilWithNavigator $name");
+    onResult(result);
+    return result;
+  });
+}
+
 class AppSlideRightRoute extends PageRouteBuilder {
   final Widget? widget;
 

@@ -121,4 +121,22 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
   void printLogger() {
     className = runtimeType.toString();
   }
+
+  Future<T?> showCustomBottomSheet(Widget child, {double? height}) =>
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
+        ),
+        backgroundColor: ColorList.white,
+        isScrollControlled: true,
+        builder: (_) => SizedBox(
+            height: height == null
+                ? null
+                : MediaQuery.of(context).size.height * height,
+            child: child),
+      );
 }

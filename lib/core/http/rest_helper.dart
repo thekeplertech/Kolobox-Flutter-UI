@@ -35,6 +35,9 @@ abstract class RestHelper {
   @POST(ApiUrls.changePasswordAPI)
   Future<ApiResponse> changePassword(@Body() ChangePasswordRequestModel model);
 
+  @GET(ApiUrls.walletAPI)
+  Future<ApiResponse> wallet();
+
   @GET(USERS_API)
   Future<ApiResponse> fetchUsers();
 

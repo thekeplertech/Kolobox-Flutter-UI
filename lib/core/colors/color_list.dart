@@ -27,15 +27,25 @@ class ColorList {
   static Color blueLightColor = const Color(0xFFE5EBFF);
   static Color blueLight2Color = const Color(0xFFF2F5FF);
   static Color greyLightColor = const Color(0xFF949494);
+  static Color greyLight5Color = const Color(0xFFF5FBFF);
   static Color greyDark2Color = const Color(0xFF363636);
   static Color greyDarkColor = const Color(0xFF6D6D6D);
   static Color greyVeryLightColor = const Color(0xFFE4E4E4);
+  static Color koloFlexColor = const Color(0xFFF9F4FF);
+  static Color koloFlexTextColor = const Color(0xFF6700EA);
+  static Color koloTargetColor = const Color(0xFFF2F5FF);
+  static Color koloTargetPlusColor = const Color(0xFFF2FFFA);
+  static Color koloFamilyColor = const Color(0xFFFEFAFA);
+  static Color koloFamilyTextColor = const Color(0xFF1CE55F);
+  static Color koloGroupTextColor = const Color(0xFF2E91EC);
   static Color buttonColor = const Color(0xFF238C9D);
   static Color yellowDarkColor = const Color(0xFFFFB715);
   static Color blueColor = const Color(0xFF28AAE1);
   static Color lightBlue2Color = const Color(0xFFDDF3FF);
   static Color lightBlue3Color = const Color(0xFFEAF7FF);
-  static Color lightBlue4Color = const Color(0xFF6A8BFD);
+  static Color lightBlue5Color = const Color(0xFFD9F1FE);
+  static Color lightBlue6Color = const Color(0xFFE2FFEE);
+  static const Color lightBlue4Color = Color(0xFF6A8BFD);
   static Color greyShadowColor = const Color(0xFFE8E8E8);
   static Color darkBlueColor = const Color(0xFF1F7295);
   static Color greenColor = const Color(0xFF76A539);
@@ -50,7 +60,7 @@ class ColorList {
   static Color greyLight3Color = const Color(0xFFB1B1B1);
   static Color redDarkColor = const Color(0xFFF73737);
 
-  static Color white = const Color(0xffFFFFFF);
+  static const Color white = Color(0xffFFFFFF);
   static Color lightGrey = const Color(0xffD1D1D1); // Border color
   static Color stormGrey = const Color(0xff797B7E); // Text value color
   static Color tunaGrey = const Color(0xff464B4F); // Text color

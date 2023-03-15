@@ -27,3 +27,12 @@ const imageWalletBalance = "assets/images/wallet_balance.png";
 const imageWalletIcon = "assets/images/wallet_icon.png";
 const imageWalletIconSelected = "assets/images/wallet_icon_selected.png";
 const imageWarningYellow = "assets/images/warning_yellow.png";
+const imageFamilyIcon = "assets/images/kolofamily_icon.png";
+const imageFlexIcon = "assets/images/koloflex_icon.png";
+const imageGroupIcon = "assets/images/kologroup_icon.png";
+const imageTargetIcon = "assets/images/kolotarget_icon.png";
+const imageTargetPlusIcon = "assets/images/kolotarget_plus_icon.png";
+const imageWalletSuccessIconSelected =
+    "assets/images/wallet_success_icon_selected.png";
+const imageDepositSuccessIcon = "assets/images/deposit_success_icon.png";
+const imageErrorIcon = "assets/images/error_icon.png";

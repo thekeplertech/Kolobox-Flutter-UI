@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
 import '../../../../core/colors/color_list.dart';
 import '../../../../core/constants/image_constants.dart';
@@ -30,18 +31,16 @@ class WelcomeToKoloboxWidget extends StatelessWidget {
                 children: [
                   Text(
                     'Welcome to KoloBox',
-                    style: TextStyle(
-                      color: ColorList.primaryColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppStyle.b9SemiBold
+                        .copyWith(color: ColorList.primaryColor),
+                  ),
+                  const SizedBox(
+                    height: 2.2,
                   ),
                   Text(
                     'Finish your account setup',
-                    style: TextStyle(
+                    style: AppStyle.b6SemiBold.copyWith(
                       color: ColorList.blackSecondColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(
@@ -76,11 +75,8 @@ class WelcomeToKoloboxWidget extends StatelessWidget {
                       ),
                       Text(
                         '2/5',
-                        style: TextStyle(
-                          color: ColorList.blackSecondColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppStyle.b8Medium
+                            .copyWith(color: ColorList.blackSecondColor),
                       ),
                     ],
                   ),

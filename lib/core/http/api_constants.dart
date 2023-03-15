@@ -8,6 +8,7 @@ class ApiUrls {
   static const String changePasswordAPI =
       "auth/user/password_reset/change_password";
   static const String validateCodeAPI = "auth/user/validate/code";
+  static const String walletAPI = "user/me/wallet";
 
   static const String getSystemsAPI = "pvsystems";
   static const String getPVSystemsAPI = "api/PVSystem/GetPVSystems";

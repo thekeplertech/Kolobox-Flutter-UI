@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/base/base_page.dart';
+import '../../../routes/routes.dart';
 import 'screen/wallet_screen.dart';
 
 class WalletPage extends BasePage {
@@ -12,5 +13,8 @@ class WalletPage extends BasePage {
 
 class WalletPageState extends BasePageState<WalletPage> {
   @override
-  Widget getChildBlocWidget(BuildContext context) => const WalletScreen();
+  Widget getChildBlocWidget(BuildContext context) {
+    logger?.d('wallet screen');
+    return const WalletScreen();
+  }
 }

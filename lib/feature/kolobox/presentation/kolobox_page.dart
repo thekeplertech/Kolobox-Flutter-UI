@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/base/base_page.dart';
+import '../../../routes/routes.dart';
 import 'screen/kolobox_screen.dart';
 
 class KoloboxPage extends BasePage {
@@ -12,5 +13,8 @@ class KoloboxPage extends BasePage {
 
 class KoloboxPageState extends BasePageState<KoloboxPage> {
   @override
-  Widget getChildBlocWidget(BuildContext context) => const KoloboxScreen();
+  Widget getChildBlocWidget(BuildContext context) {
+    logger?.d('kolobox screen');
+    return const KoloboxScreen();
+  }
 }

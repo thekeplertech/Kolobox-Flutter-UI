@@ -23,8 +23,8 @@ class RestClientImpl implements RestClient {
       'Content-Type': 'application/json',
     };
 
-    // headersMap.putIfAbsent('Authorization',
-    //     () => 'Bearer ${helper.getLoginResponseModel().token}');
+    headersMap.putIfAbsent('Authorization',
+        () => 'Bearer ${helper.getLoginResponseModel().token}');
     // headersMap.putIfAbsent(
     //     'AccessKeyId', () => 'FKIA8DEC740217144A779ADD787C07A3A6AA');
     // headersMap.putIfAbsent(

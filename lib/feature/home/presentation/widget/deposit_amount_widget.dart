@@ -1,39 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
 import '../../../../core/colors/color_list.dart';
 import '../../../../core/constants/image_constants.dart';
 
 class DepositAmountWidget extends StatelessWidget {
-  const DepositAmountWidget({Key? key}) : super(key: key);
+  final String text;
+
+  const DepositAmountWidget({
+    Key? key,
+    this.text = 'Deposit',
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: ColorList.lightBlue3Color,
-          borderRadius: BorderRadius.circular(24)),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: 12,
-      ),
-      child: IntrinsicWidth(
-        child: Row(
-          children: [
-            Text(
-              'Deposit',
-              style: TextStyle(
-                color: ColorList.primaryColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(
-              width: 14,
-            ),
-            Image.asset(imageDownload),
-          ],
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+            color: ColorList.lightBlue3Color,
+            borderRadius: BorderRadius.circular(24)),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 12,
         ),
-      ),
-    );
-  }
+        child: IntrinsicWidth(
+          child: Row(
+            children: [
+              Text(
+                text,
+                style:
+                    AppStyle.b7SemiBold.copyWith(color: ColorList.primaryColor),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              Image.asset(imageDownload),
+            ],
+          ),
+        ),
+      );
 }

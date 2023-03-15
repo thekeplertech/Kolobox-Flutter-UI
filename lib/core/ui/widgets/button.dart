@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../colors/color_list.dart';
+import '../style/app_style.dart';
 
 class Button extends StatelessWidget {
   const Button(
@@ -46,7 +47,8 @@ class Button extends StatelessWidget {
           child: Center(
             child: Text(
               text,
-              style: TextStyle(color: textColor ?? ColorList.white),
+              style: AppStyle.b7SemiBold
+                  .copyWith(color: textColor ?? ColorList.white),
             ),
           ),
         ),

@@ -8,6 +8,10 @@ import 'package:kolobox_new_app/feature/auth/register/data/data_source/remote_re
 import 'package:kolobox_new_app/feature/auth/register/data/data_source/remote_register_data_source_impl.dart';
 import 'package:kolobox_new_app/feature/auth/register/data/repository/register_repo_impl.dart';
 import 'package:kolobox_new_app/feature/auth/register/domain/register_repo.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/data_source/remote_dashboard_data_source.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/data_source/remote_dashboard_data_source_impl.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/repository/dashboard_repo_impl.dart';
+import 'package:kolobox_new_app/feature/dashboard/domain/dashboard_repo.dart';
 import 'package:logger/logger.dart';
 
 import '../core/apirepo/custom_interceptors.dart';
@@ -54,6 +58,7 @@ Future<void> init() async {
   sl.registerLazySingleton<ForgetPasswordRepo>(
       () => ForgetPasswordRepoImpl(sl()));
   sl.registerLazySingleton<RegisterRepo>(() => RegisterRepoImpl(sl()));
+  sl.registerLazySingleton<DashboardRepo>(() => DashboardRepoImpl(sl()));
 
   // Some data sources
   sl.registerLazySingleton<RemoteFetchUsersDataSource>(
@@ -64,4 +69,6 @@ Future<void> init() async {
       () => RemoteForgetPasswordDataSourceImpl(restClient: sl()));
   sl.registerLazySingleton<RemoteRegisterDataSource>(
       () => RemoteRegisterDataSourceImpl(restClient: sl()));
+  sl.registerLazySingleton<RemoteDashboardDataSource>(
+      () => RemoteDashboardDataSourceImpl(restClient: sl()));
 }
