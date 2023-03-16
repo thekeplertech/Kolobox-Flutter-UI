@@ -10,6 +10,7 @@ import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bl
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_state.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/ui/style/app_style.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../routes/routes.dart';
@@ -151,7 +152,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
                   sizeFactor: hideAnimationController!,
                   axisAlignment: -1.0,
                   child: Container(
-                    height: 67,
+                    height: dashboardTabHeight,
                     color: ColorList.white,
                     child: Column(
                       children: [
@@ -185,8 +186,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
         currentDashboardTabEnum == dashboardTabModel.dashboardTabEnum;
     return GestureDetector(
       onTap: () {
-        currentDashboardTabEnum = dashboardTabModel.dashboardTabEnum;
-        currentDashboardStreamController.add(currentDashboardTabEnum);
+        onClickBottomTab(dashboardTabModel.dashboardTabEnum.getDashboardValue);
       },
       child: AbsorbPointer(
         child: Column(
@@ -245,7 +245,8 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
 
   onClickBottomTab(int index1, {bool isCall = false}) async {
     await popUntil(index1);
-    currentDashboardStreamController.add(index1.dashboardTypeVal());
+    currentDashboardTabEnum = index1.dashboardTypeVal();
+    currentDashboardStreamController.add(currentDashboardTabEnum);
     logger?.d("onClickBottomTab ${index1.dashboardTypeVal()}");
     switch (index1.dashboardTypeVal()) {
       case DashboardTabEnum.home:
@@ -264,7 +265,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
     }
   }
 
-  popUntil(int index) async {
+  Future<void> popUntil(int index) async {
     if (dashboardTabModels[previousTabIndex].navigatorKey.currentState !=
         null) {
       await popUntilWithNavigator(
@@ -287,12 +288,14 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
           if (isBottomTabHideDisable &&
               userScroll.metrics.axis == Axis.vertical) {
             hideAnimationController?.forward();
+            isBottomTabOpened = true;
           }
           break;
         case ScrollDirection.reverse:
           if (isBottomTabHideDisable &&
               userScroll.metrics.axis == Axis.vertical) {
             hideAnimationController?.reverse();
+            isBottomTabOpened = false;
           }
           break;
         case ScrollDirection.idle:

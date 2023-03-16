@@ -14,12 +14,13 @@ import 'package:kolobox_new_app/feature/home/presentation/bloc/home_event.dart';
 import 'package:kolobox_new_app/feature/home/presentation/bloc/home_state.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/deposit_amount_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/explore_item_widget.dart';
-import 'package:kolobox_new_app/feature/home/presentation/widget/home_app_bar_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/learn_item_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/news_item_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/refer_and_earn_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/home_app_bar_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../core/constants/image_constants.dart';
 import '../../data/models/wallet_data_model.dart';
 import '../widget/welcome_to_kolobox_widget.dart';
 
@@ -84,6 +85,10 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
               HomeAppBarWidget(
                 amount: userWallet?.accountBalance?.getAmount() ?? '0.00',
                 walletBalanceStreamController: walletBalanceStreamController,
+                leftIcon: imageDashboardIcon,
+                rightIcon: imageNotification,
+                onLeftPressed: () => comingSoon(),
+                onRightPressed: () => comingSoon(),
               ),
               getHeaderWidget(),
               Padding(
@@ -264,7 +269,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
               height: 18,
             ),
             const Center(
-              child: DepositAmountWidget(),
+              child: DepositAmountWidget(width: 129),
             ),
             const SizedBox(
               height: 23,

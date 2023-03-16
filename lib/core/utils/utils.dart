@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kolobox_new_app/core/constants/app_constants.dart';
 
 class Utils {
   Utils._();
@@ -11,7 +12,8 @@ class Utils {
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
       .hasMatch(email);
 
-  static void showToast(BuildContext context, Widget child) {
+  static void showToast(BuildContext context, Widget child,
+      {bool isTab = false}) {
     FToast fToast = FToast();
     fToast.init(context);
     fToast.showToast(
@@ -20,7 +22,7 @@ class Utils {
         gravity: ToastGravity.BOTTOM,
         toastDuration: const Duration(seconds: 2),
         positionedToastBuilder: (context, child) => Positioned(
-              bottom: 24,
+              bottom: isTab ? (24 + dashboardTabHeight) : 24,
               left: 24,
               right: 24,
               child: child,

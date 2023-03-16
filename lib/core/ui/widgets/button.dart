@@ -12,7 +12,10 @@ class Button extends StatelessWidget {
     this.textColor,
     this.borderSide,
     this.borderRadius = 0,
+    this.verticalPadding = 15,
+    this.height = 48,
     this.onPressed,
+    this.textStyle,
   }) : super(key: key);
 
   final String text;
@@ -21,34 +24,42 @@ class Button extends StatelessWidget {
   final Color? textColor;
   final BorderSide? borderSide;
   final double borderRadius;
+  final double verticalPadding;
+  final double height;
   final Function()? onPressed;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) => TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-            overlayColor: MaterialStateProperty.all(
-                overlayColor ?? ColorList.primaryColor),
-            backgroundColor: MaterialStateProperty.all(
-              backgroundColor ?? ColorList.accentColor,
-            ),
-            padding: MaterialStateProperty.all(EdgeInsets.zero),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                side: borderSide ?? BorderSide.none,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius),
-                ),
+          overlayColor:
+              MaterialStateProperty.all(overlayColor ?? ColorList.primaryColor),
+          backgroundColor: MaterialStateProperty.all(
+            backgroundColor ?? ColorList.accentColor,
+          ),
+          padding: MaterialStateProperty.all(EdgeInsets.zero),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              side: borderSide ?? BorderSide.none,
+              borderRadius: BorderRadius.all(
+                Radius.circular(borderRadius),
               ),
-            )),
+            ),
+          ),
+          fixedSize: MaterialStateProperty.all(Size.fromHeight(height)),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
         child: Container(
+          height: height,
           width: double.maxFinite,
-          padding: const EdgeInsets.only(top: 15, bottom: 13),
+          padding: EdgeInsets.symmetric(vertical: verticalPadding),
           child: Center(
             child: Text(
               text,
-              style: AppStyle.b7SemiBold
-                  .copyWith(color: textColor ?? ColorList.white),
+              style: textStyle ??
+                  AppStyle.b7SemiBold
+                      .copyWith(color: textColor ?? ColorList.white),
             ),
           ),
         ),

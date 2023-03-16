@@ -5,11 +5,13 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/deposit_amount_widget.dart';
+import 'package:kolobox_new_app/feature/kolobox_detail/presentation/kolobox_detail_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../home/presentation/widget/home_app_bar_widget.dart';
+import '../../../../routes/routes.dart';
+import '../../../widgets/home_app_bar_widget.dart';
 
 class KoloboxScreen extends BaseBlocWidget {
   const KoloboxScreen({Key? key}) : super(key: key);
@@ -40,6 +42,10 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                 HomeAppBarWidget(
                   amount: '0.00',
                   walletBalanceStreamController: walletBalanceStreamController,
+                  leftIcon: imageDashboardIcon,
+                  rightIcon: imageNotification,
+                  onLeftPressed: () => comingSoon(),
+                  onRightPressed: () => comingSoon(),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -63,7 +69,8 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      const DepositAmountWidget(text: 'Fund my KoloBox'),
+                      const DepositAmountWidget(
+                          width: 200, text: 'Fund my KoloBox'),
                       const SizedBox(
                         height: 24,
                       ),
@@ -140,13 +147,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
   }) =>
       GestureDetector(
         onTap: () async {
-          // BlocProvider.of<DashboardBloc>(context)
-          //     .add(HideDisableBottomScreenEvent());
-          // navigatePush(context, const TransactionSuccessfulPage())
-          //     .then((value) {
-          //   BlocProvider.of<DashboardBloc>(context)
-          //       .add(ShowEnableBottomScreenEvent());
-          // });
+          navigatePush(context, const KoloboxDetailPage());
         },
         child: Container(
           width: double.maxFinite,

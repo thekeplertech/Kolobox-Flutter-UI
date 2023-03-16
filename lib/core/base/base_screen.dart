@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 
 import '../../di/injection_container.dart';
 import '../colors/color_list.dart';
+import '../constants/app_constants.dart';
 import '../constants/image_constants.dart';
 import '../constants/message_constants.dart';
 import '../preference/pref_helper.dart';
@@ -96,16 +97,18 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
 
   comingSoon() {
     Utils.showToast(
-        context,
-        ToastWidget(
-          'Coming soon. In development.',
-          backgroundColor: ColorList.primaryColor,
-          messageIcon: imageRightWhite,
-          closeWidget: Image.asset(
-            imageClose,
-            color: ColorList.white,
-          ),
-        ));
+      context,
+      ToastWidget(
+        'Coming soon. In development.',
+        backgroundColor: ColorList.primaryColor,
+        messageIcon: imageRightWhite,
+        closeWidget: Image.asset(
+          imageClose,
+          color: ColorList.white,
+        ),
+      ),
+      isTab: isBottomTabOpened,
+    );
   }
 
   exitApp() {

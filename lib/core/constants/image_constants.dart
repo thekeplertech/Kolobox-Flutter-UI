@@ -29,6 +29,8 @@ const imageWalletIconSelected = "assets/images/wallet_icon_selected.png";
 const imageWarningYellow = "assets/images/warning_yellow.png";
 const imageFamilyIcon = "assets/images/kolofamily_icon.png";
 const imageFlexIcon = "assets/images/koloflex_icon.png";
+const imageKoloFlexInfoIcon = "assets/images/koloflex_info_icon.png";
+const imageKoloflexDetailIcon = "assets/images/koloflex_detail_icon.png";
 const imageGroupIcon = "assets/images/kologroup_icon.png";
 const imageTargetIcon = "assets/images/kolotarget_icon.png";
 const imageTargetPlusIcon = "assets/images/kolotarget_plus_icon.png";
@@ -36,3 +38,25 @@ const imageWalletSuccessIconSelected =
     "assets/images/wallet_success_icon_selected.png";
 const imageDepositSuccessIcon = "assets/images/deposit_success_icon.png";
 const imageErrorIcon = "assets/images/error_icon.png";
+const imageAboutIcon = "assets/images/about_icon.png";
+const imageAccountVerificationIcon =
+    "assets/images/account_verification_icon.png";
+const imageBankDetailsIcon = "assets/images/bank_details_icon.png";
+const imageHistoryIcon = "assets/images/history_icon.png";
+const imageNextOfKinIcon = "assets/images/next_ok_kin_icon.png";
+const imageNotificationIcon = "assets/images/notification_icon.png";
+const imageRightArrowIcon = "assets/images/right_arrow_icon.png";
+const imageRightTriangleArrowIcon =
+    "assets/images/right_triangle_arrow_icon.png";
+const imageSecurityIcon = "assets/images/security_icon.png";
+const imageSecurityShieldIcon = "assets/images/security_shield_icon.png";
+const imageSupportCenterIcon = "assets/images/support_center.png";
+const imageUserPlaceHolder = "assets/images/user_place_holder.png";
+const imageSettingIcon = "assets/images/setting_icon.png";
+const imageShareIdIcon = "assets/images/share_id_icon.png";
+const imageBackArrowIcon = "assets/images/back_arrow_icon.png";
+const imageInfoIcon = "assets/images/info_icon.png";
+const imageWithdrawalIcon = "assets/images/withdrawal_icon.png";
+const imageDepositRecentIcon = "assets/images/deposit_recent_icon.png";
+const imageWithdrawSecondRecentIcon =
+    "assets/images/withdraw_second_recent_icon.png";

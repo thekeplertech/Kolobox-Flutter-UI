@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ColorList {
   static const int _primaryValue = 0xFF053AF9;
   static const int _accentValue = 0xFF0032E1;
-  static Color primaryColor = const Color(_primaryValue);
+  static const Color primaryColor = Color(_primaryValue);
   static Color accentColor = const Color(_accentValue);
 
   static const MaterialColor primaryMaterialColor = MaterialColor(
@@ -24,10 +24,15 @@ class ColorList {
   static Color blackFourColor = const Color(0xFFE3E3E3);
   static Color greyLight2Color = const Color(0xFF7D7D7D);
   static Color greyLight4Color = const Color(0xFFE9E9E9);
+  static Color greyLight7Color = const Color(0xFFE6E6E6);
   static Color blueLightColor = const Color(0xFFE5EBFF);
   static Color blueLight2Color = const Color(0xFFF2F5FF);
   static Color greyLightColor = const Color(0xFF949494);
   static Color greyLight5Color = const Color(0xFFF5FBFF);
+  static Color greyLight6Color = const Color(0xFFDEDEDE);
+  static const Color greyLight8Color = Color(0xFFEBEBEB);
+  static const Color greyLight9Color = Color(0xFF424242);
+  static const Color greyLight10Color = Color(0xFFEAEAEA);
   static Color greyDark2Color = const Color(0xFF363636);
   static Color greyDarkColor = const Color(0xFF6D6D6D);
   static Color greyVeryLightColor = const Color(0xFFE4E4E4);
@@ -42,7 +47,7 @@ class ColorList {
   static Color yellowDarkColor = const Color(0xFFFFB715);
   static Color blueColor = const Color(0xFF28AAE1);
   static Color lightBlue2Color = const Color(0xFFDDF3FF);
-  static Color lightBlue3Color = const Color(0xFFEAF7FF);
+  static const Color lightBlue3Color = Color(0xFFEAF7FF);
   static Color lightBlue5Color = const Color(0xFFD9F1FE);
   static Color lightBlue6Color = const Color(0xFFE2FFEE);
   static const Color lightBlue4Color = Color(0xFF6A8BFD);
@@ -59,6 +64,8 @@ class ColorList {
   static Color lightBlueColor = const Color(0xFFDBEEC2);
   static Color greyLight3Color = const Color(0xFFB1B1B1);
   static Color redDarkColor = const Color(0xFFF73737);
+  static const Color redDark2Color = Color(0xFFFF543E);
+  static const Color redLightColor = Color(0xFFFFE8E8);
 
   static const Color white = Color(0xffFFFFFF);
   static Color lightGrey = const Color(0xffD1D1D1); // Border color
@@ -121,6 +128,7 @@ class ColorList {
   static Color redNotAddedColor = const Color(0xffe20042);
   static Color redProfileEmirateColor = const Color(0xffad4444);
   static Color redClosingMemColor = const Color(0xffd96253);
+  static Color lightRed2Color = const Color(0xffFFF0F0);
   static Color cyanProfileColor = const Color(0xff75cfc8);
   static Color greenProfileEduMajorColor = const Color(0xffb0cf75);
   static Color black02Opacity = Colors.black.withOpacity(0.2);

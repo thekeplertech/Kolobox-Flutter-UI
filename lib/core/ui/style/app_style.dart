@@ -102,6 +102,17 @@ class AppStyle {
   static TextStyle b9Bold =
       const TextStyle(fontWeight: FontWeight.w700, fontSize: 10);
 
+  static TextStyle b10Light =
+      const TextStyle(fontWeight: FontWeight.w300, fontSize: 8);
+  static TextStyle b10Regular =
+      const TextStyle(fontWeight: FontWeight.w400, fontSize: 8);
+  static TextStyle b10Medium =
+      const TextStyle(fontWeight: FontWeight.w500, fontSize: 8);
+  static TextStyle b10SemiBold =
+      const TextStyle(fontWeight: FontWeight.w600, fontSize: 8);
+  static TextStyle b10Bold =
+      const TextStyle(fontWeight: FontWeight.w700, fontSize: 8);
+
   static TextStyle h1Light =
       const TextStyle(fontWeight: FontWeight.w300, fontSize: 104);
   static TextStyle h1Regular =

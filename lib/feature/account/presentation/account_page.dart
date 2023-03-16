@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/base/base_page.dart';
-import '../../../routes/routes.dart';
 import 'screen/account_screen.dart';
 
 class AccountPage extends BasePage {
@@ -13,8 +12,5 @@ class AccountPage extends BasePage {
 
 class AccountPageState extends BasePageState<AccountPage> {
   @override
-  Widget getChildBlocWidget(BuildContext context) {
-    logger?.d('account screen');
-    return const AccountScreen();
-  }
+  Widget getChildBlocWidget(BuildContext context) => const AccountScreen();
 }
