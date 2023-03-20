@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
+import 'package:kolobox_new_app/feature/widgets/deposit_summary_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../core/base/base_screen.dart';
@@ -62,7 +63,9 @@ class _DepositYourKoloboxWidgetState
                 textColor: ColorList.primaryColor,
                 overlayColor: ColorList.blueColor,
                 borderRadius: 32,
-                onPressed: () {},
+                onPressed: () {
+                  goBack(context);
+                },
               ),
               const SizedBox(
                 height: 12,
@@ -179,7 +182,9 @@ class _DepositYourKoloboxWidgetState
                 textColor: ColorList.white,
                 overlayColor: ColorList.blueColor,
                 borderRadius: 32,
-                onPressed: () {},
+                onPressed: () {
+                  showCustomBottomSheet(const DepositSummaryWidget());
+                },
               ),
             ],
           ),

@@ -111,5 +111,8 @@ flutter:
           weight: 300
         - asset: assets/fonts/Montserrat-Thin.ttf
           weight: 100
+    - family: kolo_box_icons
+      fonts:
+        - asset: assets/fonts/kolo_box_icons.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

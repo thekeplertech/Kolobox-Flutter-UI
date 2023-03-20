@@ -1,16 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/deposit_amount_widget.dart';
 import 'package:kolobox_new_app/feature/kolobox_detail/presentation/kolobox_detail_page.dart';
+import 'package:kolobox_new_app/feature/widgets/fund_your_kolobox_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
+import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
 class KoloboxScreen extends BaseBlocWidget {
@@ -69,8 +73,20 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      const DepositAmountWidget(
-                          width: 200, text: 'Fund my KoloBox'),
+                      GestureDetector(
+                        onTap: () {
+                          BlocProvider.of<DashboardBloc>(context)
+                              .add(HideDisableBottomScreenEvent());
+                          showCustomBottomSheet(const FundYourKoloboxWidget(),
+                                  height: 0.9)
+                              .then((value) {
+                            BlocProvider.of<DashboardBloc>(context)
+                                .add(ShowEnableBottomScreenEvent());
+                          });
+                        },
+                        child: const DepositAmountWidget(
+                            width: 200, text: 'Fund my KoloBox'),
+                      ),
                       const SizedBox(
                         height: 24,
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/transaction_successful/presentation/transaction_successful_page.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../core/colors/color_list.dart';
@@ -82,7 +83,9 @@ class ConfirmWithPinWidget extends StatelessWidget {
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {},
+              onPressed: () {
+                navigatePush(context, const TransactionSuccessfulPage());
+              },
             ),
           ],
         ),

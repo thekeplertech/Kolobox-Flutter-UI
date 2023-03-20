@@ -54,6 +54,8 @@ class ColorList {
   static Color greyShadowColor = const Color(0xFFE8E8E8);
   static Color darkBlueColor = const Color(0xFF1F7295);
   static Color greenColor = const Color(0xFF76A539);
+  static Color greenLightColor = const Color(0xFF2CDA94);
+  static Color greenLight2Color = const Color(0xFFB9FFD1);
   static Color searchBackColor = const Color(0xFFF6F7FA);
   static Color searchBackShadowColor = const Color(0x5500001F);
   static Color greyTextColor = const Color(0xFF393D41);

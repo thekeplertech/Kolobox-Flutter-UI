@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/core/ui/widgets/button.dart';
-import 'package:kolobox_new_app/feature/widgets/confirm_with_pin_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
-import '../../core/base/base_screen.dart';
 import '../../core/colors/color_list.dart';
+import '../../core/ui/widgets/button.dart';
 
-class DepositSummaryWidget extends BaseScreen {
-  const DepositSummaryWidget({Key? key}) : super(key: key);
+class WithdrawalSummaryKoloboxWidget extends BaseScreen {
+  const WithdrawalSummaryKoloboxWidget({Key? key}) : super(key: key);
 
   @override
-  State<DepositSummaryWidget> createState() => _DepositSummaryWidgetState();
+  State<WithdrawalSummaryKoloboxWidget> createState() =>
+      _WithdrawalSummaryKoloboxWidgetState();
 }
 
-class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
+class _WithdrawalSummaryKoloboxWidgetState
+    extends BaseScreenState<WithdrawalSummaryKoloboxWidget> {
   @override
   Widget body(BuildContext context) {
     return SingleChildScrollView(
@@ -35,13 +36,17 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               ),
             ),
             Text(
-              'Deposit Summary',
+              'Withdrawal Summary',
               style:
                   AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
             ),
-            const SizedBox(
-              height: 13,
+            const SizedBox(height: 5),
+            Text(
+              'Withdraw to your bank account',
+              style:
+                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
             ),
+            const SizedBox(height: 20),
             Button(
               'Edit',
               backgroundColor: ColorList.lightBlue3Color,
@@ -51,7 +56,7 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               onPressed: () {},
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             Container(
               decoration: BoxDecoration(
@@ -72,7 +77,7 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
                       height: 5,
                     ),
                     Text(
-                      '₦ 0.00',
+                      '₦ 100,000.00',
                       style: AppStyle.b3Bold.copyWith(color: ColorList.white),
                     ),
                   ],
@@ -80,66 +85,52 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               ),
             ),
             const SizedBox(
-              height: 17,
+              height: 30,
             ),
             Text(
-              'Deposit into my',
-              style:
-                  AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            getOptionWidget(ColorList.koloFlexColor, "Koloflex",
-                ColorList.koloFlexTextColor, imageFlexIcon),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Selected Investing towards',
-                  style: AppStyle.b9Medium
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-                Text(
-                  'Renting a new home',
-                  style: AppStyle.b8SemiBold
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Select payment option',
+              'Withdraw to',
               style: AppStyle.b8SemiBold
                   .copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
-              height: 9,
+              height: 10,
             ),
             Container(
+              width: double.maxFinite,
               decoration: BoxDecoration(
-                color: ColorList.greyLight5Color,
+                color: ColorList.lightBlue3Color,
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.only(
-                  left: 14.5, right: 23, top: 12, bottom: 9),
-              child: Row(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Paystack',
-                    style: AppStyle.b7Regular
+                    'Zenith Bank',
+                    style: AppStyle.b8SemiBold
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Text(
+                    '0949830020004',
+                    style: AppStyle.b6Bold
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Dami Anoreq',
+                    style: AppStyle.b8Medium
                         .copyWith(color: ColorList.blackSecondColor),
                   ),
                 ],
               ),
             ),
             const SizedBox(
-              height: 18,
+              height: 30,
             ),
             Button(
               'Next',
@@ -147,38 +138,10 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {
-                showCustomBottomSheet(const ConfirmWithPinWidget());
-              },
+              onPressed: () {},
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget getOptionWidget(
-      Color backColor, String title, Color titleColor, String icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: backColor,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      padding: const EdgeInsets.all(24),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: AppStyle.b3Bold.copyWith(color: titleColor),
-            ),
-          ),
-          Image.asset(
-            icon,
-            width: 48,
-            height: 48,
-          ),
-        ],
       ),
     );
   }
