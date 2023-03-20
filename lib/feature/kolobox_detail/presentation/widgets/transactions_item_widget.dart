@@ -1,136 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:kolobox_new_app/core/ui/widgets/range_custom_painter.dart';
 
 import '../../../../core/colors/color_list.dart';
 import '../../../../core/constants/image_constants.dart';
 import '../../../../core/ui/style/app_style.dart';
 
 class TransactionsItemWidget extends StatelessWidget {
-  const TransactionsItemWidget({Key? key}) : super(key: key);
+  final Function() onPressed;
+
+  const TransactionsItemWidget({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 12,
-        ),
-        Row(
+    return GestureDetector(
+      onTap: onPressed,
+      child: AbsorbPointer(
+        child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: ColorList.lightBlue6Color, shape: BoxShape.circle),
-              padding: const EdgeInsets.all(15),
-              child: Image.asset(imageDepositRecentIcon),
-            ),
             const SizedBox(
-              width: 8,
+              height: 12,
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Investment',
-                    style: AppStyle.b8SemiBold
-                        .copyWith(color: ColorList.blackSecondColor),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  if (true) ...[
-                    Text(
-                      'Aug 02, 2022',
-                      style: AppStyle.b10SemiBold
-                          .copyWith(color: ColorList.greyLight2Color),
-                    ),
-                  ] else ...[
-                    Text(
-                      'View Details',
-                      style: AppStyle.b10SemiBold
-                          .copyWith(color: ColorList.primaryColor),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            Row(
               children: [
-                Text(
-                  '₦1,500,000.00',
-                  style: AppStyle.b8SemiBold
-                      .copyWith(color: ColorList.blackSecondColor),
+                Container(
+                  decoration: BoxDecoration(
+                      color: true
+                          ? ColorList.redLightColor
+                          : ColorList.lightBlue6Color,
+                      shape: BoxShape.circle),
+                  padding: const EdgeInsets.all(15),
+                  child: Image.asset(true
+                      ? imageWithdrawSecondRecentIcon
+                      : imageDepositRecentIcon),
                 ),
                 const SizedBox(
-                  height: 4,
+                  width: 8,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Deposit',
+                        style: AppStyle.b8SemiBold
+                            .copyWith(color: ColorList.blackSecondColor),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        'Aug 02, 2022',
+                        style: AppStyle.b10SemiBold
+                            .copyWith(color: ColorList.greyLight2Color),
+                      ),
+                    ],
+                  ),
                 ),
                 Text(
-                  '+ ₦ 100,000.00',
-                  style: AppStyle.b10SemiBold
-                      .copyWith(color: ColorList.koloFamilyTextColor),
+                  '₦ 14,200.00',
+                  style: AppStyle.b8SemiBold
+                      .copyWith(color: ColorList.blackSecondColor),
                 ),
               ],
             ),
             const SizedBox(
-              width: 8,
+              height: 10,
             ),
-            Container(
-              width: 1,
-              color: ColorList.greyLight7Color,
-              height: 45,
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            SizedBox(
-              width: 50,
-              height: 50,
-              child: CustomPaint(
-                painter: RangeCustomPainter(
-                    selectedColor: ColorList.redDark2Color,
-                    backColor: ColorList.greyLight8Color),
-                child: true
-                    ? Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Center(
-                          child: Text(
-                            '22 Days Left',
-                            style: AppStyle.b9SemiBold
-                                .copyWith(color: ColorList.greyLight9Color),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(imageWithdrawalIcon),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            'Withdraw',
-                            style: AppStyle.b10SemiBold
-                                .copyWith(color: ColorList.koloFlexTextColor),
-                          ),
-                        ],
-                      ),
-              ),
-            ),
+            Divider(
+                thickness: 1,
+                height: 1,
+                color: ColorList.greyDisableCircleColor),
           ],
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Divider(
-            thickness: 1, height: 1, color: ColorList.greyDisableCircleColor),
-      ],
+      ),
     );
   }
 }

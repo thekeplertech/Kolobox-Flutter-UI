@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/base/base_page.dart';
+import '../../../core/enums/kolobox_fund_enum.dart';
 import 'screen/kolobox_detail_screen.dart';
 
 class KoloboxDetailPage extends BasePage {
-  const KoloboxDetailPage({Key? key}) : super(key: key);
+  final KoloboxFundEnum koloboxFundEnum;
+
+  const KoloboxDetailPage({
+    Key? key,
+    required this.koloboxFundEnum,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => KoloboxDetailPageState();
@@ -12,16 +18,7 @@ class KoloboxDetailPage extends BasePage {
 
 class KoloboxDetailPageState extends BasePageState<KoloboxDetailPage> {
   @override
-  Widget getChildBlocWidget(BuildContext context) =>
-      const KoloboxDetailScreen();
+  Widget getChildBlocWidget(BuildContext context) => KoloboxDetailScreen(
+        koloboxFundEnum: widget.koloboxFundEnum,
+      );
 }
-
-// List<String> list = ['1', '2', '3'];
-//
-// String ids = '';
-// for (int i = 0; i < list.length; i++) {
-// if (ids.isNotEmpty) {
-// ids += ',';
-// }
-// ids += list[i];
-// }

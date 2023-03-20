@@ -125,7 +125,12 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
     className = runtimeType.toString();
   }
 
-  Future<T?> showCustomBottomSheet(Widget child, {double? height}) =>
+  Future<T?> showCustomBottomSheet(
+    Widget child, {
+    double? height,
+    bool isScrollControlled = true,
+    bool isDismissible = true,
+  }) =>
       showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -135,7 +140,8 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
           ),
         ),
         backgroundColor: ColorList.white,
-        isScrollControlled: true,
+        isScrollControlled: isScrollControlled,
+        isDismissible: isDismissible,
         builder: (_) => SizedBox(
             height: height == null
                 ? null

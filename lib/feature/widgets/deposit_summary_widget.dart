@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
+import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_with_pin_widget.dart';
@@ -9,7 +10,12 @@ import '../../core/base/base_screen.dart';
 import '../../core/colors/color_list.dart';
 
 class DepositSummaryWidget extends BaseScreen {
-  const DepositSummaryWidget({Key? key}) : super(key: key);
+  final KoloboxFundEnum koloboxFundEnum;
+
+  const DepositSummaryWidget({
+    Key? key,
+    required this.koloboxFundEnum,
+  }) : super(key: key);
 
   @override
   State<DepositSummaryWidget> createState() => _DepositSummaryWidgetState();
@@ -48,7 +54,9 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               textColor: ColorList.primaryColor,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {},
+              onPressed: () {
+                goBack(context);
+              },
             ),
             const SizedBox(
               height: 20,
@@ -90,8 +98,7 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
             const SizedBox(
               height: 5,
             ),
-            getOptionWidget(ColorList.koloFlexColor, "Koloflex",
-                ColorList.koloFlexTextColor, imageFlexIcon),
+            getOptionWidget(),
             const SizedBox(
               height: 20,
             ),
@@ -126,8 +133,7 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
                 color: ColorList.greyLight5Color,
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.only(
-                  left: 14.5, right: 23, top: 12, bottom: 9),
+              padding: const EdgeInsets.all(15),
               child: Row(
                 children: [
                   Text(
@@ -157,28 +163,54 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
     );
   }
 
-  Widget getOptionWidget(
-      Color backColor, String title, Color titleColor, String icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: backColor,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      padding: const EdgeInsets.all(24),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: AppStyle.b3Bold.copyWith(color: titleColor),
+  Widget getOptionWidget() {
+    return GestureDetector(
+      onTap: () async {
+        // switch (fundEnum) {
+        //   case KoloboxFundEnum.koloFlex:
+        //   case KoloboxFundEnum.koloTarget:
+        //   case KoloboxFundEnum.koloFamily:
+        //   case KoloboxFundEnum.koloGroup:
+        //     showCustomBottomSheet(
+        //         DepositYourKoloboxWidget(
+        //           koloboxFundEnum: fundEnum,
+        //         ),
+        //         height: 0.9);
+        //     break;
+        //   case KoloboxFundEnum.koloTargetPlus:
+        //     comingSoon();
+        //     break;
+        // }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: widget.koloboxFundEnum.getFundBackColorValue,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        padding: const EdgeInsets.all(24),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.koloboxFundEnum.getFundValue,
+                style: AppStyle.b3Bold.copyWith(
+                    color: widget.koloboxFundEnum.getFundTextColorValue),
+              ),
             ),
-          ),
-          Image.asset(
-            icon,
-            width: 48,
-            height: 48,
-          ),
-        ],
+            widget.koloboxFundEnum.isPhotoEnabledAsIcon
+                ? Icon(
+                    widget.koloboxFundEnum.getFundIconValue,
+                    size: 48,
+                    color: widget.koloboxFundEnum.getFundIconColorValue
+                        .withOpacity(0.4),
+                  )
+                : Image.asset(
+                    widget.koloboxFundEnum.getFundImageValue,
+                    width: 48,
+                    height: 48,
+                  ),
+          ],
+        ),
       ),
     );
   }

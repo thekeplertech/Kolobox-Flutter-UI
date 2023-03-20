@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
+import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../core/colors/color_list.dart';
 import '../../core/ui/widgets/button.dart';
+import 'withdrawal_summary_kolobox_widget.dart';
 
 class WithdrawalToBankKoloboxWidget extends BaseScreen {
   const WithdrawalToBankKoloboxWidget({Key? key}) : super(key: key);
@@ -38,13 +40,13 @@ class _WithdrawalToBankKoloboxWidgetState
             Text(
               'Withdrawal',
               style:
-                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(height: 5),
             Text(
               'Withdraw to my bank account',
               style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 20,
@@ -52,7 +54,7 @@ class _WithdrawalToBankKoloboxWidgetState
             Text(
               'Enter Amount',
               style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 10,
@@ -93,13 +95,26 @@ class _WithdrawalToBankKoloboxWidgetState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Zenith Bank',
-                    style: AppStyle.b8SemiBold
-                        .copyWith(color: ColorList.blackSecondColor),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        KoloBoxIcons.bank,
+                        size: 18,
+                        color: ColorList.primaryColor,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Zenith Bank',
+                        style: AppStyle.b8SemiBold
+                            .copyWith(color: ColorList.blackSecondColor),
+                      ),
+                    ],
                   ),
                   const SizedBox(
-                    height: 25,
+                    height: 20,
                   ),
                   Text(
                     '0949830020004',
@@ -107,7 +122,7 @@ class _WithdrawalToBankKoloboxWidgetState
                         .copyWith(color: ColorList.blackSecondColor),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 5,
                   ),
                   Text(
                     'Dami Anoreq',
@@ -148,7 +163,7 @@ class _WithdrawalToBankKoloboxWidgetState
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             Button(
               'Next',
@@ -156,7 +171,9 @@ class _WithdrawalToBankKoloboxWidgetState
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {},
+              onPressed: () {
+                showCustomBottomSheet(const WithdrawalSummaryKoloboxWidget());
+              },
             ),
           ],
         ),

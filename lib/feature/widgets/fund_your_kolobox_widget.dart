@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
@@ -60,44 +59,23 @@ class _FundYourKoloboxWidgetState
             const SizedBox(
               height: 16,
             ),
-            getOptionWidget(KoloboxFundEnum.koloFlex, ColorList.koloFlexColor,
-                "Koloflex", ColorList.koloFlexTextColor, imageFlexIcon),
+            getOptionWidget(KoloboxFundEnum.koloFlex),
             const SizedBox(
               height: 18,
             ),
-            getOptionWidget(
-                KoloboxFundEnum.koloTarget,
-                ColorList.blueLight2Color,
-                "Kolotarget",
-                ColorList.primaryColor,
-                imageTargetIcon),
+            getOptionWidget(KoloboxFundEnum.koloTarget),
             const SizedBox(
               height: 18,
             ),
-            getOptionWidget(
-                KoloboxFundEnum.koloTargetPlus,
-                ColorList.koloTargetPlusColor,
-                "Kolotarget+",
-                ColorList.blackSecondColor,
-                imageTargetPlusIcon),
+            getOptionWidget(KoloboxFundEnum.koloTargetPlus),
             const SizedBox(
               height: 18,
             ),
-            getOptionWidget(
-                KoloboxFundEnum.koloFamily,
-                ColorList.koloFamilyColor,
-                "Kolofamily",
-                ColorList.koloFamilyTextColor,
-                imageFamilyIcon),
+            getOptionWidget(KoloboxFundEnum.koloFamily),
             const SizedBox(
               height: 18,
             ),
-            getOptionWidget(
-                KoloboxFundEnum.koloGroup,
-                ColorList.blackSecondColor,
-                "Kologroup",
-                ColorList.white,
-                imageGroupIcon),
+            getOptionWidget(KoloboxFundEnum.koloGroup),
             const SizedBox(
               height: 18,
             ),
@@ -107,8 +85,7 @@ class _FundYourKoloboxWidgetState
     );
   }
 
-  Widget getOptionWidget(KoloboxFundEnum fundEnum, Color backColor,
-      String title, Color titleColor, String icon) {
+  Widget getOptionWidget(KoloboxFundEnum fundEnum) {
     return GestureDetector(
       onTap: () async {
         switch (fundEnum) {
@@ -116,7 +93,10 @@ class _FundYourKoloboxWidgetState
           case KoloboxFundEnum.koloTarget:
           case KoloboxFundEnum.koloFamily:
           case KoloboxFundEnum.koloGroup:
-            showCustomBottomSheet(const DepositYourKoloboxWidget(),
+            showCustomBottomSheet(
+                DepositYourKoloboxWidget(
+                  koloboxFundEnum: fundEnum,
+                ),
                 height: 0.9);
             break;
           case KoloboxFundEnum.koloTargetPlus:
@@ -126,7 +106,7 @@ class _FundYourKoloboxWidgetState
       },
       child: Container(
         decoration: BoxDecoration(
-          color: backColor,
+          color: fundEnum.getFundBackColorValue,
           borderRadius: BorderRadius.circular(14),
         ),
         padding: const EdgeInsets.all(24),
@@ -134,20 +114,22 @@ class _FundYourKoloboxWidgetState
           children: [
             Expanded(
               child: Text(
-                title,
-                style: AppStyle.b3Bold.copyWith(color: titleColor),
+                fundEnum.getFundValue,
+                style: AppStyle.b3Bold
+                    .copyWith(color: fundEnum.getFundTextColorValue),
               ),
             ),
-            Icon(
-              KoloBoxIcons.koloFlex,
-              size: 48,
-              color: ColorList.koloFlexTextColor.withOpacity(0.4),
-            ),
-            Image.asset(
-              icon,
-              width: 48,
-              height: 48,
-            ),
+            fundEnum.isPhotoEnabledAsIcon
+                ? Icon(
+                    fundEnum.getFundIconValue,
+                    size: 48,
+                    color: fundEnum.getFundIconColorValue.withOpacity(0.4),
+                  )
+                : Image.asset(
+                    fundEnum.getFundImageValue,
+                    width: 48,
+                    height: 48,
+                  ),
           ],
         ),
       ),

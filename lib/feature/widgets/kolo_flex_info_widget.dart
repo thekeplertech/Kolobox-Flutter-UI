@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
 import '../../core/colors/color_list.dart';
@@ -7,7 +8,12 @@ import '../../core/ui/widgets/button.dart';
 import '../../routes/routes.dart';
 
 class KoloFlexInfoWidget extends StatelessWidget {
-  const KoloFlexInfoWidget({Key? key}) : super(key: key);
+  final KoloboxFundEnum koloboxFundEnum;
+
+  const KoloFlexInfoWidget({
+    Key? key,
+    required this.koloboxFundEnum,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +37,15 @@ class KoloFlexInfoWidget extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: ColorList.koloFlexColor,
+                color: koloboxFundEnum.getFundBackColorValue,
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(25),
-              child: Image.asset(imageKoloFlexInfoIcon),
+              child: Icon(
+                koloboxFundEnum.getFundIconValue,
+                size: 90,
+                color: koloboxFundEnum.getFundIconColorValue,
+              ),
             ),
             const SizedBox(
               height: 30,

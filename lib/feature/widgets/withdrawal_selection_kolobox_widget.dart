@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/widgets/withdrawal_to_bank_kolobox_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/withdrawal_to_my_wallet_kolobox_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../core/colors/color_list.dart';
+import '../../core/constants/kolo_box_icon.dart';
 import '../../core/ui/widgets/button.dart';
 
 class WithdrawalSelectionKoloboxWidget extends BaseScreen {
@@ -17,6 +22,10 @@ class WithdrawalSelectionKoloboxWidget extends BaseScreen {
 
 class _WithdrawalSelectionKoloboxWidgetState
     extends BaseScreenState<WithdrawalSelectionKoloboxWidget> {
+  StreamController<bool> withdrawalSelectionStreamController =
+      StreamController<bool>.broadcast();
+  bool isBankAccount = false;
+
   @override
   Widget body(BuildContext context) {
     return SingleChildScrollView(
@@ -38,7 +47,7 @@ class _WithdrawalSelectionKoloboxWidgetState
             Text(
               'Withdrawal',
               style:
-                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 20,
@@ -46,7 +55,7 @@ class _WithdrawalSelectionKoloboxWidgetState
             Text(
               'Enter Amount',
               style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 10,
@@ -82,48 +91,111 @@ class _WithdrawalSelectionKoloboxWidgetState
                 color: ColorList.greyLight5Color,
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.all(13),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 7, bottom: 14),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Bank account',
-                            style: AppStyle.b7Regular
-                                .copyWith(color: ColorList.blackSecondColor),
+              child: StreamBuilder<bool>(
+                initialData: isBankAccount,
+                stream: withdrawalSelectionStreamController.stream,
+                builder: (_, snapshot) {
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          isBankAccount = true;
+                          withdrawalSelectionStreamController
+                              .add(isBankAccount);
+                        },
+                        child: AbsorbPointer(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, top: 15, bottom: 10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Bank account',
+                                    style: AppStyle.b8Regular.copyWith(
+                                        color: ColorList.blackSecondColor),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child: Stack(
+                                    children: [
+                                      Image.asset(isBankAccount
+                                          ? imageCheckedIcon
+                                          : imageUncheckedIcon),
+                                      if (isBankAccount) ...[
+                                        Center(
+                                          child: Icon(
+                                            KoloBoxIcons.check,
+                                            color: ColorList.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Text('a'),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                      color: ColorList.lightBlue5Color,
-                      height: 1,
-                      thickness: 1),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 14, bottom: 7),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'My Wallet',
-                            style: AppStyle.b7Regular
-                                .copyWith(color: ColorList.blackSecondColor),
+                      ),
+                      Divider(
+                          color: ColorList.lightBlue5Color,
+                          height: 1,
+                          thickness: 1),
+                      GestureDetector(
+                        onTap: () {
+                          isBankAccount = false;
+                          withdrawalSelectionStreamController
+                              .add(isBankAccount);
+                        },
+                        child: AbsorbPointer(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, top: 10, bottom: 15),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'My Wallet',
+                                    style: AppStyle.b7Regular.copyWith(
+                                        color: ColorList.blackSecondColor),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child: Stack(
+                                    children: [
+                                      Image.asset(!isBankAccount
+                                          ? imageCheckedIcon
+                                          : imageUncheckedIcon),
+                                      if (!isBankAccount) ...[
+                                        Center(
+                                          child: Icon(
+                                            KoloBoxIcons.check,
+                                            color: ColorList.white,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        Text('a'),
-                      ],
-                    ),
-                  ),
-                ],
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             Button(
               'Next',
@@ -131,11 +203,21 @@ class _WithdrawalSelectionKoloboxWidgetState
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {},
+              onPressed: () {
+                showCustomBottomSheet(isBankAccount
+                    ? const WithdrawalToBankKoloboxWidget()
+                    : const WithdrawalToMyWalletKoloboxWidget());
+              },
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    withdrawalSelectionStreamController.close();
   }
 }

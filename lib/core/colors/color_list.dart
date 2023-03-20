@@ -42,7 +42,9 @@ class ColorList {
   static Color koloTargetPlusColor = const Color(0xFFF2FFFA);
   static Color koloFamilyColor = const Color(0xFFFEFAFA);
   static Color koloFamilyTextColor = const Color(0xFF1CE55F);
+  static Color koloFamilyIconColor = const Color(0xFF11CD5C);
   static Color koloGroupTextColor = const Color(0xFF2E91EC);
+  static Color koloGroupIconColor = const Color(0xFF747474);
   static Color buttonColor = const Color(0xFF238C9D);
   static Color yellowDarkColor = const Color(0xFFFFB715);
   static Color blueColor = const Color(0xFF28AAE1);

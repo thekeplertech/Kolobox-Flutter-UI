@@ -5,7 +5,9 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../core/colors/color_list.dart';
+import '../../core/constants/kolo_box_icon.dart';
 import '../../core/ui/widgets/button.dart';
+import 'confirm_with_pin_widget.dart';
 
 class WithdrawalSummaryKoloboxWidget extends BaseScreen {
   const WithdrawalSummaryKoloboxWidget({Key? key}) : super(key: key);
@@ -38,13 +40,13 @@ class _WithdrawalSummaryKoloboxWidgetState
             Text(
               'Withdrawal Summary',
               style:
-                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(height: 5),
             Text(
               'Withdraw to your bank account',
               style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(height: 20),
             Button(
@@ -71,21 +73,21 @@ class _WithdrawalSummaryKoloboxWidgetState
                     Text(
                       'Deposit Amount',
                       style:
-                          AppStyle.b8Regular.copyWith(color: ColorList.white),
+                          AppStyle.b9Regular.copyWith(color: ColorList.white),
                     ),
                     const SizedBox(
                       height: 5,
                     ),
                     Text(
                       '₦ 100,000.00',
-                      style: AppStyle.b3Bold.copyWith(color: ColorList.white),
+                      style: AppStyle.b4Bold.copyWith(color: ColorList.white),
                     ),
                   ],
                 ),
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             Text(
               'Withdraw to',
@@ -105,13 +107,26 @@ class _WithdrawalSummaryKoloboxWidgetState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Zenith Bank',
-                    style: AppStyle.b8SemiBold
-                        .copyWith(color: ColorList.blackSecondColor),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        KoloBoxIcons.bank,
+                        size: 18,
+                        color: ColorList.primaryColor,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Zenith Bank',
+                        style: AppStyle.b8SemiBold
+                            .copyWith(color: ColorList.blackSecondColor),
+                      ),
+                    ],
                   ),
                   const SizedBox(
-                    height: 25,
+                    height: 20,
                   ),
                   Text(
                     '0949830020004',
@@ -119,7 +134,7 @@ class _WithdrawalSummaryKoloboxWidgetState
                         .copyWith(color: ColorList.blackSecondColor),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 5,
                   ),
                   Text(
                     'Dami Anoreq',
@@ -130,7 +145,7 @@ class _WithdrawalSummaryKoloboxWidgetState
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             Button(
               'Next',
@@ -138,7 +153,9 @@ class _WithdrawalSummaryKoloboxWidgetState
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {},
+              onPressed: () {
+                showCustomBottomSheet(const ConfirmWithPinWidget());
+              },
             ),
           ],
         ),

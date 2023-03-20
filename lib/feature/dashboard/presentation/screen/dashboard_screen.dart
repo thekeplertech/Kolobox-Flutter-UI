@@ -52,7 +52,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
   }
 
   @override
-  Widget getCustomBloc() => BlocConsumer<DashboardBloc, DashboardState>(
+  Widget getCustomBloc() => BlocListener<DashboardBloc, DashboardState>(
         listenWhen: (previousState, state) => state != previousState,
         listener: (context, state) async {
           if (state is ShowEnableBottomScreenState) {
@@ -65,9 +65,12 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
               isBottomTabHideDisable = false;
               hideAnimationController?.reverse();
             }
+          } else if (state is ClearBackStackState) {
+            await popUntil(previousTabIndex);
           }
         },
-        builder: (context, state) => getChild(),
+        child: getChild(),
+        // builder: (context, state) => getChild(),
       );
 
   Widget getChild() => WillPopScope(
@@ -218,22 +221,24 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
                 .currentState
                 ?.maybePop() ??
             true);
+    logger?.d("status $status");
     if (status) {
-      // if (currentDashboardTabEnum == DashboardTabEnum.home) {
-      //   if (!isBackClicked) {
-      //     showToast(AppLocalizations.of(context)!
-      //         .translate(labelPleaseClickBackAgainToExit));
-      //     isBackClicked = true;
-      //     Future.delayed(const Duration(seconds: 3), () {
-      //       isBackClicked = false;
-      //     });
-      //     return false;
-      //   } else {
-      //     return true;
-      //   }
-      // } else {
-      //   onClickBottomTab(0);
-      // }
+      if (currentDashboardTabEnum == DashboardTabEnum.home) {
+        //   if (!isBackClicked) {
+        //     showToast(AppLocalizations.of(context)!
+        //         .translate(labelPleaseClickBackAgainToExit));
+        //     isBackClicked = true;
+        //     Future.delayed(const Duration(seconds: 3), () {
+        //       isBackClicked = false;
+        //     });
+        //     return false;
+        //   } else {
+        //     return true;
+        //   }
+        return true;
+      } else {
+        onClickBottomTab(0);
+      }
       return false;
     } else {
       // if (isNavigation) {
@@ -274,7 +279,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
         if (result) {
           // await setBottomListItems();
         }
-      });
+      }, until: 'KoloboxDetailPage');
     }
 
     previousTabIndex = index;

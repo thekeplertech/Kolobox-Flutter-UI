@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
+import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
@@ -108,8 +112,12 @@ class TransactionSuccessfulScreenState
                         color: ColorList.lightBlue6Color,
                         shape: BoxShape.circle,
                       ),
-                      padding: const EdgeInsets.all(10),
-                      child: Image.asset(imageDepositSuccessIcon),
+                      padding: const EdgeInsets.all(25),
+                      child: Icon(
+                        KoloBoxIcons.deposit,
+                        size: 20,
+                        color: ColorList.primaryColor,
+                      ),
                     ),
                     const SizedBox(
                       height: 17,
@@ -203,7 +211,10 @@ class TransactionSuccessfulScreenState
                     textColor: ColorList.white,
                     overlayColor: ColorList.blueColor,
                     borderRadius: 32,
-                    onPressed: () {},
+                    onPressed: () {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ClearBackStackEvent());
+                    },
                   ),
                 ],
               ),

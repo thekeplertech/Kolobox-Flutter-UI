@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/widgets/withdrawal_summary_kolobox_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../core/colors/color_list.dart';
@@ -38,13 +39,13 @@ class _WithdrawalToMyWalletKoloboxWidgetState
             Text(
               'Withdrawal',
               style:
-                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(height: 5),
             Text(
               'Withdraw to my wallet',
               style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 20,
@@ -52,7 +53,7 @@ class _WithdrawalToMyWalletKoloboxWidgetState
             Text(
               'Enter Amount',
               style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 10,
@@ -77,7 +78,7 @@ class _WithdrawalToMyWalletKoloboxWidgetState
             ),
             Text(
               'Withdraw to',
-              style: AppStyle.b8SemiBold
+              style: AppStyle.b9SemiBold
                   .copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
@@ -98,12 +99,13 @@ class _WithdrawalToMyWalletKoloboxWidgetState
                     style: AppStyle.b3Bold
                         .copyWith(color: ColorList.blackSecondColor),
                   ),
-                  Image.asset(imageWalletSuccessIconSelected),
+                  Image.asset(imageWalletSuccessIconSelected,
+                      width: 48, height: 48),
                 ],
               ),
             ),
             const SizedBox(
-              height: 30,
+              height: 25,
             ),
             Button(
               'Next',
@@ -111,7 +113,9 @@ class _WithdrawalToMyWalletKoloboxWidgetState
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {},
+              onPressed: () {
+                showCustomBottomSheet(const WithdrawalSummaryKoloboxWidget());
+              },
             ),
           ],
         ),

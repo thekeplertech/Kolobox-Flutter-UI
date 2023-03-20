@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
+import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/deposit_amount_widget.dart';
 import 'package:kolobox_new_app/feature/kolobox_detail/presentation/kolobox_detail_page.dart';
@@ -91,54 +92,42 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                         height: 24,
                       ),
                       getListWidget(
-                          ColorList.koloFlexColor,
-                          'Koloflex',
-                          ColorList.koloFlexTextColor,
-                          '₦ 150,000.00',
-                          ColorList.koloFlexTextColor,
-                          imageFlexIcon),
+                        KoloboxFundEnum.koloFlex,
+                        '₦ 150,000.00',
+                        ColorList.koloFlexTextColor,
+                      ),
                       const SizedBox(
                         height: 18,
                       ),
                       getListWidget(
-                          ColorList.koloTargetColor,
-                          'Kolotarget',
-                          ColorList.primaryColor,
-                          '₦ 800,000.00',
-                          ColorList.primaryColor,
-                          imageTargetIcon),
+                        KoloboxFundEnum.koloTarget,
+                        '₦ 800,000.00',
+                        ColorList.primaryColor,
+                      ),
                       const SizedBox(
                         height: 18,
                       ),
                       getListWidget(
-                          ColorList.koloTargetPlusColor,
-                          'Kolotarget+',
-                          ColorList.blackSecondColor,
-                          '₦ 1,200,000.00',
-                          ColorList.primaryColor,
-                          imageTargetPlusIcon,
-                          imageWidth: 96,
-                          imageHeight: 82),
+                        KoloboxFundEnum.koloTargetPlus,
+                        '₦ 1,200,000.00',
+                        ColorList.primaryColor,
+                      ),
                       const SizedBox(
                         height: 18,
                       ),
                       getListWidget(
-                          ColorList.koloFamilyColor,
-                          'Kolofamily',
-                          ColorList.koloFamilyTextColor,
-                          '₦ 1,080,000.00',
-                          ColorList.primaryColor,
-                          imageFamilyIcon),
+                        KoloboxFundEnum.koloFamily,
+                        '₦ 1,080,000.00',
+                        ColorList.primaryColor,
+                      ),
                       const SizedBox(
                         height: 18,
                       ),
                       getListWidget(
-                          ColorList.blackSecondColor,
-                          'Kologroup',
-                          ColorList.white,
-                          '₦ 2,560,000.00',
-                          ColorList.koloGroupTextColor,
-                          imageGroupIcon),
+                        KoloboxFundEnum.koloGroup,
+                        '₦ 2,560,000.00',
+                        ColorList.koloGroupTextColor,
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -152,24 +141,23 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
       );
 
   Widget getListWidget(
-    Color backgroundColor,
-    String title,
-    Color titleColor,
+    KoloboxFundEnum fundEnum,
     String amount,
     Color amountColor,
-    String icon, {
-    double imageWidth = 78,
-    double imageHeight = 78,
-  }) =>
+  ) =>
       GestureDetector(
         onTap: () async {
-          navigatePush(context, const KoloboxDetailPage());
+          navigatePush(
+              context,
+              KoloboxDetailPage(
+                koloboxFundEnum: fundEnum,
+              ));
         },
         child: Container(
           width: double.maxFinite,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: backgroundColor,
+            color: fundEnum.getFundBackColorValue,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 21, vertical: 22),
           child: Row(
@@ -180,8 +168,9 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
-                      style: AppStyle.b3Bold.copyWith(color: titleColor),
+                      fundEnum.getFundValue,
+                      style: AppStyle.b3Bold
+                          .copyWith(color: fundEnum.getFundTextColorValue),
                     ),
                     Text(
                       amount,
@@ -190,11 +179,16 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   ],
                 ),
               ),
-              Image.asset(
-                icon,
-                width: imageWidth,
-                height: imageHeight,
-              ),
+              fundEnum.isPhotoEnabledAsIcon
+                  ? Icon(
+                      fundEnum.getFundIconValue,
+                      size: 78,
+                      color: fundEnum.getFundIconColorValue,
+                    )
+                  : Image.asset(
+                      fundEnum.getFundImageValue,
+                      width: 96,
+                    ),
             ],
           ),
         ),

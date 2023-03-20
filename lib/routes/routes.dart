@@ -186,13 +186,17 @@ navigatePushReplacement(BuildContext context, Widget? route) {
 
 // use this method to navigate screen with push and custom navigator
 Future<dynamic> popUntilWithNavigator(
-    NavigatorState navigatorState, Function(bool) onResult) async {
+    NavigatorState navigatorState, Function(bool) onResult,
+    {String until = '/'}) async {
+  bool removeStack = true;
   navigatorState.popUntil((route) {
     var name = route.settings.name ?? "";
-    bool result = name == "/";
-    logger?.v("popUntilWithNavigator $name");
-    onResult(result);
-    return result;
+    if (removeStack && name == until) {
+      removeStack = false;
+    }
+    logger?.v("popUntilWithNavigator $removeStack $name $until");
+    onResult(removeStack);
+    return !removeStack;
   });
 }
 
