@@ -9,15 +9,14 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
-import 'package:kolobox_new_app/feature/widgets/kolo_flex_info_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../home/presentation/widget/deposit_amount_widget.dart';
-import '../../../widgets/deposit_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../widgets/kolo_target_item_widget.dart';
 
 class KoloTargetScreen extends BaseBlocWidget {
   const KoloTargetScreen({
@@ -29,13 +28,16 @@ class KoloTargetScreen extends BaseBlocWidget {
 }
 
 class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
-  StreamController<bool> emptyStreamController =
+  StreamController<bool> emptyActiveStreamController =
+      StreamController<bool>.broadcast();
+  StreamController<bool> emptyPaidStreamController =
       StreamController<bool>.broadcast();
   StreamController<bool> leftRightStreamController =
       StreamController<bool>.broadcast();
   bool isLeft = true;
 
-  bool isEmpty = true;
+  bool isActiveEmpty = true;
+  bool isPaidEmpty = true;
 
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
@@ -62,8 +64,8 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                 onRightPressed: () {
                   BlocProvider.of<DashboardBloc>(context)
                       .add(HideDisableBottomScreenEvent());
-                  showCustomBottomSheet(const KoloFlexInfoWidget(
-                    koloboxFundEnum: KoloboxFundEnum.koloFlex,
+                  showCustomBottomSheet(const KoloInfoWidget(
+                    koloboxFundEnum: KoloboxFundEnum.koloTarget,
                   )).then((value) {
                     BlocProvider.of<DashboardBloc>(context)
                         .add(ShowEnableBottomScreenEvent());
@@ -79,7 +81,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                       height: 10,
                     ),
                     Text(
-                      'Koloflex Account',
+                      'Kolotarget Investment',
                       style: AppStyle.b7SemiBold
                           .copyWith(color: ColorList.blackSecondColor),
                     ),
@@ -87,36 +89,36 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                       height: 4,
                     ),
                     Text(
-                      '₦ 150,000.00',
+                      '₦ 820,500.00',
                       style: AppStyle.b2Bold
-                          .copyWith(color: ColorList.koloFlexTextColor),
+                          .copyWith(color: ColorList.primaryColor),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: ColorList.koloFlexColor,
+                        color: ColorList.lightBlue7Color,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 13, vertical: 18),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Interest (6% p.a)',
-                            style: AppStyle.b7SemiBold
+                            'Total Interest (0% p.a)',
+                            style: AppStyle.b8SemiBold
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                '₦ 540.00',
-                                style: AppStyle.b7Bold.copyWith(
-                                    color: ColorList.koloFlexTextColor),
+                                '₦ 20,500.00',
+                                style: AppStyle.b7Bold
+                                    .copyWith(color: ColorList.primaryColor),
                               ),
                               const SizedBox(
                                 height: 3,
@@ -132,41 +134,106 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: ColorList.greyLight6Color, width: 1),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      width: double.maxFinite,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 13, vertical: 14),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    StreamBuilder<bool>(
+                      initialData: isLeft,
+                      stream: leftRightStreamController.stream,
+                      builder: (_, snapshot) => Column(
                         children: [
-                          Text(
-                            'Withdrawals',
-                            style: AppStyle.b9Medium
-                                .copyWith(color: ColorList.blackThirdColor),
+                          if (!isActiveEmpty) ...[
+                            Button(
+                              'Create',
+                              backgroundColor: ColorList.lightBlue3Color,
+                              textColor: ColorList.primaryColor,
+                              overlayColor: ColorList.blueColor,
+                              borderRadius: 32,
+                              onPressed: () {
+                                onClickCreateTarget();
+                              },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                          ],
+                          Container(
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: ColorList.greyLight6Color, width: 1),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            padding: const EdgeInsets.all(5),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Button(
+                                    'Active',
+                                    borderRadius: 12,
+                                    verticalPadding: 10,
+                                    height: 31,
+                                    backgroundColor:
+                                        isLeft ? null : ColorList.white,
+                                    overlayColor: ColorList.blueColor,
+                                    textStyle: AppStyle.b9SemiBold.copyWith(
+                                        color: isLeft
+                                            ? ColorList.white
+                                            : ColorList.blackThirdColor),
+                                    onPressed: () {
+                                      isLeft = true;
+                                      leftRightStreamController.add(isLeft);
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: Button(
+                                    'Paid',
+                                    borderRadius: 12,
+                                    verticalPadding: 10,
+                                    height: 31,
+                                    backgroundColor:
+                                        !isLeft ? null : ColorList.white,
+                                    overlayColor: ColorList.blueColor,
+                                    textStyle: AppStyle.b9SemiBold.copyWith(
+                                        color: !isLeft
+                                            ? ColorList.white
+                                            : ColorList.blackThirdColor),
+                                    onPressed: () {
+                                      isLeft = false;
+                                      leftRightStreamController.add(isLeft);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            '0 of 5 limit used this month',
-                            style: AppStyle.b9Bold
-                                .copyWith(color: ColorList.blackThirdColor),
+                          const SizedBox(
+                            height: 20,
                           ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Targets',
+                              style: AppStyle.b7SemiBold
+                                  .copyWith(color: ColorList.blackSecondColor),
+                            ),
+                          ),
+                          if (isLeft) ...[
+                            if (isActiveEmpty)
+                              getEmptyWidget(true)
+                            else
+                              getActiveWidget(),
+                          ] else ...[
+                            if (isPaidEmpty)
+                              getEmptyWidget(false)
+                            else
+                              getPaidWidget(),
+                          ],
                         ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    StreamBuilder(
-                      initialData: isEmpty,
-                      stream: emptyStreamController.stream,
-                      builder: (_, snapshot) =>
-                          isEmpty ? getEmptyWidget() : getDataWidget(),
                     ),
                   ],
                 ),
@@ -178,242 +245,92 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
     );
   }
 
-  Widget getEmptyWidget() => Column(
+  Widget getEmptyWidget(bool isActive) => Column(
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Recent Transaction',
-              style: AppStyle.b7SemiBold
-                  .copyWith(color: ColorList.blackSecondColor),
-            ),
-          ),
           const SizedBox(
             height: 60,
           ),
           Icon(
             koloboxFundEnum.getFundIconValue,
-            size: 55,
+            size: 60,
             color: koloboxFundEnum.getFundIconColorValue,
           ),
           const SizedBox(
             height: 20,
           ),
           Text(
-            'You have not performed any transaction',
+            'You have not created any target yet',
             style: AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
           ),
           const SizedBox(
             height: 20,
           ),
-          DepositAmountWidget(
-              width: 180,
+          if (isActive) ...[
+            Button(
+              'Create',
+              backgroundColor: ColorList.lightBlue3Color,
+              textColor: ColorList.primaryColor,
+              overlayColor: ColorList.blueColor,
+              borderRadius: 32,
               onPressed: () {
-                onClickDeposit();
-              }),
-          const SizedBox(
-            height: 20,
-          ),
+                onClickCreateTarget();
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
         ],
       );
 
-  void onClickDeposit() {
-    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const DepositYourKoloboxWidget(), height: 0.9)
-        .then((value) {
-      BlocProvider.of<DashboardBloc>(context)
-          .add(ShowEnableBottomScreenEvent());
-      isEmpty = false;
-      emptyStreamController.add(isEmpty);
-    });
+  void onClickCreateTarget() {
+    isActiveEmpty = false;
+    isPaidEmpty = false;
+    leftRightStreamController.add(true);
+    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    // showCustomBottomSheet(const DepositYourKoloboxWidget(), height: 0.9)
+    //     .then((value) {
+    //   BlocProvider.of<DashboardBloc>(context)
+    //       .add(ShowEnableBottomScreenEvent());
+    //   isEmpty = false;
+    //   emptyStreamController.add(isEmpty);
+    // });
   }
 
-  Widget getDataWidget() {
+  Widget getActiveWidget() {
     return Column(
       children: [
-        DepositAmountWidget(
-          backColor: ColorList.koloFlexColor,
-          width: 180,
-          onPressed: () {
-            onClickDeposit();
-          },
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 5,
+          itemBuilder: (_, index) => const Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: KoloTargetItemWidget(),
+          ),
         ),
         const SizedBox(
           height: 20,
         ),
-        StreamBuilder<bool>(
-          initialData: isLeft,
-          stream: leftRightStreamController.stream,
-          builder: (_, snapshot) => Column(
-            children: [
-              Container(
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                  border:
-                      Border.all(color: ColorList.greyLight6Color, width: 1),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                padding: const EdgeInsets.all(5),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Button(
-                        'Account',
-                        borderRadius: 12,
-                        verticalPadding: 10,
-                        height: 31,
-                        backgroundColor: isLeft ? null : ColorList.white,
-                        overlayColor: ColorList.blueColor,
-                        textStyle: AppStyle.b9SemiBold.copyWith(
-                            color: isLeft
-                                ? ColorList.white
-                                : ColorList.blackThirdColor),
-                        onPressed: () {
-                          isLeft = true;
-                          leftRightStreamController.add(isLeft);
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Expanded(
-                      child: Button(
-                        'Transactions',
-                        borderRadius: 12,
-                        verticalPadding: 10,
-                        height: 31,
-                        backgroundColor: !isLeft ? null : ColorList.white,
-                        overlayColor: ColorList.blueColor,
-                        textStyle: AppStyle.b9SemiBold.copyWith(
-                            color: !isLeft
-                                ? ColorList.white
-                                : ColorList.blackThirdColor),
-                        onPressed: () {
-                          isLeft = false;
-                          leftRightStreamController.add(isLeft);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              if (isLeft) ...[
-                getAccountWidget(),
-              ] else ...[
-                getTransactionsWidget(),
-              ],
-            ],
-          ),
-        ),
       ],
     );
   }
 
-  Widget getTransactionsWidget() {
+  Widget getPaidWidget() {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Recent Transaction',
-            style:
-                AppStyle.b7SemiBold.copyWith(color: ColorList.blackSecondColor),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 5,
+          itemBuilder: (_, index) => const Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: KoloTargetItemWidget(isPaid: true),
           ),
         ),
         const SizedBox(
-          height: 8,
+          height: 20,
         ),
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: 10,
-        //     itemBuilder: (_, index) => TransactionsItemWidget(
-        //           onPressed: () {
-        //             BlocProvider.of<DashboardBloc>(context)
-        //                 .add(HideDisableBottomScreenEvent());
-        //             showCustomBottomSheet(
-        //               DepositedWithdrawalInfoKoloboxWidget(
-        //                 koloboxFundEnum: koloboxFundEnum,
-        //               ),
-        //               height: 0.75,
-        //             ).then((value) {
-        //               BlocProvider.of<DashboardBloc>(context)
-        //                   .add(ShowEnableBottomScreenEvent());
-        //             });
-        //           },
-        //         )),
-        // const SizedBox(
-        //   height: 20,
-        // ),
-        Button(
-          'History',
-          backgroundColor: ColorList.greyLight10Color,
-          textColor: ColorList.blackSecondColor,
-          overlayColor: ColorList.blueColor,
-          borderRadius: 32,
-          onPressed: () {
-            comingSoon();
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget getAccountWidget() {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Available for withdrawal',
-            style:
-                AppStyle.b7SemiBold.copyWith(color: ColorList.blackSecondColor),
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: 5,
-        //     itemBuilder: (_, index) => AccountItemWidget(
-        //           onWithdrawal: () {
-        //             BlocProvider.of<DashboardBloc>(context)
-        //                 .add(HideDisableBottomScreenEvent());
-        //             showCustomBottomSheet(
-        //                     const WithdrawalSelectionKoloboxWidget())
-        //                 .then((value) {
-        //               BlocProvider.of<DashboardBloc>(context)
-        //                   .add(ShowEnableBottomScreenEvent());
-        //             });
-        //           },
-        //         )),
-        // const SizedBox(
-        //   height: 20,
-        // ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Balance',
-            style:
-                AppStyle.b7SemiBold.copyWith(color: ColorList.blackSecondColor),
-          ),
-        ),
-        // const SizedBox(
-        //   height: 8,
-        // ),
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: 5,
-        //     itemBuilder: (_, index) => AccountItemWidget(
-        //           onWithdrawal: () {},
-        //         )),
       ],
     );
   }
@@ -422,6 +339,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
   void dispose() {
     super.dispose();
     leftRightStreamController.close();
-    emptyStreamController.close();
+    emptyActiveStreamController.close();
+    emptyPaidStreamController.close();
   }
 }

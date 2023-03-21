@@ -131,6 +131,20 @@
       "search": [
         "vector"
       ]
+    },
+    {
+      "uid": "de964f9636499923de561eb53a2da93c",
+      "css": "vector-1",
+      "code": 59401,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M369.4 500.1L15.9 146.5 116.9 45.5 571.4 500.1 116.9 954.6 15.9 853.6 369.4 500.1Z",
+        "width": 571
+      },
+      "search": [
+        "vector"
+      ]
     }
   ]
 }

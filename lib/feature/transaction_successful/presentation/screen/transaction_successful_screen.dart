@@ -218,11 +218,14 @@ class TransactionSuccessfulScreenState
                     borderRadius: 32,
                     onPressed: () {
                       BlocProvider.of<DashboardBloc>(context).add(
-                          ClearBackStackEvent(
-                              until:
-                                  StateContainer.of(context).isFromFundMyKoloBox
-                                      ? '/'
-                                      : 'KoloboxDetailPage'));
+                        ClearBackStackEvent(
+                          until: StateContainer.of(context).isFromFundMyKoloBox
+                              ? '/'
+                              : StateContainer.of(context)
+                                  .koloboxFundEnum
+                                  .getFundPageValue,
+                        ),
+                      );
                     },
                   ),
                 ],

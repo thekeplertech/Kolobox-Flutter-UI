@@ -8,10 +8,8 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:kolobox_new_app/feature/widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
-import 'package:kolobox_new_app/feature/widgets/kolo_flex_info_widget.dart';
-import 'package:kolobox_new_app/feature/widgets/withdrawal/withdrawal_selection_kolobox_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -64,7 +62,7 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
                 onRightPressed: () {
                   BlocProvider.of<DashboardBloc>(context)
                       .add(HideDisableBottomScreenEvent());
-                  showCustomBottomSheet(const KoloFlexInfoWidget(
+                  showCustomBottomSheet(const KoloInfoWidget(
                     koloboxFundEnum: KoloboxFundEnum.koloFlex,
                   )).then((value) {
                     BlocProvider.of<DashboardBloc>(context)

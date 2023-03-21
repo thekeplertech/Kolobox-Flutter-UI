@@ -7,10 +7,10 @@ import '../../core/constants/image_constants.dart';
 import '../../core/ui/widgets/button.dart';
 import '../../routes/routes.dart';
 
-class KoloFlexInfoWidget extends StatelessWidget {
+class KoloInfoWidget extends StatelessWidget {
   final KoloboxFundEnum koloboxFundEnum;
 
-  const KoloFlexInfoWidget({
+  const KoloInfoWidget({
     Key? key,
     required this.koloboxFundEnum,
   }) : super(key: key);
@@ -40,7 +40,7 @@ class KoloFlexInfoWidget extends StatelessWidget {
                 color: koloboxFundEnum.getFundBackColorValue,
                 shape: BoxShape.circle,
               ),
-              padding: const EdgeInsets.all(25),
+              padding: const EdgeInsets.all(45),
               child: Icon(
                 koloboxFundEnum.getFundIconValue,
                 size: 90,
@@ -51,7 +51,7 @@ class KoloFlexInfoWidget extends StatelessWidget {
               height: 30,
             ),
             Text(
-              'Learn about Koloflex',
+              'Learn about ${koloboxFundEnum.getFundValue}',
               style:
                   AppStyle.b5Bold.copyWith(color: ColorList.blackSecondColor),
             ),

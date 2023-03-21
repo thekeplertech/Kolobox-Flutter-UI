@@ -49,7 +49,10 @@ class ColorList {
   static Color yellowDarkColor = const Color(0xFFFFB715);
   static Color blueColor = const Color(0xFF28AAE1);
   static Color lightBlue2Color = const Color(0xFFDDF3FF);
+  static const Color lightBlue7Color = Color(0xFFF4FBFF);
   static const Color lightBlue3Color = Color(0xFFEAF7FF);
+  static const Color lightBlue8Color = Color(0xFFA5C7FB);
+  static const Color lightBlue9Color = Color(0xFFF6FAFF);
   static Color lightBlue5Color = const Color(0xFFD9F1FE);
   static Color lightBlue6Color = const Color(0xFFE2FFEE);
   static const Color lightBlue4Color = Color(0xFF6A8BFD);
@@ -67,6 +70,8 @@ class ColorList {
   static Color radialColor = const Color(0xFFDDEEEF);
   static Color lightBlueColor = const Color(0xFFDBEEC2);
   static Color greyLight3Color = const Color(0xFFB1B1B1);
+  static Color greyLight11Color = const Color(0xFFF5F5F5);
+  static Color greyLight12Color = const Color(0xFF5A5A5A);
   static Color redDarkColor = const Color(0xFFF73737);
   static const Color redDark2Color = Color(0xFFFF543E);
   static const Color redLightColor = Color(0xFFFFE8E8);

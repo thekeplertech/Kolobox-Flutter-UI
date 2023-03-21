@@ -9,7 +9,7 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
-import 'package:kolobox_new_app/feature/widgets/kolo_flex_info_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -62,7 +62,7 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
                 onRightPressed: () {
                   BlocProvider.of<DashboardBloc>(context)
                       .add(HideDisableBottomScreenEvent());
-                  showCustomBottomSheet(const KoloFlexInfoWidget(
+                  showCustomBottomSheet(const KoloInfoWidget(
                     koloboxFundEnum: KoloboxFundEnum.koloFlex,
                   )).then((value) {
                     BlocProvider.of<DashboardBloc>(context)

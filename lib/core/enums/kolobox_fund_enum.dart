@@ -10,6 +10,12 @@ const String koloTargetPlusValue = 'Kolotarget+';
 const String koloFamilyValue = 'Kolofamily';
 const String koloGroupValue = 'Kologroup';
 
+const String koloFlexPageValue = 'KoloFlexPage';
+const String koloTargetPageValue = 'KoloTargetPage';
+const String koloTargetPlusPageValue = 'KoloTargetPlusPage';
+const String koloFamilyPageValue = 'KoloFamilyPage';
+const String koloGroupPageValue = 'KoloGroupPage';
+
 enum KoloboxFundEnum {
   koloFlex,
   koloTarget,
@@ -118,6 +124,21 @@ extension EnumExtensions on KoloboxFundEnum {
         return imageTargetPlusIcon;
       case KoloboxFundEnum.koloGroup:
         return imageGroupIcon;
+    }
+  }
+
+  String get getFundPageValue {
+    switch (this) {
+      case KoloboxFundEnum.koloFlex:
+        return koloFlexPageValue;
+      case KoloboxFundEnum.koloTarget:
+        return koloTargetPageValue;
+      case KoloboxFundEnum.koloTargetPlus:
+        return koloTargetPlusPageValue;
+      case KoloboxFundEnum.koloFamily:
+        return koloFamilyPageValue;
+      case KoloboxFundEnum.koloGroup:
+        return koloGroupPageValue;
     }
   }
 }
