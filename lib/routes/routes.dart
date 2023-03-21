@@ -188,15 +188,14 @@ navigatePushReplacement(BuildContext context, Widget? route) {
 Future<dynamic> popUntilWithNavigator(
     NavigatorState navigatorState, Function(bool) onResult,
     {String until = '/'}) async {
-  bool removeStack = true;
+  bool removeUntil = true;
+  logger?.v("popUntilWithNavigator ------------------------- $until");
   navigatorState.popUntil((route) {
     var name = route.settings.name ?? "";
-    if (removeStack && name == until) {
-      removeStack = false;
-    }
-    logger?.v("popUntilWithNavigator $removeStack $name $until");
-    onResult(removeStack);
-    return !removeStack;
+    removeUntil = name == until;
+    logger?.v("popUntilWithNavigator $removeUntil $name $until");
+    onResult(removeUntil);
+    return removeUntil;
   });
 }
 

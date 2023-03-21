@@ -8,7 +8,8 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/deposit_amount_widget.dart';
 import 'package:kolobox_new_app/feature/kolobox_detail/presentation/kolobox_detail_page.dart';
-import 'package:kolobox_new_app/feature/widgets/fund_your_kolobox_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
@@ -76,6 +77,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          StateContainer.of(context).isFromFundMyKoloBox = true;
                           BlocProvider.of<DashboardBloc>(context)
                               .add(HideDisableBottomScreenEvent());
                           showCustomBottomSheet(const FundYourKoloboxWidget(),
@@ -146,12 +148,14 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
     Color amountColor,
   ) =>
       GestureDetector(
-        onTap: () async {
-          navigatePush(
-              context,
-              KoloboxDetailPage(
-                koloboxFundEnum: fundEnum,
-              ));
+        onTap: () {
+          if (fundEnum == KoloboxFundEnum.koloTargetPlus) {
+            comingSoon();
+          } else {
+            StateContainer.of(context).isFromFundMyKoloBox = false;
+            StateContainer.of(context).koloboxFundEnum = fundEnum;
+            navigatePush(context, KoloboxDetailPage());
+          }
         },
         child: Container(
           width: double.maxFinite,

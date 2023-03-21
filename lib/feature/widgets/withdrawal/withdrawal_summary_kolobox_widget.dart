@@ -4,10 +4,10 @@ import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
-import '../../core/colors/color_list.dart';
-import '../../core/constants/kolo_box_icon.dart';
-import '../../core/ui/widgets/button.dart';
-import 'confirm_with_pin_widget.dart';
+import '../../../core/colors/color_list.dart';
+import '../../../core/constants/kolo_box_icon.dart';
+import '../../../core/ui/widgets/button.dart';
+import '../confirm_with_pin_widget.dart';
 
 class WithdrawalSummaryKoloboxWidget extends BaseScreen {
   const WithdrawalSummaryKoloboxWidget({Key? key}) : super(key: key);

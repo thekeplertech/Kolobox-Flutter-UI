@@ -4,17 +4,15 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_with_pin_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../core/base/base_screen.dart';
 import '../../core/colors/color_list.dart';
 
 class DepositSummaryWidget extends BaseScreen {
-  final KoloboxFundEnum koloboxFundEnum;
-
   const DepositSummaryWidget({
     Key? key,
-    required this.koloboxFundEnum,
   }) : super(key: key);
 
   @override
@@ -22,8 +20,11 @@ class DepositSummaryWidget extends BaseScreen {
 }
 
 class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
+  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+
   @override
   Widget body(BuildContext context) {
+    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -102,24 +103,26 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Selected Investing towards',
-                  style: AppStyle.b9Medium
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-                Text(
-                  'Renting a new home',
-                  style: AppStyle.b8SemiBold
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
+            if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Selected Investing towards',
+                    style: AppStyle.b9Medium
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                  Text(
+                    'Renting a new home',
+                    style: AppStyle.b8SemiBold
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
             Text(
               'Select payment option',
               style: AppStyle.b8SemiBold
@@ -136,11 +139,14 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               padding: const EdgeInsets.all(15),
               child: Row(
                 children: [
-                  Text(
-                    'Paystack',
-                    style: AppStyle.b7Regular
-                        .copyWith(color: ColorList.blackSecondColor),
+                  Expanded(
+                    child: Text(
+                      'Paystack',
+                      style: AppStyle.b7Regular
+                          .copyWith(color: ColorList.blackSecondColor),
+                    ),
                   ),
+                  Image.asset(imagePayStackIcon),
                 ],
               ),
             ),
@@ -184,7 +190,7 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: widget.koloboxFundEnum.getFundBackColorValue,
+          color: koloboxFundEnum.getFundBackColorValue,
           borderRadius: BorderRadius.circular(14),
         ),
         padding: const EdgeInsets.all(24),
@@ -192,20 +198,20 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
           children: [
             Expanded(
               child: Text(
-                widget.koloboxFundEnum.getFundValue,
-                style: AppStyle.b3Bold.copyWith(
-                    color: widget.koloboxFundEnum.getFundTextColorValue),
+                koloboxFundEnum.getFundValue,
+                style: AppStyle.b3Bold
+                    .copyWith(color: koloboxFundEnum.getFundTextColorValue),
               ),
             ),
-            widget.koloboxFundEnum.isPhotoEnabledAsIcon
+            koloboxFundEnum.isPhotoEnabledAsIcon
                 ? Icon(
-                    widget.koloboxFundEnum.getFundIconValue,
+                    koloboxFundEnum.getFundIconValue,
                     size: 48,
-                    color: widget.koloboxFundEnum.getFundIconColorValue
-                        .withOpacity(0.4),
+                    color:
+                        koloboxFundEnum.getFundIconColorValue.withOpacity(0.4),
                   )
                 : Image.asset(
-                    widget.koloboxFundEnum.getFundImageValue,
+                    koloboxFundEnum.getFundImageValue,
                     width: 48,
                     height: 48,
                   ),

@@ -5,13 +5,17 @@ import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
+import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
+import '../../../../core/enums/kolobox_fund_enum.dart';
 import '../../../../core/ui/widgets/button.dart';
 
 class TransactionSuccessfulScreen extends BaseBlocWidget {
-  const TransactionSuccessfulScreen({Key? key}) : super(key: key);
+  const TransactionSuccessfulScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   TransactionSuccessfulScreenState createState() =>
@@ -172,25 +176,26 @@ class TransactionSuccessfulScreenState
                   const SizedBox(
                     height: 7,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: ColorList.lightBlue3Color,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Wallet',
-                          style: AppStyle.b3Bold
-                              .copyWith(color: ColorList.blackSecondColor),
-                        ),
-                        Image.asset(imageWalletSuccessIconSelected),
-                      ],
-                    ),
-                  ),
+                  getOptionWidget(StateContainer.of(context).koloboxFundEnum),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     color: ColorList.lightBlue3Color,
+                  //     borderRadius: BorderRadius.circular(14),
+                  //   ),
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 20, vertical: 20),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(
+                  //         'Wallet',
+                  //         style: AppStyle.b3Bold
+                  //             .copyWith(color: ColorList.blackSecondColor),
+                  //       ),
+                  //       Image.asset(imageWalletSuccessIconSelected),
+                  //     ],
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 15,
                   ),
@@ -212,14 +217,53 @@ class TransactionSuccessfulScreenState
                     overlayColor: ColorList.blueColor,
                     borderRadius: 32,
                     onPressed: () {
-                      BlocProvider.of<DashboardBloc>(context)
-                          .add(ClearBackStackEvent());
+                      BlocProvider.of<DashboardBloc>(context).add(
+                          ClearBackStackEvent(
+                              until:
+                                  StateContainer.of(context).isFromFundMyKoloBox
+                                      ? '/'
+                                      : 'KoloboxDetailPage'));
                     },
                   ),
                 ],
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget getOptionWidget(KoloboxFundEnum fundEnum) {
+    return GestureDetector(
+      onTap: () async {},
+      child: Container(
+        decoration: BoxDecoration(
+          color: fundEnum.getFundBackColorValue,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        padding: const EdgeInsets.all(24),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                fundEnum.getFundValue,
+                style: AppStyle.b3Bold
+                    .copyWith(color: fundEnum.getFundTextColorValue),
+              ),
+            ),
+            fundEnum.isPhotoEnabledAsIcon
+                ? Icon(
+                    fundEnum.getFundIconValue,
+                    size: 48,
+                    color: fundEnum.getFundIconColorValue.withOpacity(0.4),
+                  )
+                : Image.asset(
+                    fundEnum.getFundImageValue,
+                    width: 48,
+                    height: 48,
+                  ),
+          ],
         ),
       ),
     );

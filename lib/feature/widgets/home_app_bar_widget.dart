@@ -95,9 +95,6 @@ class _HomeAppBarWidgetState extends BaseScreenState<HomeAppBarWidget> {
                 ),
               ],
               if (widget.rightIcon != null) ...[
-                const SizedBox(
-                  width: 12,
-                ),
                 GestureDetector(
                   onTap: widget.onRightPressed,
                   child: Padding(

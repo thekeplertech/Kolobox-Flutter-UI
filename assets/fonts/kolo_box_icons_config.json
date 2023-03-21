@@ -117,6 +117,20 @@
       "search": [
         "frame-(2)"
       ]
+    },
+    {
+      "uid": "34e5e60c92e4ca783bf5167008d1eb47",
+      "css": "vector",
+      "code": 59398,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M800 933.3L0 133.3H1600L800 933.3Z",
+        "width": 1600
+      },
+      "search": [
+        "vector"
+      ]
     }
   ]
 }

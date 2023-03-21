@@ -4,6 +4,7 @@ import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bl
 
 import '../../../../core/base/base_page.dart';
 import '../../../core/bloc/master_bloc.dart';
+import '../../widgets/inherited_state_container.dart';
 import 'screen/dashboard_screen.dart';
 
 class DashboardPage extends BasePage {
@@ -15,10 +16,12 @@ class DashboardPage extends BasePage {
 
 class DashboardPageState extends BasePageState<DashboardPage> {
   @override
-  Widget getChildBlocWidget(BuildContext context) =>
-      BlocProvider<DashboardBloc>(
-        create: (context) =>
-            DashboardBloc(BlocProvider.of<MasterBloc>(context)),
-        child: const DashboardScreen(),
+  Widget getChildBlocWidget(BuildContext context) => StateContainer(
+        key: const Key('unique'),
+        child: BlocProvider<DashboardBloc>(
+          create: (context) =>
+              DashboardBloc(BlocProvider.of<MasterBloc>(context)),
+          child: const DashboardScreen(),
+        ),
       );
 }

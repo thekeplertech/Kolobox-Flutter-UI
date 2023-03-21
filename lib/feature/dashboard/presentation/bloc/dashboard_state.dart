@@ -6,4 +6,8 @@ class ShowEnableBottomScreenState extends DashboardState {}
 
 class HideDisableBottomScreenState extends DashboardState {}
 
-class ClearBackStackState extends DashboardState {}
+class ClearBackStackState extends DashboardState {
+  final String until;
+
+  ClearBackStackState({this.until = '/'});
+}

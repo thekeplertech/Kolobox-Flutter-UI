@@ -66,11 +66,10 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
               hideAnimationController?.reverse();
             }
           } else if (state is ClearBackStackState) {
-            await popUntil(previousTabIndex);
+            await popUntil(previousTabIndex, removeUntil: state.until);
           }
         },
         child: getChild(),
-        // builder: (context, state) => getChild(),
       );
 
   Widget getChild() => WillPopScope(
@@ -270,7 +269,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
     }
   }
 
-  Future<void> popUntil(int index) async {
+  Future<void> popUntil(int index, {String removeUntil = '/'}) async {
     if (dashboardTabModels[previousTabIndex].navigatorKey.currentState !=
         null) {
       await popUntilWithNavigator(
@@ -279,7 +278,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
         if (result) {
           // await setBottomListItems();
         }
-      }, until: 'KoloboxDetailPage');
+      }, until: removeUntil);
     }
 
     previousTabIndex = index;

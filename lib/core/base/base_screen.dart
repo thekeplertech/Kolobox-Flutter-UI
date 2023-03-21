@@ -142,10 +142,12 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
         backgroundColor: ColorList.white,
         isScrollControlled: isScrollControlled,
         isDismissible: isDismissible,
-        builder: (_) => SizedBox(
-            height: height == null
-                ? null
-                : MediaQuery.of(context).size.height * height,
-            child: child),
+        builder: (_) {
+          return SizedBox(
+              height: height == null
+                  ? null
+                  : MediaQuery.of(context).size.height * height,
+              child: child);
+        },
       );
 }

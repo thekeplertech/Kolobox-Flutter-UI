@@ -17,7 +17,7 @@ class DashboardBloc extends BaseBloc<DashboardEvent, DashboardState> {
       emit(HideDisableBottomScreenState());
     });
     on<ClearBackStackEvent>((event, emit) {
-      emit(ClearBackStackState());
+      emit(ClearBackStackState(until: event.until));
     });
   }
 }

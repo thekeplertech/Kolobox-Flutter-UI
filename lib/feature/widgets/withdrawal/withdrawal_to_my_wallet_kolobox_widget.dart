@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/widgets/withdrawal/withdrawal_summary_kolobox_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
-import '../../core/colors/color_list.dart';
-import '../../core/ui/widgets/button.dart';
-import 'withdrawal_summary_kolobox_widget.dart';
+import '../../../core/colors/color_list.dart';
+import '../../../core/ui/widgets/button.dart';
 
-class WithdrawalToBankKoloboxWidget extends BaseScreen {
-  const WithdrawalToBankKoloboxWidget({Key? key}) : super(key: key);
+class WithdrawalToMyWalletKoloboxWidget extends BaseScreen {
+  const WithdrawalToMyWalletKoloboxWidget({Key? key}) : super(key: key);
 
   @override
-  State<WithdrawalToBankKoloboxWidget> createState() =>
-      _WithdrawalToBankKoloboxWidgetState();
+  State<WithdrawalToMyWalletKoloboxWidget> createState() =>
+      _WithdrawalToMyWalletKoloboxWidgetState();
 }
 
-class _WithdrawalToBankKoloboxWidgetState
-    extends BaseScreenState<WithdrawalToBankKoloboxWidget> {
+class _WithdrawalToMyWalletKoloboxWidgetState
+    extends BaseScreenState<WithdrawalToMyWalletKoloboxWidget> {
   @override
   Widget body(BuildContext context) {
     return SingleChildScrollView(
@@ -44,7 +43,7 @@ class _WithdrawalToBankKoloboxWidgetState
             ),
             const SizedBox(height: 5),
             Text(
-              'Withdraw to my bank account',
+              'Withdraw to my wallet',
               style:
                   AppStyle.b9Regular.copyWith(color: ColorList.blackThirdColor),
             ),
@@ -79,7 +78,7 @@ class _WithdrawalToBankKoloboxWidgetState
             ),
             Text(
               'Withdraw to',
-              style: AppStyle.b8SemiBold
+              style: AppStyle.b9SemiBold
                   .copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
@@ -88,78 +87,21 @@ class _WithdrawalToBankKoloboxWidgetState
             Container(
               width: double.maxFinite,
               decoration: BoxDecoration(
-                color: ColorList.lightBlue3Color,
+                color: ColorList.blueLight2Color,
                 borderRadius: BorderRadius.circular(12),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        KoloBoxIcons.bank,
-                        size: 18,
-                        color: ColorList.primaryColor,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Zenith Bank',
-                        style: AppStyle.b8SemiBold
-                            .copyWith(color: ColorList.blackSecondColor),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
                   Text(
-                    '0949830020004',
-                    style: AppStyle.b6Bold
+                    'Wallet',
+                    style: AppStyle.b3Bold
                         .copyWith(color: ColorList.blackSecondColor),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'Dami Anoreq',
-                    style: AppStyle.b8Medium
-                        .copyWith(color: ColorList.blackSecondColor),
-                  ),
+                  Image.asset(imageWalletSuccessIconSelected,
+                      width: 48, height: 48),
                 ],
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: ColorList.lightBlue3Color,
-                    borderRadius: BorderRadius.circular(32)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 27, vertical: 17),
-                child: IntrinsicWidth(
-                  child: Row(
-                    children: [
-                      Text(
-                        'Add Bank Account',
-                        style: AppStyle.b7SemiBold
-                            .copyWith(color: ColorList.primaryColor),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Image.asset(
-                        imageBankDetailsIcon,
-                        color: ColorList.primaryColor,
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ),
             const SizedBox(

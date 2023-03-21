@@ -22,4 +22,6 @@ class KoloBoxIcons {
       IconData(0xe805, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
   static const IconData bank =
       IconData(0xe803, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
+  static const IconData downArrow =
+      IconData(0xe806, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
 }

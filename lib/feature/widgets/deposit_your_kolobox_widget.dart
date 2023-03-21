@@ -9,13 +9,11 @@ import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../core/base/base_screen.dart';
 import '../../../../core/colors/color_list.dart';
+import 'inherited_state_container.dart';
 
 class DepositYourKoloboxWidget extends BaseScreen {
-  final KoloboxFundEnum koloboxFundEnum;
-
   const DepositYourKoloboxWidget({
     Key? key,
-    required this.koloboxFundEnum,
   }) : super(key: key);
 
   @override
@@ -25,8 +23,11 @@ class DepositYourKoloboxWidget extends BaseScreen {
 
 class _DepositYourKoloboxWidgetState
     extends BaseScreenState<DepositYourKoloboxWidget> {
+  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+
   @override
   Widget body(BuildContext context) {
+    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -52,7 +53,7 @@ class _DepositYourKoloboxWidgetState
               height: 5,
             ),
             Text(
-              'Deposit into your Kolotarget',
+              'Deposit into your ${koloboxFundEnum.getFundValue}',
               style:
                   AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
             ),
@@ -76,30 +77,40 @@ class _DepositYourKoloboxWidgetState
             const SizedBox(
               height: 20,
             ),
-            Text(
-              'Select a kolotarget to make this deposit to',
-              style:
-                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: ColorList.greyLightColor, width: 1),
-                borderRadius: BorderRadius.circular(12),
+            if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
+              Text(
+                'Select a kolotarget to make this deposit to',
+                style: AppStyle.b8Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
-              width: double.maxFinite,
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                'Select a kolotarget',
-                style: AppStyle.b8Regular
-                    .copyWith(color: ColorList.blackThirdColor),
+              const SizedBox(
+                height: 4,
               ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: ColorList.greyLightColor, width: 1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                width: double.maxFinite,
+                padding: const EdgeInsets.only(
+                    left: 12, right: 16, top: 12, bottom: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Select a ${koloboxFundEnum.getFundValue}',
+                        style: AppStyle.b8Regular
+                            .copyWith(color: ColorList.blackThirdColor),
+                      ),
+                    ),
+                    const Icon(KoloBoxIcons.downArrow, size: 8),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+            ],
             Text(
               'Enter Amount',
               style:
@@ -142,8 +153,8 @@ class _DepositYourKoloboxWidgetState
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 15, top: 15, bottom: 10),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
                     child: Row(
                       children: [
                         Expanded(
@@ -152,6 +163,10 @@ class _DepositYourKoloboxWidgetState
                             style: AppStyle.b7Regular
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
+                        ),
+                        Image.asset(imagePayStackIcon),
+                        const SizedBox(
+                          width: 10,
                         ),
                         SizedBox(
                           width: 25,
@@ -172,35 +187,6 @@ class _DepositYourKoloboxWidgetState
                       ],
                     ),
                   ),
-                  Divider(
-                      color: ColorList.lightBlue5Color,
-                      height: 1,
-                      thickness: 1),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 15, top: 10, bottom: 15),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Flutterwave',
-                            style: AppStyle.b7Regular
-                                .copyWith(color: ColorList.blackSecondColor),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: Stack(
-                            children: [
-                              Image.asset(imageUncheckedIcon),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -214,9 +200,8 @@ class _DepositYourKoloboxWidgetState
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
               onPressed: () {
-                showCustomBottomSheet(DepositSummaryWidget(
-                  koloboxFundEnum: widget.koloboxFundEnum,
-                ));
+                showCustomBottomSheet(const DepositSummaryWidget(),
+                    height: 0.9);
               },
             ),
           ],
@@ -246,7 +231,7 @@ class _DepositYourKoloboxWidgetState
       },
       child: Container(
         decoration: BoxDecoration(
-          color: widget.koloboxFundEnum.getFundBackColorValue,
+          color: koloboxFundEnum.getFundBackColorValue,
           borderRadius: BorderRadius.circular(14),
         ),
         padding: const EdgeInsets.all(24),
@@ -254,20 +239,20 @@ class _DepositYourKoloboxWidgetState
           children: [
             Expanded(
               child: Text(
-                widget.koloboxFundEnum.getFundValue,
-                style: AppStyle.b3Bold.copyWith(
-                    color: widget.koloboxFundEnum.getFundTextColorValue),
+                koloboxFundEnum.getFundValue,
+                style: AppStyle.b3Bold
+                    .copyWith(color: koloboxFundEnum.getFundTextColorValue),
               ),
             ),
-            widget.koloboxFundEnum.isPhotoEnabledAsIcon
+            koloboxFundEnum.isPhotoEnabledAsIcon
                 ? Icon(
-                    widget.koloboxFundEnum.getFundIconValue,
+                    koloboxFundEnum.getFundIconValue,
                     size: 48,
-                    color: widget.koloboxFundEnum.getFundIconColorValue
-                        .withOpacity(0.4),
+                    color:
+                        koloboxFundEnum.getFundIconColorValue.withOpacity(0.4),
                   )
                 : Image.asset(
-                    widget.koloboxFundEnum.getFundImageValue,
+                    koloboxFundEnum.getFundImageValue,
                     width: 48,
                     height: 48,
                   ),

@@ -5,8 +5,9 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
-import '../../core/colors/color_list.dart';
-import 'deposit_your_kolobox_widget.dart';
+import '../../../core/colors/color_list.dart';
+import '../deposit_your_kolobox_widget.dart';
+import '../inherited_state_container.dart';
 
 class FundYourKoloboxWidget extends BaseScreen {
   const FundYourKoloboxWidget({Key? key}) : super(key: key);
@@ -88,16 +89,17 @@ class _FundYourKoloboxWidgetState
   Widget getOptionWidget(KoloboxFundEnum fundEnum) {
     return GestureDetector(
       onTap: () async {
+        StateContainer.of(context).koloboxFundEnum = fundEnum;
         switch (fundEnum) {
           case KoloboxFundEnum.koloFlex:
           case KoloboxFundEnum.koloTarget:
           case KoloboxFundEnum.koloFamily:
           case KoloboxFundEnum.koloGroup:
             showCustomBottomSheet(
-                DepositYourKoloboxWidget(
-                  koloboxFundEnum: fundEnum,
-                ),
-                height: 0.9);
+              const DepositYourKoloboxWidget(),
+              height: 0.8,
+              isDismissible: false,
+            );
             break;
           case KoloboxFundEnum.koloTargetPlus:
             comingSoon();

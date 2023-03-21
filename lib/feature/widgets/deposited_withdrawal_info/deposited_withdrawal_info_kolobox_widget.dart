@@ -5,8 +5,8 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
-import '../../../../core/base/base_screen.dart';
-import '../../../../core/colors/color_list.dart';
+import '../../../../../core/base/base_screen.dart';
+import '../../../../../core/colors/color_list.dart';
 
 class DepositedWithdrawalInfoKoloboxWidget extends BaseScreen {
   final KoloboxFundEnum koloboxFundEnum;
