@@ -14,7 +14,7 @@ import '../../../../routes/routes.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../home/presentation/widget/deposit_amount_widget.dart';
-import '../../../koloflex/presentation/kolobox_detail_page.dart';
+import '../../../koloflex/presentation/kolo_flex_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';

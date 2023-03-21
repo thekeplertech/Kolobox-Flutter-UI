@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/base/base_page.dart';
-import 'screen/kolobox_detail_screen.dart';
+import 'screen/kolo_flex_screen.dart';
 
 class KoloFlexPage extends BasePage {
   const KoloFlexPage({
