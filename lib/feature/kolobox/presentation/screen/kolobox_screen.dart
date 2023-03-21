@@ -6,6 +6,9 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/kolofamily/presentation/kolo_family_page.dart';
+import 'package:kolobox_new_app/feature/kologroup/presentation/kolo_group_page.dart';
+import 'package:kolobox_new_app/feature/kolotarget/presentation/kolo_target_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
@@ -157,13 +160,16 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
               navigatePush(context, const KoloFlexPage());
               break;
             case KoloboxFundEnum.koloTarget:
+              navigatePush(context, const KoloTargetPage());
               break;
             case KoloboxFundEnum.koloTargetPlus:
               comingSoon();
               break;
             case KoloboxFundEnum.koloFamily:
+              navigatePush(context, const KoloFamilyPage());
               break;
             case KoloboxFundEnum.koloGroup:
+              navigatePush(context, const KoloGroupPage());
               break;
           }
         },
