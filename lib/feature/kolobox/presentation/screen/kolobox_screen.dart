@@ -6,10 +6,6 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/home/presentation/widget/deposit_amount_widget.dart';
-import 'package:kolobox_new_app/feature/kolobox_detail/presentation/kolobox_detail_page.dart';
-import 'package:kolobox_new_app/feature/widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
-import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
@@ -17,7 +13,11 @@ import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../../../home/presentation/widget/deposit_amount_widget.dart';
+import '../../../koloflex/presentation/kolobox_detail_page.dart';
+import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../../../widgets/inherited_state_container.dart';
 
 class KoloboxScreen extends BaseBlocWidget {
   const KoloboxScreen({Key? key}) : super(key: key);
@@ -149,12 +149,22 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
   ) =>
       GestureDetector(
         onTap: () {
-          if (fundEnum == KoloboxFundEnum.koloTargetPlus) {
-            comingSoon();
-          } else {
-            StateContainer.of(context).isFromFundMyKoloBox = false;
-            StateContainer.of(context).koloboxFundEnum = fundEnum;
-            navigatePush(context, KoloboxDetailPage());
+          StateContainer.of(context).isFromFundMyKoloBox = false;
+          StateContainer.of(context).koloboxFundEnum = fundEnum;
+
+          switch (fundEnum) {
+            case KoloboxFundEnum.koloFlex:
+              navigatePush(context, const KoloFlexPage());
+              break;
+            case KoloboxFundEnum.koloTarget:
+              break;
+            case KoloboxFundEnum.koloTargetPlus:
+              comingSoon();
+              break;
+            case KoloboxFundEnum.koloFamily:
+              break;
+            case KoloboxFundEnum.koloGroup:
+              break;
           }
         },
         child: Container(
