@@ -28,10 +28,6 @@ class KoloTargetScreen extends BaseBlocWidget {
 }
 
 class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
-  StreamController<bool> emptyActiveStreamController =
-      StreamController<bool>.broadcast();
-  StreamController<bool> emptyPaidStreamController =
-      StreamController<bool>.broadcast();
   StreamController<bool> leftRightStreamController =
       StreamController<bool>.broadcast();
   bool isLeft = true;
@@ -266,15 +262,18 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
             height: 20,
           ),
           if (isActive) ...[
-            Button(
-              'Create',
-              backgroundColor: ColorList.lightBlue3Color,
-              textColor: ColorList.primaryColor,
-              overlayColor: ColorList.blueColor,
-              borderRadius: 32,
-              onPressed: () {
-                onClickCreateTarget();
-              },
+            SizedBox(
+              width: 174,
+              child: Button(
+                'Create',
+                backgroundColor: ColorList.lightBlue3Color,
+                textColor: ColorList.primaryColor,
+                overlayColor: ColorList.blueColor,
+                borderRadius: 32,
+                onPressed: () {
+                  onClickCreateTarget();
+                },
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -339,7 +338,5 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
   void dispose() {
     super.dispose();
     leftRightStreamController.close();
-    emptyActiveStreamController.close();
-    emptyPaidStreamController.close();
   }
 }

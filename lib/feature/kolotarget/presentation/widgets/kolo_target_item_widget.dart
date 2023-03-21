@@ -3,12 +3,16 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
+import '../../../../core/enums/kolobox_fund_enum.dart';
+
 class KoloTargetItemWidget extends StatelessWidget {
+  final KoloboxFundEnum koloboxFundEnum;
   final bool isPaid;
 
   const KoloTargetItemWidget({
     Key? key,
     this.isPaid = false,
+    this.koloboxFundEnum = KoloboxFundEnum.koloTarget,
   }) : super(key: key);
 
   @override
@@ -23,10 +27,11 @@ class KoloTargetItemWidget extends StatelessWidget {
           Row(
             children: [
               Icon(
-                KoloBoxIcons.koloTarget,
+                koloboxFundEnum.getFundIconValue,
                 size: 24,
-                color:
-                    isPaid ? ColorList.greyLight2Color : ColorList.primaryColor,
+                color: isPaid
+                    ? ColorList.greyLight2Color
+                    : koloboxFundEnum.getFundIconColorValue,
               ),
               const SizedBox(
                 width: 15,
