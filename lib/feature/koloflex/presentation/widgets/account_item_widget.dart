@@ -7,10 +7,12 @@ import '../../../../core/ui/widgets/range_custom_painter.dart';
 
 class AccountItemWidget extends StatelessWidget {
   final Function() onWithdrawal;
+  final Function() onDetail;
 
   const AccountItemWidget({
     Key? key,
     required this.onWithdrawal,
+    required this.onDetail,
   }) : super(key: key);
 
   @override
@@ -22,71 +24,85 @@ class AccountItemWidget extends StatelessWidget {
         ),
         Row(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: ColorList.lightBlue6Color, shape: BoxShape.circle),
-              padding: const EdgeInsets.all(15),
-              child: Image.asset(imageDepositRecentIcon),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Investment',
-                    style: AppStyle.b8SemiBold
-                        .copyWith(color: ColorList.blackSecondColor),
+              child: GestureDetector(
+                onTap: () {
+                  onDetail();
+                },
+                child: AbsorbPointer(
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: ColorList.lightBlue6Color,
+                            shape: BoxShape.circle),
+                        padding: const EdgeInsets.all(15),
+                        child: Image.asset(imageDepositRecentIcon),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Investment',
+                              style: AppStyle.b8SemiBold
+                                  .copyWith(color: ColorList.blackSecondColor),
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            if (false) ...[
+                              Text(
+                                'Aug 02, 2022',
+                                style: AppStyle.b10SemiBold
+                                    .copyWith(color: ColorList.greyLight2Color),
+                              ),
+                            ] else ...[
+                              Text(
+                                'View Details',
+                                style: AppStyle.b10SemiBold
+                                    .copyWith(color: ColorList.primaryColor),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '₦1,500,000.00',
+                            style: AppStyle.b8SemiBold
+                                .copyWith(color: ColorList.blackSecondColor),
+                          ),
+                          const SizedBox(
+                            height: 4,
+                          ),
+                          Text(
+                            '+ ₦ 100,000.00',
+                            style: AppStyle.b10SemiBold
+                                .copyWith(color: ColorList.koloFamilyTextColor),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Container(
+                        width: 1,
+                        color: ColorList.greyLight7Color,
+                        height: 45,
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  if (false) ...[
-                    Text(
-                      'Aug 02, 2022',
-                      style: AppStyle.b10SemiBold
-                          .copyWith(color: ColorList.greyLight2Color),
-                    ),
-                  ] else ...[
-                    Text(
-                      'View Details',
-                      style: AppStyle.b10SemiBold
-                          .copyWith(color: ColorList.primaryColor),
-                    ),
-                  ],
-                ],
+                ),
               ),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '₦1,500,000.00',
-                  style: AppStyle.b8SemiBold
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  '+ ₦ 100,000.00',
-                  style: AppStyle.b10SemiBold
-                      .copyWith(color: ColorList.koloFamilyTextColor),
-                ),
-              ],
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Container(
-              width: 1,
-              color: ColorList.greyLight7Color,
-              height: 45,
             ),
             const SizedBox(
               width: 8,

@@ -63,3 +63,5 @@ const imageWithdrawSecondRecentIcon =
 const imageUncheckedIcon = "assets/images/unchecked.png";
 const imageCheckedIcon = "assets/images/checked.png";
 const imagePayStackIcon = "assets/images/pay_stack.png";
+const imageSendIcon = "assets/images/send_icon.png";
+const imageNoTransactionIcon = "assets/images/no_transaction_icon.png";
