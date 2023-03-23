@@ -53,6 +53,8 @@ class ColorList {
   static const Color lightBlue3Color = Color(0xFFEAF7FF);
   static const Color lightBlue8Color = Color(0xFFA5C7FB);
   static const Color lightBlue9Color = Color(0xFFF6FAFF);
+  static const Color lightBlue10Color = Color(0xFFB9E5FF);
+  static const Color lightBlue11Color = Color(0xFFEDF8FF);
   static Color lightBlue5Color = const Color(0xFFD9F1FE);
   static Color lightBlue6Color = const Color(0xFFE2FFEE);
   static const Color lightBlue4Color = Color(0xFF6A8BFD);

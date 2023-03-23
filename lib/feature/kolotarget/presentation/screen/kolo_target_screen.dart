@@ -8,6 +8,7 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
+import 'package:kolobox_new_app/feature/widgets/create_kolo_target/create_kolo_target_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
@@ -139,7 +140,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                         children: [
                           if (!isActiveEmpty) ...[
                             Button(
-                              'Create',
+                              'Create new target',
                               backgroundColor: ColorList.lightBlue3Color,
                               textColor: ColorList.primaryColor,
                               overlayColor: ColorList.blueColor,
@@ -283,17 +284,14 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
       );
 
   void onClickCreateTarget() {
-    isActiveEmpty = false;
-    isPaidEmpty = false;
-    leftRightStreamController.add(true);
-    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    // showCustomBottomSheet(const DepositYourKoloboxWidget(), height: 0.9)
-    //     .then((value) {
-    //   BlocProvider.of<DashboardBloc>(context)
-    //       .add(ShowEnableBottomScreenEvent());
-    //   isEmpty = false;
-    //   emptyStreamController.add(isEmpty);
-    // });
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(const CreateKoloTargetWidget()).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      isActiveEmpty = false;
+      isPaidEmpty = false;
+      leftRightStreamController.add(true);
+    });
   }
 
   Widget getActiveWidget() {

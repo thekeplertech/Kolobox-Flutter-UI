@@ -15,7 +15,10 @@ class CustomTextField extends StatelessWidget {
     this.postIcon,
     this.onPressed,
     this.onChanged,
+    this.textStyle,
+    this.hintStyle,
     this.obscureText = false,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   final String hint;
@@ -28,6 +31,9 @@ class CustomTextField extends StatelessWidget {
   final Function? onPressed;
   final Function(String)? onChanged;
   final bool obscureText;
+  final TextStyle? textStyle;
+  final TextStyle? hintStyle;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +65,12 @@ class CustomTextField extends StatelessWidget {
           Expanded(
             child: TextFormField(
               controller: controller,
-              style: TextStyle(
-                color: ColorList.blackThirdColor,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-              ),
+              style: textStyle ??
+                  TextStyle(
+                    color: ColorList.blackThirdColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
               decoration: InputDecoration(
                 hintText: hint,
                 border: InputBorder.none,
@@ -72,11 +79,12 @@ class CustomTextField extends StatelessWidget {
                   vertical: 15,
                   horizontal: 12,
                 ),
-                hintStyle: TextStyle(
-                  color: ColorList.blackThirdColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
+                hintStyle: hintStyle ??
+                    TextStyle(
+                      color: ColorList.blackThirdColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
               ),
               keyboardType: keyboardType,
               textInputAction: textInputAction,
@@ -85,6 +93,7 @@ class CustomTextField extends StatelessWidget {
               enabled: onPressed == null,
               onChanged: onChanged,
               obscureText: obscureText,
+              textAlign: textAlign,
             ),
           ),
           if (postIcon != null) ...[
