@@ -17,12 +17,17 @@ import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../home/presentation/widget/deposit_amount_widget.dart';
+import '../../../widgets/deposit_your_kolobox_widget.dart';
 import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../../../widgets/recurring_deposit/enable_recurring_deposit_widget.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
+  final bool isPaid;
+
   const KoloTransactionDetailScreen({
     Key? key,
+    required this.isPaid,
   }) : super(key: key);
 
   @override
@@ -189,7 +194,9 @@ class KoloTransactionDetailState
                                 Text(
                                   '26 Jan 2023',
                                   style: AppStyle.b9SemiBold.copyWith(
-                                      color: ColorList.blackSecondColor),
+                                      color: widget.isPaid
+                                          ? ColorList.redDarkColor
+                                          : ColorList.blackSecondColor),
                                 ),
                               ],
                             ),
@@ -200,39 +207,59 @@ class KoloTransactionDetailState
                     const SizedBox(
                       height: 15,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                              color: ColorList.greyLight6Color, width: 1)),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Enable recurring deposit',
-                            style: AppStyle.b8Medium
-                                .copyWith(color: ColorList.primaryColor),
-                          ),
-                          Image.asset(
-                            imageSendIcon,
-                            width: 24,
-                            height: 24,
-                            color: ColorList.primaryColor,
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        onClickRecurringDeposit();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                                color: ColorList.greyLight6Color, width: 1)),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Enable recurring deposit',
+                              style: AppStyle.b8Medium
+                                  .copyWith(color: ColorList.primaryColor),
+                            ),
+                            Image.asset(
+                              imageSendIcon,
+                              width: 24,
+                              height: 24,
+                              color: ColorList.primaryColor,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(
                       height: 15,
                     ),
+                    if (widget.isPaid) ...[
+                      Button(
+                        'View Payout',
+                        backgroundColor: ColorList.lightBlue3Color,
+                        textColor: ColorList.primaryColor,
+                        overlayColor: ColorList.blueColor,
+                        borderRadius: 32,
+                        onPressed: () {
+                          comingSoon();
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    ],
                     StreamBuilder<bool>(
                       initialData: isLeft,
                       stream: leftRightStreamController.stream,
                       builder: (_, snapshot) => Column(
                         children: [
-                          if (!isRecentEmpty) ...[
+                          if (!isRecentEmpty && !widget.isPaid) ...[
                             Align(
                               alignment: Alignment.centerLeft,
                               child: DepositAmountWidget(
@@ -350,7 +377,7 @@ class KoloTransactionDetailState
           const SizedBox(
             height: 20,
           ),
-          if (isRecent) ...[
+          if (isRecent && !widget.isPaid) ...[
             SizedBox(
               width: 174,
               child: DepositAmountWidget(
@@ -366,15 +393,26 @@ class KoloTransactionDetailState
         ],
       );
 
+  void onClickRecurringDeposit() {
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(const EnableRecurringDepositWidget()).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      isRecentEmpty = false;
+      isFailedEmpty = false;
+      leftRightStreamController.add(true);
+    });
+  }
+
   void onClickDeposit() {
-    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    // showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
-    //   BlocProvider.of<DashboardBloc>(context)
-    //       .add(ShowEnableBottomScreenEvent());
-    isRecentEmpty = false;
-    isFailedEmpty = false;
-    leftRightStreamController.add(true);
-    // });
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      isRecentEmpty = false;
+      isFailedEmpty = false;
+      leftRightStreamController.add(true);
+    });
   }
 
   Widget getRecentDepositWidget() {

@@ -388,7 +388,12 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
             itemCount: 5,
             itemBuilder: (_, index) => AccountItemWidget(
                   onDetail: () {
-                    navigatePush(context, const KoloTransactionDetailPage());
+                    StateContainer.of(context).isFromDetail = true;
+                    navigatePush(
+                        context,
+                        const KoloTransactionDetailPage(
+                          isPaid: false,
+                        ));
                   },
                   onWithdrawal: () {
                     BlocProvider.of<DashboardBloc>(context)
@@ -421,7 +426,12 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
             itemCount: 5,
             itemBuilder: (_, index) => AccountItemWidget(
                   onDetail: () {
-                    navigatePush(context, const KoloTransactionDetailPage());
+                    StateContainer.of(context).isFromDetail = true;
+                    navigatePush(
+                        context,
+                        const KoloTransactionDetailPage(
+                          isPaid: true,
+                        ));
                   },
                   onWithdrawal: () {},
                 )),

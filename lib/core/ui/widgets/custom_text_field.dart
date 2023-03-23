@@ -4,8 +4,7 @@ import 'package:flutter/services.dart';
 import '../../colors/color_list.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField(
-    this.hint, {
+  const CustomTextField(this.hint, {
     Key? key,
     this.controller,
     this.keyboardType = TextInputType.text,
@@ -13,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     this.textCapitalization = TextCapitalization.none,
     this.inputFormatter,
     this.postIcon,
+    this.iconData,
     this.onPressed,
     this.onChanged,
     this.textStyle,
@@ -28,6 +28,7 @@ class CustomTextField extends StatelessWidget {
   final TextCapitalization textCapitalization;
   final List<TextInputFormatter>? inputFormatter;
   final String? postIcon;
+  final IconData? iconData;
   final Function? onPressed;
   final Function(String)? onChanged;
   final bool obscureText;
@@ -100,6 +101,12 @@ class CustomTextField extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Image.asset(postIcon!),
+            ),
+          ],
+          if (iconData != null) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Icon(iconData, size: 8),
             ),
           ],
         ],

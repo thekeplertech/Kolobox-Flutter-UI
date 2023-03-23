@@ -35,6 +35,7 @@ class StateContainer extends StatefulWidget {
 
 class StateContainerState extends State<StateContainer> {
   bool isFromFundMyKoloBox = true;
+  bool isFromDetail = false;
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
   @override

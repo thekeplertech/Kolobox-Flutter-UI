@@ -15,6 +15,7 @@ const String koloTargetPageValue = 'KoloTargetPage';
 const String koloTargetPlusPageValue = 'KoloTargetPlusPage';
 const String koloFamilyPageValue = 'KoloFamilyPage';
 const String koloGroupPageValue = 'KoloGroupPage';
+const String koloTransactionDetailPageValue = 'KoloTransactionDetailPage';
 
 enum KoloboxFundEnum {
   koloFlex,
@@ -127,7 +128,12 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
-  String get getFundPageValue {
+  String getFundPageValue(bool isDetail) {
+    if (this == KoloboxFundEnum.koloFlex) {
+      return koloFlexPageValue;
+    } else if (isDetail) {
+      return koloTransactionDetailPageValue;
+    }
     switch (this) {
       case KoloboxFundEnum.koloFlex:
         return koloFlexPageValue;

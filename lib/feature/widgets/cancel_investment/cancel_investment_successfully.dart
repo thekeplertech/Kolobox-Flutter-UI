@@ -69,7 +69,8 @@ class _CancelInvestmentSuccessfullyWidgetState
                       ? '/'
                       : StateContainer.of(context)
                           .koloboxFundEnum
-                          .getFundPageValue,
+                          .getFundPageValue(
+                              StateContainer.of(context).isFromDetail),
                 ),
               );
             },

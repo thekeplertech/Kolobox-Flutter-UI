@@ -152,6 +152,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
       GestureDetector(
         onTap: () {
           StateContainer.of(context).isFromFundMyKoloBox = false;
+          StateContainer.of(context).isFromDetail = false;
           StateContainer.of(context).koloboxFundEnum = fundEnum;
 
           switch (fundEnum) {
