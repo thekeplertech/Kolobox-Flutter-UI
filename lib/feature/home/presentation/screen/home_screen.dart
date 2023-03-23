@@ -20,8 +20,6 @@ import 'package:kolobox_new_app/feature/widgets/home_app_bar_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
-import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
-import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../data/models/wallet_data_model.dart';
 import '../widget/welcome_to_kolobox_widget.dart';
 
@@ -91,53 +89,6 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                 onLeftPressed: () => comingSoon(),
                 onRightPressed: () => comingSoon(),
               ),
-              GestureDetector(
-                  onTap: () {
-                    BlocProvider.of<DashboardBloc>(context)
-                        .add(HideDisableBottomScreenEvent());
-                    showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        isDismissible: false,
-                        enableDrag: false,
-                        builder: (context) {
-                          return Container(
-                            height: MediaQuery.of(context).size.height * 0.9,
-                            child: SingleChildScrollView(
-                                child: Container(
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom),
-                              child: Column(
-                                children: [
-                                  TextFormField(),
-                                  ListView.builder(
-                                      itemCount: 10,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemBuilder: (_, index) {
-                                        return Text("asdf $index");
-                                      })
-                                ],
-                              ),
-                            )),
-                          );
-                          return Wrap(
-                            children: [
-                              ListView.builder(
-                                  itemCount: 50,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemBuilder: (_, index) {
-                                    return Text("asdf $index");
-                                  })
-                            ],
-                          );
-                        });
-                  },
-                  child: Text(
-                      'asdf kjslkf jafd ;lks;lkf j;ljjs;lkfj; flsjf lks jf;lkfjs;l kjs; lkfjs;lkfsj;lkj;lkj ;lk j;lk')),
               getHeaderWidget(),
               Padding(
                 padding: const EdgeInsets.only(
