@@ -303,10 +303,11 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) => const Padding(
-            padding: EdgeInsets.only(top: 15),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 15),
             child: KoloTargetItemWidget(
               koloboxFundEnum: KoloboxFundEnum.koloGroup,
+              onPressed: () {},
             ),
           ),
         ),
@@ -324,11 +325,12 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) => const Padding(
-            padding: EdgeInsets.only(top: 15),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 15),
             child: KoloTargetItemWidget(
               isPaid: true,
               koloboxFundEnum: KoloboxFundEnum.koloGroup,
+              onPressed: () {},
             ),
           ),
         ),

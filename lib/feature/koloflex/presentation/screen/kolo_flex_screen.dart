@@ -421,7 +421,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
             itemCount: 5,
             itemBuilder: (_, index) => AccountItemWidget(
                   onDetail: () {
-                    print("asdf");
+                    navigatePush(context, const KoloTransactionDetailPage());
                   },
                   onWithdrawal: () {},
                 )),

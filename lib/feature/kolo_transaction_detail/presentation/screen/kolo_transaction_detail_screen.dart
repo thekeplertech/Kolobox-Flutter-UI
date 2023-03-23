@@ -7,6 +7,7 @@ import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/koloflex/presentation/widgets/transactions_item_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/cancel_investment/cancel_investment.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
@@ -235,7 +236,10 @@ class KoloTransactionDetailState
                             Align(
                               alignment: Alignment.centerLeft,
                               child: DepositAmountWidget(
-                                  width: 180, onPressed: () {}),
+                                  width: 180,
+                                  onPressed: () {
+                                    onClickDeposit();
+                                  }),
                             ),
                             const SizedBox(
                               height: 20,
@@ -363,16 +367,13 @@ class KoloTransactionDetailState
       );
 
   void onClickDeposit() {
+    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    // showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+    //   BlocProvider.of<DashboardBloc>(context)
+    //       .add(ShowEnableBottomScreenEvent());
     isRecentEmpty = false;
     isFailedEmpty = false;
     leftRightStreamController.add(true);
-    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    // showCustomBottomSheet(const DepositYourKoloboxWidget(), height: 0.9)
-    //     .then((value) {
-    //   BlocProvider.of<DashboardBloc>(context)
-    //       .add(ShowEnableBottomScreenEvent());
-    //   isEmpty = false;
-    //   emptyStreamController.add(isEmpty);
     // });
   }
 
@@ -420,7 +421,12 @@ class KoloTransactionDetailState
           overlayColor: ColorList.redDark2Color,
           borderRadius: 32,
           onPressed: () {
-            comingSoon();
+            BlocProvider.of<DashboardBloc>(context)
+                .add(HideDisableBottomScreenEvent());
+            showCustomBottomSheet(const CancelInvestmentWidget()).then((value) {
+              BlocProvider.of<DashboardBloc>(context)
+                  .add(ShowEnableBottomScreenEvent());
+            });
           },
         ),
       ],

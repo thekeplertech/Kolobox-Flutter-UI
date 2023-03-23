@@ -303,10 +303,11 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) => const Padding(
-            padding: EdgeInsets.only(top: 15),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 15),
             child: KoloTargetItemWidget(
               koloboxFundEnum: KoloboxFundEnum.koloFamily,
+              onPressed: () {},
             ),
           ),
         ),
@@ -324,11 +325,12 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) => const Padding(
-            padding: EdgeInsets.only(top: 15),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 15),
             child: KoloTargetItemWidget(
               isPaid: true,
               koloboxFundEnum: KoloboxFundEnum.koloFamily,
+              onPressed: () {},
             ),
           ),
         ),

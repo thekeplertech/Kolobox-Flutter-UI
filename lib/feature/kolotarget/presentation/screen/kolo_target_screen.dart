@@ -16,6 +16,8 @@ import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../routes/routes.dart';
+import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../widgets/kolo_target_item_widget.dart';
 
@@ -301,9 +303,13 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) => const Padding(
-            padding: EdgeInsets.only(top: 15),
-            child: KoloTargetItemWidget(),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: KoloTargetItemWidget(
+              onPressed: () {
+                navigatePush(context, const KoloTransactionDetailPage());
+              },
+            ),
           ),
         ),
         const SizedBox(
@@ -320,9 +326,14 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) => const Padding(
-            padding: EdgeInsets.only(top: 15),
-            child: KoloTargetItemWidget(isPaid: true),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: KoloTargetItemWidget(
+              isPaid: true,
+              onPressed: () {
+                navigatePush(context, const KoloTransactionDetailPage());
+              },
+            ),
           ),
         ),
         const SizedBox(
