@@ -25,107 +25,98 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
     extends BaseScreenState<DepositedWithdrawalInfoKoloboxWidget> {
   @override
   Widget body(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: SingleChildScrollView(
-        child: Padding(
-          padding:
-              const EdgeInsets.only(top: 25, left: 28, right: 28, bottom: 31),
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: ColorList.lightBlue6Color,
-                  shape: BoxShape.circle,
-                ),
-                padding: const EdgeInsets.all(25),
-                child: Icon(
-                  KoloBoxIcons.deposit,
-                  size: 20,
-                  color: ColorList.primaryColor,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Deposited',
-                style:
-                    AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Text(
-                '₦ 14,200.00',
-                style:
-                    AppStyle.b5SemiBold.copyWith(color: ColorList.primaryColor),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                'Aug 02, 2022 - 11:34 PM',
-                style: AppStyle.b9SemiBold
-                    .copyWith(color: ColorList.greyLight2Color),
-              ),
-              const SizedBox(
-                height: 18,
-              ),
-              Text(
-                'Ref',
-                style: AppStyle.b9SemiBold
-                    .copyWith(color: ColorList.greyLight2Color),
-              ),
-              const SizedBox(
-                height: 3,
-              ),
-              Text(
-                '092829-20991090009w0220',
-                style: AppStyle.b8Medium
-                    .copyWith(color: ColorList.blackThirdColor),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Text(
-                'Deposit destination',
-                style: AppStyle.b8SemiBold
-                    .copyWith(color: ColorList.blackSecondColor),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              getOptionWidget(),
-              const SizedBox(
-                height: 20,
-              ),
-              Button(
-                'Share',
-                backgroundColor: ColorList.lightBlue3Color,
-                textColor: ColorList.primaryColor,
-                overlayColor: ColorList.blueColor,
-                borderRadius: 32,
-                onPressed: () {
-                  goBack(context);
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Button(
-                'Ok',
-                backgroundColor: ColorList.primaryColor,
-                textColor: ColorList.white,
-                overlayColor: ColorList.blueColor,
-                borderRadius: 32,
-                onPressed: () {
-                  goBack(context);
-                },
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 25, left: 28, right: 28, bottom: 31),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: ColorList.lightBlue6Color,
+              shape: BoxShape.circle,
+            ),
+            padding: const EdgeInsets.all(25),
+            child: Icon(
+              KoloBoxIcons.deposit,
+              size: 20,
+              color: ColorList.primaryColor,
+            ),
           ),
-        ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Deposited',
+            style: AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            '₦ 14,200.00',
+            style: AppStyle.b5SemiBold.copyWith(color: ColorList.primaryColor),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            'Aug 02, 2022 - 11:34 PM',
+            style:
+                AppStyle.b9SemiBold.copyWith(color: ColorList.greyLight2Color),
+          ),
+          const SizedBox(
+            height: 18,
+          ),
+          Text(
+            'Ref',
+            style:
+                AppStyle.b9SemiBold.copyWith(color: ColorList.greyLight2Color),
+          ),
+          const SizedBox(
+            height: 3,
+          ),
+          Text(
+            '092829-20991090009w0220',
+            style: AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Deposit destination',
+            style:
+                AppStyle.b8SemiBold.copyWith(color: ColorList.blackSecondColor),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          getOptionWidget(),
+          const SizedBox(
+            height: 20,
+          ),
+          Button(
+            'Share',
+            backgroundColor: ColorList.lightBlue3Color,
+            textColor: ColorList.primaryColor,
+            overlayColor: ColorList.blueColor,
+            borderRadius: 32,
+            onPressed: () {
+              goBack(context);
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Button(
+            'Ok',
+            backgroundColor: ColorList.primaryColor,
+            textColor: ColorList.white,
+            overlayColor: ColorList.blueColor,
+            borderRadius: 32,
+            onPressed: () {
+              goBack(context);
+            },
+          ),
+        ],
       ),
     );
   }

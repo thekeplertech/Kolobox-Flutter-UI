@@ -28,96 +28,60 @@ class _DepositYourKoloboxWidgetState
   @override
   Widget body(BuildContext context) {
     koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
-    return SingleChildScrollView(
-      child: Padding(
-        padding:
-            const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () {
-                  goBack(context);
-                },
-                child: Image.asset(imageClose),
-              ),
-            ),
-            Text(
-              'Deposit',
-              style:
-                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              'Deposit into your ${koloboxFundEnum.getFundValue}',
-              style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
-            ),
-            const SizedBox(
-              height: 13,
-            ),
-            Button(
-              'Edit',
-              backgroundColor: ColorList.lightBlue3Color,
-              textColor: ColorList.primaryColor,
-              overlayColor: ColorList.blueColor,
-              borderRadius: 32,
-              onPressed: () {
+    return Padding(
+      padding: const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () {
                 goBack(context);
               },
+              child: Image.asset(imageClose),
             ),
-            const SizedBox(
-              height: 12,
-            ),
-            getOptionWidget(),
-            const SizedBox(
-              height: 20,
-            ),
-            if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
-              Text(
-                'Select a kolotarget to make this deposit to',
-                style: AppStyle.b8Medium
-                    .copyWith(color: ColorList.blackSecondColor),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: ColorList.greyLightColor, width: 1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                width: double.maxFinite,
-                padding: const EdgeInsets.only(
-                    left: 12, right: 16, top: 12, bottom: 12),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Select a ${koloboxFundEnum.getFundValue}',
-                        style: AppStyle.b8Regular
-                            .copyWith(color: ColorList.blackThirdColor),
-                      ),
-                    ),
-                    const Icon(KoloBoxIcons.downArrow, size: 8),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-            ],
+          ),
+          Text(
+            'Deposit',
+            style: AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            'Deposit into your ${koloboxFundEnum.getFundValue}',
+            style:
+                AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+          ),
+          const SizedBox(
+            height: 13,
+          ),
+          Button(
+            'Edit',
+            backgroundColor: ColorList.lightBlue3Color,
+            textColor: ColorList.primaryColor,
+            overlayColor: ColorList.blueColor,
+            borderRadius: 32,
+            onPressed: () {
+              goBack(context);
+            },
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          getOptionWidget(),
+          const SizedBox(
+            height: 20,
+          ),
+          if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
             Text(
-              'Enter Amount',
+              'Select a kolotarget to make this deposit to',
               style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
-              height: 7,
+              height: 4,
             ),
             Container(
               decoration: BoxDecoration(
@@ -125,87 +89,118 @@ class _DepositYourKoloboxWidgetState
                 borderRadius: BorderRadius.circular(12),
               ),
               width: double.maxFinite,
-              padding: const EdgeInsets.all(27),
-              child: Center(
-                child: Text(
-                  '₦ 0.00',
-                  style: AppStyle.b3Bold
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Select payment option',
-              style: AppStyle.b8SemiBold
-                  .copyWith(color: ColorList.blackSecondColor),
-            ),
-            const SizedBox(
-              height: 9,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: ColorList.greyLight5Color,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
+              padding: const EdgeInsets.only(
+                  left: 12, right: 16, top: 12, bottom: 12),
+              child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Paystack',
-                            style: AppStyle.b7Regular
-                                .copyWith(color: ColorList.blackSecondColor),
-                          ),
-                        ),
-                        Image.asset(imagePayStackIcon),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: Stack(
-                            children: [
-                              Image.asset(imageCheckedIcon),
-                              Center(
-                                child: Icon(
-                                  KoloBoxIcons.check,
-                                  color: ColorList.white,
-                                  size: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                  Expanded(
+                    child: Text(
+                      'Select a ${koloboxFundEnum.getFundValue}',
+                      style: AppStyle.b8Regular
+                          .copyWith(color: ColorList.blackThirdColor),
                     ),
                   ),
+                  const Icon(KoloBoxIcons.downArrow, size: 8),
                 ],
               ),
             ),
             const SizedBox(
-              height: 18,
-            ),
-            Button(
-              'Next',
-              backgroundColor: ColorList.primaryColor,
-              textColor: ColorList.white,
-              overlayColor: ColorList.blueColor,
-              borderRadius: 32,
-              onPressed: () {
-                showCustomBottomSheet(const DepositSummaryWidget(),
-                    height: 0.9);
-              },
+              height: 12,
             ),
           ],
-        ),
+          Text(
+            'Enter Amount',
+            style:
+                AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: ColorList.greyLightColor, width: 1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            width: double.maxFinite,
+            padding: const EdgeInsets.all(27),
+            child: Center(
+              child: Text(
+                '₦ 0.00',
+                style:
+                    AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Select payment option',
+            style:
+                AppStyle.b8SemiBold.copyWith(color: ColorList.blackSecondColor),
+          ),
+          const SizedBox(
+            height: 9,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: ColorList.greyLight5Color,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Paystack',
+                          style: AppStyle.b7Regular
+                              .copyWith(color: ColorList.blackSecondColor),
+                        ),
+                      ),
+                      Image.asset(imagePayStackIcon),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: Stack(
+                          children: [
+                            Image.asset(imageCheckedIcon),
+                            Center(
+                              child: Icon(
+                                KoloBoxIcons.check,
+                                color: ColorList.white,
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 18,
+          ),
+          Button(
+            'Next',
+            backgroundColor: ColorList.primaryColor,
+            textColor: ColorList.white,
+            overlayColor: ColorList.blueColor,
+            borderRadius: 32,
+            onPressed: () {
+              showCustomBottomSheet(const DepositSummaryWidget());
+            },
+          ),
+        ],
       ),
     );
   }

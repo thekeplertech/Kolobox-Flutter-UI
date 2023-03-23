@@ -49,6 +49,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
         AnimationController(vsync: this, duration: kThemeAnimationDuration);
 
     hideAnimationController?.forward();
+    isBottomTabOpened = true;
   }
 
   @override
@@ -59,11 +60,13 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
             if (!isBottomTabHideDisable) {
               isBottomTabHideDisable = true;
               hideAnimationController?.forward();
+              isBottomTabOpened = true;
             }
           } else if (state is HideDisableBottomScreenState) {
             if (isBottomTabHideDisable) {
               isBottomTabHideDisable = false;
               hideAnimationController?.reverse();
+              isBottomTabOpened = false;
             }
           } else if (state is ClearBackStackState) {
             await popUntil(previousTabIndex, removeUntil: state.until);
@@ -132,11 +135,13 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
           fadeAnimationControllers[
                   dashboardModel.dashboardTabEnum.getDashboardValue]
               .forward();
+          isBottomTabOpened = true;
           return view;
         } else {
           fadeAnimationControllers[
                   dashboardModel.dashboardTabEnum.getDashboardValue]
               .reverse();
+          isBottomTabOpened = false;
           if (fadeAnimationControllers[
                   dashboardModel.dashboardTabEnum.getDashboardValue]
               .isAnimating) {

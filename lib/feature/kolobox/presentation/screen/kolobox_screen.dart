@@ -83,8 +83,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                           StateContainer.of(context).isFromFundMyKoloBox = true;
                           BlocProvider.of<DashboardBloc>(context)
                               .add(HideDisableBottomScreenEvent());
-                          showCustomBottomSheet(const FundYourKoloboxWidget(),
-                                  height: 0.9)
+                          showCustomBottomSheet(const FundYourKoloboxWidget())
                               .then((value) {
                             BlocProvider.of<DashboardBloc>(context)
                                 .add(ShowEnableBottomScreenEvent());

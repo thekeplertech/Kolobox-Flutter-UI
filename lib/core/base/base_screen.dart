@@ -9,6 +9,7 @@ import '../constants/app_constants.dart';
 import '../constants/image_constants.dart';
 import '../constants/message_constants.dart';
 import '../preference/pref_helper.dart';
+import '../ui/widgets/custom_show_modal_bottom_sheet.dart';
 import '../ui/widgets/toast_widget.dart';
 import '../utils/utils.dart';
 import 'base_view.dart';
@@ -128,10 +129,12 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
   Future<T?> showCustomBottomSheet(
     Widget child, {
     double? height,
+    Function()? onBack,
     bool isScrollControlled = true,
-    bool isDismissible = true,
+    bool isDismissible = false,
+    bool enableDrag = false,
   }) =>
-      showModalBottomSheet(
+      customShowModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -142,12 +145,25 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
         backgroundColor: ColorList.white,
         isScrollControlled: isScrollControlled,
         isDismissible: isDismissible,
+        enableDrag: enableDrag,
         builder: (_) {
-          return SizedBox(
+          return WillPopScope(
+            onWillPop: () async {
+              onBack!();
+              return false;
+            },
+            child: SizedBox(
               height: height == null
                   ? null
                   : MediaQuery.of(context).size.height * height,
-              child: child);
+              child: SingleChildScrollView(
+                child: Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: child),
+              ),
+            ),
+          );
         },
       );
 }

@@ -31,11 +31,11 @@ class KoloTransactionDetailScreen extends BaseBlocWidget {
 class KoloTransactionDetailState
     extends BaseBlocWidgetState<KoloTransactionDetailScreen> {
   StreamController<bool> leftRightStreamController =
-  StreamController<bool>.broadcast();
+      StreamController<bool>.broadcast();
   bool isLeft = true;
 
-  bool isActiveEmpty = true;
-  bool isPaidEmpty = true;
+  bool isRecentEmpty = true;
+  bool isFailedEmpty = true;
 
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
@@ -46,9 +46,7 @@ class KoloTransactionDetailState
 
   @override
   Widget getCustomBloc() {
-    koloboxFundEnum = StateContainer
-        .of(context)
-        .koloboxFundEnum;
+    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
@@ -61,7 +59,7 @@ class KoloTransactionDetailState
               const HomeAppBarWidget(leftIcon: imageBackArrowIcon),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 28, vertical: 18.52),
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 18.52),
                 child: Column(
                   children: [
                     const SizedBox(
@@ -201,93 +199,120 @@ class KoloTransactionDetailState
                     const SizedBox(
                       height: 15,
                     ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                              color: ColorList.greyLight6Color, width: 1)),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Enable recurring deposit',
+                            style: AppStyle.b8Medium
+                                .copyWith(color: ColorList.primaryColor),
+                          ),
+                          Image.asset(
+                            imageSendIcon,
+                            width: 24,
+                            height: 24,
+                            color: ColorList.primaryColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     StreamBuilder<bool>(
                       initialData: isLeft,
                       stream: leftRightStreamController.stream,
-                      builder: (_, snapshot) =>
-                          Column(
-                            children: [
-                              if (!isActiveEmpty) ...[
-                                DepositAmountWidget(
-                                    width: 180, onPressed: () {}),
+                      builder: (_, snapshot) => Column(
+                        children: [
+                          if (!isRecentEmpty) ...[
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: DepositAmountWidget(
+                                  width: 180, onPressed: () {}),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                          Container(
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: ColorList.greyLight6Color, width: 1),
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            padding: const EdgeInsets.all(5),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Button(
+                                    'Recent Deposit',
+                                    borderRadius: 12,
+                                    verticalPadding: 10,
+                                    height: 31,
+                                    backgroundColor: isLeft
+                                        ? ColorList.blackSecondColor
+                                        : ColorList.white,
+                                    overlayColor: ColorList.blueColor,
+                                    textStyle: AppStyle.b9SemiBold.copyWith(
+                                        color: isLeft
+                                            ? ColorList.white
+                                            : ColorList.blackThirdColor),
+                                    onPressed: () {
+                                      isLeft = true;
+                                      leftRightStreamController.add(isLeft);
+                                    },
+                                  ),
+                                ),
                                 const SizedBox(
-                                  height: 20,
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: Button(
+                                    'Failed Deposit',
+                                    borderRadius: 12,
+                                    verticalPadding: 10,
+                                    height: 31,
+                                    backgroundColor: !isLeft
+                                        ? ColorList.blackSecondColor
+                                        : ColorList.white,
+                                    overlayColor: ColorList.blueColor,
+                                    textStyle: AppStyle.b9SemiBold.copyWith(
+                                        color: !isLeft
+                                            ? ColorList.white
+                                            : ColorList.blackThirdColor),
+                                    onPressed: () {
+                                      isLeft = false;
+                                      leftRightStreamController.add(isLeft);
+                                    },
+                                  ),
                                 ),
                               ],
-                              Container(
-                                width: double.maxFinite,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: ColorList.greyLight6Color,
-                                      width: 1),
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                padding: const EdgeInsets.all(5),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Button(
-                                        'Recent Deposit',
-                                        borderRadius: 12,
-                                        verticalPadding: 10,
-                                        height: 31,
-                                        backgroundColor: isLeft
-                                            ? ColorList.blackSecondColor
-                                            : ColorList.white,
-                                        overlayColor: ColorList.blueColor,
-                                        textStyle: AppStyle.b9SemiBold.copyWith(
-                                            color: isLeft
-                                                ? ColorList.white
-                                                : ColorList.blackThirdColor),
-                                        onPressed: () {
-                                          isLeft = true;
-                                          leftRightStreamController.add(isLeft);
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Expanded(
-                                      child: Button(
-                                        'Failed Deposit',
-                                        borderRadius: 12,
-                                        verticalPadding: 10,
-                                        height: 31,
-                                        backgroundColor: !isLeft
-                                            ? ColorList.blackSecondColor
-                                            : ColorList.white,
-                                        overlayColor: ColorList.blueColor,
-                                        textStyle: AppStyle.b9SemiBold.copyWith(
-                                            color: !isLeft
-                                                ? ColorList.white
-                                                : ColorList.blackThirdColor),
-                                        onPressed: () {
-                                          isLeft = false;
-                                          leftRightStreamController.add(isLeft);
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              if (isLeft) ...[
-                                if (isActiveEmpty)
-                                  getEmptyWidget(true)
-                                else
-                                  getRecentDepositWidget(),
-                              ] else
-                                ...[
-                                  if (isPaidEmpty)
-                                    getEmptyWidget(false)
-                                  else
-                                    getFailedDepositWidget(),
-                                ],
-                            ],
+                            ),
                           ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          if (isLeft) ...[
+                            if (isRecentEmpty)
+                              getEmptyWidget(true)
+                            else
+                              getRecentDepositWidget(),
+                          ] else ...[
+                            if (isFailedEmpty)
+                              getEmptyWidget(false)
+                            else
+                              getFailedDepositWidget(),
+                          ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -299,8 +324,7 @@ class KoloTransactionDetailState
     );
   }
 
-  Widget getEmptyWidget(bool isRecent) =>
-      Column(
+  Widget getEmptyWidget(bool isRecent) => Column(
         children: [
           const SizedBox(
             height: 40,
@@ -332,15 +356,15 @@ class KoloTransactionDetailState
                   }),
             ),
             const SizedBox(
-              height: 20,
+              height: 50,
             ),
           ],
         ],
       );
 
   void onClickDeposit() {
-    isActiveEmpty = false;
-    isPaidEmpty = false;
+    isRecentEmpty = false;
+    isFailedEmpty = false;
     leftRightStreamController.add(true);
     // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     // showCustomBottomSheet(const DepositYourKoloboxWidget(), height: 0.9)
@@ -359,18 +383,45 @@ class KoloTransactionDetailState
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) =>
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: TransactionsItemWidget(
-                  onPressed: () {
-                    onClickTransaction();
-                  },
-                ),
-              ),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: TransactionsItemWidget(
+              onPressed: () {
+                onClickTransaction();
+              },
+            ),
+          ),
         ),
         const SizedBox(
           height: 20,
+        ),
+        Button(
+          'History',
+          backgroundColor: ColorList.greyLight10Color,
+          textColor: ColorList.blackSecondColor,
+          overlayColor: ColorList.blueColor,
+          borderRadius: 32,
+          onPressed: () {
+            comingSoon();
+          },
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Divider(
+            thickness: 1, height: 1, color: ColorList.greyDisableCircleColor),
+        const SizedBox(
+          height: 20,
+        ),
+        Button(
+          'Cancel Investment',
+          backgroundColor: ColorList.white,
+          textColor: ColorList.redDarkColor,
+          overlayColor: ColorList.redDark2Color,
+          borderRadius: 32,
+          onPressed: () {
+            comingSoon();
+          },
         ),
       ],
     );
@@ -383,15 +434,14 @@ class KoloTransactionDetailState
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: 5,
-          itemBuilder: (_, index) =>
-              Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: TransactionsItemWidget(
-                  onPressed: () {
-                    onClickTransaction();
-                  },
-                ),
-              ),
+          itemBuilder: (_, index) => Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: TransactionsItemWidget(
+              onPressed: () {
+                onClickTransaction();
+              },
+            ),
+          ),
         ),
         const SizedBox(
           height: 20,
@@ -401,8 +451,7 @@ class KoloTransactionDetailState
   }
 
   void onClickTransaction() {
-    BlocProvider.of<DashboardBloc>(context)
-        .add(HideDisableBottomScreenEvent());
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(
       DepositedWithdrawalInfoKoloboxWidget(
         koloboxFundEnum: koloboxFundEnum,
