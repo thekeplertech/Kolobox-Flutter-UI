@@ -374,10 +374,10 @@ class KoloTransactionDetailState
                 : 'You have no failed deposit',
             style: AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
           ),
-          const SizedBox(
-            height: 20,
-          ),
           if (isRecent && !widget.isPaid) ...[
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
               width: 174,
               child: DepositAmountWidget(
@@ -386,10 +386,10 @@ class KoloTransactionDetailState
                     onClickDeposit();
                   }),
             ),
-            const SizedBox(
-              height: 50,
-            ),
           ],
+          const SizedBox(
+            height: 50,
+          ),
         ],
       );
 
