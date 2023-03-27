@@ -57,6 +57,7 @@ const imageShareIdIcon = "assets/images/share_id_icon.png";
 const imageBackArrowIcon = "assets/images/back_arrow_icon.png";
 const imageInfoIcon = "assets/images/info_icon.png";
 const imageWithdrawalIcon = "assets/images/withdrawal_icon.png";
+const imageWithdrawIcon = "assets/images/withdraw_icon.png";
 const imageDepositRecentIcon = "assets/images/deposit_recent_icon.png";
 const imageWithdrawSecondRecentIcon =
     "assets/images/withdraw_second_recent_icon.png";
@@ -66,3 +67,4 @@ const imagePayStackIcon = "assets/images/pay_stack.png";
 const imageSendIcon = "assets/images/send_icon.png";
 const imageNoTransactionIcon = "assets/images/no_transaction_icon.png";
 const imageUserIcon = "assets/images/user_icon.png";
+const imageWalletInfoIcon = "assets/images/wallet_info_icon.png";

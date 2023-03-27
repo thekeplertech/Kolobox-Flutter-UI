@@ -9,11 +9,11 @@ import '../../../../../core/base/base_screen.dart';
 import '../../../../../core/colors/color_list.dart';
 
 class DepositedWithdrawalInfoKoloboxWidget extends BaseScreen {
-  final KoloboxFundEnum koloboxFundEnum;
+  final KoloboxFundEnum? koloboxFundEnum;
 
   const DepositedWithdrawalInfoKoloboxWidget({
     Key? key,
-    required this.koloboxFundEnum,
+    this.koloboxFundEnum,
   }) : super(key: key);
 
   @override
@@ -89,7 +89,9 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
           const SizedBox(
             height: 8,
           ),
-          getOptionWidget(),
+          if (widget.koloboxFundEnum != null) ...[
+            getOptionWidget(),
+          ],
           const SizedBox(
             height: 20,
           ),
@@ -142,7 +144,7 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
       },
       child: Container(
         decoration: BoxDecoration(
-          color: widget.koloboxFundEnum.getFundBackColorValue,
+          color: widget.koloboxFundEnum!.getFundBackColorValue,
           borderRadius: BorderRadius.circular(14),
         ),
         padding: const EdgeInsets.all(24),
@@ -150,20 +152,20 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
           children: [
             Expanded(
               child: Text(
-                widget.koloboxFundEnum.getFundValue,
+                widget.koloboxFundEnum!.getFundValue,
                 style: AppStyle.b3Bold.copyWith(
-                    color: widget.koloboxFundEnum.getFundTextColorValue),
+                    color: widget.koloboxFundEnum!.getFundTextColorValue),
               ),
             ),
-            widget.koloboxFundEnum.isPhotoEnabledAsIcon
+            widget.koloboxFundEnum!.isPhotoEnabledAsIcon
                 ? Icon(
-                    widget.koloboxFundEnum.getFundIconValue,
+                    widget.koloboxFundEnum!.getFundIconValue,
                     size: 48,
-                    color: widget.koloboxFundEnum.getFundIconColorValue
+                    color: widget.koloboxFundEnum!.getFundIconColorValue
                         .withOpacity(0.4),
                   )
                 : Image.asset(
-                    widget.koloboxFundEnum.getFundImageValue,
+                    widget.koloboxFundEnum!.getFundImageValue,
                     width: 48,
                     height: 48,
                   ),

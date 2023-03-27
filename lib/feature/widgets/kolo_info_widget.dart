@@ -8,11 +8,11 @@ import '../../core/ui/widgets/button.dart';
 import '../../routes/routes.dart';
 
 class KoloInfoWidget extends StatelessWidget {
-  final KoloboxFundEnum koloboxFundEnum;
+  final KoloboxFundEnum? koloboxFundEnum;
 
   const KoloInfoWidget({
     Key? key,
-    required this.koloboxFundEnum,
+    this.koloboxFundEnum,
   }) : super(key: key);
 
   @override
@@ -37,21 +37,27 @@ class KoloInfoWidget extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: koloboxFundEnum.getFundBackColorValue,
+                color: koloboxFundEnum == null
+                    ? ColorList.lightBlue13Color
+                    : koloboxFundEnum!.getFundBackColorValue,
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(45),
-              child: Icon(
-                koloboxFundEnum.getFundIconValue,
-                size: 90,
-                color: koloboxFundEnum.getFundIconColorValue,
-              ),
+              child: koloboxFundEnum == null
+                  ? Image.asset(
+                      imageWalletInfoIcon,
+                    )
+                  : Icon(
+                      koloboxFundEnum!.getFundIconValue,
+                      size: 90,
+                      color: koloboxFundEnum!.getFundIconColorValue,
+                    ),
             ),
             const SizedBox(
               height: 30,
             ),
             Text(
-              'Learn about ${koloboxFundEnum.getFundValue}',
+              'Learn about ${(koloboxFundEnum == null) ? 'your wallet' : koloboxFundEnum!.getFundValue}',
               style:
                   AppStyle.b5Bold.copyWith(color: ColorList.blackSecondColor),
             ),
