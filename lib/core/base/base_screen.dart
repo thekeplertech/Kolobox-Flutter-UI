@@ -120,6 +120,10 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
     SystemChannels.textInput.invokeMethod('TextInput.show');
   }
 
+  hideKeyboard() {
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
   String className = "";
 
   void printLogger() {

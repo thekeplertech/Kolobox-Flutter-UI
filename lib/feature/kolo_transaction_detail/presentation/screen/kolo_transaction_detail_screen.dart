@@ -394,10 +394,12 @@ class KoloTransactionDetailState
       );
 
   void onClickRecurringDeposit() {
+    StateContainer.of(context).isFromDetail = true;
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(const EnableRecurringDepositWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
+      StateContainer.of(context).isFromDetail = false;
       isRecentEmpty = false;
       isFailedEmpty = false;
       leftRightStreamController.add(true);
@@ -405,10 +407,12 @@ class KoloTransactionDetailState
   }
 
   void onClickDeposit() {
+    StateContainer.of(context).isFromDetail = true;
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
+      StateContainer.of(context).isFromDetail = false;
       isRecentEmpty = false;
       isFailedEmpty = false;
       leftRightStreamController.add(true);
@@ -459,11 +463,13 @@ class KoloTransactionDetailState
           overlayColor: ColorList.redDark2Color,
           borderRadius: 32,
           onPressed: () {
+            StateContainer.of(context).isFromDetail = true;
             BlocProvider.of<DashboardBloc>(context)
                 .add(HideDisableBottomScreenEvent());
             showCustomBottomSheet(const CancelInvestmentWidget()).then((value) {
               BlocProvider.of<DashboardBloc>(context)
                   .add(ShowEnableBottomScreenEvent());
+              StateContainer.of(context).isFromDetail = false;
             });
           },
         ),
@@ -495,6 +501,7 @@ class KoloTransactionDetailState
   }
 
   void onClickTransaction() {
+    StateContainer.of(context).isFromDetail = true;
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(
       DepositedWithdrawalInfoKoloboxWidget(
@@ -504,6 +511,7 @@ class KoloTransactionDetailState
     ).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
+      StateContainer.of(context).isFromDetail = false;
     });
   }
 

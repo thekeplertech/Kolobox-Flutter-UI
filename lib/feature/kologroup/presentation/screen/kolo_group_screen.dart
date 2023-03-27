@@ -15,6 +15,8 @@ import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../routes/routes.dart';
+import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
 import '../../../kolotarget/presentation/widgets/kolo_target_item_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
@@ -307,7 +309,13 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
             padding: const EdgeInsets.only(top: 15),
             child: KoloTargetItemWidget(
               koloboxFundEnum: KoloboxFundEnum.koloGroup,
-              onPressed: () {},
+              onPressed: () {
+                navigatePush(
+                    context,
+                    const KoloTransactionDetailPage(
+                      isPaid: false,
+                    ));
+              },
             ),
           ),
         ),
@@ -330,7 +338,13 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
             child: KoloTargetItemWidget(
               isPaid: true,
               koloboxFundEnum: KoloboxFundEnum.koloGroup,
-              onPressed: () {},
+              onPressed: () {
+                navigatePush(
+                    context,
+                    const KoloTransactionDetailPage(
+                      isPaid: true,
+                    ));
+              },
             ),
           ),
         ),

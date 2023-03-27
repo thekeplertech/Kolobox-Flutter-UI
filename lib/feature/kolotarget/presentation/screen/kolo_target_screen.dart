@@ -307,7 +307,6 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
             padding: const EdgeInsets.only(top: 15),
             child: KoloTargetItemWidget(
               onPressed: () {
-                StateContainer.of(context).isFromDetail = true;
                 navigatePush(
                     context,
                     const KoloTransactionDetailPage(
@@ -336,7 +335,6 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
             child: KoloTargetItemWidget(
               isPaid: true,
               onPressed: () {
-                StateContainer.of(context).isFromDetail = true;
                 navigatePush(
                     context,
                     const KoloTransactionDetailPage(

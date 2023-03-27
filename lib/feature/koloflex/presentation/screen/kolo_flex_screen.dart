@@ -8,12 +8,10 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:kolobox_new_app/feature/kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
 import 'package:kolobox_new_app/feature/widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/withdrawal/withdrawal_selection_kolobox_widget.dart';
-import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -388,12 +386,17 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
             itemCount: 5,
             itemBuilder: (_, index) => AccountItemWidget(
                   onDetail: () {
-                    StateContainer.of(context).isFromDetail = true;
-                    navigatePush(
-                        context,
-                        const KoloTransactionDetailPage(
-                          isPaid: false,
-                        ));
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(HideDisableBottomScreenEvent());
+                    showCustomBottomSheet(
+                      DepositedWithdrawalInfoKoloboxWidget(
+                        koloboxFundEnum: koloboxFundEnum,
+                      ),
+                      height: 0.75,
+                    ).then((value) {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ShowEnableBottomScreenEvent());
+                    });
                   },
                   onWithdrawal: () {
                     BlocProvider.of<DashboardBloc>(context)
@@ -425,14 +428,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: 5,
             itemBuilder: (_, index) => AccountItemWidget(
-                  onDetail: () {
-                    StateContainer.of(context).isFromDetail = true;
-                    navigatePush(
-                        context,
-                        const KoloTransactionDetailPage(
-                          isPaid: true,
-                        ));
-                  },
+                  onDetail: () {},
                   onWithdrawal: () {},
                 )),
       ],

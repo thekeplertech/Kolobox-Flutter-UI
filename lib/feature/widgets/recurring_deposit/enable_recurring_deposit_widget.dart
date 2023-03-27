@@ -5,7 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
+import 'package:kolobox_new_app/core/enums/period_enum.dart';
+import 'package:kolobox_new_app/core/enums/weekly_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/feature/widgets/recurring_deposit/select_recurring_date_weekly_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/recurring_deposit/select_recurring_period_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
@@ -25,9 +30,13 @@ class _EnableRecurringDepositWidgetState
     extends BaseScreenState<EnableRecurringDepositWidget> {
   TextEditingController nameTextEditingController = TextEditingController();
 
-  StreamController<bool> enableRecurringDepositStreamController =
-      StreamController<bool>.broadcast();
-  bool isEnableRecurringDeposit = false;
+  StreamController<PeriodEnum> periodStreamController =
+      StreamController<PeriodEnum>.broadcast();
+  PeriodEnum selectedPeriodEnum = PeriodEnum.monthly;
+
+  StreamController<WeeklyEnum> weeklyStreamController =
+      StreamController<WeeklyEnum>.broadcast();
+  WeeklyEnum selectedWeeklyEnum = WeeklyEnum.monday;
 
   @override
   Widget body(BuildContext context) {
@@ -68,14 +77,28 @@ class _EnableRecurringDepositWidgetState
           const SizedBox(
             height: 7,
           ),
-          CustomTextField(
-            'Monthly',
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.next,
-            textCapitalization: TextCapitalization.words,
-            onPressed: () {},
-            iconData: KoloBoxIcons.downArrow,
-          ),
+          StreamBuilder<PeriodEnum>(
+              initialData: selectedPeriodEnum,
+              stream: periodStreamController.stream,
+              builder: (context, snapshot) {
+                return CustomTextField(
+                  selectedPeriodEnum.getPeriodValue,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.words,
+                  onPressed: () {
+                    showCustomBottomSheet(SelectRecurringPeriodWidget(
+                      periodEnum: selectedPeriodEnum,
+                      onPop: (periodEnum) {
+                        logger?.d("result $periodEnum");
+                        selectedPeriodEnum = periodEnum;
+                        periodStreamController.add(selectedPeriodEnum);
+                      },
+                    ));
+                  },
+                  iconData: KoloBoxIcons.downArrow,
+                );
+              }),
           const SizedBox(
             height: 15,
           ),
@@ -92,7 +115,13 @@ class _EnableRecurringDepositWidgetState
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             textCapitalization: TextCapitalization.words,
-            onPressed: () {},
+            onPressed: () {
+              showCustomBottomSheet(SelectRecurringDateWeeklyWidget(
+                onPop: (weeklyEnum) {
+                  logger?.d("result $weeklyEnum");
+                },
+              ));
+            },
             postIcon: imageCalendar,
           ),
           const SizedBox(
@@ -111,7 +140,11 @@ class _EnableRecurringDepositWidgetState
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
             textCapitalization: TextCapitalization.none,
-            inputFormatter: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatter: [
+              CurrencyTextInputFormatter(
+                name: '₦ ',
+              )
+            ],
             textStyle:
                 AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
             hintStyle:
@@ -129,6 +162,7 @@ class _EnableRecurringDepositWidgetState
             overlayColor: ColorList.blueColor,
             borderRadius: 32,
             onPressed: () {
+              hideKeyboard();
               showCustomBottomSheet(
                   const EnableRecurringDepositSummaryWidget());
             },
@@ -141,6 +175,7 @@ class _EnableRecurringDepositWidgetState
   @override
   void dispose() {
     super.dispose();
-    enableRecurringDepositStreamController.close();
+    periodStreamController.close();
+    weeklyStreamController.close();
   }
 }

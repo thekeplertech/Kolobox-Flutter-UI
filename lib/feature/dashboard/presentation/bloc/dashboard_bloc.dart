@@ -1,3 +1,5 @@
+import 'package:kolobox_new_app/routes/routes.dart';
+
 import '../../../../core/base/base_bloc.dart';
 import '../../../../core/bloc/master_bloc.dart';
 import '../../../../core/preference/pref_helper.dart';
@@ -17,6 +19,7 @@ class DashboardBloc extends BaseBloc<DashboardEvent, DashboardState> {
       emit(HideDisableBottomScreenState());
     });
     on<ClearBackStackEvent>((event, emit) {
+      logger?.d("Remove until ${event.until}");
       emit(ClearBackStackState(until: event.until));
     });
   }

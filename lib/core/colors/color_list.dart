@@ -24,7 +24,7 @@ class ColorList {
   static Color blackFourColor = const Color(0xFFE3E3E3);
   static Color greyLight2Color = const Color(0xFF7D7D7D);
   static Color greyLight4Color = const Color(0xFFE9E9E9);
-  static Color greyLight7Color = const Color(0xFFE6E6E6);
+  static const Color greyLight7Color = Color(0xFFE6E6E6);
   static Color blueLightColor = const Color(0xFFE5EBFF);
   static Color blueLight2Color = const Color(0xFFF2F5FF);
   static Color greyLightColor = const Color(0xFF949494);
