@@ -9,6 +9,7 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/koloflex/presentation/widgets/transactions_item_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/cancel_investment/cancel_investment.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
+import 'package:kolobox_new_app/feature/widgets/invite_user/invite_family_member.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -207,38 +208,40 @@ class KoloTransactionDetailState
                     const SizedBox(
                       height: 15,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        onClickRecurringDeposit();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                                color: ColorList.greyLight6Color, width: 1)),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Enable recurring deposit',
-                              style: AppStyle.b8Medium
-                                  .copyWith(color: ColorList.primaryColor),
-                            ),
-                            Image.asset(
-                              imageSendIcon,
-                              width: 24,
-                              height: 24,
-                              color: ColorList.primaryColor,
-                            ),
-                          ],
+                    if (!widget.isPaid) ...[
+                      GestureDetector(
+                        onTap: () {
+                          onClickRecurringDeposit();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                  color: ColorList.greyLight6Color, width: 1)),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Enable recurring deposit',
+                                style: AppStyle.b9Medium
+                                    .copyWith(color: ColorList.primaryColor),
+                              ),
+                              Image.asset(
+                                imageSendIcon,
+                                width: 20,
+                                height: 20,
+                                color: ColorList.primaryColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    ],
                     if (widget.isPaid) ...[
                       Button(
                         'View Payout',
@@ -260,13 +263,38 @@ class KoloTransactionDetailState
                       builder: (_, snapshot) => Column(
                         children: [
                           if (!isRecentEmpty && !widget.isPaid) ...[
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: DepositAmountWidget(
-                                  width: 180,
-                                  onPressed: () {
-                                    onClickDeposit();
-                                  }),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Button(
+                                    'Deposit',
+                                    backgroundColor: ColorList.lightBlue3Color,
+                                    textColor: ColorList.primaryColor,
+                                    overlayColor: ColorList.blueColor,
+                                    borderRadius: 24,
+                                    verticalPadding: 10,
+                                    onPressed: () {
+                                      onClickDeposit();
+                                    },
+                                    postIcon: imageDownload,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Button(
+                                    'Invite',
+                                    backgroundColor: ColorList.lightBlue3Color,
+                                    textColor: ColorList.primaryColor,
+                                    overlayColor: ColorList.blueColor,
+                                    borderRadius: 24,
+                                    verticalPadding: 10,
+                                    onPressed: () {
+                                      onClickInvite();
+                                    },
+                                    postIcon: imageUserIcon,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 20,
@@ -410,6 +438,19 @@ class KoloTransactionDetailState
     StateContainer.of(context).isFromDetail = true;
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      StateContainer.of(context).isFromDetail = false;
+      isRecentEmpty = false;
+      isFailedEmpty = false;
+      leftRightStreamController.add(true);
+    });
+  }
+
+  void onClickInvite() {
+    StateContainer.of(context).isFromDetail = true;
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(const InviteFamilyMemberWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
       StateContainer.of(context).isFromDetail = false;

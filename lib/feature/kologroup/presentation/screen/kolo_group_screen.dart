@@ -18,6 +18,7 @@ import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
 import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
 import '../../../kolotarget/presentation/widgets/kolo_target_item_widget.dart';
+import '../../../widgets/create_kolo_target/create_kolo_target_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
 class KoloGroupScreen extends BaseBlocWidget {
@@ -285,9 +286,17 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
       );
 
   void onClickCreateNew() {
-    isActiveEmpty = false;
-    isPaidEmpty = false;
-    leftRightStreamController.add(true);
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(const CreateKoloTargetWidget()).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      isActiveEmpty = false;
+      isPaidEmpty = false;
+      leftRightStreamController.add(true);
+    });
+    // isActiveEmpty = false;
+    // isPaidEmpty = false;
+    // leftRightStreamController.add(true);
     // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     // showCustomBottomSheet(const DepositYourKoloboxWidget(), height: 0.9)
     //     .then((value) {

@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import '../../colors/color_list.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField(this.hint, {
+  const CustomTextField(
+    this.hint, {
     Key? key,
     this.controller,
     this.keyboardType = TextInputType.text,
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     this.hintStyle,
     this.obscureText = false,
     this.textAlign = TextAlign.start,
+    this.maxLines = 1,
   }) : super(key: key);
 
   final String hint;
@@ -35,6 +37,7 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? textStyle;
   final TextStyle? hintStyle;
   final TextAlign textAlign;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +98,7 @@ class CustomTextField extends StatelessWidget {
               onChanged: onChanged,
               obscureText: obscureText,
               textAlign: textAlign,
+              maxLines: maxLines,
             ),
           ),
           if (postIcon != null) ...[

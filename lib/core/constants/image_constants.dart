@@ -65,3 +65,4 @@ const imageCheckedIcon = "assets/images/checked.png";
 const imagePayStackIcon = "assets/images/pay_stack.png";
 const imageSendIcon = "assets/images/send_icon.png";
 const imageNoTransactionIcon = "assets/images/no_transaction_icon.png";
+const imageUserIcon = "assets/images/user_icon.png";

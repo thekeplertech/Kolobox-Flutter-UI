@@ -16,6 +16,7 @@ class Button extends StatelessWidget {
     this.height = 48,
     this.onPressed,
     this.textStyle,
+    this.postIcon,
   }) : super(key: key);
 
   final String text;
@@ -28,6 +29,7 @@ class Button extends StatelessWidget {
   final double height;
   final Function()? onPressed;
   final TextStyle? textStyle;
+  final String? postIcon;
 
   @override
   Widget build(BuildContext context) => TextButton(
@@ -54,13 +56,20 @@ class Button extends StatelessWidget {
           height: height,
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(vertical: verticalPadding),
-          child: Center(
-            child: Text(
-              text,
-              style: textStyle ??
-                  AppStyle.b7SemiBold
-                      .copyWith(color: textColor ?? ColorList.white),
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                text,
+                style: textStyle ??
+                    AppStyle.b7SemiBold
+                        .copyWith(color: textColor ?? ColorList.white),
+              ),
+              if (postIcon != null) ...[
+                const SizedBox(width: 12),
+                Image.asset(postIcon!),
+              ],
+            ],
           ),
         ),
       );
