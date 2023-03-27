@@ -109,7 +109,7 @@ class CustomTextField extends StatelessWidget {
           ],
           if (iconData != null) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Icon(iconData, size: 8),
             ),
           ],

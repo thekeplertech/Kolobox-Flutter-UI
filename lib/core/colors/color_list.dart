@@ -33,6 +33,7 @@ class ColorList {
   static const Color greyLight8Color = Color(0xFFEBEBEB);
   static const Color greyLight9Color = Color(0xFF424242);
   static const Color greyLight10Color = Color(0xFFEAEAEA);
+  static const Color greyLight13Color = Color(0xFFCFCFCF);
   static Color greyDark2Color = const Color(0xFF363636);
   static Color greyDarkColor = const Color(0xFF6D6D6D);
   static Color greyVeryLightColor = const Color(0xFFE4E4E4);

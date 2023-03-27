@@ -22,8 +22,12 @@ class KoloBoxIcons {
       IconData(0xe805, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
   static const IconData bank =
       IconData(0xe803, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
-  static const IconData downArrow =
+  static const IconData dropDownArrow =
       IconData(0xe806, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
   static const IconData forwardArrow =
       IconData(0xe809, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
+  static const IconData upArrow =
+      IconData(0xe80C, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
+  static const IconData downArrow =
+      IconData(0xe80D, fontFamily: _kFontFamily, fontPackage: _kFontPackage);
 }

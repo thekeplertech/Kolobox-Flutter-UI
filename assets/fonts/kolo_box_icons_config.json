@@ -119,6 +119,20 @@
       ]
     },
     {
+      "uid": "de964f9636499923de561eb53a2da93c",
+      "css": "vector-1",
+      "code": 59401,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M369.4 500.1L15.9 146.5 116.9 45.5 571.4 500.1 116.9 954.6 15.9 853.6 369.4 500.1Z",
+        "width": 571
+      },
+      "search": [
+        "vector"
+      ]
+    },
+    {
       "uid": "34e5e60c92e4ca783bf5167008d1eb47",
       "css": "vector",
       "code": 59398,
@@ -133,17 +147,59 @@
       ]
     },
     {
-      "uid": "de964f9636499923de561eb53a2da93c",
-      "css": "vector-1",
-      "code": 59401,
+      "uid": "6e8bfbe15431743d0a58b11410e0cb28",
+      "css": "vector-(5)",
+      "code": 59402,
       "src": "custom_icons",
       "selected": true,
       "svg": {
-        "path": "M369.4 500.1L15.9 146.5 116.9 45.5 571.4 500.1 116.9 954.6 15.9 853.6 369.4 500.1Z",
-        "width": 571
+        "path": "M875 353.5L256.3 972.3 79.5 795.5 875 0 1670.5 795.5 1493.8 972.3 875 353.5Z",
+        "width": 1750
       },
       "search": [
-        "vector"
+        "vector-(5)"
+      ]
+    },
+    {
+      "uid": "e5eb108e5c87c6a3748884d55aaaf2e5",
+      "css": "vector-(6)",
+      "code": 59403,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M875 646.6L1493.8 27.8 1670.5 204.6 875 1000.1 79.5 204.6 256.3 27.8 875 646.6Z",
+        "width": 1750
+      },
+      "search": [
+        "vector-(6)"
+      ]
+    },
+    {
+      "uid": "24271d37e39036638c6489cf20b6996e",
+      "css": "frame",
+      "code": 59404,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M500 451.2L293.8 657.4 234.8 598.5 500 333.3 765.2 598.5 706.3 657.4 500 451.2Z",
+        "width": 1000
+      },
+      "search": [
+        "frame"
+      ]
+    },
+    {
+      "uid": "aea5520907f2018c1fc4eb530ea08ae5",
+      "css": "frame-(1)",
+      "code": 59405,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M500 548.9L706.3 342.6 765.2 401.5 500 666.7 234.8 401.5 293.8 342.6 500 548.9Z",
+        "width": 1000
+      },
+      "search": [
+        "frame-(1)"
       ]
     }
   ]

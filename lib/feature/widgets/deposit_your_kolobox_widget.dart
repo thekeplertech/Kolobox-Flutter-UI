@@ -100,7 +100,7 @@ class _DepositYourKoloboxWidgetState
                           .copyWith(color: ColorList.blackThirdColor),
                     ),
                   ),
-                  const Icon(KoloBoxIcons.downArrow, size: 8),
+                  const Icon(KoloBoxIcons.dropDownArrow, size: 8),
                 ],
               ),
             ),

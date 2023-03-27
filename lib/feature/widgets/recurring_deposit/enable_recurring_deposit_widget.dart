@@ -9,6 +9,7 @@ import 'package:kolobox_new_app/core/enums/period_enum.dart';
 import 'package:kolobox_new_app/core/enums/weekly_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/feature/widgets/recurring_deposit/select_recurring_date_monthly_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/recurring_deposit/select_recurring_date_weekly_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/recurring_deposit/select_recurring_period_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
@@ -17,6 +18,7 @@ import '../../../core/colors/color_list.dart';
 import '../../../core/ui/widgets/button.dart';
 import '../../../core/ui/widgets/custom_text_field.dart';
 import 'enable_recurring_deposit_summary_widget.dart';
+import 'select_recurring_date_daily_widget.dart';
 
 class EnableRecurringDepositWidget extends BaseScreen {
   const EnableRecurringDepositWidget({Key? key}) : super(key: key);
@@ -34,8 +36,8 @@ class _EnableRecurringDepositWidgetState
       StreamController<PeriodEnum>.broadcast();
   PeriodEnum selectedPeriodEnum = PeriodEnum.monthly;
 
-  StreamController<WeeklyEnum> weeklyStreamController =
-      StreamController<WeeklyEnum>.broadcast();
+  StreamController<bool> timeStreamController =
+      StreamController<bool>.broadcast();
   WeeklyEnum selectedWeeklyEnum = WeeklyEnum.monday;
 
   @override
@@ -90,13 +92,13 @@ class _EnableRecurringDepositWidgetState
                     showCustomBottomSheet(SelectRecurringPeriodWidget(
                       periodEnum: selectedPeriodEnum,
                       onPop: (periodEnum) {
-                        logger?.d("result $periodEnum");
                         selectedPeriodEnum = periodEnum;
                         periodStreamController.add(selectedPeriodEnum);
+                        timeStreamController.add(true);
                       },
                     ));
                   },
-                  iconData: KoloBoxIcons.downArrow,
+                  iconData: KoloBoxIcons.dropDownArrow,
                 );
               }),
           const SizedBox(
@@ -110,20 +112,43 @@ class _EnableRecurringDepositWidgetState
           const SizedBox(
             height: 7,
           ),
-          CustomTextField(
-            'Select date',
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.next,
-            textCapitalization: TextCapitalization.words,
-            onPressed: () {
-              showCustomBottomSheet(SelectRecurringDateWeeklyWidget(
-                onPop: (weeklyEnum) {
-                  logger?.d("result $weeklyEnum");
-                },
-              ));
-            },
-            postIcon: imageCalendar,
-          ),
+          StreamBuilder<bool>(
+              stream: timeStreamController.stream,
+              builder: (context, snapshot) {
+                String hint = 'Select date';
+                if (selectedPeriodEnum != PeriodEnum.daily) {
+                  hint = 'Select day';
+                }
+                return CustomTextField(
+                  hint,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.words,
+                  onPressed: () {
+                    switch (selectedPeriodEnum) {
+                      case PeriodEnum.monthly:
+                        showCustomBottomSheet(SelectRecurringDateMonthlyWidget(
+                          onPop: (weeklyEnum) {
+                            selectedWeeklyEnum = weeklyEnum;
+                            timeStreamController.add(true);
+                          },
+                        ));
+                        break;
+                      case PeriodEnum.weekly:
+                        showCustomBottomSheet(SelectRecurringDateWeeklyWidget(
+                          onPop: (weeklyEnum) {},
+                        ));
+                        break;
+                      case PeriodEnum.daily:
+                        showCustomBottomSheet(SelectRecurringDateDailyWidget(
+                          onPop: (weeklyEnum) {},
+                        ));
+                        break;
+                    }
+                  },
+                  postIcon: imageCalendar,
+                );
+              }),
           const SizedBox(
             height: 15,
           ),
@@ -176,6 +201,6 @@ class _EnableRecurringDepositWidgetState
   void dispose() {
     super.dispose();
     periodStreamController.close();
-    weeklyStreamController.close();
+    timeStreamController.close();
   }
 }
