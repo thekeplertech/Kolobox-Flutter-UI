@@ -10,6 +10,7 @@ import 'package:kolobox_new_app/feature/koloflex/presentation/widgets/transactio
 import 'package:kolobox_new_app/feature/widgets/cancel_investment/cancel_investment.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/invite_user/invite_family_member.dart';
+import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -17,6 +18,7 @@ import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../../../family_contributors/presentation/family_contributors_page.dart';
 import '../../../home/presentation/widget/deposit_amount_widget.dart';
 import '../../../widgets/deposit_your_kolobox_widget.dart';
 import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
@@ -315,8 +317,8 @@ class KoloTransactionDetailState
                               height: 20,
                             ),
                           ],
-                          if (koloboxFundEnum ==
-                              KoloboxFundEnum.koloFamily) ...[
+                          if (koloboxFundEnum == KoloboxFundEnum.koloFamily ||
+                              koloboxFundEnum == KoloboxFundEnum.koloGroup) ...[
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -337,7 +339,16 @@ class KoloTransactionDetailState
                                     height: 30,
                                     textStyle: AppStyle.b10SemiBold
                                         .copyWith(color: ColorList.white),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      BlocProvider.of<DashboardBloc>(context)
+                                          .add(HideDisableBottomScreenEvent());
+                                      navigatePush(context,
+                                              const FamilyContributorsPage())
+                                          .then((value) {
+                                        BlocProvider.of<DashboardBloc>(context)
+                                            .add(ShowEnableBottomScreenEvent());
+                                      });
+                                    },
                                   ),
                                 ),
                               ],
