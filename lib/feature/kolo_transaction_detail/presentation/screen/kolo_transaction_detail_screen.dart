@@ -22,6 +22,7 @@ import '../../../widgets/deposit_your_kolobox_widget.dart';
 import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/recurring_deposit/enable_recurring_deposit_widget.dart';
+import '../widgets/family_contributors_widget.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
   final bool isPaid;
@@ -43,6 +44,10 @@ class KoloTransactionDetailState
 
   bool isRecentEmpty = true;
   bool isFailedEmpty = true;
+
+  StreamController<bool> recurringDepositStreamController =
+      StreamController<bool>.broadcast();
+  bool isRecurringDeposit = false;
 
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
@@ -73,7 +78,7 @@ class KoloTransactionDetailState
                       height: 10,
                     ),
                     Text(
-                      'Kolotarget Investment',
+                      '${koloboxFundEnum.getFundValue} Investment',
                       style: AppStyle.b7SemiBold
                           .copyWith(color: ColorList.blackSecondColor),
                     ),
@@ -209,35 +214,45 @@ class KoloTransactionDetailState
                       height: 15,
                     ),
                     if (!widget.isPaid) ...[
-                      GestureDetector(
-                        onTap: () {
-                          onClickRecurringDeposit();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              border: Border.all(
-                                  color: ColorList.greyLight6Color, width: 1)),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Enable recurring deposit',
-                                style: AppStyle.b9Medium
-                                    .copyWith(color: ColorList.primaryColor),
-                              ),
-                              Image.asset(
-                                imageSendIcon,
-                                width: 20,
-                                height: 20,
-                                color: ColorList.primaryColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      StreamBuilder<bool>(
+                          initialData: isRecurringDeposit,
+                          stream: recurringDepositStreamController.stream,
+                          builder: (context, snapshot) {
+                            return isRecurringDeposit
+                                ? getRecurringDepositDetailWidget()
+                                : GestureDetector(
+                                    onTap: () {
+                                      onClickRecurringDeposit();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          border: Border.all(
+                                              color: ColorList.greyLight6Color,
+                                              width: 1)),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 20),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Enable recurring deposit',
+                                            style: AppStyle.b9Medium.copyWith(
+                                                color: ColorList.primaryColor),
+                                          ),
+                                          Image.asset(
+                                            imageSendIcon,
+                                            width: 20,
+                                            height: 20,
+                                            color: ColorList.primaryColor,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                          }),
                       const SizedBox(
                         height: 15,
                       ),
@@ -298,6 +313,53 @@ class KoloTransactionDetailState
                             ),
                             const SizedBox(
                               height: 20,
+                            ),
+                          ],
+                          if (koloboxFundEnum ==
+                              KoloboxFundEnum.koloFamily) ...[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Family Contributors',
+                                  style: AppStyle.b8Bold.copyWith(
+                                      color: ColorList.blackSecondColor),
+                                ),
+                                SizedBox(
+                                  width: 84,
+                                  child: Button(
+                                    'See all',
+                                    textColor: ColorList.white,
+                                    backgroundColor: ColorList.blackSecondColor,
+                                    overlayColor: ColorList.blueColor,
+                                    borderRadius: 12,
+                                    verticalPadding: 10,
+                                    height: 30,
+                                    textStyle: AppStyle.b10SemiBold
+                                        .copyWith(color: ColorList.white),
+                                    onPressed: () {},
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            GridView.builder(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 14,
+                                  mainAxisSpacing: 14,
+                                  childAspectRatio: 1.2,
+                                ),
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: 4,
+                                itemBuilder: (_, index) =>
+                                    const FamilyContributorsWidget()),
+                            const SizedBox(
+                              height: 15,
                             ),
                           ],
                           Container(
@@ -431,6 +493,8 @@ class KoloTransactionDetailState
       isRecentEmpty = false;
       isFailedEmpty = false;
       leftRightStreamController.add(true);
+      isRecurringDeposit = true;
+      recurringDepositStreamController.add(true);
     });
   }
 
@@ -554,6 +618,101 @@ class KoloTransactionDetailState
           .add(ShowEnableBottomScreenEvent());
       StateContainer.of(context).isFromDetail = false;
     });
+  }
+
+  Widget getRecurringDepositDetailWidget() {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: ColorList.greyLight11Color, width: 1)),
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 12, bottom: 12),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: ColorList.lightBlue9Color,
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            child: Row(
+              children: [
+                Text(
+                  'Recurring deposit',
+                  style: AppStyle.b9Medium
+                      .copyWith(color: ColorList.greyLight12Color),
+                ),
+                const Spacer(),
+                Text(
+                  '₦ 80,000.00',
+                  style: AppStyle.b9SemiBold
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 9,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: ColorList.lightBlue9Color,
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            child: Row(
+              children: [
+                Text(
+                  'Upcoming recurring date',
+                  style: AppStyle.b9Medium
+                      .copyWith(color: ColorList.greyLight12Color),
+                ),
+                const Spacer(),
+                Text(
+                  '02 Aug 2022',
+                  style: AppStyle.b9SemiBold
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 9,
+          ),
+          Row(
+            children: [
+              Text(
+                'Disable recurring deposit',
+                style:
+                    AppStyle.b9Medium.copyWith(color: ColorList.redDarkColor),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Image.asset(
+                imageSendIcon,
+                color: ColorList.redDarkColor,
+              ),
+              const Spacer(),
+              SizedBox(
+                width: 100,
+                child: Button(
+                  'Update',
+                  textColor: ColorList.white,
+                  backgroundColor: ColorList.blackSecondColor,
+                  overlayColor: ColorList.blueColor,
+                  borderRadius: 12,
+                  verticalPadding: 10,
+                  height: 30,
+                  textStyle:
+                      AppStyle.b10SemiBold.copyWith(color: ColorList.white),
+                  onPressed: () {},
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override
