@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/account/history/presentation/history_page.dart';
+import 'package:kolobox_new_app/feature/account/notification/presentation/notification_page.dart';
+import 'package:kolobox_new_app/feature/account/security/presentation/security_page.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
@@ -9,6 +13,8 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
 class SettingsScreen extends BaseBlocWidget {
@@ -49,7 +55,18 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                             height: 10,
                           ),
                           getSupportCenterWidget(),
-                          getSelectionOptionWidget('History', imageHistoryIcon),
+                          InkWell(
+                              onTap: () {
+                                BlocProvider.of<DashboardBloc>(context)
+                                    .add(HideDisableBottomScreenEvent());
+                                navigatePush(context, const HistoryPage())
+                                    .then((value) {
+                                  BlocProvider.of<DashboardBloc>(context)
+                                      .add(ShowEnableBottomScreenEvent());
+                                });
+                              },
+                              child: getSelectionOptionWidget(
+                                  'History', imageHistoryIcon)),
                           Divider(
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
@@ -66,8 +83,19 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
                               thickness: 1),
-                          getSelectionOptionWidget(
-                              'Notification', imageNotificationIcon),
+                          InkWell(
+                            onTap: () {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(HideDisableBottomScreenEvent());
+                              navigatePush(context, const NotificationPage())
+                                  .then((value) {
+                                BlocProvider.of<DashboardBloc>(context)
+                                    .add(ShowEnableBottomScreenEvent());
+                              });
+                            },
+                            child: getSelectionOptionWidget(
+                                'Notification', imageNotificationIcon),
+                          ),
                           Divider(
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
@@ -78,8 +106,19 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
                               thickness: 1),
-                          getSelectionOptionWidget(
-                              'Security', imageSecurityIcon),
+                          InkWell(
+                            onTap: () {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(HideDisableBottomScreenEvent());
+                              navigatePush(context, const SecurityPage())
+                                  .then((value) {
+                                BlocProvider.of<DashboardBloc>(context)
+                                    .add(ShowEnableBottomScreenEvent());
+                              });
+                            },
+                            child: getSelectionOptionWidget(
+                                'Security', imageSecurityIcon),
+                          ),
                           Divider(
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
@@ -114,25 +153,22 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
       );
 
   Widget getSelectionOptionWidget(String title, String icon) {
-    return InkWell(
-      onTap: () => comingSoon(),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Row(
-          children: [
-            Image.asset(icon),
-            const SizedBox(
-              width: 8,
-            ),
-            Text(
-              title,
-              style:
-                  AppStyle.b7Medium.copyWith(color: ColorList.blackSecondColor),
-            ),
-            const Spacer(),
-            Image.asset(imageRightArrowIcon),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Row(
+        children: [
+          Image.asset(icon),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            title,
+            style:
+                AppStyle.b7Medium.copyWith(color: ColorList.blackSecondColor),
+          ),
+          const Spacer(),
+          Image.asset(imageRightArrowIcon),
+        ],
       ),
     );
   }

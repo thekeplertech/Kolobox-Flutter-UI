@@ -68,3 +68,4 @@ const imageSendIcon = "assets/images/send_icon.png";
 const imageNoTransactionIcon = "assets/images/no_transaction_icon.png";
 const imageUserIcon = "assets/images/user_icon.png";
 const imageWalletInfoIcon = "assets/images/wallet_info_icon.png";
+const imageNoHistoryIcon = "assets/images/no_history_icon.png";

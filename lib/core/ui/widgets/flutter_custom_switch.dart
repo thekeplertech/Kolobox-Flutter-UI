@@ -61,6 +61,8 @@ class FlutterCustomSwitch extends StatefulWidget {
   /// for small size button
   final bool isSmallToggle;
 
+  final Color? borderColor;
+
   const FlutterCustomSwitch({
     Key? key,
     required this.value,
@@ -75,6 +77,7 @@ class FlutterCustomSwitch extends StatefulWidget {
     this.inActiveThumbImagePath,
     this.enableOutsideText = false,
     this.isSmallToggle = false,
+    this.borderColor,
   }) : super(key: key);
 
   @override
@@ -118,17 +121,17 @@ class FlutterCustomSwitchState extends State<FlutterCustomSwitch> {
   /// custom switch button
   _switchButton() {
     Color backgroundColor =
-        (widget.value) ? widget.activeColor : widget.inActiveColor;
+    (widget.value) ? widget.activeColor : widget.inActiveColor;
 
     return Row(
       children: [
         (widget.enableOutsideText)
             ? (!widget.value)
-                ? Container(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: const Text("off"),
-                  )
-                : Container()
+            ? Container(
+          padding: const EdgeInsets.only(right: 5),
+          child: const Text("off"),
+        )
+            : Container()
             : Container(),
         GestureDetector(
           child: AnimatedContainer(
@@ -136,13 +139,14 @@ class FlutterCustomSwitchState extends State<FlutterCustomSwitch> {
             width: _switchWidth,
             height: _switchHeight,
             alignment:
-                (widget.value) ? Alignment.centerRight : Alignment.centerLeft,
+            (widget.value) ? Alignment.centerRight : Alignment.centerLeft,
             decoration: BoxDecoration(
               color: backgroundColor,
               image: _backgroundDecorationImage(),
               borderRadius: BorderRadius.circular(_switchBorderRadius),
               border: Border.all(
-                  color: ColorList.lightBlue10Color, width: _switchWidthBorder),
+                  color: widget.borderColor ?? ColorList.lightBlue10Color,
+                  width: _switchWidthBorder),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(_switchBorderRadius),
@@ -155,11 +159,11 @@ class FlutterCustomSwitchState extends State<FlutterCustomSwitch> {
         ),
         (widget.enableOutsideText)
             ? (widget.value)
-                ? Container(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: const Text("on"),
-                  )
-                : Container()
+            ? Container(
+          padding: const EdgeInsets.only(left: 5),
+          child: const Text("on"),
+        )
+            : Container()
             : Container(),
       ],
     );
@@ -168,7 +172,7 @@ class FlutterCustomSwitchState extends State<FlutterCustomSwitch> {
   /// active and in-active thumb view
   _circleView() {
     Color iconColor =
-        widget.value ? widget.activeThumbColor : widget.inActiveThumbColor;
+    widget.value ? widget.activeThumbColor : widget.inActiveThumbColor;
 
     return Container(
       height: _thumbSize,
@@ -187,7 +191,7 @@ class FlutterCustomSwitchState extends State<FlutterCustomSwitch> {
   /// else it won't add the image and it'll return the null
   DecorationImage? _backgroundDecorationImage() {
     String? image =
-        (widget.value) ? widget.activeImagePath : widget.inActiveImagePath;
+    (widget.value) ? widget.activeImagePath : widget.inActiveImagePath;
     if (_checkBackgroundDecorationImage() && image != null) {
       return DecorationImage(image: AssetImage(image), fit: BoxFit.cover);
     }
@@ -199,7 +203,7 @@ class FlutterCustomSwitchState extends State<FlutterCustomSwitch> {
   /// else it won't add the image and it'll return the null
   DecorationImage? _thumbDecorationImage() {
     if (((widget.activeThumbImagePath != null &&
-            (widget.activeThumbImagePath ?? '').isNotEmpty) &&
+        (widget.activeThumbImagePath ?? '').isNotEmpty) &&
         (widget.inActiveThumbImagePath != null &&
             (widget.inActiveThumbImagePath ?? '').isNotEmpty))) {
       return DecorationImage(
@@ -213,7 +217,7 @@ class FlutterCustomSwitchState extends State<FlutterCustomSwitch> {
 
   bool _checkBackgroundDecorationImage() {
     return ((widget.activeImagePath != null &&
-            (widget.activeImagePath ?? '').isNotEmpty) &&
+        (widget.activeImagePath ?? '').isNotEmpty) &&
         (widget.inActiveImagePath != null &&
             (widget.inActiveImagePath ?? '').isNotEmpty));
   }
