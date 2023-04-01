@@ -70,6 +70,8 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
             }
           } else if (state is ClearBackStackState) {
             await popUntil(previousTabIndex, removeUntil: state.until);
+          } else if (state is SelectTabState) {
+            onClickBottomTab(state.tabEnum.getDashboardValue);
           }
         },
         child: getChild(),

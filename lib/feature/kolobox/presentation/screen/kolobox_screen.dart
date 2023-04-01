@@ -11,12 +11,12 @@ import 'package:kolobox_new_app/feature/kologroup/presentation/kolo_group_page.d
 import 'package:kolobox_new_app/feature/kolotarget/presentation/kolo_target_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../home/presentation/widget/deposit_amount_widget.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
@@ -78,19 +78,28 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       const SizedBox(
                         height: 24,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          StateContainer.of(context).isFromFundMyKoloBox = true;
-                          BlocProvider.of<DashboardBloc>(context)
-                              .add(HideDisableBottomScreenEvent());
-                          showCustomBottomSheet(const FundYourKoloboxWidget())
-                              .then((value) {
+                      SizedBox(
+                        width: 200,
+                        child: Button(
+                          'Fund my KoloBox',
+                          backgroundColor: ColorList.lightBlue3Color,
+                          textColor: ColorList.primaryColor,
+                          overlayColor: ColorList.blueColor,
+                          borderRadius: 24,
+                          verticalPadding: 10,
+                          onPressed: () {
+                            StateContainer.of(context).isFromFundMyKoloBox =
+                                true;
                             BlocProvider.of<DashboardBloc>(context)
-                                .add(ShowEnableBottomScreenEvent());
-                          });
-                        },
-                        child: const DepositAmountWidget(
-                            width: 200, text: 'Fund my KoloBox'),
+                                .add(HideDisableBottomScreenEvent());
+                            showCustomBottomSheet(const FundYourKoloboxWidget())
+                                .then((value) {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(ShowEnableBottomScreenEvent());
+                            });
+                          },
+                          postIcon: imageDownload,
+                        ),
                       ),
                       const SizedBox(
                         height: 24,

@@ -21,6 +21,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.textAlign = TextAlign.start,
     this.maxLines = 1,
+    this.contentPadding,
   }) : super(key: key);
 
   final String hint;
@@ -38,6 +39,7 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final TextAlign textAlign;
   final int maxLines;
+  final EdgeInsets? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +81,11 @@ class CustomTextField extends StatelessWidget {
                 hintText: hint,
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 15,
-                  horizontal: 12,
-                ),
+                contentPadding: contentPadding ??
+                    const EdgeInsets.symmetric(
+                      vertical: 15,
+                      horizontal: 12,
+                    ),
                 hintStyle: hintStyle ??
                     TextStyle(
                       color: ColorList.blackThirdColor,

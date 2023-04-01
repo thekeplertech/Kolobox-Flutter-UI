@@ -4,7 +4,7 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/account/history/presentation/history_page.dart';
-import 'package:kolobox_new_app/feature/account/notification/presentation/notification_page.dart';
+import 'package:kolobox_new_app/feature/account/notification/presentation/notification_settings_page.dart';
 import 'package:kolobox_new_app/feature/account/security/presentation/security_page.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
@@ -87,7 +87,8 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                             onTap: () {
                               BlocProvider.of<DashboardBloc>(context)
                                   .add(HideDisableBottomScreenEvent());
-                              navigatePush(context, const NotificationPage())
+                              navigatePush(
+                                      context, const NotificationSettingsPage())
                                   .then((value) {
                                 BlocProvider.of<DashboardBloc>(context)
                                     .add(ShowEnableBottomScreenEvent());

@@ -17,7 +17,6 @@ import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../home/presentation/widget/deposit_amount_widget.dart';
 import '../../../widgets/deposit_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../widgets/account_item_widget.dart';
@@ -210,11 +209,21 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
           const SizedBox(
             height: 20,
           ),
-          DepositAmountWidget(
-              width: 180,
+          SizedBox(
+            width: 180,
+            child: Button(
+              'Deposit',
+              backgroundColor: ColorList.lightBlue3Color,
+              textColor: ColorList.primaryColor,
+              overlayColor: ColorList.blueColor,
+              borderRadius: 24,
+              verticalPadding: 10,
               onPressed: () {
                 onClickDeposit();
-              }),
+              },
+              postIcon: imageDownload,
+            ),
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -234,12 +243,20 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
   Widget getDataWidget() {
     return Column(
       children: [
-        DepositAmountWidget(
-          backColor: ColorList.koloFlexColor,
+        SizedBox(
           width: 180,
-          onPressed: () {
-            onClickDeposit();
-          },
+          child: Button(
+            'Deposit',
+            backgroundColor: ColorList.lightBlue3Color,
+            textColor: ColorList.primaryColor,
+            overlayColor: ColorList.blueColor,
+            borderRadius: 24,
+            verticalPadding: 10,
+            onPressed: () {
+              onClickDeposit();
+            },
+            postIcon: imageDownload,
+          ),
         ),
         const SizedBox(
           height: 20,

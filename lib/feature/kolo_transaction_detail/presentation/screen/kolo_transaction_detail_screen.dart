@@ -19,7 +19,6 @@ import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../family_contributors/presentation/family_contributors_page.dart';
-import '../../../home/presentation/widget/deposit_amount_widget.dart';
 import '../../../widgets/deposit_your_kolobox_widget.dart';
 import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
@@ -480,12 +479,19 @@ class KoloTransactionDetailState
               height: 20,
             ),
             SizedBox(
-              width: 174,
-              child: DepositAmountWidget(
-                  width: 180,
-                  onPressed: () {
-                    onClickDeposit();
-                  }),
+              width: 180,
+              child: Button(
+                'Deposit',
+                backgroundColor: ColorList.lightBlue3Color,
+                textColor: ColorList.primaryColor,
+                overlayColor: ColorList.blueColor,
+                borderRadius: 24,
+                verticalPadding: 10,
+                onPressed: () {
+                  onClickDeposit();
+                },
+                postIcon: imageDownload,
+              ),
             ),
           ],
           const SizedBox(

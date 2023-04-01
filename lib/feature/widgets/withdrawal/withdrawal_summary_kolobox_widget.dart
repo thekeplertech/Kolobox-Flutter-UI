@@ -110,7 +110,7 @@ class _WithdrawalSummaryKoloboxWidgetState
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         KoloBoxIcons.bank,
                         size: 18,
                         color: ColorList.primaryColor,

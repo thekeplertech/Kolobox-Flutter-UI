@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
 import 'package:kolobox_new_app/feature/widgets/deposit_summary_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../core/base/base_screen.dart';
 import '../../../../core/colors/color_list.dart';
+import '../../core/ui/widgets/custom_text_field.dart';
 import 'inherited_state_container.dart';
 
 class DepositYourKoloboxWidget extends BaseScreen {
@@ -116,20 +119,21 @@ class _DepositYourKoloboxWidgetState
           const SizedBox(
             height: 7,
           ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: ColorList.greyLightColor, width: 1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            width: double.maxFinite,
-            padding: const EdgeInsets.all(27),
-            child: Center(
-              child: Text(
-                '₦ 0.00',
-                style:
-                    AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
-              ),
-            ),
+          CustomTextField(
+            '₦ 0.00',
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.done,
+            textCapitalization: TextCapitalization.none,
+            inputFormatter: [
+              CurrencyTextInputFormatter(
+                name: '₦ ',
+              )
+            ],
+            textStyle: AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+            hintStyle: AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+            textAlign: TextAlign.center,
+            contentPadding: const EdgeInsets.symmetric(vertical: 25),
+            // controller: emailTextEditingController,
           ),
           const SizedBox(
             height: 20,

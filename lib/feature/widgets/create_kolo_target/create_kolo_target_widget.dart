@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
 import 'package:kolobox_new_app/feature/widgets/create_kolo_target/kolo_target_summary_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
@@ -90,7 +91,11 @@ class _CreateKoloTargetWidgetState
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.next,
             textCapitalization: TextCapitalization.none,
-            inputFormatter: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatter: [
+              CurrencyTextInputFormatter(
+                name: '₦ ',
+              )
+            ],
             textStyle: AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
             hintStyle: AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
             textAlign: TextAlign.center,
@@ -132,7 +137,11 @@ class _CreateKoloTargetWidgetState
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
             textCapitalization: TextCapitalization.none,
-            inputFormatter: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatter: [
+              CurrencyTextInputFormatter(
+                name: '₦ ',
+              )
+            ],
             textStyle:
                 AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
             hintStyle:

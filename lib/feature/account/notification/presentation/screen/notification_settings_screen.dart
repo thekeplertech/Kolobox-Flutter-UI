@@ -11,16 +11,17 @@ import '../../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../widgets/home_app_bar_widget.dart';
 
-class NotificationScreen extends BaseBlocWidget {
-  const NotificationScreen({
+class NotificationSettingsScreen extends BaseBlocWidget {
+  const NotificationSettingsScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  NotificationState createState() => NotificationState();
+  NotificationSettingsState createState() => NotificationSettingsState();
 }
 
-class NotificationState extends BaseBlocWidgetState<NotificationScreen> {
+class NotificationSettingsState
+    extends BaseBlocWidgetState<NotificationSettingsScreen> {
   StreamController<bool> smsAlertStreamController =
       StreamController<bool>.broadcast();
   bool isSMSAlert = false;

@@ -7,6 +7,8 @@ import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
 import '../../../core/ui/widgets/button.dart';
+import '../../../core/ui/widgets/currency_text_input_formatter.dart';
+import '../../../core/ui/widgets/custom_text_field.dart';
 import 'withdrawal_summary_kolobox_widget.dart';
 
 class WithdrawalToBankKoloboxWidget extends BaseScreen {
@@ -59,20 +61,23 @@ class _WithdrawalToBankKoloboxWidgetState
             const SizedBox(
               height: 10,
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: ColorList.greyLightColor, width: 1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              width: double.maxFinite,
-              padding: const EdgeInsets.all(27),
-              child: Center(
-                child: Text(
-                  '₦ 0.00',
-                  style: AppStyle.b3Bold
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-              ),
+            CustomTextField(
+              '₦ 0.00',
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              textCapitalization: TextCapitalization.none,
+              inputFormatter: [
+                CurrencyTextInputFormatter(
+                  name: '₦ ',
+                )
+              ],
+              textStyle:
+                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+              hintStyle:
+                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+              textAlign: TextAlign.center,
+              contentPadding: const EdgeInsets.symmetric(vertical: 25),
+              // controller: emailTextEditingController,
             ),
             const SizedBox(
               height: 30,

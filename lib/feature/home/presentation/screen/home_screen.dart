@@ -11,15 +11,19 @@ import 'package:kolobox_new_app/core/ui/widgets/no_overflow_scrollbar_behaviour.
 import 'package:kolobox_new_app/feature/home/presentation/bloc/home_bloc.dart';
 import 'package:kolobox_new_app/feature/home/presentation/bloc/home_event.dart';
 import 'package:kolobox_new_app/feature/home/presentation/bloc/home_state.dart';
-import 'package:kolobox_new_app/feature/home/presentation/widget/deposit_amount_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/explore_item_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/learn_item_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/news_item_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/refer_and_earn_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/home_app_bar_widget.dart';
+import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
+import '../../../../core/ui/widgets/button.dart';
+import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../../../notifications/presentation/notifications_page.dart';
 import '../../data/models/wallet_data_model.dart';
 import '../widget/welcome_to_kolobox_widget.dart';
 
@@ -87,7 +91,15 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                 leftIcon: imageDashboardIcon,
                 rightIcon: imageNotification,
                 onLeftPressed: () => comingSoon(),
-                onRightPressed: () => comingSoon(),
+                onRightPressed: () {
+                  BlocProvider.of<DashboardBloc>(context)
+                      .add(HideDisableBottomScreenEvent());
+                  navigatePush(context, const NotificationsPage())
+                      .then((value) {
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(ShowEnableBottomScreenEvent());
+                  });
+                },
               ),
               getHeaderWidget(),
               Padding(
@@ -267,8 +279,20 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
             const SizedBox(
               height: 18,
             ),
-            const Center(
-              child: DepositAmountWidget(width: 129),
+            Center(
+              child: SizedBox(
+                width: 129,
+                child: Button(
+                  'Deposit',
+                  backgroundColor: ColorList.lightBlue3Color,
+                  textColor: ColorList.primaryColor,
+                  overlayColor: ColorList.blueColor,
+                  borderRadius: 24,
+                  verticalPadding: 10,
+                  onPressed: () {},
+                  postIcon: imageDownload,
+                ),
+              ),
             ),
             const SizedBox(
               height: 23,
@@ -309,22 +333,16 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                         children: [
                           Text(
                             walletHistory[index].productName ?? '',
-                            style: TextStyle(
-                              color: ColorList.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppStyle.b9SemiBold
+                                .copyWith(color: ColorList.white),
                           ),
                           const SizedBox(
                             height: 11,
                           ),
                           Text(
                             walletHistory[index].depositAmount.getAmount(),
-                            style: TextStyle(
-                              color: ColorList.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: AppStyle.b4SemiBold
+                                .copyWith(color: ColorList.white),
                           ),
                         ],
                       );
