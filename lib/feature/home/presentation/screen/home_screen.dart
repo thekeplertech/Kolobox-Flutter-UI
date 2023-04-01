@@ -289,7 +289,11 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 24,
                   verticalPadding: 10,
-                  onPressed: () {},
+                  onPressed: () {
+                    // PayStackPayment payStack = PayStackPayment();
+                    // payStack.init();
+                    // payStack.checkout(context);
+                  },
                   postIcon: imageDownload,
                 ),
               ),
