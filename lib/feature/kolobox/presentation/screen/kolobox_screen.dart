@@ -12,12 +12,14 @@ import 'package:kolobox_new_app/feature/kolotarget/presentation/kolo_target_page
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
+import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
+import '../../../notifications/presentation/notifications_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
@@ -49,12 +51,22 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HomeAppBarWidget(
-                  amount: '0.00',
+                  amount: CurrencyTextInputFormatter.formatAmount(
+                      prefHelper?.getProfileDataModel().wallet?.accountBalance,
+                      isSymbol: false),
                   walletBalanceStreamController: walletBalanceStreamController,
                   leftIcon: imageDashboardIcon,
                   rightIcon: imageNotification,
                   onLeftPressed: () => comingSoon(),
-                  onRightPressed: () => comingSoon(),
+                  onRightPressed: () {
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(HideDisableBottomScreenEvent());
+                    navigatePush(context, const NotificationsPage())
+                        .then((value) {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ShowEnableBottomScreenEvent());
+                    });
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -71,7 +83,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                         height: 4,
                       ),
                       Text(
-                        'Total ₦ 4,860,700.00',
+                        'Total ${CurrencyTextInputFormatter.formatAmount(prefHelper?.getProfileDataModel().wallet?.withDrawableFunds?.toString() ?? '0.0')}',
                         style: AppStyle.b7SemiBold
                             .copyWith(color: ColorList.primaryColor),
                       ),
