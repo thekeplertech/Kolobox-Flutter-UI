@@ -122,6 +122,7 @@ abstract class BaseScreenState<T extends BaseScreen> extends State<T>
 
   hideKeyboard() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   String className = "";

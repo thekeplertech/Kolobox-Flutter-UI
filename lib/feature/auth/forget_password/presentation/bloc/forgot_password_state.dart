@@ -1,4 +1,3 @@
-import 'package:kolobox_new_app/feature/auth/forget_password/data/models/forget_password_request_model.dart';
 import 'package:kolobox_new_app/feature/auth/forget_password/data/models/forget_password_response_model.dart';
 
 abstract class ForgotPasswordState {}
@@ -11,14 +10,10 @@ class CallForgotPasswordState extends ForgotPasswordState {
   CallForgotPasswordState({required this.model});
 }
 
-class ForgotPasswordValidateState extends ForgotPasswordState {
-  final ForgetPasswordRequestModel model;
-
-  ForgotPasswordValidateState({required this.model});
-}
+class ForgotPasswordValidateState extends ForgotPasswordState {}
 
 class ChangePasswordState extends ForgotPasswordState {
-  final ForgetPasswordRequestModel model;
+  final String message;
 
-  ChangePasswordState({required this.model});
+  ChangePasswordState({required this.message});
 }

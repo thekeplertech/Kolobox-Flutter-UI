@@ -13,10 +13,12 @@ import 'package:kolobox_new_app/routes/routes.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../../core/ui/style/app_style.dart';
 import '../../../../../core/ui/widgets/button.dart';
 import '../../../../../core/ui/widgets/custom_text_field.dart';
 import '../../../../../core/ui/widgets/toast_widget.dart';
 import '../../../../../core/utils/utils.dart';
+import '../../data/models/change_password_request_model.dart';
 import '../../data/models/forget_password_request_model.dart';
 import '../../data/models/validate_request_model.dart';
 import '../bloc/forgot_password_event.dart';
@@ -35,11 +37,22 @@ class ForgotPasswordScreenState
   final TextEditingController otpTextEditingController =
       TextEditingController();
 
+  final TextEditingController passwordTextEditingController =
+      TextEditingController();
+  final TextEditingController cPasswordTextEditingController =
+      TextEditingController();
+
   StreamController<int> pageIndicatorStreamController =
+      StreamController<int>.broadcast();
+
+  StreamController<int> passwordStrengthStreamController =
       StreamController<int>.broadcast();
 
   int pageIndicatorPosition = 0;
   int pageIndicatorCount = 4;
+
+  static const int maxPasswordStrength = 4;
+  int passwordStrength = 0;
 
   PageController pageController = PageController(initialPage: 0);
 
@@ -47,7 +60,8 @@ class ForgotPasswordScreenState
   void initState() {
     super.initState();
     if (FlavorConfig.isDev()) {
-      emailTextEditingController.text = 'tulbadex@gmail.com';
+      emailTextEditingController.text = 'parth123456789@mailinator.com';
+      // emailTextEditingController.text = 'tulbadex@gmail.com';
     }
   }
 
@@ -85,8 +99,24 @@ class ForgotPasswordScreenState
                 );
               });
             }
-            if (state is ForgotPasswordValidateState) {}
-            if (state is ChangePasswordState) {}
+            if (state is ForgotPasswordValidateState) {
+              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+                pageController.animateToPage(
+                  ++pageIndicatorPosition,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                );
+              });
+            }
+            if (state is ChangePasswordState) {
+              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+                pageController.animateToPage(
+                  ++pageIndicatorPosition,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                );
+              });
+            }
           },
           child: getChildWidget(),
         ),
@@ -200,21 +230,13 @@ class ForgotPasswordScreenState
                           onClickValidateCode();
                           break;
                         case 2:
+                          onClickCreatePassword();
                           break;
                         case 3:
+                          goBack(context);
                           break;
                       }
                       return;
-                      if (pageIndicatorPosition == pageIndicatorCount - 1) {
-                        goBack(context);
-                        return;
-                      }
-                      await Future.delayed(const Duration(milliseconds: 200));
-                      pageController.animateToPage(
-                        ++pageIndicatorPosition,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.easeIn,
-                      );
                     },
                   );
                 }),
@@ -257,6 +279,7 @@ class ForgotPasswordScreenState
       );
 
   onClickNext() {
+    hideKeyboard();
     if (emailTextEditingController.text.isEmpty) {
       Utils.showToast(
           context,
@@ -328,7 +351,7 @@ class ForgotPasswordScreenState
             PinCodeTextField(
               appContext: context,
               controller: otpTextEditingController,
-              length: 6,
+              length: 4,
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.box,
                 borderRadius: BorderRadius.circular(12),
@@ -386,6 +409,7 @@ class ForgotPasswordScreenState
   }
 
   onClickValidateCode() {
+    hideKeyboard();
     if (otpTextEditingController.text.isEmpty) {
       Utils.showToast(
           context,
@@ -402,11 +426,11 @@ class ForgotPasswordScreenState
           ));
       return;
     }
-    if (otpTextEditingController.text.length != 6) {
+    if (otpTextEditingController.text.length != 4) {
       Utils.showToast(
           context,
           ToastWidget(
-            'Enter valid email address',
+            'Enter valid otp',
             borderColor: ColorList.redDarkColor,
             backgroundColor: ColorList.white,
             textColor: ColorList.black,
@@ -422,89 +446,191 @@ class ForgotPasswordScreenState
     BlocProvider.of<ForgotPasswordBloc>(context)
         .add(ForgotPasswordValidateEvent(
       model: ValidateRequestModel(
-        code: '',
+        code: otpTextEditingController.text,
       ),
     ));
   }
 
   Widget stepThreeEnterPassword() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Password setup',
-          style: TextStyle(
-            color: ColorList.blackSecondColor,
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Text(
-          'Password',
-          style: TextStyle(
-            color: ColorList.blackSecondColor,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        const CustomTextField('Create secure password'),
-        const SizedBox(
-          height: 24,
-        ),
-        Text(
-          'Confirm password',
-          style: TextStyle(
-            color: ColorList.blackSecondColor,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(
-          height: 7,
-        ),
-        const CustomTextField('Confirm created password'),
-        const SizedBox(
-          height: 20,
-        ),
-        Stack(
+    return ScrollConfiguration(
+      behavior: NoOverFlowScrollbarBehaviour(),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.maxFinite,
-              height: 8,
-              decoration: BoxDecoration(
-                color: ColorList.greyVeryLightColor,
-                borderRadius: BorderRadius.circular(100),
+            Text(
+              'Password setup',
+              style: TextStyle(
+                color: ColorList.blackSecondColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            Container(
-              width: 100,
-              height: 8,
-              decoration: BoxDecoration(
-                color: ColorList.yellowDarkColor,
-                borderRadius: BorderRadius.circular(100),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Password',
+              style:
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            CustomTextField(
+              'Create secure password',
+              controller: passwordTextEditingController,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              obscureText: true,
+              onChanged: (value) => changePasswordUpdated(),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Text(
+              'Confirm password',
+              style:
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            CustomTextField(
+              'Confirm created password',
+              controller: cPasswordTextEditingController,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.done,
+              obscureText: true,
+              onChanged: (value) => changePasswordUpdated(),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            LayoutBuilder(builder: (_, constraint) {
+              return Stack(
+                children: [
+                  Container(
+                    width: double.maxFinite,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: ColorList.greyVeryLightColor,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                  StreamBuilder<int>(
+                      initialData: passwordStrength,
+                      stream: passwordStrengthStreamController.stream,
+                      builder: (context, snapshot) {
+                        return Container(
+                          width: constraint.maxWidth *
+                              passwordStrength /
+                              maxPasswordStrength,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: ColorList.yellowDarkColor,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        );
+                      }),
+                ],
+              );
+            }),
+            const SizedBox(
+              height: 9,
+            ),
+            Text(
+              'Password strength',
+              style: TextStyle(
+                color: ColorList.greyDarkColor,
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
-        const SizedBox(
-          height: 9,
-        ),
-        Text(
-          'Password strength',
-          style: TextStyle(
-            color: ColorList.greyDarkColor,
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
+      ),
     );
+  }
+
+  onClickCreatePassword() {
+    hideKeyboard();
+    if (passwordTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter password',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (cPasswordTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter confirm password',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (passwordTextEditingController.text !=
+        cPasswordTextEditingController.text) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Password & confirm password must be same.',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+
+    BlocProvider.of<ForgotPasswordBloc>(context).add(ChangePasswordEvent(
+      model: ChangePasswordRequestModel(
+        newPassword: passwordTextEditingController.text,
+        newCPassword: passwordTextEditingController.text,
+      ),
+    ));
+  }
+
+  void changePasswordUpdated() {
+    passwordStrength = 0;
+
+    if (passwordTextEditingController.text.isEmpty) {
+      passwordStrength = 0;
+    } else if (passwordTextEditingController.text.length < 6) {
+      passwordStrength = 1;
+    } else if (passwordTextEditingController.text.length < 8) {
+      passwordStrength = 2;
+    } else {
+      if (!Utils.isLetter(passwordTextEditingController.text) ||
+          !Utils.isNumber(passwordTextEditingController.text)) {
+        passwordStrength = 3;
+      } else {
+        passwordStrength = 4;
+      }
+    }
+    passwordStrengthStreamController.add(passwordStrength);
   }
 
   Widget stepFourSuccess() {
@@ -572,6 +698,9 @@ class ForgotPasswordScreenState
     super.dispose();
     pageController.dispose();
     emailTextEditingController.dispose();
+    otpTextEditingController.dispose();
+    passwordTextEditingController.dispose();
+    cPasswordTextEditingController.dispose();
     pageIndicatorStreamController.close();
   }
 }

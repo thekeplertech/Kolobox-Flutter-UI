@@ -51,7 +51,7 @@ class ForgotPasswordBloc
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(ForgotPasswordValidateState(model: r.model));
+      emit(ForgotPasswordValidateState());
     });
   }
 
@@ -65,7 +65,7 @@ class ForgotPasswordBloc
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(ChangePasswordState(model: r.model));
+      emit(ChangePasswordState(message: r.model));
     });
   }
 }
