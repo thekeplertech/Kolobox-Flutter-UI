@@ -20,7 +20,9 @@ import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
+import '../../../../core/pay_stack_payment_gateway/pay_stack_payment.dart';
 import '../../../../core/ui/widgets/button.dart';
+import '../../../../di/injection_container.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../notifications/presentation/notifications_page.dart';
@@ -302,8 +304,8 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   borderRadius: 24,
                   verticalPadding: 10,
                   onPressed: () {
-                    // PayStackPayment payStack = PayStackPayment();
-                    // payStack.init();
+                    PayStackPayment payStack = sl();
+                    payStack.checkout(context);
                     // payStack.checkout(context);
                   },
                   postIcon: imageDownload,

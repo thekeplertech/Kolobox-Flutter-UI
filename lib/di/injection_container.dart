@@ -21,6 +21,7 @@ import '../core/http/rest_client.dart';
 import '../core/http/rest_client_impl.dart';
 import '../core/loggers/app_log_filter.dart';
 import '../core/loggers/app_log_printer.dart';
+import '../core/pay_stack_payment_gateway/pay_stack_payment.dart';
 import '../core/preference/pref_helper.dart';
 import '../core/preference/pref_helper_impl.dart';
 import '../feature/auth/forget_password/data/data_source/remote_forget_password_data_source_impl.dart';
@@ -50,6 +51,8 @@ Future<void> init() async {
   // Some initialization
   // sl.registerLazySingleton<MessageDataSource>(
   //     () => FirebaseMessageDataSourceImpl());
+
+  sl.registerLazySingleton<PayStackPayment>(() => PayStackPayment());
 
   // Some API Repositories
   sl.registerLazySingleton<SplashRepo>(
