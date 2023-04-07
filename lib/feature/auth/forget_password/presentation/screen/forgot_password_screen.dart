@@ -18,6 +18,7 @@ import '../../../../../core/ui/widgets/custom_text_field.dart';
 import '../../../../../core/ui/widgets/toast_widget.dart';
 import '../../../../../core/utils/utils.dart';
 import '../../data/models/forget_password_request_model.dart';
+import '../../data/models/validate_request_model.dart';
 import '../bloc/forgot_password_event.dart';
 
 class ForgotPasswordScreen extends BaseBlocWidget {
@@ -30,6 +31,8 @@ class ForgotPasswordScreen extends BaseBlocWidget {
 class ForgotPasswordScreenState
     extends BaseBlocWidgetState<ForgotPasswordScreen> {
   final TextEditingController emailTextEditingController =
+      TextEditingController();
+  final TextEditingController otpTextEditingController =
       TextEditingController();
 
   StreamController<int> pageIndicatorStreamController =
@@ -55,7 +58,7 @@ class ForgotPasswordScreenState
           backgroundColor: ColorList.transparentColor,
           bottomOpacity: 0,
           elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: ColorList.white,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
@@ -194,6 +197,7 @@ class ForgotPasswordScreenState
                           onClickNext();
                           break;
                         case 1:
+                          onClickValidateCode();
                           break;
                         case 2:
                           break;
@@ -323,6 +327,7 @@ class ForgotPasswordScreenState
             ),
             PinCodeTextField(
               appContext: context,
+              controller: otpTextEditingController,
               length: 6,
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.box,
@@ -378,6 +383,48 @@ class ForgotPasswordScreenState
         ),
       ),
     );
+  }
+
+  onClickValidateCode() {
+    if (otpTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter otp',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (otpTextEditingController.text.length != 6) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter valid email address',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+
+    BlocProvider.of<ForgotPasswordBloc>(context)
+        .add(ForgotPasswordValidateEvent(
+      model: ValidateRequestModel(
+        code: '',
+      ),
+    ));
   }
 
   Widget stepThreeEnterPassword() {

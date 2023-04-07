@@ -8,6 +8,7 @@ import '../../../../../core/http/network_info.dart';
 import '../../../../../core/models/failure.dart';
 import '../../../../../core/models/success.dart';
 import '../../../../../di/injection_container.dart';
+import '../models/register_response_model.dart';
 
 class RegisterRepoImpl extends RegisterRepo {
   RemoteRegisterDataSource remoteRegisterDataSource = sl();
@@ -16,15 +17,12 @@ class RegisterRepoImpl extends RegisterRepo {
 
   @override
   Future<Either<Failure, Success>> register(RegisterRequestModel model) =>
-      baseApiMethod(() => loginFromAPI(model));
+      baseApiMethod(() => registerFromAPI(model));
 
-  Future<Either<Failure, Success>> loginFromAPI(
+  Future<Either<Failure, Success>> registerFromAPI(
       RegisterRequestModel model) async {
-    dynamic apiResponse = await remoteRegisterDataSource.register(model);
-    // LoginResponseModel responseModel =
-    //     LoginResponseModel.fromJson(await remoteLoginDataSource.login(model));
-    // PrefHelper helper = sl();
-    // await helper.setLoginResponseModel(responseModel);
+    RegisterResponseModel responseModel = RegisterResponseModel.fromJson(
+        (await remoteRegisterDataSource.register(model)).data);
     return Right(Success(null /*responseModel*/));
   }
 
