@@ -10,6 +10,9 @@ class DashboardBloc extends BaseBloc<DashboardEvent, DashboardState> {
 
   DashboardBloc(MasterBloc baseBlocObject)
       : super(baseBlocObject, InitialState()) {
+    on<LogoutEvent>((event, emit) {
+      emit(LogoutState());
+    });
     on<ShowEnableBottomScreenEvent>((event, emit) {
       emit(ShowEnableBottomScreenState());
     });

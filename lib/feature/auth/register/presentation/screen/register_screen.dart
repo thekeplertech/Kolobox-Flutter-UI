@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
+import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import 'package:kolobox_new_app/core/ui/widgets/toast_widget.dart';
 import 'package:kolobox_new_app/core/utils/date_helper.dart';
@@ -80,7 +81,7 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
           backgroundColor: ColorList.transparentColor,
           bottomOpacity: 0,
           elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: ColorList.white,
             statusBarIconBrightness: Brightness.dark,
             statusBarBrightness: Brightness.light,
@@ -242,37 +243,25 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
                               text: TextSpan(children: [
                                 TextSpan(
                                   text: 'I agree to the ',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorList.blackThirdColor,
-                                  ),
+                                  style: AppStyle.b9Medium.copyWith(
+                                      color: ColorList.blackThirdColor),
                                 ),
                                 TextSpan(
                                   text: 'User Agreement',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorList.primaryColor,
-                                  ),
+                                  style: AppStyle.b9Medium
+                                      .copyWith(color: ColorList.primaryColor),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () => comingSoon(),
                                 ),
                                 TextSpan(
                                   text: ' & ',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorList.blackThirdColor,
-                                  ),
+                                  style: AppStyle.b9Medium.copyWith(
+                                      color: ColorList.blackThirdColor),
                                 ),
                                 TextSpan(
                                   text: 'Privacy Policy',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    color: ColorList.primaryColor,
-                                  ),
+                                  style: AppStyle.b9Medium
+                                      .copyWith(color: ColorList.primaryColor),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () => comingSoon(),
                                 ),
@@ -353,22 +342,16 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
             children: [
               Text(
                 'Create your account',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
+                style:
+                    AppStyle.b5Bold.copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 20,
               ),
               Text(
                 'First Name',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -385,11 +368,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               ),
               Text(
                 'Last Name',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -406,11 +386,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               ),
               Text(
                 'Email',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -427,11 +404,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               ),
               Text(
                 'Phone Number',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -449,11 +423,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               ),
               Text(
                 'Date Of Birth',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -477,11 +448,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               ),
               Text(
                 'Next of Kin',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -498,11 +466,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               ),
               Text(
                 'Occupation',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -534,11 +499,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               // ),
               Text(
                 'Password',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -556,11 +518,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               ),
               Text(
                 'Confirm password',
-                style: TextStyle(
-                  color: ColorList.blackSecondColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
               ),
               const SizedBox(
                 height: 7,
@@ -815,7 +774,6 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
           ));
       return;
     }
-    print('asdfa');
 
     BlocProvider.of<RegisterBloc>(context).add(CallRegisterEvent(
       model: RegisterRequestModel(

@@ -144,7 +144,11 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 32,
                   onPressed: () {
-                    comingSoon();
+                    prefHelper!.clear().then((value) {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(LogoutEvent());
+                    });
+                    // comingSoon();
                   },
                 ),
               ),

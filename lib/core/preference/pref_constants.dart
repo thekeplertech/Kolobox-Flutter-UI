@@ -17,3 +17,4 @@ const String keyUpdatedAt = "KEY_UPDATED_AT";
 const String keySMSNotification = "KEY_SMS_NOTIFICATION";
 const String keyEmailNotification = "KEY_EMAIL_NOTIFICATION";
 const String keyToken = "KEY_TOKEN";
+const String keyProfile = "KEY_PROFILE";

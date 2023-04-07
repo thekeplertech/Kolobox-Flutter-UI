@@ -9,4 +9,6 @@ abstract class DashboardRepo extends BaseApiRepo {
   DashboardRepo(NetworkInfo? networkInfo) : super(networkInfo);
 
   Future<Either<Failure, Success>> wallet();
+
+  Future<Either<Failure, Success>> getProfile();
 }

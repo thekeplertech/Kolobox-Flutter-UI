@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
+import '../../../routes/routes.dart';
+
 /// Flutter plugin for currency text input formatter.
 ///
 /// See [the official documentation](https://github.com/gtgalone/currency_text_input_formatter)
@@ -178,5 +180,16 @@ class CurrencyTextInputFormatter extends TextInputFormatter {
     final String newText = value.replaceAll(RegExp('[^0-9]'), '');
     _formatter(newText);
     return _newString;
+  }
+
+  /// Method for formatting value.
+  /// You can use initialValue with this method.
+  String formatValue(String value) {
+    final String newText = value.replaceAll(RegExp('[^0-9.]'), '');
+    logger?.d("asdf $newText");
+    _newNum = num.tryParse(newText) ?? 0;
+    String v = NumberFormat('###,###,#00.00').format(_newNum).trim();
+    logger?.d("asdf $v");
+    return v;
   }
 }

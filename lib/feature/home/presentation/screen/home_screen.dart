@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/ui/extension.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
 import 'package:kolobox_new_app/core/ui/widgets/indicator_widget.dart';
 import 'package:kolobox_new_app/core/ui/widgets/no_app_bar.dart';
 import 'package:kolobox_new_app/core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
@@ -19,6 +20,7 @@ import 'package:kolobox_new_app/feature/widgets/home_app_bar_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/image_constants.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
@@ -86,7 +88,9 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HomeAppBarWidget(
-                amount: userWallet?.accountBalance?.getAmount() ?? '0.00',
+                amount: CurrencyTextInputFormatter(
+                        name: nigerianCurrency, decimalDigits: 0)
+                    .formatValue('45.123456'),
                 walletBalanceStreamController: walletBalanceStreamController,
                 leftIcon: imageDashboardIcon,
                 rightIcon: imageNotification,

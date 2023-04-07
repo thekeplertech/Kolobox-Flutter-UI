@@ -20,8 +20,8 @@ abstract class RestHelper {
   @POST(ApiUrls.registerAPI)
   Future<ApiResponse> register(@Body() RegisterRequestModel model);
 
-  @POST(ApiUrls.validateCodeAPI)
-  Future<ApiResponse> validateCode(@Body() ValidateCodeRequestModel model);
+  @POST(ApiUrls.verifyCodeAPI)
+  Future<ApiResponse> verifyCode(@Body() ValidateCodeRequestModel model);
 
   @POST(ApiUrls.loginAPI)
   Future<ApiResponse> login(@Body() LoginRequestModel model);
@@ -37,6 +37,12 @@ abstract class RestHelper {
 
   @GET(ApiUrls.walletAPI)
   Future<ApiResponse> wallet();
+
+  @GET(ApiUrls.getProfileAPI)
+  Future<ApiResponse> getProfile();
+
+  @GET(ApiUrls.getProductAPI)
+  Future<ApiResponse> getProducts();
 
   @GET(USERS_API)
   Future<ApiResponse> fetchUsers();

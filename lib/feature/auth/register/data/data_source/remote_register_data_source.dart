@@ -6,5 +6,5 @@ import '../../../../../core/models/api_response.dart';
 abstract class RemoteRegisterDataSource {
   Future<ApiResponse> register(RegisterRequestModel model);
 
-  Future<ApiResponse> validateCode(ValidateCodeRequestModel model);
+  Future<ApiResponse> verifyCode(ValidateCodeRequestModel model);
 }

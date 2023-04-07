@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
 import '../../colors/color_list.dart';
 
@@ -72,11 +73,7 @@ class CustomTextField extends StatelessWidget {
             child: TextFormField(
               controller: controller,
               style: textStyle ??
-                  TextStyle(
-                    color: ColorList.blackThirdColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
               decoration: InputDecoration(
                 hintText: hint,
                 border: InputBorder.none,
@@ -87,11 +84,8 @@ class CustomTextField extends StatelessWidget {
                       horizontal: 12,
                     ),
                 hintStyle: hintStyle ??
-                    TextStyle(
-                      color: ColorList.blackThirdColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    AppStyle.b8Regular
+                        .copyWith(color: ColorList.blackThirdColor),
               ),
               keyboardType: keyboardType,
               textInputAction: textInputAction,

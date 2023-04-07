@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/config/flavor_config.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
+import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/custom_text_field.dart';
 import 'package:kolobox_new_app/core/utils/utils.dart';
@@ -49,7 +50,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
           backgroundColor: ColorList.transparentColor,
           bottomOpacity: 0,
           elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: ColorList.primaryColor,
             statusBarIconBrightness: Brightness.light,
             statusBarBrightness: Brightness.dark,
@@ -166,9 +167,9 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                         onTap: () {
                           navigateTo(context, Routes.forgotPassword);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, top: 10, bottom: 10),
+                        child: const Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 10, bottom: 10),
                           child: Text(
                             'Forgot password?',
                             style: TextStyle(
@@ -188,8 +189,6 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                       borderRadius: 32,
                       onPressed: () {
                         onClickLogin();
-                        // navigateAndRemoveAll(
-                        //     context, Routes.dashboard, Routes.dashboard);
                       },
                     ),
                     const SizedBox(
@@ -201,29 +200,20 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                         text: TextSpan(children: [
                           TextSpan(
                             text: 'User Agreement',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: ColorList.primaryColor,
-                            ),
+                            style: AppStyle.b8Medium
+                                .copyWith(color: ColorList.primaryColor),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => comingSoon(),
                           ),
                           TextSpan(
                             text: ' & ',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: ColorList.blackThirdColor,
-                            ),
+                            style: AppStyle.b8Medium
+                                .copyWith(color: ColorList.blackThirdColor),
                           ),
                           TextSpan(
                             text: 'Privacy Policy',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: ColorList.primaryColor,
-                            ),
+                            style: AppStyle.b8Medium
+                                .copyWith(color: ColorList.primaryColor),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => comingSoon(),
                           ),

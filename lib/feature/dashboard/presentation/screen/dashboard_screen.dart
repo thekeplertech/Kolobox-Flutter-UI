@@ -72,6 +72,8 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
             await popUntil(previousTabIndex, removeUntil: state.until);
           } else if (state is SelectTabState) {
             onClickBottomTab(state.tabEnum.getDashboardValue);
+          } else if (state is LogoutState) {
+            navigateAndRemoveAll(context, Routes.login, Routes.login);
           }
         },
         child: getChild(),
@@ -143,7 +145,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
           fadeAnimationControllers[
                   dashboardModel.dashboardTabEnum.getDashboardValue]
               .reverse();
-          isBottomTabOpened = false;
+          // isBottomTabOpened = false;
           if (fadeAnimationControllers[
                   dashboardModel.dashboardTabEnum.getDashboardValue]
               .isAnimating) {

@@ -12,5 +12,5 @@ abstract class RegisterRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> register(RegisterRequestModel model);
 
-  Future<Either<Failure, Success>> validateCode(ValidateCodeRequestModel model);
+  Future<Either<Failure, Success>> verifyCode(ValidateCodeRequestModel model);
 }

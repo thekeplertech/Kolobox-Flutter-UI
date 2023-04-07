@@ -29,13 +29,12 @@ class RegisterRepoImpl extends RegisterRepo {
   }
 
   @override
-  Future<Either<Failure, Success>> validateCode(
-          ValidateCodeRequestModel model) =>
-      baseApiMethod(() => validateCodeFromAPI(model));
+  Future<Either<Failure, Success>> verifyCode(ValidateCodeRequestModel model) =>
+      baseApiMethod(() => verifyCodeFromAPI(model));
 
-  Future<Either<Failure, Success>> validateCodeFromAPI(
+  Future<Either<Failure, Success>> verifyCodeFromAPI(
       ValidateCodeRequestModel model) async {
-    dynamic apiResponse = await remoteRegisterDataSource.validateCode(model);
+    dynamic apiResponse = await remoteRegisterDataSource.verifyCode(model);
     // LoginResponseModel responseModel =
     //     LoginResponseModel.fromJson(await remoteLoginDataSource.login(model));
     // PrefHelper helper = sl();

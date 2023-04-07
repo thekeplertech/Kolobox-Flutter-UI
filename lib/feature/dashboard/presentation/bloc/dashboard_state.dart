@@ -4,6 +4,8 @@ abstract class DashboardState {}
 
 class InitialState extends DashboardState {}
 
+class LogoutState extends DashboardState {}
+
 class ShowEnableBottomScreenState extends DashboardState {}
 
 class HideDisableBottomScreenState extends DashboardState {}

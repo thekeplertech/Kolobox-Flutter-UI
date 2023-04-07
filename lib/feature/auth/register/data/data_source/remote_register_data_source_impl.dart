@@ -18,8 +18,8 @@ class RemoteRegisterDataSourceImpl implements RemoteRegisterDataSource {
   }
 
   @override
-  Future<ApiResponse> validateCode(ValidateCodeRequestModel model) async {
+  Future<ApiResponse> verifyCode(ValidateCodeRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
-    return helper.validateCode(model);
+    return helper.verifyCode(model);
   }
 }

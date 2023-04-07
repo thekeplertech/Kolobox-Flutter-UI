@@ -43,7 +43,7 @@ class _RestHelper implements RestHelper {
   }
 
   @override
-  Future<ApiResponse> validateCode(model) async {
+  Future<ApiResponse> verifyCode(model) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -57,7 +57,7 @@ class _RestHelper implements RestHelper {
     )
             .compose(
               _dio.options,
-              'auth/user/validate/code',
+              'auth/user/verify/code',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -177,6 +177,52 @@ class _RestHelper implements RestHelper {
             .compose(
               _dio.options,
               'user/me/wallet',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ApiResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ApiResponse> getProfile() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'user/me/profile',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ApiResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ApiResponse> getProducts() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ApiResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'product',
               queryParameters: queryParameters,
               data: _data,
             )
