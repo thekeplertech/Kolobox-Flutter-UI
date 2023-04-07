@@ -10,17 +10,17 @@ class RegisterResponseModel {
   String? wallet;
   String? school;
   String? number;
-  String? nextOfKin;
-  String? referral;
   String? createdAt;
   String? updatedAt;
   bool? smsNotification;
   bool? emailNotification;
   String? token;
+  String? logoUrl;
+  String? inviteURL;
 
   RegisterResponseModel({
-    this.active,
     this.id,
+    this.active,
     this.firstname,
     this.lastname,
     this.email,
@@ -30,18 +30,18 @@ class RegisterResponseModel {
     this.wallet,
     this.school,
     this.number,
-    this.nextOfKin,
-    this.referral,
     this.createdAt,
     this.updatedAt,
     this.smsNotification,
     this.emailNotification,
     this.token,
+    this.logoUrl,
+    this.inviteURL,
   });
 
   RegisterResponseModel.fromJson(Map<String, dynamic> json) {
-    active = json['active'] ?? false;
     id = json['id'] ?? '';
+    active = json['active'] ?? false;
     firstname = json['firstname'] ?? '';
     lastname = json['lastname'] ?? '';
     email = json['email'] ?? '';
@@ -51,13 +51,13 @@ class RegisterResponseModel {
     wallet = json['wallet'] ?? '';
     school = json['school'] ?? '';
     number = json['number'] ?? '';
-    nextOfKin = json['Next_Of_Kin'] ?? '';
-    referral = json['referral'] ?? '';
     createdAt = json['created_at'] ?? '';
     updatedAt = json['updated_at'] ?? '';
     smsNotification = json['sms_notification'] ?? false;
     emailNotification = json['email_notification'] ?? false;
     token = json['token'] ?? '';
+    logoUrl = json['logoUrl'] ?? '';
+    inviteURL = json['invite_URL'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -73,13 +73,13 @@ class RegisterResponseModel {
     data['wallet'] = wallet;
     data['school'] = school;
     data['number'] = number;
-    data['Next_Of_Kin'] = nextOfKin;
-    data['referral'] = referral;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['sms_notification'] = smsNotification;
     data['email_notification'] = emailNotification;
     data['token'] = token;
+    data['logoUrl'] = logoUrl;
+    data['invite_URL'] = inviteURL;
     return data;
   }
 }

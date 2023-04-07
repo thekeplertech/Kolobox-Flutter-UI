@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:kolobox_new_app/core/preference/pref_helper.dart';
 import 'package:kolobox_new_app/feature/auth/register/data/data_source/remote_register_data_source.dart';
 import 'package:kolobox_new_app/feature/auth/register/data/models/register_request_model.dart';
-import 'package:kolobox_new_app/feature/auth/register/data/models/validate_code_request_model.dart';
+import 'package:kolobox_new_app/feature/auth/register/data/models/verify_user_request_model.dart';
 import 'package:kolobox_new_app/feature/auth/register/domain/register_repo.dart';
 
 import '../../../../../core/http/network_info.dart';
@@ -23,20 +24,18 @@ class RegisterRepoImpl extends RegisterRepo {
       RegisterRequestModel model) async {
     RegisterResponseModel responseModel = RegisterResponseModel.fromJson(
         (await remoteRegisterDataSource.register(model)).data);
-    return Right(Success(null /*responseModel*/));
+    PrefHelper helper = sl();
+    await helper.setToken(responseModel.token ?? '');
+    return Right(Success(responseModel));
   }
 
   @override
-  Future<Either<Failure, Success>> verifyCode(ValidateCodeRequestModel model) =>
+  Future<Either<Failure, Success>> verifyCode(VerifyUserRequestModel model) =>
       baseApiMethod(() => verifyCodeFromAPI(model));
 
   Future<Either<Failure, Success>> verifyCodeFromAPI(
-      ValidateCodeRequestModel model) async {
-    dynamic apiResponse = await remoteRegisterDataSource.verifyCode(model);
-    // LoginResponseModel responseModel =
-    //     LoginResponseModel.fromJson(await remoteLoginDataSource.login(model));
-    // PrefHelper helper = sl();
-    // await helper.setLoginResponseModel(responseModel);
-    return Right(Success(null /*responseModel*/));
+      VerifyUserRequestModel model) async {
+    await remoteRegisterDataSource.verifyCode(model);
+    return Right(Success(null));
   }
 }

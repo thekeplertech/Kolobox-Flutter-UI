@@ -11,6 +11,7 @@ import 'package:kolobox_new_app/core/ui/widgets/no_overflow_scrollbar_behaviour.
 import 'package:kolobox_new_app/core/ui/widgets/toast_widget.dart';
 import 'package:kolobox_new_app/core/utils/date_helper.dart';
 import 'package:kolobox_new_app/core/utils/utils.dart';
+import 'package:kolobox_new_app/feature/auth/register/data/models/verify_user_request_model.dart';
 import 'package:kolobox_new_app/feature/auth/register/presentation/bloc/register_bloc.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -45,6 +46,9 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
   final TextEditingController passwordTextEditingController =
       TextEditingController();
   final TextEditingController cPasswordTextEditingController =
+      TextEditingController();
+
+  final TextEditingController otpTextEditingController =
       TextEditingController();
 
   StreamController<int> pageIndicatorStreamController =
@@ -90,7 +94,7 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
         body: BlocListener<RegisterBloc, RegisterState>(
           listener: (_, state) {
             if (state is CallRegisterState) {
-              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+              Future.delayed(const Duration(milliseconds: 300)).then((value) {
                 Utils.showToast(
                     context,
                     ToastWidget(
@@ -105,6 +109,18 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.easeIn,
                 );
+              });
+            } else if (state is VerifyUserState) {
+              Future.delayed(const Duration(milliseconds: 200)).then((value) {
+                pageController.animateToPage(
+                  ++pageIndicatorPosition,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeIn,
+                );
+              });
+            } else if (state is SaveUserState) {
+              Future.delayed(const Duration(milliseconds: 300), () {
+                goToDashboard();
               });
             }
           },
@@ -280,51 +296,15 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
                           switch (pageIndicatorPosition) {
                             case 0:
                               onClickRegister();
-                              // BlocProvider.of<RegisterBloc>(context)
-                              //     .add(CallRegisterEvent(
-                              //   model: RegisterRequestModel(
-                              //     firstname: '',
-                              //     lastname: '',
-                              //     email: '',
-                              //     phone: '',
-                              //     dob: '',
-                              //     nextOfKin: '',
-                              //     occupation: '',
-                              //     password: '',
-                              //     cPassword: '',
-                              //     school: '',
-                              //   ),
-                              // ));
-                              // Utils.showToast(
-                              //     context,
-                              //     ToastWidget(
-                              //       'Register successful',
-                              //       backgroundColor: ColorList.primaryColor,
-                              //       messageIcon: imageRightWhite,
-                              //       closeWidget: Image.asset(
-                              //         imageClose,
-                              //         color: ColorList.white,
-                              //       ),
-                              //     ));
                               break;
                             case 1:
+                              onClickVerifyUser();
                               break;
                             case 2:
-                              navigateAndRemoveAll(
-                                  context, Routes.dashboard, Routes.dashboard);
+                              BlocProvider.of<RegisterBloc>(context)
+                                  .add(SaveUserEvent());
                               break;
                           }
-                          if (pageIndicatorPosition == pageIndicatorCount - 1) {
-                            return;
-                          }
-                          if (pageIndicatorPosition == 0) {}
-                          // await Future.delayed(
-                          //     const Duration(milliseconds: 200));
-                          // pageController.animateToPage(
-                          //   ++pageIndicatorPosition,
-                          //   duration: const Duration(milliseconds: 200),
-                          //   curve: Curves.easeIn,
-                          // );
                         },
                       ),
                     ],
@@ -582,219 +562,211 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
 
   void onClickRegister() {
     hideKeyboard();
-    // if (firstNameTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter first name',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (lastNameTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter last name',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (emailAddressTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter email address',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (!Utils.emailValid(emailAddressTextEditingController.text)) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter valid email address',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (phoneNumberTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter phone number',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (phoneNumberTextEditingController.text.length != 11) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter valid phone number',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (dateOfBirth == null) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Select date of birth',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (nextOfKinTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter next of kin',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (occupationTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter occupation',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (passwordTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter password',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (cPasswordTextEditingController.text.isEmpty) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Enter confirm password',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
-    // if (passwordTextEditingController.text !=
-    //     cPasswordTextEditingController.text) {
-    //   Utils.showToast(
-    //       context,
-    //       ToastWidget(
-    //         'Password & confirm password must be same.',
-    //         borderColor: ColorList.redDarkColor,
-    //         backgroundColor: ColorList.white,
-    //         textColor: ColorList.black,
-    //         messageIcon: imageCloseRed,
-    //         closeWidget: Image.asset(
-    //           imageClose,
-    //           color: ColorList.black,
-    //         ),
-    //       ));
-    //   return;
-    // }
+    if (firstNameTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter first name',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (lastNameTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter last name',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (emailAddressTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter email address',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (!Utils.emailValid(emailAddressTextEditingController.text)) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter valid email address',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (phoneNumberTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter phone number',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (phoneNumberTextEditingController.text.length != 11) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter valid phone number',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (dateOfBirth == null) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Select date of birth',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (nextOfKinTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter next of kin',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (occupationTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter occupation',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (passwordTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter password',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (cPasswordTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter confirm password',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (passwordTextEditingController.text !=
+        cPasswordTextEditingController.text) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Password & confirm password must be same.',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
 
     BlocProvider.of<RegisterBloc>(context).add(CallRegisterEvent(
       model: RegisterRequestModel(
-        firstname: 'Parth',
-        //firstNameTextEditingController.text,
-        lastname: 'Suthar',
-        //lastNameTextEditingController.text,
-        email: 'parth12345@mailinator.com',
-        //emailAddressTextEditingController.text,
-        phone: '9558494789',
-        //phoneNumberTextEditingController.text,
+        firstname: firstNameTextEditingController.text,
+        lastname: lastNameTextEditingController.text,
+        email: emailAddressTextEditingController.text,
+        phone: phoneNumberTextEditingController.text,
         dob: DateHelper.getTextFromDateTime(dateOfBirth!, 'yyyy-MM-dd'),
-        nextOfKin: 'adsf',
-        //nextOfKinTextEditingController.text,
-        occupation: 'software developer',
-        //occupationTextEditingController.text,
-        password: 'kolobox@123',
-        //passwordTextEditingController.text,
-        cPassword: 'kolobox@123',
-        //cPasswordTextEditingController.text,
+        nextOfKin: nextOfKinTextEditingController.text,
+        occupation: occupationTextEditingController.text,
+        password: passwordTextEditingController.text,
+        cPassword: cPasswordTextEditingController.text,
         school: '',
       ),
     ));
@@ -861,7 +833,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
         ),
         PinCodeTextField(
           appContext: context,
-          length: 6,
+          controller: otpTextEditingController,
+          length: 4,
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
             borderRadius: BorderRadius.circular(12),
@@ -916,6 +889,47 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
         ),
       ],
     );
+  }
+
+  onClickVerifyUser() {
+    if (otpTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter otp',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (otpTextEditingController.text.length != 4) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter valid otp',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+
+    BlocProvider.of<RegisterBloc>(context).add(VerifyUserEvent(
+        model: VerifyUserRequestModel(
+      code: otpTextEditingController.text,
+      id: '',
+    )));
   }
 
   Widget stepThreeSuccess() {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../feature/auth/login/data/models/login_response_model.dart';
+import '../../feature/dashboard/data/models/product_data_model.dart';
 import '../../feature/dashboard/data/models/profile_data_model.dart';
 import 'pref_constants.dart';
 import 'pref_helper.dart';
@@ -59,6 +60,21 @@ class PrefHelperImpl implements PrefHelper {
   @override
   Future<void> setProfileDataModel(ProfileDataModel model) async =>
       await Prefs.setString(keyProfile, jsonEncode(model));
+
+  @override
+  ProductDataModel getProductDataModel() =>
+      ProductDataModel.fromJson(jsonDecode(Prefs.getString(keyProduct, '')));
+
+  @override
+  Future<void> setProductDataModel(ProductDataModel model) async =>
+      await Prefs.setString(keyProduct, jsonEncode(model));
+
+  @override
+  String getToken() => Prefs.getString(keyToken, '');
+
+  @override
+  Future<void> setToken(String token) async =>
+      await Prefs.setString(keyToken, token);
 
   @override
   bool isLoggedIn() => Prefs.getBool(keyLoggedIn, false);

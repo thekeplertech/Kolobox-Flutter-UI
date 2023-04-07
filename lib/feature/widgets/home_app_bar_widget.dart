@@ -64,7 +64,7 @@ class _HomeAppBarWidgetState extends BaseScreenState<HomeAppBarWidget> {
                       children: [
                         Text(
                           'Wallet balance',
-                          style: AppStyle.b8Medium
+                          style: AppStyle.b9Medium
                               .copyWith(color: ColorList.blackThirdColor),
                         ),
                         const SizedBox(
@@ -90,7 +90,7 @@ class _HomeAppBarWidgetState extends BaseScreenState<HomeAppBarWidget> {
                                     ),
                                     Text(
                                       widget.amount ?? '',
-                                      style: AppStyle.b8Bold.copyWith(
+                                      style: AppStyle.b9Bold.copyWith(
                                           color: ColorList.primaryColor),
                                     ),
                                   ],
@@ -107,7 +107,7 @@ class _HomeAppBarWidgetState extends BaseScreenState<HomeAppBarWidget> {
                   onTap: widget.onRightPressed,
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        left: 20, right: 30, top: 11, bottom: 11),
+                        left: 10, right: 30, top: 11, bottom: 11),
                     child: Image.asset(widget.rightIcon!),
                   ),
                 ),

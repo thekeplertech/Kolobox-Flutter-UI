@@ -142,7 +142,9 @@ class Wallet {
     createdAt = json['created_at'] ?? '';
     updatedAt = json['updated_at'] ?? '';
     userId = json['user_id'] ?? '';
-    withDrawableFunds = json['withdrawable_funds'] ?? 0.0;
+    withDrawableFunds = json['withdrawable_funds'] == null
+        ? 0.0
+        : double.parse(json['withdrawable_funds'].toString());
   }
 
   Map<String, dynamic> toJson() {

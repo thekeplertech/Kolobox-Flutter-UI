@@ -9,3 +9,7 @@ class CallRegisterState extends RegisterState {
 
   CallRegisterState({required this.model});
 }
+
+class VerifyUserState extends RegisterState {}
+
+class SaveUserState extends RegisterState {}

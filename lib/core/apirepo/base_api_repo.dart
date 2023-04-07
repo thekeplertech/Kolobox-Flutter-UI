@@ -33,6 +33,11 @@ abstract class BaseApiRepo {
               apiStatus: statusCode,
               message: e.response?.statusMessage ?? '',
               model: e.response?.data));
+        } else if (statusCode == 429) {
+          return Left(Failure(
+              apiStatus: statusCode,
+              message: e.response?.statusMessage ?? '',
+              model: e.response?.data));
         } else if (statusCode == 400) {
           return Left(
             Failure(

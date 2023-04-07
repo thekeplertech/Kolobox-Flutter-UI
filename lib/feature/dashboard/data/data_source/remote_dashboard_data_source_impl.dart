@@ -19,4 +19,16 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
     RestHelper helper = await restClient!.getClient();
     return helper.getProfile();
   }
+
+  @override
+  Future<ApiResponse> getProducts() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getProducts();
+  }
+
+  @override
+  Future<ApiResponse> getActiveProducts() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getActiveProducts();
+  }
 }

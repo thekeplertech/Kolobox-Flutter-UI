@@ -7,7 +7,6 @@ import '../../../../../core/bloc/master_bloc.dart';
 import '../../../../../core/bloc/master_event.dart';
 import '../../../../../core/preference/pref_helper.dart';
 import '../../../../../di/injection_container.dart';
-import '../../../../../routes/routes.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
@@ -26,7 +25,6 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
     baseBlocObject!.add(LoadApiEvent());
     final result = await loginRepo.login(event.model);
 
-    logger?.d("left ${result.isLeft()} right ${result.isRight()}");
     if (result.isRight()) {
       await dashboardRepo.getProfile();
     }

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:kolobox_new_app/feature/auth/register/data/models/register_request_model.dart';
-import 'package:kolobox_new_app/feature/auth/register/data/models/validate_code_request_model.dart';
+import 'package:kolobox_new_app/feature/auth/register/data/models/verify_user_request_model.dart';
 
 import '../../../../core/apirepo/base_api_repo.dart';
 import '../../../../core/http/network_info.dart';
@@ -12,5 +12,5 @@ abstract class RegisterRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> register(RegisterRequestModel model);
 
-  Future<Either<Failure, Success>> verifyCode(ValidateCodeRequestModel model);
+  Future<Either<Failure, Success>> verifyCode(VerifyUserRequestModel model);
 }

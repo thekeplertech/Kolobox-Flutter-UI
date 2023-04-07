@@ -33,7 +33,7 @@ class SplashScreenState extends BaseBlocWidgetState<SplashScreen> {
                 context, Routes.splashLoaded, Routes.splashLoaded);
           }
           if (state is GoToDashboardState) {
-            navigateAndRemoveAll(context, Routes.dashboard, Routes.dashboard);
+            goToDashboard();
           }
         },
         child: Scaffold(

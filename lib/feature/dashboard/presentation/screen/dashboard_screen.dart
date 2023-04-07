@@ -8,12 +8,14 @@ import 'package:kolobox_new_app/core/enums/dashboard_tab_enum.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/dashboard_tab_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_state.dart';
+import 'package:kolobox_new_app/feature/home/presentation/bloc/home_bloc.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/ui/style/app_style.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../routes/routes.dart';
+import '../../../home/presentation/bloc/home_event.dart';
 import '../widgets/dashboard_management_widget.dart';
 
 class DashboardScreen extends BaseBlocWidget {
@@ -50,6 +52,7 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
 
     hideAnimationController?.forward();
     isBottomTabOpened = true;
+    onClickBottomTab(0);
   }
 
   @override
@@ -257,25 +260,26 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
   }
 
   onClickBottomTab(int index1, {bool isCall = false}) async {
-    await popUntil(index1);
-    currentDashboardTabEnum = index1.dashboardTypeVal();
-    currentDashboardStreamController.add(currentDashboardTabEnum);
-    logger?.d("onClickBottomTab ${index1.dashboardTypeVal()}");
-    switch (index1.dashboardTypeVal()) {
-      case DashboardTabEnum.home:
-        // BlocProvider.of<FeedBloc>(context).add(ClickOnFeedEvent());
-        break;
-      case DashboardTabEnum.kolobox:
-        // BlocProvider.of<MyTreeBloc>(context).add(ClickOnMyTreeEvent());
-        break;
-      case DashboardTabEnum.wallet:
-        // BlocProvider.of<MapBloc>(context).add(ClickOnMapEvent());
-        break;
-      case DashboardTabEnum.account:
-        // BlocProvider.of<NotificationBloc>(context)
-        //     .add(ClickOnNotificationEvent());
-        break;
-    }
+    await popUntil(index1).then((value) {
+      currentDashboardTabEnum = index1.dashboardTypeVal();
+      currentDashboardStreamController.add(currentDashboardTabEnum);
+      logger?.d("onClickBottomTab ${index1.dashboardTypeVal()}");
+      switch (index1.dashboardTypeVal()) {
+        case DashboardTabEnum.home:
+          BlocProvider.of<HomeBloc>(context).add(ClickOnHomeEvent());
+          break;
+        case DashboardTabEnum.kolobox:
+          // BlocProvider.of<MyTreeBloc>(context).add(ClickOnMyTreeEvent());
+          break;
+        case DashboardTabEnum.wallet:
+          // BlocProvider.of<MapBloc>(context).add(ClickOnMapEvent());
+          break;
+        case DashboardTabEnum.account:
+          // BlocProvider.of<NotificationBloc>(context)
+          //     .add(ClickOnNotificationEvent());
+          break;
+      }
+    });
   }
 
   Future<void> popUntil(int index, {String removeUntil = '/'}) async {

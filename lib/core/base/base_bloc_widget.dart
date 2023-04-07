@@ -103,6 +103,10 @@ abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
     goBack(context, route: runtimeType.toString());
   }
 
+  goToDashboard() {
+    navigateAndRemoveAll(context, Routes.dashboard, Routes.dashboard);
+  }
+
   bool isBottomSheet = false;
 
   void showBottomSheetWidget(

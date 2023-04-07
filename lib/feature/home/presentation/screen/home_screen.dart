@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
-import 'package:kolobox_new_app/core/ui/extension.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
 import 'package:kolobox_new_app/core/ui/widgets/indicator_widget.dart';
@@ -20,12 +19,12 @@ import 'package:kolobox_new_app/feature/widgets/home_app_bar_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/image_constants.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../notifications/presentation/notifications_page.dart';
+import '../../data/models/DashboardAmountModel.dart';
 import '../../data/models/wallet_data_model.dart';
 import '../widget/welcome_to_kolobox_widget.dart';
 
@@ -42,7 +41,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
 
   StreamController<bool> walletBalanceStreamController =
       StreamController<bool>.broadcast();
-  StreamController<bool> walletHistoryStreamController =
+  StreamController<bool> dashboardAmountStreamController =
       StreamController<bool>.broadcast();
 
   int pageIndicatorPosition = 0;
@@ -51,6 +50,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
 
   UserWallet? userWallet;
   List<TransactionHistory> walletHistory = [];
+  List<DashboardAmountModel> dashboardAmountModels = [];
 
   @override
   void initState() {
@@ -61,20 +61,28 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
 
   callWalletAPI() => BlocProvider.of<HomeBloc>(context).add(CallWalletEvent());
 
+  callProductsAPI() =>
+      BlocProvider.of<HomeBloc>(context).add(CallProductEvent());
+
   @override
   Widget getCustomBloc() => Scaffold(
         backgroundColor: ColorList.white,
         appBar: const NoAppBar(),
         body: BlocListener<HomeBloc, HomeState>(
           listener: (_, state) {
-            if (state is CallWalletState) {
+            if (state is ClickOnHomeState) {
+              callProductsAPI();
+            } else if (state is CallProductState) {
+              dashboardAmountModels = state.models;
+              dashboardAmountStreamController.add(true);
+            } else if (state is CallWalletState) {
               userWallet = state.model.userWallet;
               List<dynamic> list = state.model.transactionHistory ?? [];
               for (int i = 0; i < 10; i++) {
                 walletHistory.add(list[i]);
               }
               walletBalanceStreamController.add(true);
-              walletHistoryStreamController.add(true);
+              dashboardAmountStreamController.add(true);
             }
           },
           child: getChildWidget(),
@@ -88,9 +96,9 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               HomeAppBarWidget(
-                amount: CurrencyTextInputFormatter(
-                        name: nigerianCurrency, decimalDigits: 0)
-                    .formatValue('45.123456'),
+                amount: CurrencyTextInputFormatter.formatAmount(
+                    prefHelper?.getProfileDataModel().wallet?.accountBalance,
+                    isSymbol: false),
                 walletBalanceStreamController: walletBalanceStreamController,
                 leftIcon: imageDashboardIcon,
                 rightIcon: imageNotification,
@@ -311,7 +319,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
       );
 
   Widget getKoloboxAmountWidget() => StreamBuilder<bool>(
-      stream: walletHistoryStreamController.stream,
+      stream: dashboardAmountStreamController.stream,
       builder: (context, snapshot) {
         return Container(
           width: double.maxFinite,
@@ -333,14 +341,14 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                     controller: pageController,
                     onPageChanged: (int page) {
                       pageIndicatorPosition = page;
-                      pageIndicatorStreamController.add(pageIndicatorPosition);
+                      dashboardAmountStreamController.add(true);
                     },
-                    itemCount: walletHistory.length,
+                    itemCount: dashboardAmountModels.length,
                     itemBuilder: (_, index) {
                       return Column(
                         children: [
                           Text(
-                            walletHistory[index].productName ?? '',
+                            dashboardAmountModels[index].title ?? '',
                             style: AppStyle.b9SemiBold
                                 .copyWith(color: ColorList.white),
                           ),
@@ -348,7 +356,8 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                             height: 11,
                           ),
                           Text(
-                            walletHistory[index].depositAmount.getAmount(),
+                            CurrencyTextInputFormatter.formatAmount(
+                                dashboardAmountModels[index].amount),
                             style: AppStyle.b4SemiBold
                                 .copyWith(color: ColorList.white),
                           ),
@@ -356,8 +365,8 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                       );
                     }),
               ),
-              IndicatorWidget<TransactionHistory>(
-                list: walletHistory,
+              IndicatorWidget<DashboardAmountModel>(
+                list: dashboardAmountModels,
                 streamController: pageIndicatorStreamController,
                 initialPosition: pageIndicatorPosition,
               ),
@@ -399,6 +408,6 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
     pageController.dispose();
     pageIndicatorStreamController.close();
     walletBalanceStreamController.close();
-    walletHistoryStreamController.close();
+    dashboardAmountStreamController.close();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:kolobox_new_app/feature/auth/register/data/models/register_request_model.dart';
-import 'package:kolobox_new_app/feature/auth/register/data/models/validate_code_request_model.dart';
+import 'package:kolobox_new_app/feature/auth/register/data/models/verify_user_request_model.dart';
 
 import '../../../../../core/http/rest_client.dart';
 import '../../../../../core/http/rest_helper.dart';
@@ -18,7 +18,7 @@ class RemoteRegisterDataSourceImpl implements RemoteRegisterDataSource {
   }
 
   @override
-  Future<ApiResponse> verifyCode(ValidateCodeRequestModel model) async {
+  Future<ApiResponse> verifyCode(VerifyUserRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.verifyCode(model);
   }

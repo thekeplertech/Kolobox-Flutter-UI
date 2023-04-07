@@ -36,8 +36,8 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
   void initState() {
     super.initState();
     if (FlavorConfig.isDev()) {
-      // emailTextEditingController.text = 'parthh2@mailinator.com';
-      // passwordTextEditingController.text = 'Parth@123';
+      // emailTextEditingController.text = 'parth123456789@mailinator.com';
+      // passwordTextEditingController.text = 'kolobox@123';
       emailTextEditingController.text = 'tulbadex@gmail.com';
       passwordTextEditingController.text = 'password';
     }
@@ -70,8 +70,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                       ),
                     ));
 
-                navigateAndRemoveAll(
-                    context, Routes.dashboard, Routes.dashboard);
+                goToDashboard();
               });
             }
           },

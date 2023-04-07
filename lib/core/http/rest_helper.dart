@@ -6,7 +6,7 @@ import 'package:retrofit/retrofit.dart';
 
 import '../../feature/auth/login/data/models/login_request_model.dart';
 import '../../feature/auth/register/data/models/register_request_model.dart';
-import '../../feature/auth/register/data/models/validate_code_request_model.dart';
+import '../../feature/auth/register/data/models/verify_user_request_model.dart';
 import '../models/api_response.dart';
 import 'api_constants.dart';
 
@@ -21,7 +21,7 @@ abstract class RestHelper {
   Future<ApiResponse> register(@Body() RegisterRequestModel model);
 
   @POST(ApiUrls.verifyCodeAPI)
-  Future<ApiResponse> verifyCode(@Body() ValidateCodeRequestModel model);
+  Future<ApiResponse> verifyCode(@Body() VerifyUserRequestModel model);
 
   @POST(ApiUrls.loginAPI)
   Future<ApiResponse> login(@Body() LoginRequestModel model);
@@ -43,6 +43,9 @@ abstract class RestHelper {
 
   @GET(ApiUrls.getProductAPI)
   Future<ApiResponse> getProducts();
+
+  @GET(ApiUrls.getActiveProductAPI)
+  Future<ApiResponse> getActiveProducts();
 
   @GET(USERS_API)
   Future<ApiResponse> fetchUsers();
