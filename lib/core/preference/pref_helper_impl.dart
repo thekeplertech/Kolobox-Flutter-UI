@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../feature/auth/login/data/models/login_response_model.dart';
+import '../../feature/dashboard/data/models/active_product_data_model.dart';
 import '../../feature/dashboard/data/models/product_data_model.dart';
 import '../../feature/dashboard/data/models/profile_data_model.dart';
 import 'pref_constants.dart';
@@ -62,12 +63,32 @@ class PrefHelperImpl implements PrefHelper {
       await Prefs.setString(keyProfile, jsonEncode(model));
 
   @override
-  ProductDataModel getProductDataModel() =>
-      ProductDataModel.fromJson(jsonDecode(Prefs.getString(keyProduct, '')));
+  ProductDataModel? getProductDataModel() {
+    String data = Prefs.getString(keyProduct, '');
+    if (data.isNotEmpty) {
+      return ProductDataModel.fromJson(jsonDecode(data));
+    } else {
+      return null;
+    }
+  }
 
   @override
   Future<void> setProductDataModel(ProductDataModel model) async =>
       await Prefs.setString(keyProduct, jsonEncode(model));
+
+  @override
+  ActiveProductDataModel? getActiveProductDataModel() {
+    String data = Prefs.getString(keyActiveProduct, '');
+    if (data.isNotEmpty) {
+      return ActiveProductDataModel.fromJson(jsonDecode(data));
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> setActiveProductDataModel(ActiveProductDataModel model) async =>
+      await Prefs.setString(keyActiveProduct, jsonEncode(model));
 
   @override
   String getToken() => Prefs.getString(keyToken, '');

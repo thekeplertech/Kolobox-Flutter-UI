@@ -12,28 +12,9 @@ class ApiUrls {
   static const String getProfileAPI = "user/me/profile";
   static const String getProductAPI = "product";
   static const String getActiveProductAPI = "user/me/active/products";
-
-  static const String getSystemsAPI = "pvsystems";
-  static const String getPVSystemsAPI = "api/PVSystem/GetPVSystems";
-  static const String getPVSystemImageAPI =
-      "api/PVSystem/GetPVsystemImagesId/{id}";
-  static const String getPVSystemFlowData =
-      "api/PVSystem/GetPVsystemFlowData/{id}";
-  static const String getWeatherCurrent =
-      "api/Fronius/GetWeatherCurrentTemp/{id}";
-  static const String getEconomicTotals = "api/PVSystem/GetEconomicTotals/{id}";
-  static const String getPVSystemAggDataTotal =
-      "api/PVSystem/GetPVSystemAggDataTotal/{id}";
-  static const String getPowerBalanceCurrent =
-      "api/PVSystem/GetPowerBalanceCurrentDay/{id}";
-  static const String getPowerBalanceDay =
-      "api/PVSystem/GetPowerBalanceDay/{id}/{year}/{month}/{day}";
-  static const String getPowerBalanceMonth =
-      "api/PVSystem/GetPowerBalanceMonth/{id}/{year}/{month}";
-  static const String getPowerBalanceYear =
-      "api/PVSystem/GetPowerBalanceYear/{id}/{year}";
-  static const String getPowerBalanceTotal =
-      "api/PVSystem/GetPowerBalanceTotal/{id}";
+  static const String getWalletAPI = "user/me/wallet";
+  static const String getEarningsAPI = "user/me/product/earnings";
+  static const String getTransactionsAPI = "user/me/product/transactions";
 }
 
 const String USERS_API = "users";

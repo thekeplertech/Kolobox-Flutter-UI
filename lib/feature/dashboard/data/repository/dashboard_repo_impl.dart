@@ -77,6 +77,8 @@ class DashboardRepoImpl extends DashboardRepo {
   Future<Either<Failure, Success>> getActiveProductsFromAPI() async {
     ActiveProductDataModel model = ActiveProductDataModel.fromJson(
         (await remoteDashboardDataSource.getActiveProducts()).data);
+    PrefHelper helper = sl();
+    await helper.setActiveProductDataModel(model);
     return Right(Success(model));
   }
 }

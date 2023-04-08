@@ -118,7 +118,8 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       ),
                       getListWidget(
                         KoloboxFundEnum.koloFlex,
-                        '₦ 150,000.00',
+                        CurrencyTextInputFormatter.formatAmount(
+                            KoloboxFundEnum.koloFlex.getDepositAmountValue()),
                         ColorList.koloFlexTextColor,
                       ),
                       const SizedBox(
@@ -126,7 +127,8 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       ),
                       getListWidget(
                         KoloboxFundEnum.koloTarget,
-                        '₦ 800,000.00',
+                        CurrencyTextInputFormatter.formatAmount(
+                            KoloboxFundEnum.koloTarget.getDepositAmountValue()),
                         ColorList.primaryColor,
                       ),
                       const SizedBox(
@@ -134,7 +136,9 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       ),
                       getListWidget(
                         KoloboxFundEnum.koloTargetPlus,
-                        '₦ 1,200,000.00',
+                        CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum
+                            .koloTargetPlus
+                            .getDepositAmountValue()),
                         ColorList.primaryColor,
                       ),
                       const SizedBox(
@@ -142,7 +146,8 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       ),
                       getListWidget(
                         KoloboxFundEnum.koloFamily,
-                        '₦ 1,080,000.00',
+                        CurrencyTextInputFormatter.formatAmount(
+                            KoloboxFundEnum.koloFamily.getDepositAmountValue()),
                         ColorList.primaryColor,
                       ),
                       const SizedBox(
@@ -150,7 +155,8 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       ),
                       getListWidget(
                         KoloboxFundEnum.koloGroup,
-                        '₦ 2,560,000.00',
+                        CurrencyTextInputFormatter.formatAmount(
+                            KoloboxFundEnum.koloGroup.getDepositAmountValue()),
                         ColorList.koloGroupTextColor,
                       ),
                       const SizedBox(

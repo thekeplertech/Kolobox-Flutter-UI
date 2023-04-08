@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/active_product_data_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/product_data_model.dart';
 
+import '../../di/injection_container.dart';
 import '../colors/color_list.dart';
+import '../preference/pref_helper.dart';
 
 const String koloFlexValue = 'Koloflex';
 const String koloTargetValue = 'Kolotarget';
@@ -16,6 +20,12 @@ const String koloTargetPlusPageValue = 'KoloTargetPlusPage';
 const String koloFamilyPageValue = 'KoloFamilyPage';
 const String koloGroupPageValue = 'KoloGroupPage';
 const String koloTransactionDetailPageValue = 'KoloTransactionDetailPage';
+
+const String koloFlexProductId = '-M1VwdR7fF9uCEf_vU0B';
+const String koloTargetProductId = '-M1VwdRAFcArdU1acs3n';
+const String koloTargetPlusProductId = 'jfhfjfbhfhjfbh';
+const String koloFamilyProductId = '233jfhfjfjffbh';
+const String koloGroupProductId = '-M1VwdgOP70p28p1oVOv';
 
 enum KoloboxFundEnum {
   koloFlex,
@@ -128,6 +138,23 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
+  String get getProductId {
+    switch (this) {
+      case KoloboxFundEnum.koloFlex:
+        return koloFlexProductId;
+      case KoloboxFundEnum.koloTarget:
+        return koloTargetProductId;
+      case KoloboxFundEnum.koloTargetPlus:
+        return koloTargetPlusProductId;
+      case KoloboxFundEnum.koloFamily:
+        return koloFamilyProductId;
+      case KoloboxFundEnum.koloGroup:
+        return koloGroupProductId;
+      default:
+        return koloFlexProductId;
+    }
+  }
+
   String getFundPageValue(bool isDetail) {
     if (this == KoloboxFundEnum.koloFlex) {
       return koloFlexPageValue;
@@ -145,6 +172,48 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFamilyPageValue;
       case KoloboxFundEnum.koloGroup:
         return koloGroupPageValue;
+    }
+  }
+
+  String getDepositAmountValue() {
+    PrefHelper helper = sl();
+    ActiveProductDataModel? active = helper.getActiveProductDataModel();
+
+    int? index = active?.products
+        ?.indexWhere((element) => element.productId == getProductId);
+
+    if (index != null && index != -1) {
+      return active?.products?[index].depositAmount ?? '0.0';
+    } else {
+      return '0.0';
+    }
+  }
+
+  int getTenor() {
+    PrefHelper helper = sl();
+    ProductDataModel? model = helper.getProductDataModel();
+
+    int? index =
+        model?.products?.indexWhere((element) => element.id == getProductId);
+
+    if (index != null && index != -1) {
+      return model?.products?[index].tenor ?? 0;
+    } else {
+      return 0;
+    }
+  }
+
+  String getInterestRate() {
+    PrefHelper helper = sl();
+    ProductDataModel? model = helper.getProductDataModel();
+
+    int? index =
+        model?.products?.indexWhere((element) => element.id == getProductId);
+
+    if (index != null && index != -1) {
+      return model?.products?[index].interestRate ?? '0.0';
+    } else {
+      return '0.0';
     }
   }
 }

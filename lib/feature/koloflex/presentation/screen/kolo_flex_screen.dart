@@ -15,6 +15,7 @@ import 'package:kolobox_new_app/feature/widgets/withdrawal/withdrawal_selection_
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
+import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../widgets/deposit_your_kolobox_widget.dart';
@@ -90,7 +91,8 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                       height: 4,
                     ),
                     Text(
-                      '₦ 150,000.00',
+                      CurrencyTextInputFormatter.formatAmount(
+                          KoloboxFundEnum.koloFlex.getDepositAmountValue()),
                       style: AppStyle.b2Bold
                           .copyWith(color: ColorList.koloFlexTextColor),
                     ),
@@ -109,7 +111,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Interest (6% p.a)',
+                            'Interest (${CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum.koloFlex.getInterestRate(), isSymbol: false)}% p.a)',
                             style: AppStyle.b7SemiBold
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
@@ -125,7 +127,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                                 height: 3,
                               ),
                               Text(
-                                'Interest in 30 days',
+                                'Interest in ${KoloboxFundEnum.koloFlex.getTenor()} days',
                                 style: AppStyle.b9Medium
                                     .copyWith(color: ColorList.blackThirdColor),
                               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../feature/dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../feature/dashboard/presentation/bloc/dashboard_event.dart';
 import '../../routes/routes.dart';
 import '../bloc/master_bloc.dart';
 import '../bloc/master_state.dart';
@@ -42,20 +44,23 @@ abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
             listener: (context, state) {
               if (state is ApiErrorState && isDialogShowing) {
                 hideDialog();
-                Utils.showToast(
-                    context,
-                    ToastWidget(
-                      state.message ?? '',
-                      borderColor: ColorList.redDarkColor,
-                      backgroundColor: ColorList.white,
-                      textColor: ColorList.black,
-                      messageIcon: imageCloseRed,
-                      closeWidget: Image.asset(
-                        imageClose,
-                        color: ColorList.black,
-                      ),
-                    ));
-                // showToast(state.message!);
+                if (state.apiStatus == 401) {
+                  logout();
+                } else {
+                  Utils.showToast(
+                      context,
+                      ToastWidget(
+                        state.message ?? '',
+                        borderColor: ColorList.redDarkColor,
+                        backgroundColor: ColorList.white,
+                        textColor: ColorList.black,
+                        messageIcon: imageCloseRed,
+                        closeWidget: Image.asset(
+                          imageClose,
+                          color: ColorList.black,
+                        ),
+                      ));
+                }
               } else if (state is ApiLoadingState) {
                 if (!isDialogShowing && ModalRoute.of(context)!.isCurrent) {
                   showDialogView();
@@ -106,6 +111,10 @@ abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
   goToDashboard() {
     navigateAndRemoveAll(context, Routes.dashboard, Routes.dashboard);
   }
+
+  logout() => prefHelper!.clear().then((value) {
+        BlocProvider.of<DashboardBloc>(context).add(LogoutEvent());
+      });
 
   bool isBottomSheet = false;
 

@@ -10,10 +10,10 @@ class ActiveProductDataModel {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+  List<dynamic> toJson() {
+    List<dynamic> data = [];
     if (products != null) {
-      data['p'] = products!.map((v) => v.toJson()).toList();
+      data = products!.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -58,7 +58,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
 
       ActiveProductDataModel activeProductDataModel = r.model;
       List<Data> activeProducts = activeProductDataModel.products ?? [];
-      List<Products> products = helper.getProductDataModel().products ?? [];
+      List<Products> products = helper.getProductDataModel()?.products ?? [];
 
       List<DashboardAmountModel> models = [];
       models.add(DashboardAmountModel(
