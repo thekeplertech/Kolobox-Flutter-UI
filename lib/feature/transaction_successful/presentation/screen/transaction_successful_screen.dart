@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
-import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
@@ -176,7 +172,7 @@ class TransactionSuccessfulScreenState
                   const SizedBox(
                     height: 7,
                   ),
-                  getOptionWidget(StateContainer.of(context).koloboxFundEnum),
+                  // getOptionWidget(StateContainer.of(context).koloboxFundEnum),
                   // Container(
                   //   decoration: BoxDecoration(
                   //     color: ColorList.lightBlue3Color,
@@ -217,16 +213,16 @@ class TransactionSuccessfulScreenState
                     overlayColor: ColorList.blueColor,
                     borderRadius: 32,
                     onPressed: () {
-                      BlocProvider.of<DashboardBloc>(context).add(
-                        ClearBackStackEvent(
-                          until: StateContainer.of(context).isFromFundMyKoloBox
-                              ? '/'
-                              : StateContainer.of(context)
-                                  .koloboxFundEnum
-                                  .getFundPageValue(
-                                      StateContainer.of(context).isFromDetail),
-                        ),
-                      );
+                      // BlocProvider.of<DashboardBloc>(context).add(
+                      //   ClearBackStackEvent(
+                      //     until: StateContainer.of(context).isFromFundMyKoloBox
+                      //         ? '/'
+                      //         : StateContainer.of(context)
+                      //             .koloboxFundEnum
+                      //             .getFundPageValue(
+                      //                 StateContainer.of(context).isFromDetail),
+                      //   ),
+                      // );
                     },
                   ),
                 ],

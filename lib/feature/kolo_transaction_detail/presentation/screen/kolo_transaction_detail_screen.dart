@@ -1,27 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/widgets/cancel_investment/cancel_investment.dart';
-import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
-import 'package:kolobox_new_app/feature/widgets/invite_user/invite_family_member.dart';
-import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
-import '../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../family_contributors/presentation/family_contributors_page.dart';
-import '../../../widgets/deposit_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
-import '../../../widgets/recurring_deposit/enable_recurring_deposit_widget.dart';
-import '../widgets/family_contributors_widget.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
   final bool isPaid;
@@ -48,7 +36,7 @@ class KoloTransactionDetailState
       StreamController<bool>.broadcast();
   bool isRecurringDeposit = false;
 
-  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
   @override
   void initState() {
@@ -57,7 +45,7 @@ class KoloTransactionDetailState
 
   @override
   Widget getCustomBloc() {
-    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
+    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
@@ -76,11 +64,11 @@ class KoloTransactionDetailState
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      '${koloboxFundEnum.getFundValue} Investment',
-                      style: AppStyle.b7SemiBold
-                          .copyWith(color: ColorList.blackSecondColor),
-                    ),
+                    // Text(
+                    //   '${koloboxFundEnum.getFundValue} Investment',
+                    //   style: AppStyle.b7SemiBold
+                    //       .copyWith(color: ColorList.blackSecondColor),
+                    // ),
                     const SizedBox(
                       height: 4,
                     ),
@@ -314,62 +302,62 @@ class KoloTransactionDetailState
                               height: 20,
                             ),
                           ],
-                          if (koloboxFundEnum == KoloboxFundEnum.koloFamily ||
-                              koloboxFundEnum == KoloboxFundEnum.koloGroup) ...[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Family Contributors',
-                                  style: AppStyle.b8Bold.copyWith(
-                                      color: ColorList.blackSecondColor),
-                                ),
-                                SizedBox(
-                                  width: 84,
-                                  child: Button(
-                                    'See all',
-                                    textColor: ColorList.white,
-                                    backgroundColor: ColorList.blackSecondColor,
-                                    overlayColor: ColorList.blueColor,
-                                    borderRadius: 12,
-                                    verticalPadding: 10,
-                                    height: 30,
-                                    textStyle: AppStyle.b10SemiBold
-                                        .copyWith(color: ColorList.white),
-                                    onPressed: () async {
-                                      BlocProvider.of<DashboardBloc>(context)
-                                          .add(HideDisableBottomScreenEvent());
-                                      navigatePush(context,
-                                              const FamilyContributorsPage())
-                                          .then((value) {
-                                        BlocProvider.of<DashboardBloc>(context)
-                                            .add(ShowEnableBottomScreenEvent());
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            GridView.builder(
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 14,
-                                  mainAxisSpacing: 14,
-                                  childAspectRatio: 1.2,
-                                ),
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: 4,
-                                itemBuilder: (_, index) =>
-                                    const FamilyContributorsWidget()),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                          ],
+                          // if (koloboxFundEnum == KoloboxFundEnum.koloFamily ||
+                          //     koloboxFundEnum == KoloboxFundEnum.koloGroup) ...[
+                          //   Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Text(
+                          //         'Family Contributors',
+                          //         style: AppStyle.b8Bold.copyWith(
+                          //             color: ColorList.blackSecondColor),
+                          //       ),
+                          //       SizedBox(
+                          //         width: 84,
+                          //         child: Button(
+                          //           'See all',
+                          //           textColor: ColorList.white,
+                          //           backgroundColor: ColorList.blackSecondColor,
+                          //           overlayColor: ColorList.blueColor,
+                          //           borderRadius: 12,
+                          //           verticalPadding: 10,
+                          //           height: 30,
+                          //           textStyle: AppStyle.b10SemiBold
+                          //               .copyWith(color: ColorList.white),
+                          //           onPressed: () async {
+                          //             BlocProvider.of<DashboardBloc>(context)
+                          //                 .add(HideDisableBottomScreenEvent());
+                          //             navigatePush(context,
+                          //                     const FamilyContributorsPage())
+                          //                 .then((value) {
+                          //               BlocProvider.of<DashboardBloc>(context)
+                          //                   .add(ShowEnableBottomScreenEvent());
+                          //             });
+                          //           },
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   const SizedBox(
+                          //     height: 15,
+                          //   ),
+                          //   GridView.builder(
+                          //       gridDelegate:
+                          //           const SliverGridDelegateWithFixedCrossAxisCount(
+                          //         crossAxisCount: 2,
+                          //         crossAxisSpacing: 14,
+                          //         mainAxisSpacing: 14,
+                          //         childAspectRatio: 1.2,
+                          //       ),
+                          //       physics: const NeverScrollableScrollPhysics(),
+                          //       shrinkWrap: true,
+                          //       itemCount: 4,
+                          //       itemBuilder: (_, index) =>
+                          //           const FamilyContributorsWidget()),
+                          //   const SizedBox(
+                          //     height: 15,
+                          //   ),
+                          // ],
                           Container(
                             width: double.maxFinite,
                             decoration: BoxDecoration(
@@ -499,44 +487,47 @@ class KoloTransactionDetailState
       );
 
   void onClickRecurringDeposit() {
-    StateContainer.of(context).isFromDetail = true;
-    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const EnableRecurringDepositWidget()).then((value) {
-      BlocProvider.of<DashboardBloc>(context)
-          .add(ShowEnableBottomScreenEvent());
-      StateContainer.of(context).isFromDetail = false;
-      isRecentEmpty = false;
-      isFailedEmpty = false;
-      leftRightStreamController.add(true);
-      isRecurringDeposit = true;
-      recurringDepositStreamController.add(true);
-    });
+    comingSoon();
+    // StateContainer.of(context).isFromDetail = true;
+    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    // showCustomBottomSheet(const EnableRecurringDepositWidget()).then((value) {
+    //   BlocProvider.of<DashboardBloc>(context)
+    //       .add(ShowEnableBottomScreenEvent());
+    //   StateContainer.of(context).isFromDetail = false;
+    //   isRecentEmpty = false;
+    //   isFailedEmpty = false;
+    //   leftRightStreamController.add(true);
+    //   isRecurringDeposit = true;
+    //   recurringDepositStreamController.add(true);
+    // });
   }
 
   void onClickDeposit() {
-    StateContainer.of(context).isFromDetail = true;
-    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
-      BlocProvider.of<DashboardBloc>(context)
-          .add(ShowEnableBottomScreenEvent());
-      StateContainer.of(context).isFromDetail = false;
-      isRecentEmpty = false;
-      isFailedEmpty = false;
-      leftRightStreamController.add(true);
-    });
+    comingSoon();
+    // StateContainer.of(context).isFromDetail = true;
+    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    // showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+    //   BlocProvider.of<DashboardBloc>(context)
+    //       .add(ShowEnableBottomScreenEvent());
+    //   StateContainer.of(context).isFromDetail = false;
+    //   isRecentEmpty = false;
+    //   isFailedEmpty = false;
+    //   leftRightStreamController.add(true);
+    // });
   }
 
   void onClickInvite() {
-    StateContainer.of(context).isFromDetail = true;
-    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const InviteFamilyMemberWidget()).then((value) {
-      BlocProvider.of<DashboardBloc>(context)
-          .add(ShowEnableBottomScreenEvent());
-      StateContainer.of(context).isFromDetail = false;
-      isRecentEmpty = false;
-      isFailedEmpty = false;
-      leftRightStreamController.add(true);
-    });
+    comingSoon();
+    // StateContainer.of(context).isFromDetail = true;
+    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    // showCustomBottomSheet(const InviteFamilyMemberWidget()).then((value) {
+    //   BlocProvider.of<DashboardBloc>(context)
+    //       .add(ShowEnableBottomScreenEvent());
+    //   StateContainer.of(context).isFromDetail = false;
+    //   isRecentEmpty = false;
+    //   isFailedEmpty = false;
+    //   leftRightStreamController.add(true);
+    // });
   }
 
   Widget getRecentDepositWidget() {
@@ -583,14 +574,15 @@ class KoloTransactionDetailState
           overlayColor: ColorList.redDark2Color,
           borderRadius: 32,
           onPressed: () {
-            StateContainer.of(context).isFromDetail = true;
-            BlocProvider.of<DashboardBloc>(context)
-                .add(HideDisableBottomScreenEvent());
-            showCustomBottomSheet(const CancelInvestmentWidget()).then((value) {
-              BlocProvider.of<DashboardBloc>(context)
-                  .add(ShowEnableBottomScreenEvent());
-              StateContainer.of(context).isFromDetail = false;
-            });
+            comingSoon();
+            // StateContainer.of(context).isFromDetail = true;
+            // BlocProvider.of<DashboardBloc>(context)
+            //     .add(HideDisableBottomScreenEvent());
+            // showCustomBottomSheet(const CancelInvestmentWidget()).then((value) {
+            //   BlocProvider.of<DashboardBloc>(context)
+            //       .add(ShowEnableBottomScreenEvent());
+            //   StateContainer.of(context).isFromDetail = false;
+            // });
           },
         ),
       ],

@@ -11,9 +11,7 @@ import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bl
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:kolobox_new_app/feature/koloflex/presentation/bloc/kolo_flex_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
-import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
-import 'package:kolobox_new_app/feature/widgets/withdrawal/withdrawal_selection_kolobox_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -46,7 +44,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
 
   bool isEmpty = true;
 
-  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
   List<Transactions> transactions = [];
 
@@ -58,13 +56,13 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
 
   callTransactions() =>
       BlocProvider.of<KoloFlexBloc>(context).add(GetTransactionsEvent(
-        model:
-            TransactionsRequestModel(productId: koloboxFundEnum.getProductId),
+        model: TransactionsRequestModel(
+            productId: KoloboxFundEnum.koloFlex.getProductId),
       ));
 
   @override
   Widget getCustomBloc() {
-    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
+    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
@@ -224,9 +222,9 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
             height: 60,
           ),
           Icon(
-            koloboxFundEnum.getFundIconValue,
+            KoloboxFundEnum.koloFlex.getFundIconValue,
             size: 55,
-            color: koloboxFundEnum.getFundIconColorValue,
+            color: KoloboxFundEnum.koloFlex.getFundIconColorValue,
           ),
           const SizedBox(
             height: 20,
@@ -429,6 +427,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
             itemCount: 5,
             itemBuilder: (_, index) => AccountItemWidget(
                   onDetail: () {
+                    comingSoon();
                     // BlocProvider.of<DashboardBloc>(context)
                     //     .add(HideDisableBottomScreenEvent());
                     // showCustomBottomSheet(
@@ -442,14 +441,15 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                     // });
                   },
                   onWithdrawal: () {
-                    BlocProvider.of<DashboardBloc>(context)
-                        .add(HideDisableBottomScreenEvent());
-                    showCustomBottomSheet(
-                            const WithdrawalSelectionKoloboxWidget())
-                        .then((value) {
-                      BlocProvider.of<DashboardBloc>(context)
-                          .add(ShowEnableBottomScreenEvent());
-                    });
+                    comingSoon();
+                    // BlocProvider.of<DashboardBloc>(context)
+                    //     .add(HideDisableBottomScreenEvent());
+                    // showCustomBottomSheet(
+                    //         const WithdrawalSelectionKoloboxWidget())
+                    //     .then((value) {
+                    //   BlocProvider.of<DashboardBloc>(context)
+                    //       .add(ShowEnableBottomScreenEvent());
+                    // });
                   },
                 )),
         const SizedBox(

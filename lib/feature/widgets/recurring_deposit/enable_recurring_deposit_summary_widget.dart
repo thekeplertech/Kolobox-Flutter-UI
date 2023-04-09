@@ -8,10 +8,8 @@ import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
 import '../../../core/constants/kolo_box_icon.dart';
-import '../../../core/enums/kolobox_fund_enum.dart';
 import '../../../core/ui/widgets/button.dart';
 import '../confirm_with_pin_widget.dart';
-import '../inherited_state_container.dart';
 
 class EnableRecurringDepositSummaryWidget extends BaseScreen {
   const EnableRecurringDepositSummaryWidget({Key? key}) : super(key: key);
@@ -28,11 +26,12 @@ class _EnableRecurringDepositSummaryWidgetState
   StreamController<bool> enableRecurringDepositStreamController =
       StreamController<bool>.broadcast();
   bool isEnableRecurringDeposit = false;
-  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+
+  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
   @override
   Widget body(BuildContext context) {
-    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
+    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Padding(
       padding: const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
       child: Column(
@@ -47,10 +46,10 @@ class _EnableRecurringDepositSummaryWidgetState
               child: Image.asset(imageClose),
             ),
           ),
-          Text(
-            '${koloboxFundEnum.getFundValue} Sumary',
-            style: AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
-          ),
+          // Text(
+          //   '${koloboxFundEnum.getFundValue} Sumary',
+          //   style: AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
+          // ),
           const SizedBox(
             height: 5,
           ),
@@ -62,7 +61,7 @@ class _EnableRecurringDepositSummaryWidgetState
           const SizedBox(
             height: 20,
           ),
-          getOptionWidget(),
+          // getOptionWidget(),
           const SizedBox(
             height: 20,
           ),
@@ -219,57 +218,57 @@ class _EnableRecurringDepositSummaryWidgetState
     );
   }
 
-  Widget getOptionWidget() {
-    return GestureDetector(
-      onTap: () async {
-        // switch (fundEnum) {
-        //   case KoloboxFundEnum.koloFlex:
-        //   case KoloboxFundEnum.koloTarget:
-        //   case KoloboxFundEnum.koloFamily:
-        //   case KoloboxFundEnum.koloGroup:
-        //     showCustomBottomSheet(
-        //         DepositYourKoloboxWidget(
-        //           koloboxFundEnum: fundEnum,
-        //         ),
-        //         height: 0.9);
-        //     break;
-        //   case KoloboxFundEnum.koloTargetPlus:
-        //     comingSoon();
-        //     break;
-        // }
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: koloboxFundEnum.getFundBackColorValue,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                koloboxFundEnum.getFundValue,
-                style: AppStyle.b3Bold
-                    .copyWith(color: koloboxFundEnum.getFundTextColorValue),
-              ),
-            ),
-            koloboxFundEnum.isPhotoEnabledAsIcon
-                ? Icon(
-                    koloboxFundEnum.getFundIconValue,
-                    size: 48,
-                    color:
-                        koloboxFundEnum.getFundIconColorValue.withOpacity(0.4),
-                  )
-                : Image.asset(
-                    koloboxFundEnum.getFundImageValue,
-                    width: 48,
-                    height: 48,
-                  ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget getOptionWidget() {
+  //   return GestureDetector(
+  //     onTap: () async {
+  //       // switch (fundEnum) {
+  //       //   case KoloboxFundEnum.koloFlex:
+  //       //   case KoloboxFundEnum.koloTarget:
+  //       //   case KoloboxFundEnum.koloFamily:
+  //       //   case KoloboxFundEnum.koloGroup:
+  //       //     showCustomBottomSheet(
+  //       //         DepositYourKoloboxWidget(
+  //       //           koloboxFundEnum: fundEnum,
+  //       //         ),
+  //       //         height: 0.9);
+  //       //     break;
+  //       //   case KoloboxFundEnum.koloTargetPlus:
+  //       //     comingSoon();
+  //       //     break;
+  //       // }
+  //     },
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         color: koloboxFundEnum.getFundBackColorValue,
+  //         borderRadius: BorderRadius.circular(14),
+  //       ),
+  //       padding: const EdgeInsets.all(24),
+  //       child: Row(
+  //         children: [
+  //           Expanded(
+  //             child: Text(
+  //               koloboxFundEnum.getFundValue,
+  //               style: AppStyle.b3Bold
+  //                   .copyWith(color: koloboxFundEnum.getFundTextColorValue),
+  //             ),
+  //           ),
+  //           koloboxFundEnum.isPhotoEnabledAsIcon
+  //               ? Icon(
+  //                   koloboxFundEnum.getFundIconValue,
+  //                   size: 48,
+  //                   color:
+  //                       koloboxFundEnum.getFundIconColorValue.withOpacity(0.4),
+  //                 )
+  //               : Image.asset(
+  //                   koloboxFundEnum.getFundImageValue,
+  //                   width: 48,
+  //                   height: 48,
+  //                 ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   void dispose() {

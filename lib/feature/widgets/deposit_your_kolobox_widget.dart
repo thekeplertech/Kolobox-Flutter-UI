@@ -7,12 +7,15 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
 import 'package:kolobox_new_app/feature/widgets/deposit_summary_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
+import 'package:kolobox_new_app/feature/widgets/product_item_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../core/base/base_screen.dart';
 import '../../../../core/colors/color_list.dart';
 import '../../core/ui/widgets/custom_text_field.dart';
-import 'inherited_state_container.dart';
+import '../../core/ui/widgets/toast_widget.dart';
+import '../../core/utils/utils.dart';
 
 class DepositYourKoloboxWidget extends BaseScreen {
   const DepositYourKoloboxWidget({
@@ -26,11 +29,13 @@ class DepositYourKoloboxWidget extends BaseScreen {
 
 class _DepositYourKoloboxWidgetState
     extends BaseScreenState<DepositYourKoloboxWidget> {
-  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+  TextEditingController amountEditingController = TextEditingController();
+
+  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
   @override
   Widget body(BuildContext context) {
-    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
+    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Padding(
       padding: const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
       child: Column(
@@ -53,7 +58,7 @@ class _DepositYourKoloboxWidgetState
             height: 5,
           ),
           Text(
-            'Deposit into your ${koloboxFundEnum.getFundValue}',
+            'Deposit into your ${StateContainer.of(context).getKoloBoxEnum()?.getFundValue ?? ''}',
             style:
                 AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
           ),
@@ -77,40 +82,40 @@ class _DepositYourKoloboxWidgetState
           const SizedBox(
             height: 20,
           ),
-          if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
-            Text(
-              'Select a kolotarget to make this deposit to',
-              style:
-                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: ColorList.greyLightColor, width: 1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              width: double.maxFinite,
-              padding: const EdgeInsets.only(
-                  left: 12, right: 16, top: 12, bottom: 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Select a ${koloboxFundEnum.getFundValue}',
-                      style: AppStyle.b8Regular
-                          .copyWith(color: ColorList.blackThirdColor),
-                    ),
-                  ),
-                  const Icon(KoloBoxIcons.dropDownArrow, size: 8),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-          ],
+          // if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
+          //   Text(
+          //     'Select a kolotarget to make this deposit to',
+          //     style:
+          //         AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
+          //   ),
+          //   const SizedBox(
+          //     height: 4,
+          //   ),
+          //   Container(
+          //     decoration: BoxDecoration(
+          //       border: Border.all(color: ColorList.greyLightColor, width: 1),
+          //       borderRadius: BorderRadius.circular(12),
+          //     ),
+          //     width: double.maxFinite,
+          //     padding: const EdgeInsets.only(
+          //         left: 12, right: 16, top: 12, bottom: 12),
+          //     child: Row(
+          //       children: [
+          //         Expanded(
+          //           child: Text(
+          //             'Select a ${koloboxFundEnum.getFundValue}',
+          //             style: AppStyle.b8Regular
+          //                 .copyWith(color: ColorList.blackThirdColor),
+          //           ),
+          //         ),
+          //         const Icon(KoloBoxIcons.dropDownArrow, size: 8),
+          //       ],
+          //     ),
+          //   ),
+          //   const SizedBox(
+          //     height: 12,
+          //   ),
+          // ],
           Text(
             'Enter Amount',
             style:
@@ -133,7 +138,7 @@ class _DepositYourKoloboxWidgetState
             hintStyle: AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
             textAlign: TextAlign.center,
             contentPadding: const EdgeInsets.symmetric(vertical: 25),
-            // controller: emailTextEditingController,
+            controller: amountEditingController,
           ),
           const SizedBox(
             height: 20,
@@ -201,7 +206,7 @@ class _DepositYourKoloboxWidgetState
             overlayColor: ColorList.blueColor,
             borderRadius: 32,
             onPressed: () {
-              showCustomBottomSheet(const DepositSummaryWidget());
+              onClickNext();
             },
           ),
         ],
@@ -210,54 +215,37 @@ class _DepositYourKoloboxWidgetState
   }
 
   Widget getOptionWidget() {
-    return GestureDetector(
-      onTap: () async {
-        // switch (fundEnum) {
-        //   case KoloboxFundEnum.koloFlex:
-        //   case KoloboxFundEnum.koloTarget:
-        //   case KoloboxFundEnum.koloFamily:
-        //   case KoloboxFundEnum.koloGroup:
-        //     showCustomBottomSheet(
-        //         DepositYourKoloboxWidget(
-        //           koloboxFundEnum: fundEnum,
-        //         ),
-        //         height: 0.9);
-        //     break;
-        //   case KoloboxFundEnum.koloTargetPlus:
-        //     comingSoon();
-        //     break;
-        // }
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: koloboxFundEnum.getFundBackColorValue,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        padding: const EdgeInsets.all(24),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                koloboxFundEnum.getFundValue,
-                style: AppStyle.b3Bold
-                    .copyWith(color: koloboxFundEnum.getFundTextColorValue),
-              ),
+    KoloboxFundEnum? fundEnum = StateContainer.of(context).getKoloBoxEnum();
+    if (fundEnum == null) return const SizedBox();
+    return ProductItemWidget(fundEnum: fundEnum);
+  }
+
+  onClickNext() {
+    if (amountEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter amount',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
             ),
-            koloboxFundEnum.isPhotoEnabledAsIcon
-                ? Icon(
-                    koloboxFundEnum.getFundIconValue,
-                    size: 48,
-                    color:
-                        koloboxFundEnum.getFundIconColorValue.withOpacity(0.4),
-                  )
-                : Image.asset(
-                    koloboxFundEnum.getFundImageValue,
-                    width: 48,
-                    height: 48,
-                  ),
-          ],
-        ),
-      ),
-    );
+          ));
+      return;
+    }
+    StateContainer.of(context).openFundMyKoloBox(
+        fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+        amount: amountEditingController.text);
+    showCustomBottomSheet(const DepositSummaryWidget());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    amountEditingController.dispose();
   }
 }

@@ -8,7 +8,6 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
-import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
@@ -38,7 +37,7 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
   bool isActiveEmpty = true;
   bool isPaidEmpty = true;
 
-  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
   @override
   void initState() {
@@ -47,7 +46,7 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
 
   @override
   Widget getCustomBloc() {
-    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
+    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
@@ -249,11 +248,11 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
           const SizedBox(
             height: 60,
           ),
-          Icon(
-            koloboxFundEnum.getFundIconValue,
-            size: 60,
-            color: koloboxFundEnum.getFundIconColorValue,
-          ),
+          // Icon(
+          //   koloboxFundEnum.getFundIconValue,
+          //   size: 60,
+          //   color: koloboxFundEnum.getFundIconColorValue,
+          // ),
           const SizedBox(
             height: 20,
           ),

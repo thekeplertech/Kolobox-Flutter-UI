@@ -108,7 +108,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       borderRadius: 24,
                       verticalPadding: 10,
                       onPressed: () {
-                        StateContainer.of(context).isFromFundMyKoloBox = true;
+                        StateContainer.of(context).openFundMyKoloBox();
                         BlocProvider.of<DashboardBloc>(context)
                             .add(HideDisableBottomScreenEvent());
                         showCustomBottomSheet(const FundYourKoloboxWidget())
@@ -182,9 +182,8 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
   ) =>
       GestureDetector(
         onTap: () {
-          StateContainer.of(context).isFromFundMyKoloBox = false;
-          StateContainer.of(context).koloboxFundEnum = fundEnum;
-
+          // StateContainer.of(context).isFromFundMyKoloBox = false;
+          // StateContainer.of(context).koloboxFundEnum = fundEnum;
           // BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
           //   model: EarningsRequestModel(userProductId: fundEnum.getProductId),
           // ));

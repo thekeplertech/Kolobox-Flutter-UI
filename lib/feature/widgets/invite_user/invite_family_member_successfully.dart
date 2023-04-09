@@ -63,16 +63,16 @@ class _InviteFamilyMemberSuccessfullyWidgetState
             overlayColor: ColorList.blueColor,
             borderRadius: 32,
             onPressed: () {
-              BlocProvider.of<DashboardBloc>(context).add(
-                ClearBackStackEvent(
-                  until: StateContainer.of(context).isFromFundMyKoloBox
-                      ? '/'
-                      : StateContainer.of(context)
-                          .koloboxFundEnum
-                          .getFundPageValue(
-                              StateContainer.of(context).isFromDetail),
-                ),
-              );
+              // BlocProvider.of<DashboardBloc>(context).add(
+              //   ClearBackStackEvent(
+              //     until: StateContainer.of(context).isFromFundMyKoloBox
+              //         ? '/'
+              //         : StateContainer.of(context)
+              //             .koloboxFundEnum
+              //             .getFundPageValue(
+              //                 StateContainer.of(context).isFromDetail),
+              //   ),
+              // );
             },
           ),
         ],

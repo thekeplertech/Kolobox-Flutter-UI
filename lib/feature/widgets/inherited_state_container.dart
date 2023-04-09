@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
+
+import '../../core/enums/payment_gateway_enum.dart';
 
 class _InheritedStateContainer extends InheritedWidget {
   final StateContainerState data;
@@ -34,9 +37,11 @@ class StateContainer extends StatefulWidget {
 }
 
 class StateContainerState extends State<StateContainer> {
-  bool isFromFundMyKoloBox = true;
-  bool isFromDetail = false;
-  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+  bool _isFromFundMyKoloBox = true;
+  bool _isFromDetail = false;
+  KoloboxFundEnum? _koloboxFundEnum;
+  String? _amount = '';
+  PaymentGatewayEnum? _paymentGatewayEnum;
 
   @override
   Widget build(BuildContext context) => _InheritedStateContainer(
@@ -44,4 +49,20 @@ class StateContainerState extends State<StateContainer> {
         key: widget.key!,
         child: widget.child,
       );
+
+  KoloboxFundEnum? getKoloBoxEnum() => _koloboxFundEnum;
+
+  String getAmount() => _amount ?? '0.0';
+
+  PaymentGatewayEnum? getPaymentGatewayEnum() => _paymentGatewayEnum;
+
+  void openFundMyKoloBox({
+    KoloboxFundEnum? fundEnum,
+    String? amount,
+    PaymentGatewayEnum? paymentEnum,
+  }) {
+    _koloboxFundEnum = fundEnum;
+    _amount = amount?.replaceAll(nigerianCurrency, '').trim();
+    _paymentGatewayEnum = paymentEnum;
+  }
 }

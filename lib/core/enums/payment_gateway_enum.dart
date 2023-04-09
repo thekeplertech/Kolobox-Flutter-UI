@@ -1,0 +1,1 @@
+enum PaymentGatewayEnum { payStack }

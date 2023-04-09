@@ -48,31 +48,30 @@ class ConfirmWithPinWidget extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            PinCodeTextField(
-              appContext: context,
-              length: 6,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(12),
-                fieldHeight: 45,
-                fieldWidth: 45,
-                borderWidth: 1,
-                inactiveColor: ColorList.greyLightColor,
-                activeColor: ColorList.greyLightColor,
-                selectedColor: ColorList.greyLightColor,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: PinCodeTextField(
+                appContext: context,
+                length: 4,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(12),
+                  fieldHeight: 45,
+                  fieldWidth: 45,
+                  borderWidth: 1,
+                  inactiveColor: ColorList.greyLightColor,
+                  activeColor: ColorList.greyLightColor,
+                  selectedColor: ColorList.greyLightColor,
+                ),
+                textStyle: AppStyle.b9Bold.copyWith(
+                  color: ColorList.blackThirdColor,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
+                onChanged: (String value) {},
               ),
-              textStyle: TextStyle(
-                color: ColorList.blackThirdColor,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              onChanged: (value) {
-                print("asd fa fds $value");
-              },
             ),
             const SizedBox(
               height: 35,

@@ -85,16 +85,16 @@ class _FundYourKoloboxWidgetState
   Widget getOptionWidget(KoloboxFundEnum fundEnum) {
     return GestureDetector(
       onTap: () async {
-        StateContainer.of(context).koloboxFundEnum = fundEnum;
+        StateContainer.of(context).openFundMyKoloBox(fundEnum: fundEnum);
         switch (fundEnum) {
           case KoloboxFundEnum.koloFlex:
-          case KoloboxFundEnum.koloTarget:
-          case KoloboxFundEnum.koloFamily:
-          case KoloboxFundEnum.koloGroup:
             showCustomBottomSheet(
               const DepositYourKoloboxWidget(),
             );
             break;
+          case KoloboxFundEnum.koloTarget:
+          case KoloboxFundEnum.koloFamily:
+          case KoloboxFundEnum.koloGroup:
           case KoloboxFundEnum.koloTargetPlus:
             comingSoon();
             break;

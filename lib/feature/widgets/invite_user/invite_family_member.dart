@@ -8,10 +8,8 @@ import 'package:kolobox_new_app/feature/widgets/invite_user/invite_family_member
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
-import '../../../core/enums/kolobox_fund_enum.dart';
 import '../../../core/ui/widgets/button.dart';
 import '../../../core/ui/widgets/custom_text_field.dart';
-import '../inherited_state_container.dart';
 
 class InviteFamilyMemberWidget extends BaseScreen {
   const InviteFamilyMemberWidget({Key? key}) : super(key: key);
@@ -28,11 +26,12 @@ class _InviteFamilyMemberWidgetState
   StreamController<bool> enableRecurringDepositStreamController =
       StreamController<bool>.broadcast();
   bool isEnableRecurringDeposit = false;
-  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+
+  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
 
   @override
   Widget body(BuildContext context) {
-    koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
+    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Padding(
       padding: const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
       child: Column(

@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/ui/extension.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
 import '../../../core/colors/color_list.dart';
 import '../../../core/ui/widgets/button.dart';
-import '../../dashboard/presentation/bloc/dashboard_bloc.dart';
-import '../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../inherited_state_container.dart';
 
 class CancelInvestmentSuccessfullyWidget extends BaseScreen {
   const CancelInvestmentSuccessfullyWidget({Key? key}) : super(key: key);
@@ -63,16 +58,16 @@ class _CancelInvestmentSuccessfullyWidgetState
             overlayColor: ColorList.blueColor,
             borderRadius: 32,
             onPressed: () {
-              BlocProvider.of<DashboardBloc>(context).add(
-                ClearBackStackEvent(
-                  until: StateContainer.of(context).isFromFundMyKoloBox
-                      ? '/'
-                      : StateContainer.of(context)
-                          .koloboxFundEnum
-                          .getFundPageValue(
-                              StateContainer.of(context).isFromDetail),
-                ),
-              );
+              // BlocProvider.of<DashboardBloc>(context).add(
+              //   ClearBackStackEvent(
+              //     until: StateContainer.of(context).isFromFundMyKoloBox
+              //         ? '/'
+              //         : StateContainer.of(context)
+              //             .koloboxFundEnum
+              //             .getFundPageValue(
+              //                 StateContainer.of(context).isFromDetail),
+              //   ),
+              // );
             },
           ),
         ],
