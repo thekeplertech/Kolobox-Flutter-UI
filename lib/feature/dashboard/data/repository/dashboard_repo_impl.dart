@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:kolobox_new_app/feature/auth/login/data/models/login_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/data_source/remote_dashboard_data_source.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/domain/dashboard_repo.dart';
@@ -37,26 +36,26 @@ class DashboardRepoImpl extends DashboardRepo {
     ProfileDataModel model = ProfileDataModel.fromJson(
         (await remoteDashboardDataSource.getProfile()).data);
     PrefHelper helper = sl();
-    await helper.setLoginResponseModel(LoginResponseModel(
-      id: model.user?.id ?? '',
-      active: model.user?.active ?? false,
-      firstname: model.user?.firstname ?? '',
-      lastname: model.user?.lastname ?? '',
-      email: model.user?.email ?? '',
-      dob: model.user?.dob ?? '',
-      phone: model.user?.phone ?? '',
-      occupation: model.user?.occupation ?? '',
-      wallet: model.user?.wallet ?? '',
-      school: '',
-      number: model.user?.number ?? '',
-      nextOfKin: model.user?.nextOfKin ?? '',
-      referral: '',
-      createdAt: model.user?.createdAt ?? '',
-      updatedAt: model.user?.updatedAt ?? '',
-      smsNotification: model.user?.smsNotification ?? false,
-      emailNotification: model.user?.emailNotification ?? false,
-      token: helper.getToken(),
-    ));
+    // await helper.setLoginResponseModel(LoginResponseModel(
+    //   id: model.user?.id ?? '',
+    //   active: model.user?.active ?? false,
+    //   firstname: model.user?.firstname ?? '',
+    //   lastname: model.user?.lastname ?? '',
+    //   email: model.user?.email ?? '',
+    //   dob: model.user?.dob ?? '',
+    //   phone: model.user?.phone ?? '',
+    //   occupation: model.user?.occupation ?? '',
+    //   wallet: model.user?.wallet ?? '',
+    //   school: '',
+    //   number: model.user?.number ?? '',
+    //   nextOfKin: model.user?.nextOfKin ?? '',
+    //   referral: '',
+    //   createdAt: model.user?.createdAt ?? '',
+    //   updatedAt: model.user?.updatedAt ?? '',
+    //   smsNotification: model.user?.smsNotification ?? false,
+    //   emailNotification: model.user?.emailNotification ?? false,
+    //   token: helper.getToken(),
+    // ));
     await helper.setProfileDataModel(model);
     return Right(Success(model));
   }

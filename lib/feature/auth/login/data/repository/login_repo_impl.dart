@@ -9,6 +9,7 @@ import '../../../../../core/preference/pref_helper.dart';
 import '../../../../../di/injection_container.dart';
 import '../../domain/login_repo.dart';
 import '../data_source/remote_login_data_source.dart';
+import '../models/create_pin_request_model.dart';
 import '../models/login_request_model.dart';
 
 class LoginRepoImpl extends LoginRepo {
@@ -24,8 +25,24 @@ class LoginRepoImpl extends LoginRepo {
     ApiResponse apiResponse = await remoteLoginDataSource.login(model);
     LoginResponseModel responseModel =
         LoginResponseModel.fromJson(apiResponse.data);
+    responseModel.isLoggedIn = false;
     PrefHelper helper = sl();
     await helper.setLoginResponseModel(responseModel);
     return Right(Success(responseModel));
+  }
+
+  @override
+  Future<Either<Failure, Success>> createPin(CreatePinRequestModel model) =>
+      baseApiMethod(() => createPinFromAPI(model));
+
+  Future<Either<Failure, Success>> createPinFromAPI(
+      CreatePinRequestModel model) async {
+    ApiResponse apiResponse = await remoteLoginDataSource.createPin(model);
+    // LoginResponseModel responseModel =
+    //     LoginResponseModel.fromJson(apiResponse.data);
+    // responseModel.isLoggedIn = false;
+    // PrefHelper helper = sl();
+    // await helper.setLoginResponseModel(responseModel);
+    return Right(Success(null));
   }
 }

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:kolobox_new_app/feature/auth/forget_password/data/models/change_password_request_model.dart';
 import 'package:kolobox_new_app/feature/auth/forget_password/data/models/forget_password_request_model.dart';
 import 'package:kolobox_new_app/feature/auth/forget_password/data/models/validate_request_model.dart';
+import 'package:kolobox_new_app/feature/auth/login/data/models/create_pin_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_request_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -9,6 +10,7 @@ import 'package:retrofit/retrofit.dart';
 import '../../feature/auth/login/data/models/login_request_model.dart';
 import '../../feature/auth/register/data/models/register_request_model.dart';
 import '../../feature/auth/register/data/models/verify_user_request_model.dart';
+import '../../feature/dashboard/data/models/verify_pin_request_model.dart';
 import '../models/api_response.dart';
 import 'api_constants.dart';
 
@@ -54,4 +56,10 @@ abstract class RestHelper {
 
   @POST(ApiUrls.getTransactionsAPI)
   Future<ApiResponse> getTransactions(@Body() TransactionsRequestModel model);
+
+  @POST(ApiUrls.createPinAPI)
+  Future<ApiResponse> createPin(@Body() CreatePinRequestModel model);
+
+  @POST(ApiUrls.verifyPinAPI)
+  Future<ApiResponse> verifyPin(@Body() VerifyPinRequestModel model);
 }

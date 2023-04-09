@@ -9,12 +9,15 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/custom_text_field.dart';
 import 'package:kolobox_new_app/core/utils/utils.dart';
+import 'package:kolobox_new_app/feature/auth/login/data/models/create_pin_request_model.dart';
+import 'package:kolobox_new_app/feature/auth/login/data/models/login_response_model.dart';
 import 'package:kolobox_new_app/feature/auth/login/presentation/bloc/login_bloc.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../../core/ui/widgets/toast_widget.dart';
+import '../../../../widgets/create_pin_widget.dart';
 import '../../data/models/login_request_model.dart';
 import '../bloc/login_event.dart';
 import '../bloc/login_state.dart';
@@ -36,10 +39,10 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
   void initState() {
     super.initState();
     if (FlavorConfig.isDev()) {
-      // emailTextEditingController.text = 'parth123456789@mailinator.com';
-      // passwordTextEditingController.text = 'kolobox@123';
-      emailTextEditingController.text = 'tulbadex@gmail.com';
-      passwordTextEditingController.text = 'password';
+      emailTextEditingController.text = 'parth123456789@mailinator.com';
+      passwordTextEditingController.text = 'kolobox@123';
+      // emailTextEditingController.text = 'tulbadex@gmail.com';
+      // passwordTextEditingController.text = 'password';
     }
   }
 
@@ -71,6 +74,10 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                     ));
 
                 goToDashboard();
+              });
+            } else if (state is CreatePinState) {
+              Future.delayed(const Duration(milliseconds: 300), () {
+                showDialogForCreatePin(state.model);
               });
             }
           },
@@ -227,6 +234,19 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void showDialogForCreatePin(LoginResponseModel model) {
+    showCustomBottomSheet(CreatePinWidget(
+      onBack: (value) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          BlocProvider.of<LoginBloc>(context).add(CallCreatePinEvent(
+            loginResponseModel: model,
+            createPinRequestModel: CreatePinRequestModel(pin: value),
+          ));
+        });
+      },
+    ));
   }
 
   void onClickLogin() {

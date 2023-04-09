@@ -16,6 +16,7 @@ class LoginResponseModel {
   String? updatedAt;
   bool? smsNotification;
   bool? emailNotification;
+  bool? isPin;
   String? token;
   bool isLoggedIn = true;
 
@@ -37,6 +38,7 @@ class LoginResponseModel {
     this.updatedAt,
     this.smsNotification,
     this.emailNotification,
+    this.isPin,
     this.token,
   });
 
@@ -58,6 +60,7 @@ class LoginResponseModel {
     updatedAt = json['updated_at'] ?? '';
     smsNotification = json['sms_notification'] ?? false;
     emailNotification = json['email_notification'] ?? false;
+    isPin = json['is_pin'] ?? false;
     token = json['token'] ?? '';
   }
 
@@ -80,6 +83,7 @@ class LoginResponseModel {
     data['updated_at'] = updatedAt;
     data['sms_notification'] = smsNotification;
     data['email_notification'] = emailNotification;
+    data['is_pin'] = isPin;
     data['token'] = token;
     return data;
   }

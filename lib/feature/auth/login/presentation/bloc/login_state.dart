@@ -9,3 +9,9 @@ class CallLoginState extends LoginState {
 
   CallLoginState({required this.model});
 }
+
+class CreatePinState extends LoginState {
+  final LoginResponseModel model;
+
+  CreatePinState({required this.model});
+}
