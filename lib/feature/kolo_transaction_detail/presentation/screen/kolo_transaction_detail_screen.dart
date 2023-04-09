@@ -6,7 +6,6 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/koloflex/presentation/widgets/transactions_item_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/cancel_investment/cancel_investment.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/invite_user/invite_family_member.dart';
@@ -20,7 +19,6 @@ import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../family_contributors/presentation/family_contributors_page.dart';
 import '../../../widgets/deposit_your_kolobox_widget.dart';
-import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/recurring_deposit/enable_recurring_deposit_widget.dart';
 import '../widgets/family_contributors_widget.dart';
@@ -544,19 +542,19 @@ class KoloTransactionDetailState
   Widget getRecentDepositWidget() {
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (_, index) => Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: TransactionsItemWidget(
-              onPressed: () {
-                onClickTransaction();
-              },
-            ),
-          ),
-        ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   itemCount: 5,
+        //   itemBuilder: (_, index) => Padding(
+        //     padding: const EdgeInsets.only(top: 5),
+        //     child: TransactionsItemWidget(
+        //       onPressed: () {
+        //         onClickTransaction();
+        //       },
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: 20,
         ),
@@ -602,19 +600,19 @@ class KoloTransactionDetailState
   Widget getFailedDepositWidget() {
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (_, index) => Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: TransactionsItemWidget(
-              onPressed: () {
-                onClickTransaction();
-              },
-            ),
-          ),
-        ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   itemCount: 5,
+        //   itemBuilder: (_, index) => Padding(
+        //     padding: const EdgeInsets.only(top: 5),
+        //     child: TransactionsItemWidget(
+        //       onPressed: () {
+        //         onClickTransaction();
+        //       },
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: 20,
         ),
@@ -623,18 +621,18 @@ class KoloTransactionDetailState
   }
 
   void onClickTransaction() {
-    StateContainer.of(context).isFromDetail = true;
-    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(
-      DepositedWithdrawalInfoKoloboxWidget(
-        koloboxFundEnum: koloboxFundEnum,
-      ),
-      height: 0.75,
-    ).then((value) {
-      BlocProvider.of<DashboardBloc>(context)
-          .add(ShowEnableBottomScreenEvent());
-      StateContainer.of(context).isFromDetail = false;
-    });
+    // StateContainer.of(context).isFromDetail = true;
+    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    // showCustomBottomSheet(
+    //   DepositedWithdrawalInfoKoloboxWidget(
+    //     koloboxFundEnum: koloboxFundEnum,
+    //   ),
+    //   height: 0.75,
+    // ).then((value) {
+    //   BlocProvider.of<DashboardBloc>(context)
+    //       .add(ShowEnableBottomScreenEvent());
+    //   StateContainer.of(context).isFromDetail = false;
+    // });
   }
 
   Widget getRecurringDepositDetailWidget() {

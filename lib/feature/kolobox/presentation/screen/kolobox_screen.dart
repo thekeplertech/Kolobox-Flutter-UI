@@ -6,7 +6,6 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_request_model.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_bloc.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_state.dart';
 import 'package:kolobox_new_app/feature/kolofamily/presentation/kolo_family_page.dart';
@@ -26,7 +25,6 @@ import '../../../notifications/presentation/notifications_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
-import '../bloc/kolobox_event.dart';
 
 class KoloboxScreen extends BaseBlocWidget {
   const KoloboxScreen({Key? key}) : super(key: key);
@@ -187,10 +185,10 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
           StateContainer.of(context).isFromFundMyKoloBox = false;
           StateContainer.of(context).koloboxFundEnum = fundEnum;
 
-          BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
-            model: EarningsRequestModel(userProductId: fundEnum.getProductId),
-          ));
-          return;
+          // BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
+          //   model: EarningsRequestModel(userProductId: fundEnum.getProductId),
+          // ));
+          // return;
           switch (fundEnum) {
             case KoloboxFundEnum.koloFlex:
               navigatePush(context, const KoloFlexPage());

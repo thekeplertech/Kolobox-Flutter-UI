@@ -3,7 +3,7 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/active_product_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/product_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/domain/dashboard_repo.dart';
-import 'package:kolobox_new_app/feature/home/data/models/DashboardAmountModel.dart';
+import 'package:kolobox_new_app/feature/home/data/models/dashboard_amount_model.dart';
 
 import '../../../../../core/base/base_bloc.dart';
 import '../../../../../core/bloc/master_bloc.dart';

@@ -219,7 +219,7 @@ extension EnumExtensions on KoloboxFundEnum {
 }
 
 extension EnumIdExtensions on String {
-  KoloboxFundEnum getEnumFromProductId() {
+  KoloboxFundEnum? getEnumFromProductId() {
     switch (this) {
       case koloFlexProductId:
         return KoloboxFundEnum.koloFlex;
@@ -232,6 +232,6 @@ extension EnumIdExtensions on String {
       case koloGroupProductId:
         return KoloboxFundEnum.koloGroup;
     }
-    return KoloboxFundEnum.koloFlex;
+    return null;
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
@@ -7,10 +6,6 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../../dashboard/presentation/bloc/dashboard_bloc.dart';
-import '../../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../../koloflex/presentation/widgets/transactions_item_widget.dart';
-import '../../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../../widgets/home_app_bar_widget.dart';
 
 class HistoryScreen extends BaseBlocWidget {
@@ -68,22 +63,22 @@ class HistoryState extends BaseBlocWidgetState<HistoryScreen> {
                     const SizedBox(
                       height: 5,
                     ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 5,
-                        itemBuilder: (_, index) => TransactionsItemWidget(
-                              onPressed: () {
-                                BlocProvider.of<DashboardBloc>(context)
-                                    .add(HideDisableBottomScreenEvent());
-                                showCustomBottomSheet(
-                                        const DepositedWithdrawalInfoKoloboxWidget())
-                                    .then((value) {
-                                  BlocProvider.of<DashboardBloc>(context)
-                                      .add(ShowEnableBottomScreenEvent());
-                                });
-                              },
-                            )),
+                    // ListView.builder(
+                    //     shrinkWrap: true,
+                    //     physics: const NeverScrollableScrollPhysics(),
+                    //     itemCount: 5,
+                    //     itemBuilder: (_, index) => TransactionsItemWidget(
+                    //           onPressed: () {
+                    //             BlocProvider.of<DashboardBloc>(context)
+                    //                 .add(HideDisableBottomScreenEvent());
+                    //             showCustomBottomSheet(
+                    //                     const DepositedWithdrawalInfoKoloboxWidget())
+                    //                 .then((value) {
+                    //               BlocProvider.of<DashboardBloc>(context)
+                    //                   .add(ShowEnableBottomScreenEvent());
+                    //             });
+                    //           },
+                    //         )),
                     const SizedBox(
                       height: 20,
                     ),
@@ -95,22 +90,22 @@ class HistoryState extends BaseBlocWidgetState<HistoryScreen> {
                     const SizedBox(
                       height: 5,
                     ),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 5,
-                        itemBuilder: (_, index) => TransactionsItemWidget(
-                              onPressed: () {
-                                BlocProvider.of<DashboardBloc>(context)
-                                    .add(HideDisableBottomScreenEvent());
-                                showCustomBottomSheet(
-                                        const DepositedWithdrawalInfoKoloboxWidget())
-                                    .then((value) {
-                                  BlocProvider.of<DashboardBloc>(context)
-                                      .add(ShowEnableBottomScreenEvent());
-                                });
-                              },
-                            )),
+                    // ListView.builder(
+                    //     shrinkWrap: true,
+                    //     physics: const NeverScrollableScrollPhysics(),
+                    //     itemCount: 5,
+                    //     itemBuilder: (_, index) => TransactionsItemWidget(
+                    //           onPressed: () {
+                    //             BlocProvider.of<DashboardBloc>(context)
+                    //                 .add(HideDisableBottomScreenEvent());
+                    //             showCustomBottomSheet(
+                    //                     const DepositedWithdrawalInfoKoloboxWidget())
+                    //                 .then((value) {
+                    //               BlocProvider.of<DashboardBloc>(context)
+                    //                   .add(ShowEnableBottomScreenEvent());
+                    //             });
+                    //           },
+                    //         )),
                   ],
                 ),
               ),

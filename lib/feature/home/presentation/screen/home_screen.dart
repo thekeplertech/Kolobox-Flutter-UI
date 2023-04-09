@@ -26,7 +26,7 @@ import '../../../../di/injection_container.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../notifications/presentation/notifications_page.dart';
-import '../../data/models/DashboardAmountModel.dart';
+import '../../data/models/dashboard_amount_model.dart';
 import '../../data/models/wallet_data_model.dart';
 import '../widget/welcome_to_kolobox_widget.dart';
 

@@ -14,8 +14,6 @@ import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../koloflex/presentation/widgets/transactions_item_widget.dart';
-import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/kolo_info_widget.dart';
 
 class WalletScreen extends BaseBlocWidget {
@@ -171,22 +169,22 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                   const SizedBox(
                     height: 8,
                   ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 10,
-                      itemBuilder: (_, index) => TransactionsItemWidget(
-                            onPressed: () {
-                              BlocProvider.of<DashboardBloc>(context)
-                                  .add(HideDisableBottomScreenEvent());
-                              showCustomBottomSheet(
-                                      const DepositedWithdrawalInfoKoloboxWidget())
-                                  .then((value) {
-                                BlocProvider.of<DashboardBloc>(context)
-                                    .add(ShowEnableBottomScreenEvent());
-                              });
-                            },
-                          )),
+                  // ListView.builder(
+                  //     shrinkWrap: true,
+                  //     physics: const NeverScrollableScrollPhysics(),
+                  //     itemCount: 10,
+                  //     itemBuilder: (_, index) => TransactionsItemWidget(
+                  //           onPressed: () {
+                  //             BlocProvider.of<DashboardBloc>(context)
+                  //                 .add(HideDisableBottomScreenEvent());
+                  //             showCustomBottomSheet(
+                  //                     const DepositedWithdrawalInfoKoloboxWidget())
+                  //                 .then((value) {
+                  //               BlocProvider.of<DashboardBloc>(context)
+                  //                   .add(ShowEnableBottomScreenEvent());
+                  //             });
+                  //           },
+                  //         )),
                   const SizedBox(
                     height: 20,
                   ),

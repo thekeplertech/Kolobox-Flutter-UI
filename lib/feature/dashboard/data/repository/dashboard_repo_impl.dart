@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:kolobox_new_app/feature/auth/login/data/models/login_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/data_source/remote_dashboard_data_source.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/domain/dashboard_repo.dart';
 import 'package:kolobox_new_app/feature/home/data/models/wallet_data_model.dart';
 
@@ -104,12 +105,7 @@ class DashboardRepoImpl extends DashboardRepo {
       baseApiMethod(() => getTransactionsFromAPI(model));
 
   Future<Either<Failure, Success>> getTransactionsFromAPI(
-      TransactionsRequestModel model) async {
-    await remoteDashboardDataSource.getTransactions(model);
-    // ActiveProductDataModel model = ActiveProductDataModel.fromJson(
-    //     (await remoteDashboardDataSource.getEarnings(model)).data);
-    // PrefHelper helper = sl();
-    // await helper.setActiveProductDataModel(model);
-    return Right(Success(null));
-  }
+          TransactionsRequestModel model) async =>
+      Right(Success(TransactionsDataModel.fromJson(
+          (await remoteDashboardDataSource.getTransactions(model)).data)));
 }

@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/core/utils/date_helper.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 
 import '../../../../core/colors/color_list.dart';
-import '../../../../core/constants/image_constants.dart';
+import '../../../../core/constants/kolo_box_icon.dart';
 import '../../../../core/ui/style/app_style.dart';
 
 class TransactionsItemWidget extends StatelessWidget {
   final Function() onPressed;
+  final Transactions transactions;
 
   const TransactionsItemWidget({
     Key? key,
     required this.onPressed,
+    required this.transactions,
   }) : super(key: key);
 
   @override
@@ -26,14 +31,20 @@ class TransactionsItemWidget extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: true
+                      color: !isDeposit()
                           ? ColorList.redLightColor
                           : ColorList.lightBlue6Color,
                       shape: BoxShape.circle),
                   padding: const EdgeInsets.all(15),
-                  child: Image.asset(true
-                      ? imageWithdrawSecondRecentIcon
-                      : imageDepositRecentIcon),
+                  child: Icon(
+                    !isDeposit()
+                        ? KoloBoxIcons.withdrawal
+                        : KoloBoxIcons.deposit,
+                    size: 12,
+                    color: !isDeposit()
+                        ? ColorList.redDarkColor
+                        : ColorList.primaryColor,
+                  ),
                 ),
                 const SizedBox(
                   width: 8,
@@ -43,7 +54,7 @@ class TransactionsItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Deposit',
+                        isDeposit() ? 'Deposit' : 'Withdrawal',
                         style: AppStyle.b8SemiBold
                             .copyWith(color: ColorList.blackSecondColor),
                       ),
@@ -51,7 +62,8 @@ class TransactionsItemWidget extends StatelessWidget {
                         height: 4,
                       ),
                       Text(
-                        'Aug 02, 2022',
+                        DateHelper.getDateFromDateTime(
+                            transactions.createdAt, 'MMM dd, yyyy - hh:mm a'),
                         style: AppStyle.b10SemiBold
                             .copyWith(color: ColorList.greyLight2Color),
                       ),
@@ -59,7 +71,9 @@ class TransactionsItemWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '₦ 14,200.00',
+                  CurrencyTextInputFormatter.formatAmount(isDeposit()
+                      ? transactions.depositAmount
+                      : transactions.withdrawalAmount),
                   style: AppStyle.b8SemiBold
                       .copyWith(color: ColorList.blackSecondColor),
                 ),
@@ -77,4 +91,6 @@ class TransactionsItemWidget extends StatelessWidget {
       ),
     );
   }
+
+  bool isDeposit() => double.parse(transactions.depositAmount ?? '0') != 0;
 }

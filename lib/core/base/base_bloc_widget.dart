@@ -20,6 +20,9 @@ abstract class BaseBlocWidget extends BaseScreen {
 
 abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
     extends BaseScreenState<T> {
+  static final GlobalKey<ScaffoldState> globalKeyLoader =
+      GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -95,6 +98,7 @@ abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
     isDialogShowing = true;
     await loadingDialog(
       context: context,
+      key: globalKeyLoader,
     );
   }
 
@@ -105,7 +109,8 @@ abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
     if (isBottomSheet) {
       isBottomSheet = false;
     }
-    goBack(context, route: runtimeType.toString());
+    goBack(globalKeyLoader.currentContext ?? context,
+        route: runtimeType.toString());
   }
 
   goToDashboard() {

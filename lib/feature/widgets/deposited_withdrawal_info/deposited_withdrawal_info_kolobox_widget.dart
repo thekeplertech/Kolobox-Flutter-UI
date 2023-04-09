@@ -3,17 +3,20 @@ import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_screen.dart';
 import '../../../../../core/colors/color_list.dart';
+import '../../../core/utils/date_helper.dart';
 
 class DepositedWithdrawalInfoKoloboxWidget extends BaseScreen {
-  final KoloboxFundEnum? koloboxFundEnum;
+  final Transactions transactions;
 
   const DepositedWithdrawalInfoKoloboxWidget({
     Key? key,
-    this.koloboxFundEnum,
+    required this.transactions,
   }) : super(key: key);
 
   @override
@@ -31,35 +34,42 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
         children: [
           Container(
             decoration: BoxDecoration(
-              color: ColorList.lightBlue6Color,
+              color: !isDeposit()
+                  ? ColorList.redLightColor
+                  : ColorList.lightBlue6Color,
               shape: BoxShape.circle,
             ),
             padding: const EdgeInsets.all(25),
             child: Icon(
-              KoloBoxIcons.deposit,
+              !isDeposit() ? KoloBoxIcons.withdrawal : KoloBoxIcons.deposit,
               size: 20,
-              color: ColorList.primaryColor,
+              color: !isDeposit()
+                  ? ColorList.redDarkColor
+                  : ColorList.primaryColor,
             ),
           ),
           const SizedBox(
             height: 20,
           ),
           Text(
-            'Deposited',
+            isDeposit() ? 'Deposited' : 'Withdrawal',
             style: AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
           ),
           const SizedBox(
             height: 15,
           ),
           Text(
-            '₦ 14,200.00',
+            CurrencyTextInputFormatter.formatAmount(isDeposit()
+                ? widget.transactions.depositAmount
+                : widget.transactions.withdrawalAmount),
             style: AppStyle.b5SemiBold.copyWith(color: ColorList.primaryColor),
           ),
           const SizedBox(
             height: 5,
           ),
           Text(
-            'Aug 02, 2022 - 11:34 PM',
+            DateHelper.getDateFromDateTime(
+                widget.transactions.createdAt, 'MMM dd, yyyy - hh:mm a'),
             style:
                 AppStyle.b9SemiBold.copyWith(color: ColorList.greyLight2Color),
           ),
@@ -82,16 +92,14 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
             height: 30,
           ),
           Text(
-            'Deposit destination',
+            '${isDeposit() ? 'Deposit' : 'Withdrawal'} destination',
             style:
                 AppStyle.b8SemiBold.copyWith(color: ColorList.blackSecondColor),
           ),
           const SizedBox(
             height: 8,
           ),
-          if (widget.koloboxFundEnum != null) ...[
-            getOptionWidget(),
-          ],
+          getOptionWidget(),
           const SizedBox(
             height: 20,
           ),
@@ -102,7 +110,7 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
             overlayColor: ColorList.blueColor,
             borderRadius: 32,
             onPressed: () {
-              goBack(context);
+              comingSoon();
             },
           ),
           const SizedBox(
@@ -124,6 +132,8 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
   }
 
   Widget getOptionWidget() {
+    KoloboxFundEnum? koloboxFundEnum =
+        widget.transactions.productId?.getEnumFromProductId();
     return GestureDetector(
       onTap: () async {
         // switch (fundEnum) {
@@ -144,7 +154,7 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
       },
       child: Container(
         decoration: BoxDecoration(
-          color: widget.koloboxFundEnum!.getFundBackColorValue,
+          color: koloboxFundEnum!.getFundBackColorValue,
           borderRadius: BorderRadius.circular(14),
         ),
         padding: const EdgeInsets.all(24),
@@ -152,20 +162,20 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
           children: [
             Expanded(
               child: Text(
-                widget.koloboxFundEnum!.getFundValue,
-                style: AppStyle.b3Bold.copyWith(
-                    color: widget.koloboxFundEnum!.getFundTextColorValue),
+                koloboxFundEnum.getFundValue,
+                style: AppStyle.b3Bold
+                    .copyWith(color: koloboxFundEnum.getFundTextColorValue),
               ),
             ),
-            widget.koloboxFundEnum!.isPhotoEnabledAsIcon
+            koloboxFundEnum.isPhotoEnabledAsIcon
                 ? Icon(
-                    widget.koloboxFundEnum!.getFundIconValue,
+                    koloboxFundEnum.getFundIconValue,
                     size: 48,
-                    color: widget.koloboxFundEnum!.getFundIconColorValue
-                        .withOpacity(0.4),
+                    color:
+                        koloboxFundEnum.getFundIconColorValue.withOpacity(0.4),
                   )
                 : Image.asset(
-                    widget.koloboxFundEnum!.getFundImageValue,
+                    koloboxFundEnum.getFundImageValue,
                     width: 48,
                     height: 48,
                   ),
@@ -174,4 +184,7 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
       ),
     );
   }
+
+  bool isDeposit() =>
+      double.parse(widget.transactions.depositAmount ?? '0') != 0;
 }

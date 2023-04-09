@@ -1,4 +1,4 @@
-import 'package:kolobox_new_app/feature/home/data/models/DashboardAmountModel.dart';
+import 'package:kolobox_new_app/feature/home/data/models/dashboard_amount_model.dart';
 
 import '../../data/models/wallet_data_model.dart';
 

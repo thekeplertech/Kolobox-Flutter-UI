@@ -9,6 +9,10 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/dashboard_tab_mode
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_state.dart';
 import 'package:kolobox_new_app/feature/home/presentation/bloc/home_bloc.dart';
+import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_bloc.dart';
+import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_event.dart';
+import 'package:kolobox_new_app/feature/wallet/presentation/bloc/wallet_bloc.dart';
+import 'package:kolobox_new_app/feature/wallet/presentation/bloc/wallet_event.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -269,10 +273,10 @@ class DashboardScreenState extends BaseBlocWidgetState<DashboardScreen>
           BlocProvider.of<HomeBloc>(context).add(ClickOnHomeEvent());
           break;
         case DashboardTabEnum.kolobox:
-          // BlocProvider.of<MyTreeBloc>(context).add(ClickOnMyTreeEvent());
+          BlocProvider.of<KoloboxBloc>(context).add(ClickOnKoloboxEvent());
           break;
         case DashboardTabEnum.wallet:
-          // BlocProvider.of<MapBloc>(context).add(ClickOnMapEvent());
+          BlocProvider.of<WalletBloc>(context).add(ClickOnWalletEvent());
           break;
         case DashboardTabEnum.account:
           // BlocProvider.of<NotificationBloc>(context)

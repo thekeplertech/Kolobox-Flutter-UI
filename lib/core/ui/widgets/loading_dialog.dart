@@ -4,6 +4,7 @@ import '../../colors/color_list.dart';
 
 Future<Widget?> loadingDialog({
   required BuildContext context,
+  required GlobalKey<ScaffoldState> key,
 }) =>
     showDialog(
       context: context,
@@ -11,17 +12,18 @@ Future<Widget?> loadingDialog({
       builder: (_) => WillPopScope(
         onWillPop: () async => false,
         child: SimpleDialog(
+          key: key,
           elevation: 0.0,
           backgroundColor: Colors.transparent,
           children: <Widget>[
             Column(
               children: <Widget>[
                 Container(
-                  decoration: ShapeDecoration(
+                  decoration: const ShapeDecoration(
                     color: ColorList.white,
                     shape: RoundedRectangleBorder(
                       side: BorderSide(color: ColorList.white),
-                      borderRadius: const BorderRadius.all(
+                      borderRadius: BorderRadius.all(
                         Radius.circular(20.0),
                       ),
                     ),
@@ -44,9 +46,9 @@ Future<Widget?> loadingDialog({
     );
 
 CircularProgressIndicator getCircularProgressIndicator() =>
-    CircularProgressIndicator(
+    const CircularProgressIndicator(
       backgroundColor: ColorList.white,
-      valueColor: const AlwaysStoppedAnimation<Color>(
+      valueColor: AlwaysStoppedAnimation<Color>(
         ColorList.primaryMaterialColor,
       ),
     );
