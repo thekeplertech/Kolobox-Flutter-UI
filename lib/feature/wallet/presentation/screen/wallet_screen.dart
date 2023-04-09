@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
 import 'package:kolobox_new_app/feature/wallet/presentation/bloc/wallet_bloc.dart';
 import 'package:kolobox_new_app/feature/wallet/presentation/bloc/wallet_event.dart';
 import 'package:kolobox_new_app/feature/wallet/presentation/bloc/wallet_state.dart';
@@ -14,6 +17,7 @@ import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../../../home/data/models/wallet_data_model.dart';
 import '../../../widgets/kolo_info_widget.dart';
 
 class WalletScreen extends BaseBlocWidget {
@@ -24,6 +28,12 @@ class WalletScreen extends BaseBlocWidget {
 }
 
 class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
+  bool isEmpty = true;
+  StreamController<bool> emptyStreamController =
+      StreamController<bool>.broadcast();
+
+  WalletDataModel? walletDataModel;
+
   @override
   void initState() {
     super.initState();
@@ -42,11 +52,19 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
               listener: (_, state) {
                 if (state is ClickOnWalletState) {
                   callWalletHistory();
-                } else if (state is GetWalletHistoryState) {}
+                } else if (state is GetWalletHistoryState) {
+                  walletDataModel = state.model;
+                  isEmpty = walletDataModel?.walletHistory?.isEmpty ?? true;
+                  emptyStreamController.add(isEmpty);
+                }
               },
               child: getChild(),
             ),
-            getBackground(),
+            StreamBuilder<bool>(
+                initialData: isEmpty,
+                stream: emptyStreamController.stream,
+                builder: (_, __) =>
+                    isEmpty ? const SizedBox() : getBackground()),
           ],
         ),
       );
@@ -150,11 +168,19 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          '₦ 34,800.00',
-                          style: AppStyle.b3SemiBold
-                              .copyWith(color: ColorList.white),
-                        ),
+                        StreamBuilder<bool>(
+                            stream: emptyStreamController.stream,
+                            builder: (context, snapshot) => Text(
+                                  CurrencyTextInputFormatter.formatAmount(
+                                      walletDataModel
+                                              ?.userWallet?.accountBalance ??
+                                          prefHelper
+                                              ?.getProfileDataModel()
+                                              .wallet
+                                              ?.accountBalance),
+                                  style: AppStyle.b3SemiBold
+                                      .copyWith(color: ColorList.white),
+                                )),
                       ],
                     ),
                   ),
@@ -169,35 +195,28 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                   const SizedBox(
                     height: 8,
                   ),
-                  // ListView.builder(
-                  //     shrinkWrap: true,
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     itemCount: 10,
-                  //     itemBuilder: (_, index) => TransactionsItemWidget(
-                  //           onPressed: () {
-                  //             BlocProvider.of<DashboardBloc>(context)
-                  //                 .add(HideDisableBottomScreenEvent());
-                  //             showCustomBottomSheet(
-                  //                     const DepositedWithdrawalInfoKoloboxWidget())
-                  //                 .then((value) {
-                  //               BlocProvider.of<DashboardBloc>(context)
-                  //                   .add(ShowEnableBottomScreenEvent());
-                  //             });
-                  //           },
-                  //         )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Button(
-                    'History',
-                    backgroundColor: ColorList.greyLight10Color,
-                    textColor: ColorList.blackSecondColor,
-                    overlayColor: ColorList.blueColor,
-                    borderRadius: 32,
-                    onPressed: () {
-                      comingSoon();
-                    },
-                  ),
+                  StreamBuilder<bool>(
+                      initialData: isEmpty,
+                      stream: emptyStreamController.stream,
+                      builder: (_, __) {
+                        return isEmpty
+                            ? Center(child: getEmptyWidget())
+                            : getDataWidget();
+                      }),
+
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                  // Button(
+                  //   'History',
+                  //   backgroundColor: ColorList.greyLight10Color,
+                  //   textColor: ColorList.blackSecondColor,
+                  //   overlayColor: ColorList.blueColor,
+                  //   borderRadius: 32,
+                  //   onPressed: () {
+                  //     comingSoon();
+                  //   },
+                  // ),
                   const SizedBox(
                     height: dashboardTabHeight + 20,
                   ),
@@ -210,8 +229,60 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
     );
   }
 
+  Widget getDataWidget() => Text('Data');
+
+  /*ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 10,
+      itemBuilder: (_, index) => TransactionsItemWidget(
+            onPressed: () {
+              BlocProvider.of<DashboardBloc>(context)
+                  .add(HideDisableBottomScreenEvent());
+              showCustomBottomSheet(
+                      const DepositedWithdrawalInfoKoloboxWidget())
+                  .then((value) {
+                BlocProvider.of<DashboardBloc>(context)
+                    .add(ShowEnableBottomScreenEvent());
+              });
+            },
+          ));*/
+
+  Widget getEmptyWidget() => Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 120,
+          ),
+          Image.asset(imageWalletSuccessIconSelected),
+          const SizedBox(
+            height: 10,
+          ),
+          Text('You have not performed any transaction',
+              style:
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackThirdColor)),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: 140,
+            child: Button(
+              'Deposit',
+              backgroundColor: ColorList.lightBlue3Color,
+              textColor: ColorList.primaryColor,
+              overlayColor: ColorList.blueColor,
+              borderRadius: 24,
+              verticalPadding: 10,
+              onPressed: () {},
+              postIcon: imageDownload,
+            ),
+          ),
+        ],
+      );
+
   @override
   void dispose() {
     super.dispose();
+    emptyStreamController.close();
   }
 }

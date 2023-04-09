@@ -37,7 +37,7 @@ class WalletBloc extends BaseBloc<WalletEvent, WalletState> {
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(GetWalletHistoryState(/*model: r.model*/));
+      emit(GetWalletHistoryState(model: r.model));
     });
   }
 }
