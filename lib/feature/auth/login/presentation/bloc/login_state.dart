@@ -6,8 +6,9 @@ class InitialState extends LoginState {}
 
 class CallLoginState extends LoginState {
   final LoginResponseModel model;
+  final bool isPinSet;
 
-  CallLoginState({required this.model});
+  CallLoginState({required this.model, this.isPinSet = false});
 }
 
 class CreatePinState extends LoginState {

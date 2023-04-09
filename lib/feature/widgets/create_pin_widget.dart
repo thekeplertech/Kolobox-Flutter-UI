@@ -13,10 +13,12 @@ import '../../routes/routes.dart';
 
 class CreatePinWidget extends BaseScreen {
   final Function(String) onBack;
+  final bool isConfirmPin;
 
   const CreatePinWidget({
     Key? key,
     required this.onBack,
+    this.isConfirmPin = false,
   }) : super(key: key);
 
   @override
@@ -47,7 +49,9 @@ class _CreatePinWidgetState extends BaseScreenState<CreatePinWidget> {
               height: 35,
             ),
             Text(
-              'Transaction Pin Setup',
+              widget.isConfirmPin
+                  ? 'Confirm Transaction Pin Setup'
+                  : 'Transaction Pin Setup',
               style:
                   AppStyle.b5Bold.copyWith(color: ColorList.blackSecondColor),
             ),
@@ -55,7 +59,9 @@ class _CreatePinWidgetState extends BaseScreenState<CreatePinWidget> {
               height: 6,
             ),
             Text(
-              'Create a Pin to secure all your transactions',
+              widget.isConfirmPin
+                  ? 'Enter again to confirm your transaction Pin'
+                  : 'Create a Pin to secure all your transactions',
               style:
                   AppStyle.b9Medium.copyWith(color: ColorList.blackThirdColor),
             ),
@@ -92,7 +98,7 @@ class _CreatePinWidgetState extends BaseScreenState<CreatePinWidget> {
               height: 35,
             ),
             Button(
-              'Next',
+              widget.isConfirmPin ? 'Set PIN' : 'Next',
               backgroundColor: ColorList.primaryColor,
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,

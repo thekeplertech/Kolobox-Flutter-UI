@@ -76,6 +76,14 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
   @override
   void initState() {
     super.initState();
+    firstNameTextEditingController.text = 'Parth';
+    lastNameTextEditingController.text = 'Suthar';
+    emailAddressTextEditingController.text = 'parth12345678901@mailinator.com';
+    phoneNumberTextEditingController.text = '95584947891';
+    nextOfKinTextEditingController.text = 'First Next of kin';
+    occupationTextEditingController.text = 'First Occupation';
+    passwordTextEditingController.text = 'kolobox@123';
+    cPasswordTextEditingController.text = 'kolobox@123';
   }
 
   @override
@@ -831,32 +839,35 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
         const SizedBox(
           height: 30,
         ),
-        PinCodeTextField(
-          appContext: context,
-          controller: otpTextEditingController,
-          length: 4,
-          pinTheme: PinTheme(
-            shape: PinCodeFieldShape.box,
-            borderRadius: BorderRadius.circular(12),
-            fieldHeight: 45,
-            fieldWidth: 45,
-            borderWidth: 1,
-            inactiveColor: ColorList.greyLightColor,
-            activeColor: ColorList.greyLightColor,
-            selectedColor: ColorList.greyLightColor,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: PinCodeTextField(
+            appContext: context,
+            controller: otpTextEditingController,
+            length: 4,
+            pinTheme: PinTheme(
+              shape: PinCodeFieldShape.box,
+              borderRadius: BorderRadius.circular(12),
+              fieldHeight: 45,
+              fieldWidth: 45,
+              borderWidth: 1,
+              inactiveColor: ColorList.greyLightColor,
+              activeColor: ColorList.greyLightColor,
+              selectedColor: ColorList.greyLightColor,
+            ),
+            textStyle: TextStyle(
+              color: ColorList.blackThirdColor,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+            ],
+            onChanged: (value) {
+              print("asd fa fds $value");
+            },
           ),
-          textStyle: TextStyle(
-            color: ColorList.blackThirdColor,
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ),
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          onChanged: (value) {
-            print("asd fa fds $value");
-          },
         ),
         const SizedBox(
           height: 25,

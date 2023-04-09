@@ -9,15 +9,16 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/custom_text_field.dart';
 import 'package:kolobox_new_app/core/utils/utils.dart';
-import 'package:kolobox_new_app/feature/auth/login/data/models/create_pin_request_model.dart';
 import 'package:kolobox_new_app/feature/auth/login/data/models/login_response_model.dart';
 import 'package:kolobox_new_app/feature/auth/login/presentation/bloc/login_bloc.dart';
+import 'package:kolobox_new_app/feature/widgets/pin_created_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../../core/ui/widgets/toast_widget.dart';
 import '../../../../widgets/create_pin_widget.dart';
+import '../../data/models/create_pin_request_model.dart';
 import '../../data/models/login_request_model.dart';
 import '../bloc/login_event.dart';
 import '../bloc/login_state.dart';
@@ -62,21 +63,21 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
         body: BlocListener<LoginBloc, LoginState>(
           listener: (_, state) {
             if (state is CallLoginState) {
-              Future.delayed(const Duration(milliseconds: 200)).then((value) {
-                Utils.showToast(
-                    context,
-                    ToastWidget(
-                      'Login successful',
-                      closeWidget: Image.asset(
-                        imageClose,
-                        color: ColorList.white,
-                      ),
-                    ));
-
-                goToDashboard();
+              Future.delayed(const Duration(milliseconds: 200), () {
+                if (state.isPinSet) {
+                  showCustomBottomSheet(PinCreatedWidget(
+                    onBack: () {
+                      Future.delayed(const Duration(milliseconds: 200), () {
+                        saveDataAndGoToDashboard();
+                      });
+                    },
+                  ));
+                } else {
+                  saveDataAndGoToDashboard();
+                }
               });
             } else if (state is CreatePinState) {
-              Future.delayed(const Duration(milliseconds: 300), () {
+              Future.delayed(const Duration(milliseconds: 200), () {
                 showDialogForCreatePin(state.model);
               });
             }
@@ -193,9 +194,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                     Button(
                       'Login',
                       borderRadius: 32,
-                      onPressed: () {
-                        onClickLogin();
-                      },
+                      onPressed: () => onClickLogin(),
                     ),
                     const SizedBox(
                       height: 30,
@@ -238,11 +237,35 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
 
   void showDialogForCreatePin(LoginResponseModel model) {
     showCustomBottomSheet(CreatePinWidget(
-      onBack: (value) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          BlocProvider.of<LoginBloc>(context).add(CallCreatePinEvent(
-            loginResponseModel: model,
-            createPinRequestModel: CreatePinRequestModel(pin: value),
+      onBack: (value1) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          showCustomBottomSheet(CreatePinWidget(
+            isConfirmPin: true,
+            onBack: (value2) {
+              Future.delayed(const Duration(milliseconds: 200), () {
+                if (value1 == value2) {
+                  BlocProvider.of<LoginBloc>(context).add(CallCreatePinEvent(
+                    loginResponseModel: model,
+                    createPinRequestModel: CreatePinRequestModel(pin: value2),
+                  ));
+                } else {
+                  Utils.showToast(
+                      context,
+                      ToastWidget(
+                        'Create PIN and confirm PIN does not match.',
+                        borderColor: ColorList.redDarkColor,
+                        backgroundColor: ColorList.white,
+                        textColor: ColorList.black,
+                        messageIcon: imageCloseRed,
+                        closeWidget: Image.asset(
+                          imageClose,
+                          color: ColorList.black,
+                        ),
+                      ));
+                  showDialogForCreatePin(model);
+                }
+              });
+            },
           ));
         });
       },
@@ -304,6 +327,20 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
       username: emailTextEditingController.text,
       password: passwordTextEditingController.text,
     )));
+  }
+
+  void saveDataAndGoToDashboard() {
+    Utils.showToast(
+        context,
+        ToastWidget(
+          'Login successful',
+          closeWidget: Image.asset(
+            imageClose,
+            color: ColorList.white,
+          ),
+        ));
+
+    goToDashboard();
   }
 
   @override

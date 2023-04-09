@@ -60,7 +60,7 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(CallLoginState(model: event.loginResponseModel));
+      emit(CallLoginState(model: event.loginResponseModel, isPinSet: true));
     });
   }
 }
