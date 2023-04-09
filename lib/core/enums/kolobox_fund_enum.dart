@@ -217,3 +217,21 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 }
+
+extension EnumIdExtensions on String {
+  KoloboxFundEnum getEnumFromProductId() {
+    switch (this) {
+      case koloFlexProductId:
+        return KoloboxFundEnum.koloFlex;
+      case koloTargetProductId:
+        return KoloboxFundEnum.koloTarget;
+      case koloTargetPlusProductId:
+        return KoloboxFundEnum.koloTargetPlus;
+      case koloFamilyProductId:
+        return KoloboxFundEnum.koloFamily;
+      case koloGroupProductId:
+        return KoloboxFundEnum.koloGroup;
+    }
+    return KoloboxFundEnum.koloFlex;
+  }
+}
