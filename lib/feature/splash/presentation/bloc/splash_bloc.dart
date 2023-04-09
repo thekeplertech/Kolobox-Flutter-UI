@@ -1,7 +1,7 @@
 import '../../../../core/base/base_bloc.dart';
 import '../../../../core/bloc/master_bloc.dart';
 import '../../../../core/preference/pref_helper.dart';
-import '../../../../di/injection_container/routes.dart';
+import '../../../../di/injection_container.dart';
 import '../../domain/splash_repo.dart';
 import 'splash_event.dart';
 import 'splash_state.dart';
