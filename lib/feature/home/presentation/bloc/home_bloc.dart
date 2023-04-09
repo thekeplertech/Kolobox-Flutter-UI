@@ -16,8 +16,15 @@ import 'home_state.dart';
 class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   DashboardRepo dashboardRepo = sl();
   PrefHelper helper = sl();
+  bool isScreenLoaded = false;
 
   HomeBloc(MasterBloc baseBlocObject) : super(baseBlocObject, InitialState()) {
+    on<ClickOnHomeEvent>((event, emit) async {
+      if (!isScreenLoaded) {
+        isScreenLoaded = true;
+        emit(ClickOnHomeState());
+      }
+    });
     on<CallWalletEvent>((event, emit) async {
       await callWalletEvent(event, emit);
     });
@@ -26,9 +33,6 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     });
     on<CallActiveProductEvent>((event, emit) async {
       await callActiveProductEvent(event, emit);
-    });
-    on<ClickOnHomeEvent>((event, emit) async {
-      emit(ClickOnHomeState());
     });
   }
 

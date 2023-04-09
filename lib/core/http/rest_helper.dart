@@ -49,9 +49,6 @@ abstract class RestHelper {
   @GET(ApiUrls.getActiveProductAPI)
   Future<ApiResponse> getActiveProducts();
 
-  @GET(ApiUrls.getWalletAPI)
-  Future<ApiResponse> getWallet();
-
   @POST(ApiUrls.getEarningsAPI)
   Future<ApiResponse> getEarnings(@Body() EarningsRequestModel model);
 

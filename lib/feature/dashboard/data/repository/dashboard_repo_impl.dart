@@ -10,8 +10,10 @@ import '../../../../../core/models/success.dart';
 import '../../../../../di/injection_container.dart';
 import '../../../../core/preference/pref_helper.dart';
 import '../models/active_product_data_model.dart';
+import '../models/earnings_request_model.dart';
 import '../models/product_data_model.dart';
 import '../models/profile_data_model.dart';
+import '../models/transactions_request_model.dart';
 
 class DashboardRepoImpl extends DashboardRepo {
   RemoteDashboardDataSource remoteDashboardDataSource = sl();
@@ -80,5 +82,34 @@ class DashboardRepoImpl extends DashboardRepo {
     PrefHelper helper = sl();
     await helper.setActiveProductDataModel(model);
     return Right(Success(model));
+  }
+
+  @override
+  Future<Either<Failure, Success>> getEarnings(EarningsRequestModel model) =>
+      baseApiMethod(() => getEarningsFromAPI(model));
+
+  Future<Either<Failure, Success>> getEarningsFromAPI(
+      EarningsRequestModel model) async {
+    await remoteDashboardDataSource.getEarnings(model);
+    // ActiveProductDataModel model = ActiveProductDataModel.fromJson(
+    //     (await remoteDashboardDataSource.getEarnings(model)).data);
+    // PrefHelper helper = sl();
+    // await helper.setActiveProductDataModel(model);
+    return Right(Success(null));
+  }
+
+  @override
+  Future<Either<Failure, Success>> getTransactions(
+          TransactionsRequestModel model) =>
+      baseApiMethod(() => getTransactionsFromAPI(model));
+
+  Future<Either<Failure, Success>> getTransactionsFromAPI(
+      TransactionsRequestModel model) async {
+    await remoteDashboardDataSource.getTransactions(model);
+    // ActiveProductDataModel model = ActiveProductDataModel.fromJson(
+    //     (await remoteDashboardDataSource.getEarnings(model)).data);
+    // PrefHelper helper = sl();
+    // await helper.setActiveProductDataModel(model);
+    return Right(Success(null));
   }
 }

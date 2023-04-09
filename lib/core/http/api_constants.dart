@@ -12,7 +12,6 @@ class ApiUrls {
   static const String getProfileAPI = "user/me/profile";
   static const String getProductAPI = "product";
   static const String getActiveProductAPI = "user/me/active/products";
-  static const String getWalletAPI = "user/me/wallet";
   static const String getEarningsAPI = "user/me/product/earnings";
   static const String getTransactionsAPI = "user/me/product/transactions";
 }

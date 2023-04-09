@@ -12,8 +12,6 @@ abstract class RemoteDashboardDataSource {
 
   Future<ApiResponse> getActiveProducts();
 
-  Future<ApiResponse> getWallet();
-
   Future<ApiResponse> getEarnings(EarningsRequestModel model);
 
   Future<ApiResponse> getTransactions(TransactionsRequestModel model);
