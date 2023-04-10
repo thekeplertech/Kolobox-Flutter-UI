@@ -67,6 +67,8 @@ class StateContainerState extends State<StateContainer> {
     _amount =
         amount?.replaceAll(nigerianCurrency, '').replaceAll(',', '').trim();
     _paymentGatewayEnum = paymentEnum;
-    _popUntil = popUntil;
+    if (popUntil != null) {
+      _popUntil = popUntil;
+    }
   }
 }

@@ -19,8 +19,9 @@ import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/data/models/transactions_data_model.dart';
-import '../../../widgets/deposit_your_kolobox_widget.dart';
+import '../../../widgets/deposit/deposit_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../../../widgets/inherited_state_container.dart';
 import '../bloc/kolo_flex_event.dart';
 import '../bloc/kolo_flex_state.dart';
 import '../widgets/account_item_widget.dart';
@@ -256,12 +257,18 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
       );
 
   void onClickDeposit() {
+    StateContainer.of(context).openFundMyKoloBox(
+        fundEnum: KoloboxFundEnum.koloFlex,
+        popUntil: KoloboxFundEnum.koloFlex.getFundPageValue(false));
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
       isEmpty = false;
       emptyStreamController.add(isEmpty);
+      Future.delayed(const Duration(milliseconds: 300), () {
+        callTransactions();
+      });
     });
   }
 

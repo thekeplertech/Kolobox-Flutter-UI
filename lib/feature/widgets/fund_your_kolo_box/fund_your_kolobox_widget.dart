@@ -6,7 +6,7 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
-import '../deposit_your_kolobox_widget.dart';
+import '../deposit/deposit_your_kolobox_widget.dart';
 import '../inherited_state_container.dart';
 
 class FundYourKoloboxWidget extends BaseScreen {

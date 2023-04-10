@@ -6,16 +6,16 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
-import 'package:kolobox_new_app/feature/widgets/deposit_summary_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/deposit/deposit_summary_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/product_item_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
-import '../../../../core/base/base_screen.dart';
-import '../../../../core/colors/color_list.dart';
-import '../../core/ui/widgets/custom_text_field.dart';
-import '../../core/ui/widgets/toast_widget.dart';
-import '../../core/utils/utils.dart';
+import '../../../../../core/base/base_screen.dart';
+import '../../../../../core/colors/color_list.dart';
+import '../../../core/ui/widgets/custom_text_field.dart';
+import '../../../core/ui/widgets/toast_widget.dart';
+import '../../../core/utils/utils.dart';
 
 class DepositYourKoloboxWidget extends BaseScreen {
   const DepositYourKoloboxWidget({
