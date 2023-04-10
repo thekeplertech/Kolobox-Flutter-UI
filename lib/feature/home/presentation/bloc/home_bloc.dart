@@ -16,12 +16,11 @@ import 'home_state.dart';
 class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   DashboardRepo dashboardRepo = sl();
   PrefHelper helper = sl();
-  bool isScreenLoaded = false;
 
   HomeBloc(MasterBloc baseBlocObject) : super(baseBlocObject, InitialState()) {
     on<ClickOnHomeEvent>((event, emit) async {
-      if (!isScreenLoaded) {
-        isScreenLoaded = true;
+      if (!helper.isHomeApiCall()) {
+        await helper.setHomeApiCall(true);
         emit(ClickOnHomeState());
       }
     });
@@ -30,9 +29,6 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     });
     on<CallProductEvent>((event, emit) async {
       await callProductEvent(event, emit);
-    });
-    on<CallActiveProductEvent>((event, emit) async {
-      await callActiveProductEvent(event, emit);
     });
   }
 
@@ -88,20 +84,6 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
       }
 
       emit(CallProductState(models: models));
-    });
-  }
-
-  Future<void> callActiveProductEvent(
-      CallActiveProductEvent event, Emitter emit) async {
-    baseBlocObject!.add(LoadApiEvent());
-    final result = await dashboardRepo.getActiveProducts();
-
-    result.fold((l) {
-      baseBlocObject!.objectModel = l;
-      baseBlocObject!.add(ErrorApiEvent());
-    }, (r) {
-      baseBlocObject!.add(LoadedApiEvent());
-      emit(CallActiveProductState(/*model: r.model*/));
     });
   }
 }

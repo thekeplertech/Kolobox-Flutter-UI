@@ -19,5 +19,3 @@ class CallProductState extends HomeState {
 
   CallProductState({required this.models});
 }
-
-class CallActiveProductState extends HomeState {}

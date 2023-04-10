@@ -12,13 +12,12 @@ import 'kolobox_state.dart';
 class KoloboxBloc extends BaseBloc<KoloboxEvent, KoloboxState> {
   DashboardRepo dashboardRepo = sl();
   PrefHelper helper = sl();
-  bool isScreenLoaded = false;
 
   KoloboxBloc(MasterBloc baseBlocObject)
       : super(baseBlocObject, InitialState()) {
     on<ClickOnKoloboxEvent>((event, emit) async {
-      if (!isScreenLoaded) {
-        isScreenLoaded = true;
+      if (!helper.isKoloboxApiCall()) {
+        await helper.setKoloboxApiCall(true);
         emit(ClickOnKoloboxState());
       }
     });

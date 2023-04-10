@@ -25,7 +25,7 @@ class LoginRepoImpl extends LoginRepo {
     ApiResponse apiResponse = await remoteLoginDataSource.login(model);
     LoginResponseModel responseModel =
         LoginResponseModel.fromJson(apiResponse.data);
-    responseModel.isLoggedIn = false;
+    responseModel.isLoggedIn = responseModel.isPin ?? false;
     PrefHelper helper = sl();
     await helper.setLoginResponseModel(responseModel);
     return Right(Success(responseModel));

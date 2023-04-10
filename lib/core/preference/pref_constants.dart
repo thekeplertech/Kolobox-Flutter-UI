@@ -20,3 +20,7 @@ const String keyToken = "KEY_TOKEN";
 const String keyProfile = "KEY_PROFILE";
 const String keyProduct = "KEY_PRODUCT";
 const String keyActiveProduct = "KEY_ACTIVE_PRODUCT";
+const String keyHomeApiCall = "KEY_HOME_API_CALL";
+const String keyKoloBoxApiCall = "KEY_KOLO_BOX_API_CALL";
+const String keyWalletApiCall = "KEY_WALLET_API_CALL";
+const String keyAccountApiCall = "KEY_ACCOUNT_API_CALL";

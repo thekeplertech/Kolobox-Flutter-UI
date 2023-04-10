@@ -102,4 +102,32 @@ class PrefHelperImpl implements PrefHelper {
 
   @override
   Future<bool> clear() async => await Prefs.clear();
+
+  @override
+  bool isHomeApiCall() => Prefs.getBool(keyHomeApiCall, false);
+
+  @override
+  Future<void> setHomeApiCall(bool call) async =>
+      await Prefs.setBool(keyHomeApiCall, call);
+
+  @override
+  bool isKoloboxApiCall() => Prefs.getBool(keyKoloBoxApiCall, false);
+
+  @override
+  Future<void> setKoloboxApiCall(bool call) async =>
+      await Prefs.setBool(keyKoloBoxApiCall, call);
+
+  @override
+  bool isWalletApiCall() => Prefs.getBool(keyWalletApiCall, false);
+
+  @override
+  Future<void> setWalletApiCall(bool call) async =>
+      await Prefs.setBool(keyWalletApiCall, call);
+
+  @override
+  bool isAccountApiCall() => Prefs.getBool(keyAccountApiCall, false);
+
+  @override
+  Future<void> setAccountApiCall(bool call) async =>
+      await Prefs.setBool(keyAccountApiCall, call);
 }

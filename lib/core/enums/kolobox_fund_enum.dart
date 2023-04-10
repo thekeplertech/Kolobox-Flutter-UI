@@ -189,6 +189,20 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
+  String getMinimumAmountValue() {
+    PrefHelper helper = sl();
+    ProductDataModel? active = helper.getProductDataModel();
+
+    int? index =
+        active?.products?.indexWhere((element) => element.id == getProductId);
+
+    if (index != null && index != -1) {
+      return active?.products?[index].minimumAmount ?? '0.0';
+    } else {
+      return '0.0';
+    }
+  }
+
   bool isInActiveProduct() {
     PrefHelper helper = sl();
     ActiveProductDataModel? active = helper.getActiveProductDataModel();

@@ -286,9 +286,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
               overlayColor: ColorList.blueColor,
               borderRadius: 24,
               verticalPadding: 10,
-              onPressed: () {
-                onClickDeposit();
-              },
+              onPressed: () => onClickDeposit(),
               postIcon: imageDownload,
             ),
           ),
@@ -418,6 +416,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
   }
 
   Widget getAccountWidget() {
+    KoloboxFundEnum.koloFlex;
     return Column(
       children: [
         Align(

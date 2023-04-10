@@ -52,7 +52,13 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
 
   UserWallet? userWallet;
   List<TransactionHistory> walletHistory = [];
-  List<DashboardAmountModel> dashboardAmountModels = [];
+  List<DashboardAmountModel> dashboardAmountModels = [
+    DashboardAmountModel(
+      title: 'Total Assets',
+      amount: '0.0',
+      backColor: ColorList.primaryColor,
+    )
+  ];
 
   @override
   void initState() {
@@ -301,7 +307,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 24,
                   verticalPadding: 10,
-                  onPressed: () => onClickDeposit(),
+                  onPressed: () => comingSoon(),
                   postIcon: imageDownload,
                 ),
               ),
@@ -388,28 +394,6 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
       }
     });
   }
-
-  // AppBar getAppBar() => AppBar(
-  //       backgroundColor: ColorList.transparentColor,
-  //       bottomOpacity: 0,
-  //       elevation: 0,
-  //       systemOverlayStyle: const SystemUiOverlayStyle(
-  //         statusBarColor: ColorList.white,
-  //         statusBarIconBrightness: Brightness.dark,
-  //         statusBarBrightness: Brightness.light,
-  //       ),
-  //       title: StreamBuilder<bool>(
-  //         stream: walletBalanceStreamController.stream,
-  //         builder: (context, snapshot) => HomeAppBarWidget(
-  //             amount: userWallet?.accountBalance?.getAmount() ?? '0.00'),
-  //       ),
-  //       leading: Image.asset(imageDashboardIcon),
-  //       actions: [
-  //         Image.asset(imageNotification),
-  //       ],
-  //       centerTitle: false,
-  //       titleSpacing: 15.0,
-  //     );
 
   @override
   void dispose() {

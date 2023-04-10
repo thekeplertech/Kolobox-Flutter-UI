@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
@@ -230,11 +231,36 @@ class _DepositYourKoloboxWidgetState
   }
 
   onClickNext() {
+    print(double.parse(getOnlyAmount(amountEditingController.text)));
+    print(double.parse(
+        StateContainer.of(context).getKoloBoxEnum()!.getMinimumAmountValue()));
+    print((double.parse(getOnlyAmount(amountEditingController.text)) <
+        double.parse(StateContainer.of(context)
+            .getKoloBoxEnum()!
+            .getMinimumAmountValue())));
     if (amountEditingController.text.isEmpty) {
       Utils.showToast(
           context,
           ToastWidget(
             'Enter amount',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    } else if (double.parse(getOnlyAmount(amountEditingController.text)) <
+        double.parse(StateContainer.of(context)
+            .getKoloBoxEnum()!
+            .getMinimumAmountValue())) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Amount is less than minimum amount required for this product',
             borderColor: ColorList.redDarkColor,
             backgroundColor: ColorList.white,
             textColor: ColorList.black,

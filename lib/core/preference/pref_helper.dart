@@ -28,4 +28,20 @@ abstract class PrefHelper {
   bool isLoggedIn();
 
   Future<bool> clear();
+
+  bool isHomeApiCall();
+
+  Future<void> setHomeApiCall(bool call);
+
+  bool isKoloboxApiCall();
+
+  Future<void> setKoloboxApiCall(bool call);
+
+  bool isWalletApiCall();
+
+  Future<void> setWalletApiCall(bool call);
+
+  bool isAccountApiCall();
+
+  Future<void> setAccountApiCall(bool call);
 }

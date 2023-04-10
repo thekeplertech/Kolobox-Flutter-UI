@@ -5,4 +5,4 @@ bool isBottomTabOpened = false;
 const nigerianCurrency = '₦ ';
 
 String getOnlyAmount(String text) =>
-    text.replaceAll(nigerianCurrency, '').trim();
+    text.replaceAll(nigerianCurrency, '').replaceAll(',', '').trim();

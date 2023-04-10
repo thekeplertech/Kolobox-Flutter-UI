@@ -11,7 +11,6 @@ import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/base/base_screen.dart';
 import '../../../core/colors/color_list.dart';
-import '../../../core/enums/kolobox_fund_enum.dart';
 import '../product_item_widget.dart';
 
 class DepositSummaryWidget extends BaseScreen {
@@ -106,7 +105,6 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               ] else if (StateContainer.of(context).isWallet() ?? false) ...[
                 const WalletItemWidget(),
               ],
-              getOptionWidget(),
               const SizedBox(
                 height: 20,
               ),
@@ -179,10 +177,4 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
           ),
         ),
       );
-
-  Widget getOptionWidget() {
-    KoloboxFundEnum? fundEnum = StateContainer.of(context).getKoloBoxEnum();
-    if (fundEnum == null) return const SizedBox();
-    return ProductItemWidget(fundEnum: fundEnum);
-  }
 }

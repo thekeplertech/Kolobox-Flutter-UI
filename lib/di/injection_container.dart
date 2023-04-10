@@ -52,7 +52,7 @@ Future<void> init() async {
   // sl.registerLazySingleton<MessageDataSource>(
   //     () => FirebaseMessageDataSourceImpl());
 
-  sl.registerLazySingleton<PayStackPayment>(() => PayStackPayment());
+  sl.registerSingleton<PayStackPayment>(PayStackPayment());
 
   // Some API Repositories
   sl.registerLazySingleton<SplashRepo>(

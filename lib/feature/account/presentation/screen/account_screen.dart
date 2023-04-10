@@ -8,6 +8,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../core/utils/date_helper.dart';
 import '../../../../routes/routes.dart';
 import '../../../settings/presentation/settings_page.dart';
 import '../../../widgets/home_app_bar_widget.dart';
@@ -63,7 +64,7 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                             height: 10,
                           ),
                           Text(
-                            'Dami Anoreq',
+                            '${prefHelper?.getLoginResponseModel().firstname} ${prefHelper?.getLoginResponseModel().lastname}',
                             style: AppStyle.b4SemiBold
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
@@ -71,7 +72,7 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                             height: 5,
                           ),
                           Text(
-                            '@DamiANQ',
+                            '@${prefHelper?.getLoginResponseModel().id}',
                             style: AppStyle.b8Medium
                                 .copyWith(color: ColorList.primaryColor),
                           ),
@@ -91,7 +92,9 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                                     color: ColorList.blackSecondColor),
                               ),
                               Text(
-                                'Feb 19, 1992',
+                                DateHelper.getDateFromDateTime(
+                                    prefHelper?.getLoginResponseModel().dob,
+                                    'MMM dd, yyyy'),
                                 style: AppStyle.b8Bold.copyWith(
                                     color: ColorList.blackSecondColor),
                               ),
@@ -116,7 +119,10 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                                     color: ColorList.blackSecondColor),
                               ),
                               Text(
-                                'Product Manager',
+                                prefHelper
+                                        ?.getLoginResponseModel()
+                                        .occupation ??
+                                    '',
                                 style: AppStyle.b8Bold.copyWith(
                                     color: ColorList.blackSecondColor),
                               ),
@@ -141,7 +147,7 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                               ),
                               const Spacer(),
                               Text(
-                                'dami_anoreq07@gmail.com',
+                                prefHelper?.getLoginResponseModel().email ?? '',
                                 style: AppStyle.b8Bold
                                     .copyWith(color: ColorList.greyLight2Color),
                               ),
@@ -170,7 +176,7 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                               ),
                               const Spacer(),
                               Text(
-                                '09083092849',
+                                prefHelper?.getLoginResponseModel().phone ?? '',
                                 style: AppStyle.b8Bold
                                     .copyWith(color: ColorList.greyLight2Color),
                               ),
@@ -238,7 +244,7 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                       height: 3,
                     ),
                     Text(
-                      'Kolobox.ng/@DamiANQ',
+                      'Kolobox.ng/@${prefHelper?.getLoginResponseModel().id}',
                       style: AppStyle.b9Medium.copyWith(color: ColorList.white),
                     ),
                   ],
