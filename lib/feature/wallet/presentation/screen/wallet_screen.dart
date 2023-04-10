@@ -51,7 +51,7 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
             BlocListener<WalletBloc, WalletState>(
               listener: (_, state) {
                 if (state is ClickOnWalletState) {
-                  callWalletHistory();
+                  // callWalletHistory();
                 } else if (state is GetWalletHistoryState) {
                   walletDataModel = state.model;
                   isEmpty = walletDataModel?.walletHistory?.isEmpty ?? true;
@@ -203,7 +203,6 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                             ? Center(child: getEmptyWidget())
                             : getDataWidget();
                       }),
-
                   // const SizedBox(
                   //   height: 20,
                   // ),
@@ -273,7 +272,7 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
               overlayColor: ColorList.blueColor,
               borderRadius: 24,
               verticalPadding: 10,
-              onPressed: () {},
+              onPressed: () => comingSoon(),
               postIcon: imageDownload,
             ),
           ),
