@@ -383,7 +383,9 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
       StateContainer.of(context).clearData();
-      callProductsAPI();
+      if (StateContainer.of(context).isSuccessful) {
+        callProductsAPI();
+      }
     });
   }
 

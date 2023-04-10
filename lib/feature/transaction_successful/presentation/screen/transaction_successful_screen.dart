@@ -237,6 +237,7 @@ class TransactionSuccessfulScreenState
                     overlayColor: ColorList.blueColor,
                     borderRadius: 32,
                     onPressed: () {
+                      StateContainer.of(context).isSuccessful = true;
                       BlocProvider.of<DashboardBloc>(context)
                           .add(ClearBackStackEvent(
                         until: StateContainer.of(context).getPopUntil(),

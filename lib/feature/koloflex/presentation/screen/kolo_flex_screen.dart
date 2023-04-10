@@ -265,11 +265,13 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
       StateContainer.of(context).clearData();
-      isEmpty = false;
-      emptyStreamController.add(isEmpty);
-      Future.delayed(const Duration(milliseconds: 300), () {
-        callTransactions();
-      });
+      if (StateContainer.of(context).isSuccessful) {
+        isEmpty = false;
+        emptyStreamController.add(isEmpty);
+        Future.delayed(const Duration(milliseconds: 300), () {
+          callTransactions();
+        });
+      }
     });
   }
 

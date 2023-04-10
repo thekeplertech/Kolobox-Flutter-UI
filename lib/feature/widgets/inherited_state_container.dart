@@ -43,6 +43,7 @@ class StateContainerState extends State<StateContainer> {
   String? _amount = '';
   PaymentGatewayEnum? _paymentGatewayEnum;
   String? _popUntil;
+  bool isSuccessful = false;
 
   @override
   Widget build(BuildContext context) => _InheritedStateContainer(
@@ -93,5 +94,6 @@ class StateContainerState extends State<StateContainer> {
     _popUntil = null;
     _isWallet = null;
     _isFundYourKoloBox = null;
+    isSuccessful = false;
   }
 }
