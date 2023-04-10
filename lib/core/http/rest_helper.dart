@@ -4,6 +4,8 @@ import 'package:kolobox_new_app/feature/auth/forget_password/data/models/forget_
 import 'package:kolobox_new_app/feature/auth/forget_password/data/models/validate_request_model.dart';
 import 'package:kolobox_new_app/feature/auth/login/data/models/create_pin_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_request_model.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -62,4 +64,12 @@ abstract class RestHelper {
 
   @POST(ApiUrls.verifyPinAPI)
   Future<ApiResponse> verifyPin(@Body() VerifyPinRequestModel model);
+
+  @POST(ApiUrls.selectProductAPI)
+  Future<ApiResponse> selectProduct(
+      @Path("userId") String userId, @Body() SelectProductRequestModel model);
+
+  @POST(ApiUrls.topUpAPI)
+  Future<ApiResponse> topUp(
+      @Path("productId") String productId, @Body() TopUpRequestModel model);
 }

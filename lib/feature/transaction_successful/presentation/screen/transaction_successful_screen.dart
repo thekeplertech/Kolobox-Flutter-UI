@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/core/utils/date_helper.dart';
+import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
+import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
+import 'package:kolobox_new_app/feature/widgets/product_item_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
 import '../../../../core/enums/kolobox_fund_enum.dart';
 import '../../../../core/ui/widgets/button.dart';
+import '../../../widgets/inherited_state_container.dart';
 
 class TransactionSuccessfulScreen extends BaseBlocWidget {
+  final String referenceCode;
+  final String amount;
+  final bool isDeposited;
+
   const TransactionSuccessfulScreen({
     Key? key,
+    required this.referenceCode,
+    required this.isDeposited,
+    required this.amount,
   }) : super(key: key);
 
   @override
@@ -109,21 +123,27 @@ class TransactionSuccessfulScreenState
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: ColorList.lightBlue6Color,
+                        color: widget.isDeposited
+                            ? ColorList.lightBlue6Color
+                            : ColorList.redLightColor,
                         shape: BoxShape.circle,
                       ),
                       padding: const EdgeInsets.all(25),
                       child: Icon(
-                        KoloBoxIcons.deposit,
+                        widget.isDeposited
+                            ? KoloBoxIcons.deposit
+                            : KoloBoxIcons.withdrawal,
                         size: 20,
-                        color: ColorList.primaryColor,
+                        color: widget.isDeposited
+                            ? ColorList.primaryColor
+                            : ColorList.redDarkColor,
                       ),
                     ),
                     const SizedBox(
                       height: 17,
                     ),
                     Text(
-                      'Deposited',
+                      widget.isDeposited ? 'Deposited' : 'Withdrawal',
                       style: AppStyle.b4Bold
                           .copyWith(color: ColorList.blackSecondColor),
                     ),
@@ -131,7 +151,7 @@ class TransactionSuccessfulScreenState
                       height: 14,
                     ),
                     Text(
-                      '₦ 14,200.00',
+                      CurrencyTextInputFormatter.formatAmount(widget.amount),
                       style: AppStyle.b5SemiBold
                           .copyWith(color: ColorList.primaryColor),
                     ),
@@ -139,7 +159,8 @@ class TransactionSuccessfulScreenState
                       height: 5,
                     ),
                     Text(
-                      'Aug 02, 2022 - 11:34 PM',
+                      DateHelper.getTextFromDateTime(
+                          DateTime.now(), 'MMM dd, yyyy - hh:mm a'),
                       style: AppStyle.b9SemiBold
                           .copyWith(color: ColorList.greyLight2Color),
                     ),
@@ -155,7 +176,7 @@ class TransactionSuccessfulScreenState
                       height: 3,
                     ),
                     Text(
-                      '092829-20991090009w0220',
+                      widget.referenceCode,
                       style: AppStyle.b8Medium
                           .copyWith(color: ColorList.blackThirdColor),
                     ),
@@ -172,7 +193,10 @@ class TransactionSuccessfulScreenState
                   const SizedBox(
                     height: 7,
                   ),
-                  // getOptionWidget(StateContainer.of(context).koloboxFundEnum),
+                  if (StateContainer.of(context).getKoloBoxEnum() != null) ...[
+                    ProductItemWidget(
+                        fundEnum: StateContainer.of(context).getKoloBoxEnum()!),
+                  ],
                   // Container(
                   //   decoration: BoxDecoration(
                   //     color: ColorList.lightBlue3Color,
@@ -201,7 +225,7 @@ class TransactionSuccessfulScreenState
                     textColor: ColorList.primaryColor,
                     overlayColor: ColorList.blueColor,
                     borderRadius: 32,
-                    onPressed: () {},
+                    onPressed: () => comingSoon(),
                   ),
                   const SizedBox(
                     height: 15,
@@ -213,6 +237,10 @@ class TransactionSuccessfulScreenState
                     overlayColor: ColorList.blueColor,
                     borderRadius: 32,
                     onPressed: () {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ClearBackStackEvent(
+                        until: StateContainer.of(context).getPopUntil(),
+                      ));
                       // BlocProvider.of<DashboardBloc>(context).add(
                       //   ClearBackStackEvent(
                       //     until: StateContainer.of(context).isFromFundMyKoloBox

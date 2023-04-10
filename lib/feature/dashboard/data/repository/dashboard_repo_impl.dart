@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/data_source/remote_dashboard_data_source.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/domain/dashboard_repo.dart';
 import 'package:kolobox_new_app/feature/home/data/models/wallet_data_model.dart';
@@ -13,7 +14,11 @@ import '../models/active_product_data_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/product_data_model.dart';
 import '../models/profile_data_model.dart';
+import '../models/select_product_request_model.dart';
+import '../models/select_product_response_model.dart';
+import '../models/top_up_request_model.dart';
 import '../models/transactions_request_model.dart';
+import '../models/verify_pin_request_model.dart';
 
 class DashboardRepoImpl extends DashboardRepo {
   RemoteDashboardDataSource remoteDashboardDataSource = sl();
@@ -107,4 +112,35 @@ class DashboardRepoImpl extends DashboardRepo {
           TransactionsRequestModel model) async =>
       Right(Success(TransactionsDataModel.fromJson(
           (await remoteDashboardDataSource.getTransactions(model)).data)));
+
+  @override
+  Future<Either<Failure, Success>> verifyPin(VerifyPinRequestModel model) =>
+      baseApiMethod(() => verifyPinFromAPI(model));
+
+  Future<Either<Failure, Success>> verifyPinFromAPI(
+      VerifyPinRequestModel model) async {
+    await remoteDashboardDataSource.verifyPin(model);
+    return Right(Success(null));
+  }
+
+  @override
+  Future<Either<Failure, Success>> selectProduct(
+          String userId, SelectProductRequestModel model) =>
+      baseApiMethod(() => selectProductFromAPI(userId, model));
+
+  Future<Either<Failure, Success>> selectProductFromAPI(
+          String userId, SelectProductRequestModel model) async =>
+      Right(Success(SelectProductResponseModel.fromJson(
+          (await remoteDashboardDataSource.selectProduct(userId, model))
+              .data)));
+
+  @override
+  Future<Either<Failure, Success>> topUp(
+          String productId, TopUpRequestModel model) =>
+      baseApiMethod(() => topUpFromAPI(productId, model));
+
+  Future<Either<Failure, Success>> topUpFromAPI(
+          String productId, TopUpRequestModel model) async =>
+      Right(Success(TopUpResponseModel.fromJson(
+          (await remoteDashboardDataSource.topUp(productId, model)).data)));
 }

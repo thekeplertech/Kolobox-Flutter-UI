@@ -1,3 +1,7 @@
+import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
+
 import '../../../../../core/http/rest_client.dart';
 import '../../../../../core/http/rest_helper.dart';
 import '../../../../../core/models/api_response.dart';
@@ -44,5 +48,24 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
   Future<ApiResponse> getTransactions(TransactionsRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.getTransactions(model);
+  }
+
+  @override
+  Future<ApiResponse> verifyPin(VerifyPinRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.verifyPin(model);
+  }
+
+  @override
+  Future<ApiResponse> selectProduct(
+      String userId, SelectProductRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.selectProduct(userId, model);
+  }
+
+  @override
+  Future<ApiResponse> topUp(String productId, TopUpRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.topUp(productId, model);
   }
 }

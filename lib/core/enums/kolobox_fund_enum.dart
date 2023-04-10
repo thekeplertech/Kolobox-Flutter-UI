@@ -189,6 +189,20 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
+  bool isInActiveProduct() {
+    PrefHelper helper = sl();
+    ActiveProductDataModel? active = helper.getActiveProductDataModel();
+
+    int? index = active?.products
+        ?.indexWhere((element) => element.productId == getProductId);
+
+    if (index != null && index != -1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   int getTenor() {
     PrefHelper helper = sl();
     ProductDataModel? model = helper.getProductDataModel();

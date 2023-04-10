@@ -4,7 +4,7 @@ import 'package:kolobox_new_app/core/enums/payment_gateway_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
-import 'package:kolobox_new_app/feature/widgets/confirm_with_pin_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/confirm_pin_and_pay_page.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
@@ -165,7 +165,7 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
                     amount: StateContainer.of(context).getAmount(),
                     paymentEnum: PaymentGatewayEnum.payStack,
                   );
-                  showCustomBottomSheet(const ConfirmWithPinWidget());
+                  showCustomBottomSheet(const ConfirmPinAndPayPage());
                 },
               ),
             ],

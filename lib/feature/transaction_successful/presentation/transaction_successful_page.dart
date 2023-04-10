@@ -4,8 +4,15 @@ import '../../../../core/base/base_page.dart';
 import 'screen/transaction_successful_screen.dart';
 
 class TransactionSuccessfulPage extends BasePage {
+  final String referenceCode;
+  final String amount;
+  final bool isDeposited;
+
   const TransactionSuccessfulPage({
     Key? key,
+    required this.referenceCode,
+    required this.amount,
+    this.isDeposited = true,
   }) : super(key: key);
 
   @override
@@ -16,5 +23,9 @@ class TransactionSuccessfulPageState
     extends BasePageState<TransactionSuccessfulPage> {
   @override
   Widget getChildBlocWidget(BuildContext context) =>
-      TransactionSuccessfulScreen();
+      TransactionSuccessfulScreen(
+        referenceCode: widget.referenceCode,
+        amount: widget.amount,
+        isDeposited: widget.isDeposited,
+      );
 }

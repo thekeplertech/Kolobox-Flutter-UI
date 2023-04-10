@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/transaction_successful/presentation/transaction_successful_page.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../core/colors/color_list.dart';
@@ -9,11 +9,16 @@ import '../../core/constants/image_constants.dart';
 import '../../core/ui/widgets/button.dart';
 import '../../routes/routes.dart';
 
-class ConfirmWithPinWidget extends StatelessWidget {
+class ConfirmWithPinWidget extends BaseScreen {
   const ConfirmWithPinWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<ConfirmWithPinWidget> createState() => _ConfirmWithPinWidgetState();
+}
+
+class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
+  @override
+  Widget body(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -83,7 +88,7 @@ class ConfirmWithPinWidget extends StatelessWidget {
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
               onPressed: () {
-                navigatePush(context, const TransactionSuccessfulPage());
+                // navigatePush(context, const TransactionSuccessfulPage());
               },
             ),
           ],

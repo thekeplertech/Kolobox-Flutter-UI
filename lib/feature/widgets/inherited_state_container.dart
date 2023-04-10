@@ -37,11 +37,10 @@ class StateContainer extends StatefulWidget {
 }
 
 class StateContainerState extends State<StateContainer> {
-  bool _isFromFundMyKoloBox = true;
-  bool _isFromDetail = false;
   KoloboxFundEnum? _koloboxFundEnum;
   String? _amount = '';
   PaymentGatewayEnum? _paymentGatewayEnum;
+  String? _popUntil;
 
   @override
   Widget build(BuildContext context) => _InheritedStateContainer(
@@ -56,13 +55,18 @@ class StateContainerState extends State<StateContainer> {
 
   PaymentGatewayEnum? getPaymentGatewayEnum() => _paymentGatewayEnum;
 
+  String getPopUntil() => _popUntil ?? '/';
+
   void openFundMyKoloBox({
     KoloboxFundEnum? fundEnum,
     String? amount,
     PaymentGatewayEnum? paymentEnum,
+    String? popUntil,
   }) {
     _koloboxFundEnum = fundEnum;
-    _amount = amount?.replaceAll(nigerianCurrency, '').trim();
+    _amount =
+        amount?.replaceAll(nigerianCurrency, '').replaceAll(',', '').trim();
     _paymentGatewayEnum = paymentEnum;
+    _popUntil = popUntil;
   }
 }

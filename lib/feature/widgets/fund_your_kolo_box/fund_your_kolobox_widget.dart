@@ -19,68 +19,68 @@ class FundYourKoloboxWidget extends BaseScreen {
 class _FundYourKoloboxWidgetState
     extends BaseScreenState<FundYourKoloboxWidget> {
   @override
-  Widget body(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: GestureDetector(
-              onTap: () {
-                goBack(context);
-              },
-              child: Image.asset(imageClose),
+  Widget body(BuildContext context) => Padding(
+        padding:
+            const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  goBack(context);
+                },
+                child: Image.asset(imageClose),
+              ),
             ),
-          ),
-          Text(
-            'Fund your KoloBox',
-            style: AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            'Deposit into your KoloBox',
-            style:
-                AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
-          ),
-          const SizedBox(
-            height: 38,
-          ),
-          Text(
-            'Select a Product to proceed',
-            style:
-                AppStyle.b7SemiBold.copyWith(color: ColorList.blackSecondColor),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          getOptionWidget(KoloboxFundEnum.koloFlex),
-          const SizedBox(
-            height: 18,
-          ),
-          getOptionWidget(KoloboxFundEnum.koloTarget),
-          const SizedBox(
-            height: 18,
-          ),
-          getOptionWidget(KoloboxFundEnum.koloTargetPlus),
-          const SizedBox(
-            height: 18,
-          ),
-          getOptionWidget(KoloboxFundEnum.koloFamily),
-          const SizedBox(
-            height: 18,
-          ),
-          getOptionWidget(KoloboxFundEnum.koloGroup),
-          const SizedBox(
-            height: 18,
-          ),
-        ],
-      ),
-    );
-  }
+            Text(
+              'Fund your KoloBox',
+              style:
+                  AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              'Deposit into your KoloBox',
+              style:
+                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
+            ),
+            const SizedBox(
+              height: 38,
+            ),
+            Text(
+              'Select a Product to proceed',
+              style: AppStyle.b7SemiBold
+                  .copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            getOptionWidget(KoloboxFundEnum.koloFlex),
+            const SizedBox(
+              height: 18,
+            ),
+            getOptionWidget(KoloboxFundEnum.koloTarget),
+            const SizedBox(
+              height: 18,
+            ),
+            getOptionWidget(KoloboxFundEnum.koloTargetPlus),
+            const SizedBox(
+              height: 18,
+            ),
+            getOptionWidget(KoloboxFundEnum.koloFamily),
+            const SizedBox(
+              height: 18,
+            ),
+            getOptionWidget(KoloboxFundEnum.koloGroup),
+            const SizedBox(
+              height: 18,
+            ),
+          ],
+        ),
+      );
 
   Widget getOptionWidget(KoloboxFundEnum fundEnum) {
     return GestureDetector(
