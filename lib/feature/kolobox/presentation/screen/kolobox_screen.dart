@@ -18,6 +18,7 @@ import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
+import '../../../dashboard/data/models/earnings_request_model.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
@@ -25,6 +26,7 @@ import '../../../notifications/presentation/notifications_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
+import '../bloc/kolobox_event.dart';
 
 class KoloboxScreen extends BaseBlocWidget {
   const KoloboxScreen({Key? key}) : super(key: key);
@@ -49,7 +51,11 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
         body: ScrollConfiguration(
           behavior: NoOverFlowScrollbarBehaviour(),
           child: BlocListener<KoloboxBloc, KoloboxState>(
-            listener: (_, state) {},
+            listener: (_, state) {
+              if (state is CallEarningsState) {
+                openDetailScreen(state.fundEnum);
+              }
+            },
             child: getChild(),
           ),
         ),
@@ -184,29 +190,10 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
   ) =>
       GestureDetector(
         onTap: () {
-          // StateContainer.of(context).isFromFundMyKoloBox = false;
-          // StateContainer.of(context).koloboxFundEnum = fundEnum;
-          // BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
-          //   model: EarningsRequestModel(userProductId: fundEnum.getProductId),
-          // ));
-          // return;
-          switch (fundEnum) {
-            case KoloboxFundEnum.koloFlex:
-              navigatePush(context, const KoloFlexPage());
-              break;
-            case KoloboxFundEnum.koloTarget:
-              navigatePush(context, const KoloTargetPage());
-              break;
-            case KoloboxFundEnum.koloTargetPlus:
-              comingSoon();
-              break;
-            case KoloboxFundEnum.koloFamily:
-              navigatePush(context, const KoloFamilyPage());
-              break;
-            case KoloboxFundEnum.koloGroup:
-              navigatePush(context, const KoloGroupPage());
-              break;
-          }
+          BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
+            model: EarningsRequestModel(userProductId: fundEnum.getProductId),
+            fundEnum: fundEnum,
+          ));
         },
         child: Container(
           width: double.maxFinite,
@@ -248,6 +235,30 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
           ),
         ),
       );
+
+  openDetailScreen(KoloboxFundEnum fundEnum) {
+    if (fundEnum != KoloboxFundEnum.koloFlex) {
+      comingSoon();
+      return;
+    }
+    switch (fundEnum) {
+      case KoloboxFundEnum.koloFlex:
+        navigatePush(context, const KoloFlexPage());
+        break;
+      case KoloboxFundEnum.koloTarget:
+        navigatePush(context, const KoloTargetPage());
+        break;
+      case KoloboxFundEnum.koloTargetPlus:
+        comingSoon();
+        break;
+      case KoloboxFundEnum.koloFamily:
+        navigatePush(context, const KoloFamilyPage());
+        break;
+      case KoloboxFundEnum.koloGroup:
+        navigatePush(context, const KoloGroupPage());
+        break;
+    }
+  }
 
   @override
   void dispose() {
