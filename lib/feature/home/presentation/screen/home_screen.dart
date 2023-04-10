@@ -388,10 +388,10 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
     showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
-      StateContainer.of(context).clearData();
       if (StateContainer.of(context).isSuccessful) {
         callProductsAPI();
       }
+      StateContainer.of(context).clearData();
     });
   }
 

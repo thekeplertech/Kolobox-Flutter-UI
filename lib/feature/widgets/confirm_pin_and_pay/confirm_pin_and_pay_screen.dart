@@ -138,14 +138,14 @@ class ConfirmPinAndPayScreenState
                 textColor: ColorList.white,
                 overlayColor: ColorList.blueColor,
                 borderRadius: 32,
-                onPressed: () => initiatePayment(),
+                onPressed: () => onClickNext(),
               ),
             ],
           ),
         ),
       );
 
-  onClickNext() {
+  void onClickNext() {
     hideKeyboard();
     if (otpTextEditingController.text.isEmpty) {
       Utils.showToast(
@@ -187,7 +187,7 @@ class ConfirmPinAndPayScreenState
     ));
   }
 
-  initiatePayment() {
+  void initiatePayment() {
     bool isInActive =
         StateContainer.of(context).getKoloBoxEnum()?.isInActiveProduct() ??
             false;
@@ -237,7 +237,8 @@ class ConfirmPinAndPayScreenState
     }
   }
 
-  callPayment(String amount, String accessCode, String referenceCode) async {
+  void callPayment(
+      String amount, String accessCode, String referenceCode) async {
     PayStackPayment payStackPayment = sl();
     await payStackPayment.checkout(
       context,
@@ -253,10 +254,23 @@ class ConfirmPinAndPayScreenState
                 referenceCode: referenceCode,
                 amount: amount,
                 isDeposited: true,
+                isSuccess: true,
               ));
         });
       },
-      (errorMessage) {},
+      (errorMessage) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          navigatePush(
+              context,
+              TransactionSuccessfulPage(
+                referenceCode: referenceCode,
+                amount: amount,
+                isDeposited: true,
+                isSuccess: false,
+                errorMessage: errorMessage,
+              ));
+        });
+      },
     );
   }
 

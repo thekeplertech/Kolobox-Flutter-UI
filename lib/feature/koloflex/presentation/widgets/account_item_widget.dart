@@ -130,7 +130,8 @@ class AccountItemWidget extends StatelessWidget {
                     // duration: accountDataModel.totalTenor,
                     // progress: 40,
                   ),
-                  child: accountDataModel.remainingTenor > 0
+                  child: accountDataModel.remainingTenor > 0 &&
+                          accountDataModel.totalTenor != 0
                       ? Padding(
                           padding: const EdgeInsets.all(5),
                           child: Center(

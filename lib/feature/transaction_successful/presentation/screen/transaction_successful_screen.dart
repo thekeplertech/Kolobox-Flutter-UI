@@ -21,12 +21,16 @@ class TransactionSuccessfulScreen extends BaseBlocWidget {
   final String referenceCode;
   final String amount;
   final bool isDeposited;
+  final bool isSuccess;
+  final String errorMessage;
 
   const TransactionSuccessfulScreen({
     Key? key,
     required this.referenceCode,
     required this.isDeposited,
+    required this.isSuccess,
     required this.amount,
+    required this.errorMessage,
   }) : super(key: key);
 
   @override
@@ -98,8 +102,8 @@ class TransactionSuccessfulScreenState
               TransactionSuccessfulState>(
             listener: (_, state) {
               if (state is CallProductState) {
+                StateContainer.of(context).isSuccessful = true;
                 Future.delayed(const Duration(milliseconds: 300), () {
-                  StateContainer.of(context).isSuccessful = true;
                   BlocProvider.of<DashboardBloc>(context)
                       .add(ClearBackStackEvent(
                     until: StateContainer.of(context).getPopUntil(),
@@ -124,12 +128,14 @@ class TransactionSuccessfulScreenState
               const SizedBox(
                 height: 22,
               ),
-              Image.asset(imageConfirm),
+              Image.asset(widget.isSuccess ? imageConfirm : imageErrorIcon),
               const SizedBox(
                 height: 8,
               ),
               Text(
-                'Transaction Successful',
+                widget.isSuccess
+                    ? 'Transaction Successful'
+                    : 'Transaction Failed',
                 style:
                     AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
               ),
@@ -137,7 +143,9 @@ class TransactionSuccessfulScreenState
                 height: 7,
               ),
               Text(
-                'This transaction was successful',
+                widget.isSuccess
+                    ? 'This transaction was successful'
+                    : widget.errorMessage,
                 style: AppStyle.b8Medium
                     .copyWith(color: ColorList.blackThirdColor),
               ),

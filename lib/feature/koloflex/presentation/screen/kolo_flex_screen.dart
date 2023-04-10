@@ -46,8 +46,6 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
 
   bool isEmpty = true;
 
-  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
-
   List<Transactions> transactions = [];
 
   @override
@@ -64,7 +62,6 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
 
   @override
   Widget getCustomBloc() {
-    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
@@ -265,7 +262,6 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
     showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
-      StateContainer.of(context).clearData();
       if (StateContainer.of(context).isSuccessful) {
         isEmpty = false;
         emptyStreamController.add(isEmpty);
@@ -273,6 +269,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
           callTransactions();
         });
       }
+      StateContainer.of(context).clearData();
     });
   }
 
@@ -417,174 +414,191 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
   }
 
   Widget getAccountWidget() {
-    int flexTenor = KoloboxFundEnum.koloFlex.tenorAvailableForWithdrawal();
-    int targetTenor = KoloboxFundEnum.koloTarget.tenorAvailableForWithdrawal();
-    int targetPlusTenor =
+    int flexRemainingTenor =
+        KoloboxFundEnum.koloFlex.tenorAvailableForWithdrawal();
+    int targetRemainingTenor =
+        KoloboxFundEnum.koloTarget.tenorAvailableForWithdrawal();
+    int targetPlusRemainingTenor =
         KoloboxFundEnum.koloTargetPlus.tenorAvailableForWithdrawal();
-    int familyTenor = KoloboxFundEnum.koloFamily.tenorAvailableForWithdrawal();
-    int groupTenor = KoloboxFundEnum.koloGroup.tenorAvailableForWithdrawal();
+    int familyRemainingTenor =
+        KoloboxFundEnum.koloFamily.tenorAvailableForWithdrawal();
+    int groupRemainingTenor =
+        KoloboxFundEnum.koloGroup.tenorAvailableForWithdrawal();
+
+    int flexTotalTenor = KoloboxFundEnum.koloFlex.getTenorValue();
+    int targetTotalTenor = KoloboxFundEnum.koloTarget.getTenorValue();
+    int targetPlusTotalTenor = KoloboxFundEnum.koloTargetPlus.getTenorValue();
+    int familyTotalTenor = KoloboxFundEnum.koloFamily.getTenorValue();
+    int groupTotalTenor = KoloboxFundEnum.koloGroup.getTenorValue();
 
     List<AccountDataModel> availableForWithdrawals = [];
     List<AccountDataModel> balances = [];
 
-    if (flexTenor == 0) {
+    if (flexRemainingTenor == 0 || flexTotalTenor == 0) {
       availableForWithdrawals.add(AccountDataModel(
         name: 'Kolo Flex',
         amount: KoloboxFundEnum.koloFlex.getDepositAmountValue(),
-        remainingTenor: flexTenor,
-        totalTenor: KoloboxFundEnum.koloFlex.getTenorValue(),
-        startDate: KoloboxFundEnum.koloFlex.getStartDateValue(),
+        remainingTenor: flexRemainingTenor,
+        totalTenor: flexTotalTenor,
+        startDate: '',
       ));
     } else {
       balances.add(AccountDataModel(
         name: 'Kolo Flex',
         amount: KoloboxFundEnum.koloFlex.getDepositAmountValue(),
-        remainingTenor: flexTenor,
-        totalTenor: KoloboxFundEnum.koloFlex.getTenorValue(),
+        remainingTenor: flexRemainingTenor,
+        totalTenor: flexTotalTenor,
         startDate: KoloboxFundEnum.koloFlex.getStartDateValue(),
       ));
     }
 
-    if (targetTenor == 0) {
+    if (targetRemainingTenor == 0 || targetTotalTenor == 0) {
       availableForWithdrawals.add(AccountDataModel(
         name: 'Kolo Target',
         amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
-        remainingTenor: targetTenor,
-        totalTenor: KoloboxFundEnum.koloTarget.getTenorValue(),
+        remainingTenor: targetRemainingTenor,
+        totalTenor: targetTotalTenor,
         startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
       ));
     } else {
       balances.add(AccountDataModel(
         name: 'Kolo Target',
         amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
-        remainingTenor: targetTenor,
-        totalTenor: KoloboxFundEnum.koloTarget.getTenorValue(),
+        remainingTenor: targetRemainingTenor,
+        totalTenor: targetTotalTenor,
         startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
       ));
     }
 
-    if (targetPlusTenor == 0) {
+    if (targetPlusRemainingTenor == 0 || targetPlusTotalTenor == 0) {
       availableForWithdrawals.add(AccountDataModel(
         name: 'Kolo Target Plus',
         amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
-        remainingTenor: targetPlusTenor,
-        totalTenor: KoloboxFundEnum.koloTargetPlus.getTenorValue(),
+        remainingTenor: targetPlusRemainingTenor,
+        totalTenor: targetPlusTotalTenor,
         startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
       ));
     } else {
       balances.add(AccountDataModel(
         name: 'Kolo Target Plus',
         amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
-        remainingTenor: targetPlusTenor,
-        totalTenor: KoloboxFundEnum.koloTargetPlus.getTenorValue(),
+        remainingTenor: targetPlusRemainingTenor,
+        totalTenor: targetPlusTotalTenor,
         startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
       ));
     }
 
-    if (familyTenor == 0) {
+    if (familyRemainingTenor == 0 || familyTotalTenor == 0) {
       availableForWithdrawals.add(AccountDataModel(
         name: 'Kolo Family',
         amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
-        remainingTenor: familyTenor,
-        totalTenor: KoloboxFundEnum.koloFamily.getTenorValue(),
+        remainingTenor: familyRemainingTenor,
+        totalTenor: familyTotalTenor,
         startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
       ));
     } else {
       balances.add(AccountDataModel(
         name: 'Kolo Family',
         amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
-        remainingTenor: familyTenor,
-        totalTenor: KoloboxFundEnum.koloFamily.getTenorValue(),
+        remainingTenor: familyRemainingTenor,
+        totalTenor: familyTotalTenor,
         startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
       ));
     }
 
-    if (groupTenor == 0) {
+    if (groupRemainingTenor == 0 || groupTotalTenor == 0) {
       availableForWithdrawals.add(AccountDataModel(
         name: 'Kolo Group',
         amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
-        remainingTenor: groupTenor,
-        totalTenor: KoloboxFundEnum.koloGroup.getTenorValue(),
+        remainingTenor: groupRemainingTenor,
+        totalTenor: groupTotalTenor,
         startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
       ));
     } else {
       balances.add(AccountDataModel(
         name: 'Kolo Group',
         amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
-        remainingTenor: groupTenor,
-        totalTenor: KoloboxFundEnum.koloGroup.getTenorValue(),
+        remainingTenor: groupRemainingTenor,
+        totalTenor: groupTotalTenor,
         startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
       ));
     }
 
     return Column(
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Available for withdrawal',
-            style:
-                AppStyle.b7SemiBold.copyWith(color: ColorList.blackSecondColor),
+        if (availableForWithdrawals.isNotEmpty) ...[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Available for withdrawal',
+              style: AppStyle.b7SemiBold
+                  .copyWith(color: ColorList.blackSecondColor),
+            ),
           ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: availableForWithdrawals.length,
-            itemBuilder: (_, index) => AccountItemWidget(
-                  accountDataModel: availableForWithdrawals[index],
-                  onDetail: () {
-                    comingSoon();
-                    // BlocProvider.of<DashboardBloc>(context)
-                    //     .add(HideDisableBottomScreenEvent());
-                    // showCustomBottomSheet(
-                    //   DepositedWithdrawalInfoKoloboxWidget(
-                    //     koloboxFundEnum: koloboxFundEnum,
-                    //   ),
-                    //   height: 0.75,
-                    // ).then((value) {
-                    //   BlocProvider.of<DashboardBloc>(context)
-                    //       .add(ShowEnableBottomScreenEvent());
-                    // });
-                  },
-                  onWithdrawal: () {
-                    comingSoon();
-                    // BlocProvider.of<DashboardBloc>(context)
-                    //     .add(HideDisableBottomScreenEvent());
-                    // showCustomBottomSheet(
-                    //         const WithdrawalSelectionKoloboxWidget())
-                    //     .then((value) {
-                    //   BlocProvider.of<DashboardBloc>(context)
-                    //       .add(ShowEnableBottomScreenEvent());
-                    // });
-                  },
-                )),
+          const SizedBox(
+            height: 8,
+          ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: availableForWithdrawals.length,
+              itemBuilder: (_, index) => AccountItemWidget(
+                    accountDataModel: availableForWithdrawals[index],
+                    onDetail: () {
+                      comingSoon();
+                      // BlocProvider.of<DashboardBloc>(context)
+                      //     .add(HideDisableBottomScreenEvent());
+                      // showCustomBottomSheet(
+                      //   DepositedWithdrawalInfoKoloboxWidget(
+                      //     koloboxFundEnum: koloboxFundEnum,
+                      //   ),
+                      //   height: 0.75,
+                      // ).then((value) {
+                      //   BlocProvider.of<DashboardBloc>(context)
+                      //       .add(ShowEnableBottomScreenEvent());
+                      // });
+                    },
+                    onWithdrawal: () {
+                      comingSoon();
+                      // BlocProvider.of<DashboardBloc>(context)
+                      //     .add(HideDisableBottomScreenEvent());
+                      // showCustomBottomSheet(
+                      //         const WithdrawalSelectionKoloboxWidget())
+                      //     .then((value) {
+                      //   BlocProvider.of<DashboardBloc>(context)
+                      //       .add(ShowEnableBottomScreenEvent());
+                      // });
+                    },
+                  )),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+        if (balances.isNotEmpty) ...[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Balance',
+              style: AppStyle.b7SemiBold
+                  .copyWith(color: ColorList.blackSecondColor),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: balances.length,
+              itemBuilder: (_, index) => AccountItemWidget(
+                    accountDataModel: balances[index],
+                    onDetail: () {},
+                    onWithdrawal: () {},
+                  )),
+        ],
         const SizedBox(
           height: 20,
         ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Balance',
-            style:
-                AppStyle.b7SemiBold.copyWith(color: ColorList.blackSecondColor),
-          ),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-        ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: balances.length,
-            itemBuilder: (_, index) => AccountItemWidget(
-                  accountDataModel: balances[index],
-                  onDetail: () {},
-                  onWithdrawal: () {},
-                )),
       ],
     );
   }

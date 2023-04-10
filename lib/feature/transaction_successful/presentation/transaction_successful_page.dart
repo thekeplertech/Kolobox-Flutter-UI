@@ -10,12 +10,16 @@ class TransactionSuccessfulPage extends BasePage {
   final String referenceCode;
   final String amount;
   final bool isDeposited;
+  final bool isSuccess;
+  final String errorMessage;
 
   const TransactionSuccessfulPage({
     Key? key,
     required this.referenceCode,
     required this.amount,
     this.isDeposited = true,
+    this.isSuccess = true,
+    this.errorMessage = '',
   }) : super(key: key);
 
   @override
@@ -33,6 +37,8 @@ class TransactionSuccessfulPageState
           referenceCode: widget.referenceCode,
           amount: widget.amount,
           isDeposited: widget.isDeposited,
+          isSuccess: widget.isSuccess,
+          errorMessage: widget.errorMessage,
         ),
       );
 }
