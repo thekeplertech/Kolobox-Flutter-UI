@@ -4,6 +4,7 @@ import 'package:kolobox_new_app/feature/transaction_successful/presentation/bloc
 
 import '../../../../core/base/base_page.dart';
 import '../../../core/bloc/master_bloc.dart';
+import '../../widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import 'screen/transaction_successful_screen.dart';
 
 class TransactionSuccessfulPage extends BasePage {
@@ -29,10 +30,17 @@ class TransactionSuccessfulPage extends BasePage {
 class TransactionSuccessfulPageState
     extends BasePageState<TransactionSuccessfulPage> {
   @override
-  Widget getChildBlocWidget(BuildContext context) =>
-      BlocProvider<TransactionSuccessfulBloc>(
-        create: (context) =>
-            TransactionSuccessfulBloc(BlocProvider.of<MasterBloc>(context)),
+  Widget getChildBlocWidget(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider<ConfirmPinAndPayBloc>(
+            create: (context) =>
+                ConfirmPinAndPayBloc(BlocProvider.of<MasterBloc>(context)),
+          ),
+          BlocProvider<TransactionSuccessfulBloc>(
+            create: (context) =>
+                TransactionSuccessfulBloc(BlocProvider.of<MasterBloc>(context)),
+          ),
+        ],
         child: TransactionSuccessfulScreen(
           referenceCode: widget.referenceCode,
           amount: widget.amount,

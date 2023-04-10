@@ -144,7 +144,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '₦ 540.00',
+                              '₦ 0.00',
                               style: AppStyle.b7Bold
                                   .copyWith(color: ColorList.koloFlexTextColor),
                             ),
