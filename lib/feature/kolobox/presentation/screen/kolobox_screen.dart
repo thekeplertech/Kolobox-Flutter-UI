@@ -108,13 +108,15 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                       borderRadius: 24,
                       verticalPadding: 10,
                       onPressed: () {
-                        StateContainer.of(context).openFundMyKoloBox();
+                        StateContainer.of(context)
+                            .openFundMyKoloBox(isFundYourKoloBox: true);
                         BlocProvider.of<DashboardBloc>(context)
                             .add(HideDisableBottomScreenEvent());
                         showCustomBottomSheet(const FundYourKoloboxWidget())
                             .then((value) {
                           BlocProvider.of<DashboardBloc>(context)
                               .add(ShowEnableBottomScreenEvent());
+                          StateContainer.of(context).clearData();
                         });
                       },
                       postIcon: imageDownload,

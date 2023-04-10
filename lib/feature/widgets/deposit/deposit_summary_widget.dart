@@ -6,6 +6,7 @@ import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/confirm_pin_and_pay_page.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
+import 'package:kolobox_new_app/feature/widgets/wallet_item_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/base/base_screen.dart';
@@ -99,6 +100,12 @@ class _DepositSummaryWidgetState extends BaseScreenState<DepositSummaryWidget> {
               const SizedBox(
                 height: 5,
               ),
+              if (StateContainer.of(context).getKoloBoxEnum() != null) ...[
+                ProductItemWidget(
+                    fundEnum: StateContainer.of(context).getKoloBoxEnum()!)
+              ] else if (StateContainer.of(context).isWallet() ?? false) ...[
+                const WalletItemWidget(),
+              ],
               getOptionWidget(),
               const SizedBox(
                 height: 20,

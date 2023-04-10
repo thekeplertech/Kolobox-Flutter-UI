@@ -37,6 +37,8 @@ class StateContainer extends StatefulWidget {
 }
 
 class StateContainerState extends State<StateContainer> {
+  bool? _isFundYourKoloBox;
+  bool? _isWallet;
   KoloboxFundEnum? _koloboxFundEnum;
   String? _amount = '';
   PaymentGatewayEnum? _paymentGatewayEnum;
@@ -57,11 +59,17 @@ class StateContainerState extends State<StateContainer> {
 
   String getPopUntil() => _popUntil ?? '/';
 
+  bool? isWallet() => _isWallet;
+
+  bool isFundYourKoloBox() => _isFundYourKoloBox ?? false;
+
   void openFundMyKoloBox({
+    bool? isFundYourKoloBox,
     KoloboxFundEnum? fundEnum,
     String? amount,
     PaymentGatewayEnum? paymentEnum,
     String? popUntil,
+    bool? isWallet,
   }) {
     _koloboxFundEnum = fundEnum;
     _amount =
@@ -70,5 +78,20 @@ class StateContainerState extends State<StateContainer> {
     if (popUntil != null) {
       _popUntil = popUntil;
     }
+    if (isWallet != null) {
+      _isWallet = isWallet;
+    }
+    if (isFundYourKoloBox != null) {
+      _isFundYourKoloBox = isFundYourKoloBox;
+    }
+  }
+
+  void clearData() {
+    _koloboxFundEnum = null;
+    _amount = null;
+    _paymentGatewayEnum = null;
+    _popUntil = null;
+    _isWallet = null;
+    _isFundYourKoloBox = null;
   }
 }

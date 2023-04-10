@@ -24,6 +24,8 @@ import '../../../../core/ui/widgets/button.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../notifications/presentation/notifications_page.dart';
+import '../../../widgets/deposit/deposit_your_kolobox_widget.dart';
+import '../../../widgets/inherited_state_container.dart';
 import '../../data/models/dashboard_amount_model.dart';
 import '../../data/models/wallet_data_model.dart';
 import '../widget/welcome_to_kolobox_widget.dart';
@@ -58,8 +60,6 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
     pageController = PageController(initialPage: pageIndicatorPosition);
     // callWalletAPI();
   }
-
-  callWalletAPI() => BlocProvider.of<HomeBloc>(context).add(CallWalletEvent());
 
   callProductsAPI() =>
       BlocProvider.of<HomeBloc>(context).add(CallProductEvent());
@@ -301,11 +301,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 24,
                   verticalPadding: 10,
-                  onPressed: () {
-                    // PayStackPayment payStack = sl();
-                    // payStack.checkout(context);
-                    // payStack.checkout(context);
-                  },
+                  onPressed: () => onClickDeposit(),
                   postIcon: imageDownload,
                 ),
               ),
@@ -379,6 +375,17 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
         padding: EdgeInsets.only(top: 40, left: 28, right: 28, bottom: 30),
         child: ReferAndEarnWidget(),
       );
+
+  void onClickDeposit() {
+    StateContainer.of(context).openFundMyKoloBox(isWallet: true);
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      StateContainer.of(context).clearData();
+      callProductsAPI();
+    });
+  }
 
   // AppBar getAppBar() => AppBar(
   //       backgroundColor: ColorList.transparentColor,

@@ -264,6 +264,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
     showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
+      StateContainer.of(context).clearData();
       isEmpty = false;
       emptyStreamController.add(isEmpty);
       Future.delayed(const Duration(milliseconds: 300), () {

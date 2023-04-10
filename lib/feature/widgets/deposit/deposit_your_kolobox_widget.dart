@@ -56,24 +56,26 @@ class _DepositYourKoloboxWidgetState
               height: 5,
             ),
             Text(
-              'Deposit into your ${StateContainer.of(context).getKoloBoxEnum()?.getFundValue ?? ''}',
+              getDepositMessage(),
               style:
                   AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 13,
             ),
-            Button(
-              'Edit',
-              backgroundColor: ColorList.lightBlue3Color,
-              textColor: ColorList.primaryColor,
-              overlayColor: ColorList.blueColor,
-              borderRadius: 32,
-              onPressed: () => goBack(context),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
+            if (StateContainer.of(context).isFundYourKoloBox()) ...[
+              Button(
+                'Edit',
+                backgroundColor: ColorList.lightBlue3Color,
+                textColor: ColorList.primaryColor,
+                overlayColor: ColorList.blueColor,
+                borderRadius: 32,
+                onPressed: () => goBack(context),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+            ],
             getOptionWidget(),
             const SizedBox(
               height: 20,
@@ -210,6 +212,16 @@ class _DepositYourKoloboxWidgetState
           ],
         ),
       );
+
+  String getDepositMessage() {
+    String message = 'Deposit into your ';
+    if (StateContainer.of(context).isWallet() ?? false) {
+      message += 'wallet balance';
+    } else if (StateContainer.of(context).getKoloBoxEnum() != null) {
+      message += StateContainer.of(context).getKoloBoxEnum()!.getFundValue;
+    }
+    return message;
+  }
 
   Widget getOptionWidget() {
     KoloboxFundEnum? fundEnum = StateContainer.of(context).getKoloBoxEnum();
