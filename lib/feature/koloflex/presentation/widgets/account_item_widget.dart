@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:kolobox_new_app/core/utils/date_helper.dart';
+import 'package:kolobox_new_app/feature/koloflex/data/models/account_data_model.dart';
 
 import '../../../../core/colors/color_list.dart';
 import '../../../../core/constants/image_constants.dart';
 import '../../../../core/ui/style/app_style.dart';
+import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/range_custom_painter.dart';
 
 class AccountItemWidget extends StatelessWidget {
+  final AccountDataModel accountDataModel;
   final Function() onWithdrawal;
   final Function() onDetail;
 
@@ -13,6 +17,7 @@ class AccountItemWidget extends StatelessWidget {
     Key? key,
     required this.onWithdrawal,
     required this.onDetail,
+    required this.accountDataModel,
   }) : super(key: key);
 
   @override
@@ -47,26 +52,29 @@ class AccountItemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Investment',
+                              accountDataModel.name,
                               style: AppStyle.b8SemiBold
                                   .copyWith(color: ColorList.blackSecondColor),
                             ),
                             const SizedBox(
                               height: 4,
                             ),
-                            if (false) ...[
+                            if (accountDataModel.startDate.isNotEmpty) ...[
                               Text(
-                                'Aug 02, 2022',
+                                DateHelper.getDateFromDateTime(
+                                    accountDataModel.startDate, 'MMM dd, yyyy'),
                                 style: AppStyle.b10SemiBold
                                     .copyWith(color: ColorList.greyLight2Color),
                               ),
-                            ] else ...[
-                              Text(
-                                'View Details',
-                                style: AppStyle.b10SemiBold
-                                    .copyWith(color: ColorList.primaryColor),
-                              ),
                             ],
+                            // if (false) ...[
+                            // ] else ...[
+                            //   Text(
+                            //     'View Details',
+                            //     style: AppStyle.b10SemiBold
+                            //         .copyWith(color: ColorList.primaryColor),
+                            //   ),
+                            // ],
                           ],
                         ),
                       ),
@@ -77,18 +85,19 @@ class AccountItemWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '₦1,500,000.00',
+                            CurrencyTextInputFormatter.formatAmount(
+                                accountDataModel.amount),
                             style: AppStyle.b8SemiBold
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            '+ ₦ 100,000.00',
-                            style: AppStyle.b10SemiBold
-                                .copyWith(color: ColorList.koloFamilyTextColor),
-                          ),
+                          // const SizedBox(
+                          //   height: 4,
+                          // ),
+                          // Text(
+                          //   '+ ₦ 100,000.00',
+                          //   style: AppStyle.b10SemiBold
+                          //       .copyWith(color: ColorList.koloFamilyTextColor),
+                          // ),
                         ],
                       ),
                       const SizedBox(
@@ -116,14 +125,17 @@ class AccountItemWidget extends StatelessWidget {
                 height: 50,
                 child: CustomPaint(
                   painter: RangeCustomPainter(
-                      selectedColor: ColorList.redDark2Color,
-                      backColor: ColorList.greyLight8Color),
-                  child: false
+                    selectedColor: ColorList.redDark2Color,
+                    backColor: ColorList.greyLight8Color,
+                    // duration: accountDataModel.totalTenor,
+                    // progress: 40,
+                  ),
+                  child: accountDataModel.remainingTenor > 0
                       ? Padding(
                           padding: const EdgeInsets.all(5),
                           child: Center(
                             child: Text(
-                              '22 Days Left',
+                              '${accountDataModel.remainingTenor} Days Left',
                               style: AppStyle.b9SemiBold
                                   .copyWith(color: ColorList.greyLight9Color),
                               maxLines: 2,

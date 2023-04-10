@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
+import 'package:kolobox_new_app/core/utils/date_helper.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/active_product_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/product_data_model.dart';
+import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../di/injection_container.dart';
 import '../colors/color_list.dart';
@@ -189,6 +191,20 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
+  String getStartDateValue() {
+    PrefHelper helper = sl();
+    ActiveProductDataModel? active = helper.getActiveProductDataModel();
+
+    int? index = active?.products
+        ?.indexWhere((element) => element.productId == getProductId);
+
+    if (index != null && index != -1) {
+      return active?.products?[index].startDate ?? '';
+    } else {
+      return '';
+    }
+  }
+
   String getMinimumAmountValue() {
     PrefHelper helper = sl();
     ProductDataModel? active = helper.getProductDataModel();
@@ -200,6 +216,21 @@ extension EnumExtensions on KoloboxFundEnum {
       return active?.products?[index].minimumAmount ?? '0.0';
     } else {
       return '0.0';
+    }
+  }
+
+  int getTenorValue() {
+    PrefHelper helper = sl();
+    ProductDataModel? active = helper.getProductDataModel();
+
+    int? index =
+        active?.products?.indexWhere((element) => element.id == getProductId);
+
+    if (index != null && index != -1) {
+      logger?.d("${this} ${active?.products?[index].tenor}");
+      return active?.products?[index].tenor ?? 0;
+    } else {
+      return 0;
     }
   }
 
@@ -243,6 +274,38 @@ extension EnumExtensions on KoloboxFundEnum {
     } else {
       return '0.0';
     }
+  }
+
+  int tenorAvailableForWithdrawal() {
+    PrefHelper helper = sl();
+    ProductDataModel? model = helper.getProductDataModel();
+    ActiveProductDataModel? active = helper.getActiveProductDataModel();
+
+    int? index = active?.products
+        ?.indexWhere((element) => element.productId == getProductId);
+
+    if (index != null && index != -1) {
+      if ((active?.products?[index].startDate ?? '').isEmpty) {
+        return 0;
+      }
+      DateTime dateTime = DateTime(2023, 4, 1);
+      DateHelper.getDateTime(active?.products?[index].startDate ?? '');
+      int tenor = model?.products?[index].tenor ?? 0;
+      // logger?.d('start date $dateTime $tenor');
+      dateTime = dateTime.add(Duration(days: tenor));
+      // logger?.d('start date $dateTime $tenor');
+
+      if (DateTime.now().isBefore(dateTime)) {
+        // logger?.d('before');
+        tenor = dateTime.difference(DateTime.now()).inDays;
+      } else {
+        // logger?.d('not before');
+        tenor = 0;
+      }
+      return tenor;
+    }
+
+    return 0;
   }
 }
 

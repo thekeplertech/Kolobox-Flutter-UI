@@ -9,6 +9,7 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
+import 'package:kolobox_new_app/feature/koloflex/data/models/account_data_model.dart';
 import 'package:kolobox_new_app/feature/koloflex/presentation/bloc/kolo_flex_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
@@ -416,7 +417,106 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
   }
 
   Widget getAccountWidget() {
-    KoloboxFundEnum.koloFlex;
+    int flexTenor = KoloboxFundEnum.koloFlex.tenorAvailableForWithdrawal();
+    int targetTenor = KoloboxFundEnum.koloTarget.tenorAvailableForWithdrawal();
+    int targetPlusTenor =
+        KoloboxFundEnum.koloTargetPlus.tenorAvailableForWithdrawal();
+    int familyTenor = KoloboxFundEnum.koloFamily.tenorAvailableForWithdrawal();
+    int groupTenor = KoloboxFundEnum.koloGroup.tenorAvailableForWithdrawal();
+
+    List<AccountDataModel> availableForWithdrawals = [];
+    List<AccountDataModel> balances = [];
+
+    if (flexTenor == 0) {
+      availableForWithdrawals.add(AccountDataModel(
+        name: 'Kolo Flex',
+        amount: KoloboxFundEnum.koloFlex.getDepositAmountValue(),
+        remainingTenor: flexTenor,
+        totalTenor: KoloboxFundEnum.koloFlex.getTenorValue(),
+        startDate: KoloboxFundEnum.koloFlex.getStartDateValue(),
+      ));
+    } else {
+      balances.add(AccountDataModel(
+        name: 'Kolo Flex',
+        amount: KoloboxFundEnum.koloFlex.getDepositAmountValue(),
+        remainingTenor: flexTenor,
+        totalTenor: KoloboxFundEnum.koloFlex.getTenorValue(),
+        startDate: KoloboxFundEnum.koloFlex.getStartDateValue(),
+      ));
+    }
+
+    if (targetTenor == 0) {
+      availableForWithdrawals.add(AccountDataModel(
+        name: 'Kolo Target',
+        amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
+        remainingTenor: targetTenor,
+        totalTenor: KoloboxFundEnum.koloTarget.getTenorValue(),
+        startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
+      ));
+    } else {
+      balances.add(AccountDataModel(
+        name: 'Kolo Target',
+        amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
+        remainingTenor: targetTenor,
+        totalTenor: KoloboxFundEnum.koloTarget.getTenorValue(),
+        startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
+      ));
+    }
+
+    if (targetPlusTenor == 0) {
+      availableForWithdrawals.add(AccountDataModel(
+        name: 'Kolo Target Plus',
+        amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
+        remainingTenor: targetPlusTenor,
+        totalTenor: KoloboxFundEnum.koloTargetPlus.getTenorValue(),
+        startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
+      ));
+    } else {
+      balances.add(AccountDataModel(
+        name: 'Kolo Target Plus',
+        amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
+        remainingTenor: targetPlusTenor,
+        totalTenor: KoloboxFundEnum.koloTargetPlus.getTenorValue(),
+        startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
+      ));
+    }
+
+    if (familyTenor == 0) {
+      availableForWithdrawals.add(AccountDataModel(
+        name: 'Kolo Family',
+        amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
+        remainingTenor: familyTenor,
+        totalTenor: KoloboxFundEnum.koloFamily.getTenorValue(),
+        startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
+      ));
+    } else {
+      balances.add(AccountDataModel(
+        name: 'Kolo Family',
+        amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
+        remainingTenor: familyTenor,
+        totalTenor: KoloboxFundEnum.koloFamily.getTenorValue(),
+        startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
+      ));
+    }
+
+    if (groupTenor == 0) {
+      availableForWithdrawals.add(AccountDataModel(
+        name: 'Kolo Group',
+        amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
+        remainingTenor: groupTenor,
+        totalTenor: KoloboxFundEnum.koloGroup.getTenorValue(),
+        startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
+      ));
+    } else {
+      balances.add(AccountDataModel(
+        name: 'Kolo Group',
+        amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
+        remainingTenor: groupTenor,
+        totalTenor: KoloboxFundEnum.koloGroup.getTenorValue(),
+        startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
+      ));
+    }
+
     return Column(
       children: [
         Align(
@@ -433,8 +533,9 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
         ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
+            itemCount: availableForWithdrawals.length,
             itemBuilder: (_, index) => AccountItemWidget(
+                  accountDataModel: availableForWithdrawals[index],
                   onDetail: () {
                     comingSoon();
                     // BlocProvider.of<DashboardBloc>(context)
@@ -478,8 +579,9 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
         ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
+            itemCount: balances.length,
             itemBuilder: (_, index) => AccountItemWidget(
+                  accountDataModel: balances[index],
                   onDetail: () {},
                   onWithdrawal: () {},
                 )),
