@@ -164,6 +164,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                       keyboardType: TextInputType.text,
                       textInputAction: TextInputAction.done,
                       controller: passwordTextEditingController,
+                      obscureText: true,
                     ),
                     const SizedBox(
                       height: 4,
