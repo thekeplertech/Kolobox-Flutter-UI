@@ -16,6 +16,7 @@ import 'package:kolobox_new_app/feature/auth/register/presentation/bloc/register
 import 'package:kolobox_new_app/routes/routes.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../../../config/flavor_config.dart';
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/button.dart';
 import '../../../../../core/ui/widgets/custom_text_field.dart';
@@ -76,14 +77,17 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    firstNameTextEditingController.text = 'Parth';
-    lastNameTextEditingController.text = 'Suthar';
-    emailAddressTextEditingController.text = 'parth12345678901@mailinator.com';
-    phoneNumberTextEditingController.text = '95584947891';
-    nextOfKinTextEditingController.text = 'First Next of kin';
-    occupationTextEditingController.text = 'First Occupation';
-    passwordTextEditingController.text = 'kolobox@123';
-    cPasswordTextEditingController.text = 'kolobox@123';
+    if (!FlavorConfig.isProd()) {
+      firstNameTextEditingController.text = 'Parth';
+      lastNameTextEditingController.text = 'Suthar';
+      emailAddressTextEditingController.text =
+          'parth12345678901@mailinator.com';
+      phoneNumberTextEditingController.text = '95584947891';
+      nextOfKinTextEditingController.text = 'First Next of kin';
+      occupationTextEditingController.text = 'First Occupation';
+      passwordTextEditingController.text = 'kolobox@123';
+      cPasswordTextEditingController.text = 'kolobox@123';
+    }
   }
 
   @override
