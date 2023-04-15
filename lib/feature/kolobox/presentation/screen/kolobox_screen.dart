@@ -37,7 +37,7 @@ class KoloboxScreen extends BaseBlocWidget {
 }
 
 class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
-  StreamController<bool> walletBalanceStreamController =
+  StreamController<bool> childStreamController =
       StreamController<bool>.broadcast();
 
   @override
@@ -57,7 +57,11 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                 openDetailScreen(state.fundEnum, state.earningsDataModel);
               }
             },
-            child: getChild(),
+            child: StreamBuilder<bool>(
+                stream: childStreamController.stream,
+                builder: (context, snapshot) {
+                  return getChild();
+                }),
           ),
         ),
       );
@@ -70,7 +74,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
               amount: CurrencyTextInputFormatter.formatAmount(
                   prefHelper?.getProfileDataModel().wallet?.accountBalance,
                   isSymbol: false),
-              walletBalanceStreamController: walletBalanceStreamController,
+              walletBalanceStreamController: childStreamController,
               leftIcon: imageDashboardIcon,
               rightIcon: imageNotification,
               onLeftPressed: () => comingSoon(),
@@ -123,6 +127,9 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                             .then((value) {
                           BlocProvider.of<DashboardBloc>(context)
                               .add(ShowEnableBottomScreenEvent());
+                          if (StateContainer.of(context).isSuccessful) {
+                            childStreamController.add(true);
+                          }
                           StateContainer.of(context).clearData();
                         });
                       },
@@ -266,6 +273,6 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
   @override
   void dispose() {
     super.dispose();
-    walletBalanceStreamController.close();
+    childStreamController.close();
   }
 }

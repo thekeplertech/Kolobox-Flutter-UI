@@ -62,17 +62,16 @@ class RegisterBloc extends BaseBloc<RegisterEvent, RegisterState> {
   }
 
   Future<void> callSaveUserEvent(SaveUserEvent event, Emitter emit) async {
-    emit(SaveUserState());
     // For Save and login, below code
-    // baseBlocObject!.add(LoadApiEvent());
-    // final result = await dashboardRepo.getProfile();
-    //
-    // result.fold((l) {
-    //   baseBlocObject!.objectModel = l;
-    //   baseBlocObject!.add(ErrorApiEvent());
-    // }, (r) {
-    //   baseBlocObject!.add(LoadedApiEvent());
-    //   emit(SaveUserState());
-    // });
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.getProfile();
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(SaveUserState());
+    });
   }
 }

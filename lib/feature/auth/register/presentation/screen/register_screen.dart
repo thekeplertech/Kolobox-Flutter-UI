@@ -81,8 +81,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
       firstNameTextEditingController.text = 'Parth';
       lastNameTextEditingController.text = 'Suthar';
       emailAddressTextEditingController.text =
-          'parth12345678901@mailinator.com';
-      phoneNumberTextEditingController.text = '95584947891';
+          'parth12345678941@mailinator.com';
+      phoneNumberTextEditingController.text = '95584947841';
       nextOfKinTextEditingController.text = 'First Next of kin';
       occupationTextEditingController.text = 'First Occupation';
       passwordTextEditingController.text = 'kolobox@123';
@@ -313,8 +313,11 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
                               onClickVerifyUser();
                               break;
                             case 2:
-                              BlocProvider.of<RegisterBloc>(context)
-                                  .add(SaveUserEvent());
+                              goBack(context);
+
+                              /// Set For register, login and go to dashboard
+                              // BlocProvider.of<RegisterBloc>(context)
+                              //     .add(SaveUserEvent());
                               break;
                           }
                         },
