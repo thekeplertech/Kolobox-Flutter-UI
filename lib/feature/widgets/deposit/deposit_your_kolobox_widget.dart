@@ -231,13 +231,6 @@ class _DepositYourKoloboxWidgetState
   }
 
   onClickNext() {
-    print(double.parse(getOnlyAmount(amountEditingController.text)));
-    print(double.parse(
-        StateContainer.of(context).getKoloBoxEnum()!.getMinimumAmountValue()));
-    print((double.parse(getOnlyAmount(amountEditingController.text)) <
-        double.parse(StateContainer.of(context)
-            .getKoloBoxEnum()!
-            .getMinimumAmountValue())));
     if (amountEditingController.text.isEmpty) {
       Utils.showToast(
           context,

@@ -35,7 +35,8 @@ class KoloboxBloc extends BaseBloc<KoloboxEvent, KoloboxState> {
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(CallEarningsState(fundEnum: event.fundEnum));
+      emit(CallEarningsState(
+          fundEnum: event.fundEnum, earningsDataModel: r.model));
     });
   }
 }

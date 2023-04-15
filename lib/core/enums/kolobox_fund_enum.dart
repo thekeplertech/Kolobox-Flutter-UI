@@ -157,6 +157,20 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
+  String get getActiveId {
+    PrefHelper helper = sl();
+    ActiveProductDataModel? active = helper.getActiveProductDataModel();
+
+    int? index = active?.products
+        ?.indexWhere((element) => element.productId == getProductId);
+
+    if (index != null && index != -1) {
+      return active?.products?[index].id ?? '';
+    } else {
+      return '';
+    }
+  }
+
   String getFundPageValue(bool isDetail) {
     if (this == KoloboxFundEnum.koloFlex) {
       return koloFlexPageValue;

@@ -6,6 +6,7 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_data_model.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_bloc.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_state.dart';
 import 'package:kolobox_new_app/feature/kolofamily/presentation/kolo_family_page.dart';
@@ -53,7 +54,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
           child: BlocListener<KoloboxBloc, KoloboxState>(
             listener: (_, state) {
               if (state is CallEarningsState) {
-                openDetailScreen(state.fundEnum);
+                openDetailScreen(state.fundEnum, state.earningsDataModel);
               }
             },
             child: getChild(),
@@ -191,7 +192,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
       GestureDetector(
         onTap: () {
           BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
-            model: EarningsRequestModel(userProductId: fundEnum.getProductId),
+            model: EarningsRequestModel(userProductId: fundEnum.getActiveId),
             fundEnum: fundEnum,
           ));
         },
@@ -236,14 +237,16 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
         ),
       );
 
-  openDetailScreen(KoloboxFundEnum fundEnum) {
+  openDetailScreen(
+      KoloboxFundEnum fundEnum, EarningsDataModel earningsDataModel) {
     if (fundEnum != KoloboxFundEnum.koloFlex) {
       comingSoon();
       return;
     }
     switch (fundEnum) {
       case KoloboxFundEnum.koloFlex:
-        navigatePush(context, const KoloFlexPage());
+        navigatePush(
+            context, KoloFlexPage(earningsDataModel: earningsDataModel));
         break;
       case KoloboxFundEnum.koloTarget:
         navigatePush(context, const KoloTargetPage());
