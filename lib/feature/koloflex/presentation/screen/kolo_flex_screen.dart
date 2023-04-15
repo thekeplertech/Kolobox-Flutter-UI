@@ -458,7 +458,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
         amount: KoloboxFundEnum.koloFlex.getDepositAmountValue(),
         remainingTenor: flexRemainingTenor,
         totalTenor: flexTotalTenor,
-        startDate: '',
+        startDate: KoloboxFundEnum.koloFlex.getStartDateValue(),
       ));
     } else {
       balances.add(AccountDataModel(

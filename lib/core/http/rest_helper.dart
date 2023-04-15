@@ -72,4 +72,7 @@ abstract class RestHelper {
   @POST(ApiUrls.topUpAPI)
   Future<ApiResponse> topUp(
       @Path("productId") String productId, @Body() TopUpRequestModel model);
+
+  @GET(ApiUrls.investmentGoalAPI)
+  Future<ApiResponse> getInvestmentGoalAPI();
 }

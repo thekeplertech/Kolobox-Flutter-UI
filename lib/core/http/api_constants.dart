@@ -18,6 +18,7 @@ class ApiUrls {
   static const String verifyPinAPI = "helpers/verifyPin";
   static const String selectProductAPI = "product/{userId}/selection";
   static const String topUpAPI = "product/{productId}/account/topup";
+  static const String investmentGoalAPI = "user/investment/goal";
 }
 
 const String USERS_API = "users";

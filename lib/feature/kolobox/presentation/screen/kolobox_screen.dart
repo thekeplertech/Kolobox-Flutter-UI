@@ -9,9 +9,6 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_data_model.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_bloc.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_state.dart';
-import 'package:kolobox_new_app/feature/kolofamily/presentation/kolo_family_page.dart';
-import 'package:kolobox_new_app/feature/kologroup/presentation/kolo_group_page.dart';
-import 'package:kolobox_new_app/feature/kolotarget/presentation/kolo_target_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -23,6 +20,7 @@ import '../../../dashboard/data/models/earnings_request_model.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
+import '../../../kolotarget/presentation/kolo_target_page.dart';
 import '../../../notifications/presentation/notifications_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
@@ -246,26 +244,25 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
 
   openDetailScreen(
       KoloboxFundEnum fundEnum, EarningsDataModel earningsDataModel) {
-    if (fundEnum != KoloboxFundEnum.koloFlex) {
-      comingSoon();
-      return;
-    }
     switch (fundEnum) {
       case KoloboxFundEnum.koloFlex:
         navigatePush(
             context, KoloFlexPage(earningsDataModel: earningsDataModel));
         break;
       case KoloboxFundEnum.koloTarget:
-        navigatePush(context, const KoloTargetPage());
+        navigatePush(
+            context, KoloTargetPage(earningsDataModel: earningsDataModel));
         break;
       case KoloboxFundEnum.koloTargetPlus:
         comingSoon();
         break;
       case KoloboxFundEnum.koloFamily:
-        navigatePush(context, const KoloFamilyPage());
+        comingSoon();
+        // navigatePush(context, const KoloFamilyPage());
         break;
       case KoloboxFundEnum.koloGroup:
-        navigatePush(context, const KoloGroupPage());
+        comingSoon();
+        // navigatePush(context, const KoloGroupPage());
         break;
     }
   }
