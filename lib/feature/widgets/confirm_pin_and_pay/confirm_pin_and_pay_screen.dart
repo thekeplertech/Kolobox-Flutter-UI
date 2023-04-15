@@ -6,6 +6,7 @@ import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/pay_stack_payment_gateway/pay_stack_payment.dart';
+import 'package:kolobox_new_app/core/ui/extension.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
@@ -230,7 +231,8 @@ class ConfirmPinAndPayScreenState
           model: SelectProductRequestModel(
             productId:
                 StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
-            savingFrequency: 'monthly',
+            savingFrequency:
+                StateContainer.of(context).getPeriodEnum().getPeriodPassValue,
             depositAmount:
                 getOnlyAmount(StateContainer.of(context).getAmount()),
           )));

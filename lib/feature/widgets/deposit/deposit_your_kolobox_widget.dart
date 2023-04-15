@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kolobox_new_app/core/constants/app_constants.dart';
@@ -7,16 +9,18 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
-import 'package:kolobox_new_app/feature/widgets/deposit/deposit_summary_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/deposit/deposit_summary_widget_page.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/feature/widgets/product_item_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_screen.dart';
 import '../../../../../core/colors/color_list.dart';
+import '../../../core/enums/period_enum.dart';
 import '../../../core/ui/widgets/custom_text_field.dart';
 import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/utils.dart';
+import '../recurring_deposit/select_recurring_period_widget.dart';
 
 class DepositYourKoloboxWidget extends BaseScreen {
   const DepositYourKoloboxWidget({
@@ -31,6 +35,10 @@ class DepositYourKoloboxWidget extends BaseScreen {
 class _DepositYourKoloboxWidgetState
     extends BaseScreenState<DepositYourKoloboxWidget> {
   TextEditingController amountEditingController = TextEditingController();
+
+  StreamController<PeriodEnum> periodStreamController =
+      StreamController<PeriodEnum>.broadcast();
+  PeriodEnum selectedPeriodEnum = PeriodEnum.monthly;
 
   @override
   Widget body(BuildContext context) => Padding(
@@ -141,6 +149,38 @@ class _DepositYourKoloboxWidgetState
               contentPadding: const EdgeInsets.symmetric(vertical: 25),
               controller: amountEditingController,
             ),
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Select recurring period',
+              style:
+                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            StreamBuilder<PeriodEnum>(
+                initialData: selectedPeriodEnum,
+                stream: periodStreamController.stream,
+                builder: (context, snapshot) {
+                  return CustomTextField(
+                    selectedPeriodEnum.getPeriodValue,
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.words,
+                    onPressed: () {
+                      showCustomBottomSheet(SelectRecurringPeriodWidget(
+                        periodEnum: selectedPeriodEnum,
+                        onPop: (periodEnum) {
+                          selectedPeriodEnum = periodEnum;
+                          periodStreamController.add(selectedPeriodEnum);
+                        },
+                      ));
+                    },
+                    iconData: KoloBoxIcons.dropDownArrow,
+                  );
+                }),
             const SizedBox(
               height: 20,
             ),
@@ -266,14 +306,19 @@ class _DepositYourKoloboxWidgetState
       return;
     }
     StateContainer.of(context).openFundMyKoloBox(
-        fundEnum: StateContainer.of(context).getKoloBoxEnum(),
-        amount: amountEditingController.text);
-    showCustomBottomSheet(const DepositSummaryWidget());
+      fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+      amount: amountEditingController.text,
+      periodEnum: selectedPeriodEnum,
+    );
+    showCustomBottomSheet(DepositSummaryWidgetPage(
+      key: Key('deposit_summary_${DateTime.now().millisecondsSinceEpoch}'),
+    ));
   }
 
   @override
   void dispose() {
     super.dispose();
     amountEditingController.dispose();
+    periodStreamController.close();
   }
 }

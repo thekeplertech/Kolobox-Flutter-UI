@@ -65,13 +65,15 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
             if (state is CallLoginState) {
               Future.delayed(const Duration(milliseconds: 200), () {
                 if (state.isPinSet) {
-                  showCustomBottomSheet(PinCreatedWidget(
-                    onBack: () {
-                      Future.delayed(const Duration(milliseconds: 200), () {
-                        saveDataAndGoToDashboard();
-                      });
-                    },
-                  ));
+                  showCustomBottomSheet(
+                    PinCreatedWidget(
+                      onBack: () {
+                        Future.delayed(const Duration(milliseconds: 200), () {
+                          saveDataAndGoToDashboard();
+                        });
+                      },
+                    ),
+                  );
                 } else {
                   saveDataAndGoToDashboard();
                 }

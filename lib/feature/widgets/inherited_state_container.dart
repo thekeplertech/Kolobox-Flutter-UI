@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
+import 'package:kolobox_new_app/core/enums/period_enum.dart';
 
 import '../../core/enums/payment_gateway_enum.dart';
 
@@ -43,6 +44,7 @@ class StateContainerState extends State<StateContainer> {
   String? _amount = '';
   PaymentGatewayEnum? _paymentGatewayEnum;
   String? _popUntil;
+  PeriodEnum? _periodEnum;
   bool isSuccessful = false;
 
   @override
@@ -58,6 +60,8 @@ class StateContainerState extends State<StateContainer> {
 
   PaymentGatewayEnum? getPaymentGatewayEnum() => _paymentGatewayEnum;
 
+  PeriodEnum getPeriodEnum() => _periodEnum ?? PeriodEnum.monthly;
+
   String getPopUntil() => _popUntil ?? '/';
 
   bool? isWallet() => _isWallet;
@@ -69,6 +73,7 @@ class StateContainerState extends State<StateContainer> {
     KoloboxFundEnum? fundEnum,
     String? amount,
     PaymentGatewayEnum? paymentEnum,
+    PeriodEnum? periodEnum,
     String? popUntil,
     bool? isWallet,
   }) {
@@ -76,6 +81,7 @@ class StateContainerState extends State<StateContainer> {
     _amount =
         amount?.replaceAll(nigerianCurrency, '').replaceAll(',', '').trim();
     _paymentGatewayEnum = paymentEnum;
+    _periodEnum = periodEnum;
     if (popUntil != null) {
       _popUntil = popUntil;
     }

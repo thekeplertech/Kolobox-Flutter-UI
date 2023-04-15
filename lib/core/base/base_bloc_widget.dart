@@ -20,8 +20,7 @@ abstract class BaseBlocWidget extends BaseScreen {
 
 abstract class BaseBlocWidgetState<T extends BaseBlocWidget>
     extends BaseScreenState<T> {
-  static final GlobalKey<ScaffoldState> globalKeyLoader =
-      GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> globalKeyLoader = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
