@@ -25,4 +25,6 @@ abstract class RemoteDashboardDataSource {
       String userId, SelectProductRequestModel model);
 
   Future<ApiResponse> topUp(String productId, TopUpRequestModel model);
+
+  Future<ApiResponse> getInvestmentGoalAPI();
 }

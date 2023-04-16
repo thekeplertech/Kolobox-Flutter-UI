@@ -4,7 +4,6 @@ import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/utils/date_helper.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/active_product_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/product_data_model.dart';
-import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../di/injection_container.dart';
 import '../colors/color_list.dart';
@@ -235,14 +234,14 @@ extension EnumExtensions on KoloboxFundEnum {
 
   int getTenorValue() {
     PrefHelper helper = sl();
-    ProductDataModel? active = helper.getProductDataModel();
+    ProductDataModel? model = helper.getProductDataModel();
 
     int? index =
-        active?.products?.indexWhere((element) => element.id == getProductId);
+        model?.products?.indexWhere((element) => element.id == getProductId);
 
     if (index != null && index != -1) {
-      logger?.d("${this} ${active?.products?[index].tenor}");
-      return active?.products?[index].tenor ?? 0;
+      // logger?.d("tenor value ${this} ${model?.products?[index].tenor}");
+      return model?.products?[index].tenor ?? 0;
     } else {
       return 0;
     }
@@ -297,23 +296,26 @@ extension EnumExtensions on KoloboxFundEnum {
 
     int? index = active?.products
         ?.indexWhere((element) => element.productId == getProductId);
+    // logger?.d("---------------------");
+    // logger?.d("$this $index");
 
     if (index != null && index != -1) {
       if ((active?.products?[index].startDate ?? '').isEmpty) {
+        // logger?.d("start date $this ${(active?.products?[index].startDate)}");
         return 0;
       }
-      DateTime dateTime = DateTime(2023, 4, 1);
-      DateHelper.getDateTime(active?.products?[index].startDate ?? '');
-      int tenor = model?.products?[index].tenor ?? 0;
-      // logger?.d('start date $dateTime $tenor');
+      DateTime dateTime =
+          DateHelper.getDateTime(active?.products?[index].startDate ?? '');
+      int tenor = getTenorValue();
+      // logger?.d('start date and tenor $dateTime $tenor');
       dateTime = dateTime.add(Duration(days: tenor));
       // logger?.d('start date $dateTime $tenor');
 
       if (DateTime.now().isBefore(dateTime)) {
-        // logger?.d('before');
+        // logger?.d("before $this ${(active?.products?[index].startDate)}");
         tenor = dateTime.difference(DateTime.now()).inDays;
       } else {
-        // logger?.d('not before');
+        // logger?.d("not before $this ${(active?.products?[index].startDate)}");
         tenor = 0;
       }
       return tenor;

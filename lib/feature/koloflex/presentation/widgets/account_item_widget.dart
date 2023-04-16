@@ -127,8 +127,14 @@ class AccountItemWidget extends StatelessWidget {
                   painter: RangeCustomPainter(
                     selectedColor: ColorList.redDark2Color,
                     backColor: ColorList.greyLight8Color,
-                    // duration: accountDataModel.totalTenor,
-                    // progress: 40,
+                    duration: (accountDataModel.remainingTenor > 0 &&
+                            accountDataModel.totalTenor != 0)
+                        ? accountDataModel.totalTenor
+                        : 100,
+                    progress: (accountDataModel.remainingTenor > 0 &&
+                            accountDataModel.totalTenor != 0)
+                        ? accountDataModel.remainingTenor
+                        : 0,
                   ),
                   child: accountDataModel.remainingTenor > 0 &&
                           accountDataModel.totalTenor != 0
@@ -137,7 +143,7 @@ class AccountItemWidget extends StatelessWidget {
                           child: Center(
                             child: Text(
                               '${accountDataModel.remainingTenor} Days Left',
-                              style: AppStyle.b9SemiBold
+                              style: AppStyle.b10SemiBold
                                   .copyWith(color: ColorList.greyLight9Color),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,

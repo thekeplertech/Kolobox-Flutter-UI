@@ -13,6 +13,7 @@ import '../../../../../di/injection_container.dart';
 import '../../../../core/preference/pref_helper.dart';
 import '../models/active_product_data_model.dart';
 import '../models/earnings_request_model.dart';
+import '../models/investment_goal_response_model.dart';
 import '../models/product_data_model.dart';
 import '../models/profile_data_model.dart';
 import '../models/select_product_request_model.dart';
@@ -139,4 +140,12 @@ class DashboardRepoImpl extends DashboardRepo {
           String productId, TopUpRequestModel model) async =>
       Right(Success(TopUpResponseModel.fromJson(
           (await remoteDashboardDataSource.topUp(productId, model)).data)));
+
+  @override
+  Future<Either<Failure, Success>> getInvestmentGoalAPI() =>
+      baseApiMethod(() => getInvestmentGoalFromAPI());
+
+  Future<Either<Failure, Success>> getInvestmentGoalFromAPI() async =>
+      Right(Success(InvestmentGoalResponseModel.fromJson(
+          (await remoteDashboardDataSource.getInvestmentGoalAPI()).data)));
 }

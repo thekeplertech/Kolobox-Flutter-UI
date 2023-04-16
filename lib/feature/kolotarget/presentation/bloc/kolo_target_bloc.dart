@@ -15,22 +15,21 @@ class KoloTargetBloc extends BaseBloc<KoloTargetEvent, KoloTargetState> {
 
   KoloTargetBloc(MasterBloc baseBlocObject)
       : super(baseBlocObject, InitialState()) {
-    on<GetTransactionsEvent>((event, emit) async {
-      await callTransactionsEvent(event, emit);
+    on<GetGoalEvent>((event, emit) async {
+      await callGetGoalEvent(event, emit);
     });
   }
 
-  Future<void> callTransactionsEvent(
-      GetTransactionsEvent event, Emitter emit) async {
+  Future<void> callGetGoalEvent(GetGoalEvent event, Emitter emit) async {
     baseBlocObject!.add(LoadApiEvent());
-    final result = await dashboardRepo.getTransactions(event.model);
+    final result = await dashboardRepo.getInvestmentGoalAPI();
 
     result.fold((l) {
       baseBlocObject!.objectModel = l;
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(GetTransactionsState(model: r.model));
+      emit(GetGoalState(model: r.model));
     });
   }
 }

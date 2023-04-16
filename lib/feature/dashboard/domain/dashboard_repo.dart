@@ -33,4 +33,6 @@ abstract class DashboardRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> topUp(
       String productId, TopUpRequestModel model);
+
+  Future<Either<Failure, Success>> getInvestmentGoalAPI();
 }

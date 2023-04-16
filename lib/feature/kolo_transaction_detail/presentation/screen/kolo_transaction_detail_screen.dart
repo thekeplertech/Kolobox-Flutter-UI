@@ -9,14 +9,17 @@ import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../dashboard/data/models/investment_goal_response_model.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
+  final InvestmentGoalResponseModel goalResponseModel;
   final bool isPaid;
 
   const KoloTransactionDetailScreen({
     Key? key,
     required this.isPaid,
+    required this.goalResponseModel,
   }) : super(key: key);
 
   @override

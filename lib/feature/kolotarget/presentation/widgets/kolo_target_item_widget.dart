@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/core/utils/date_helper.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/investment_goal_response_model.dart';
 
 import '../../../../core/enums/kolobox_fund_enum.dart';
 
 class KoloTargetItemWidget extends StatelessWidget {
+  final InvestmentGoalResponseModel model;
   final KoloboxFundEnum koloboxFundEnum;
   final bool isPaid;
   final Function() onPressed;
@@ -14,6 +18,7 @@ class KoloTargetItemWidget extends StatelessWidget {
     Key? key,
     this.isPaid = false,
     required this.onPressed,
+    required this.model,
     this.koloboxFundEnum = KoloboxFundEnum.koloTarget,
   }) : super(key: key);
 
@@ -48,7 +53,7 @@ class KoloTargetItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Buy a new car',
+                        model.purpose ?? '',
                         style: AppStyle.b7Bold
                             .copyWith(color: ColorList.blackSecondColor),
                       ),
@@ -56,7 +61,8 @@ class KoloTargetItemWidget extends StatelessWidget {
                         height: 2,
                       ),
                       Text(
-                        '₦ 500,000.00',
+                        CurrencyTextInputFormatter.formatAmountDouble(
+                            model.amountSaved),
                         style: AppStyle.b8SemiBold
                             .copyWith(color: ColorList.primaryColor),
                       ),
@@ -90,7 +96,8 @@ class KoloTargetItemWidget extends StatelessWidget {
                     width: 3,
                   ),
                   Text(
-                    '26 Jan 2023',
+                    DateHelper.getDateFromDateTime(
+                        model.dueDate ?? '', 'dd MMM yyyy'),
                     style: AppStyle.b9SemiBold.copyWith(
                         color: isPaid
                             ? ColorList.redDarkColor
@@ -106,7 +113,8 @@ class KoloTargetItemWidget extends StatelessWidget {
                     width: 3,
                   ),
                   Text(
-                    '₦ 2,500,000.00',
+                    CurrencyTextInputFormatter.formatAmountDouble(
+                        model.goalAmount),
                     style: AppStyle.b9SemiBold
                         .copyWith(color: ColorList.primaryColor),
                   ),

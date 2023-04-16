@@ -1,11 +1,11 @@
-import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
+import '../../../dashboard/data/models/investment_goal_response_model.dart';
 
 abstract class KoloTargetState {}
 
 class InitialState extends KoloTargetState {}
 
-class GetTransactionsState extends KoloTargetState {
-  final TransactionsDataModel model;
+class GetGoalState extends KoloTargetState {
+  final InvestmentGoalResponseModel model;
 
-  GetTransactionsState({required this.model});
+  GetGoalState({required this.model});
 }

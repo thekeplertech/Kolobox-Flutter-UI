@@ -19,8 +19,7 @@ import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
 import '../../../dashboard/data/models/earnings_data_model.dart';
-import '../../../dashboard/data/models/transactions_data_model.dart';
-import '../../../dashboard/data/models/transactions_request_model.dart';
+import '../../../dashboard/data/models/investment_goal_response_model.dart';
 import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../bloc/kolo_target_bloc.dart';
@@ -44,10 +43,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
       StreamController<bool>.broadcast();
   bool isLeft = true;
 
-  bool isActiveEmpty = true;
-  bool isPaidEmpty = true;
-
-  List<Transactions> transactions = [];
+  InvestmentGoalResponseModel? goalResponseModel;
   EarningsDataModel? earningsDataModel;
   double interestAmount = 0;
 
@@ -56,7 +52,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
     earningsDataModel = widget.earningsDataModel;
     checkEarningsData();
     super.initState();
-    callTransactions();
+    callInvestmentGoal();
   }
 
   checkEarningsData() {
@@ -68,11 +64,8 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
     }
   }
 
-  callTransactions() =>
-      BlocProvider.of<KoloTargetBloc>(context).add(GetTransactionsEvent(
-        model: TransactionsRequestModel(
-            productId: KoloboxFundEnum.koloTarget.getProductId),
-      ));
+  callInvestmentGoal() =>
+      BlocProvider.of<KoloTargetBloc>(context).add(GetGoalEvent());
 
   @override
   Widget getCustomBloc() {
@@ -81,10 +74,9 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
       appBar: const NoAppBar(),
       body: BlocListener<KoloTargetBloc, KoloTargetState>(
         listener: (_, state) {
-          if (state is GetTransactionsState) {
-            transactions = state.model.transactions ?? [];
-            isActiveEmpty = transactions.isEmpty;
-            // emptyStreamController.add(isActiveEmpty);
+          if (state is GetGoalState) {
+            goalResponseModel = state.model;
+            leftRightStreamController.add(true);
           }
         },
         child: getChild(),
@@ -184,21 +176,6 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                     stream: leftRightStreamController.stream,
                     builder: (_, snapshot) => Column(
                       children: [
-                        if (!isActiveEmpty) ...[
-                          Button(
-                            'Create new target',
-                            backgroundColor: ColorList.lightBlue3Color,
-                            textColor: ColorList.primaryColor,
-                            overlayColor: ColorList.blueColor,
-                            borderRadius: 32,
-                            onPressed: () {
-                              onClickCreateTarget();
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                        ],
                         Container(
                           width: double.maxFinite,
                           decoration: BoxDecoration(
@@ -264,16 +241,21 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
                         ),
-                        if (isLeft) ...[
-                          if (isActiveEmpty)
-                            getEmptyWidget(true)
-                          else
-                            getActiveWidget(),
+                        if (goalResponseModel == null) ...[
+                          getEmptyWidget(isLeft),
                         ] else ...[
-                          if (isPaidEmpty)
-                            getEmptyWidget(false)
-                          else
-                            getPaidWidget(),
+                          KoloTargetItemWidget(
+                            model: goalResponseModel!,
+                            isPaid: !isLeft,
+                            onPressed: () {
+                              navigatePush(
+                                  context,
+                                  KoloTransactionDetailPage(
+                                    goalResponseModel: goalResponseModel!,
+                                    isPaid: !isLeft,
+                                  ));
+                            },
+                          ),
                         ],
                       ],
                     ),
@@ -292,11 +274,11 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
           const SizedBox(
             height: 60,
           ),
-          // Icon(
-          //   koloboxFundEnum.getFundIconValue,
-          //   size: 60,
-          //   color: koloboxFundEnum.getFundIconColorValue,
-          // ),
+          Icon(
+            KoloboxFundEnum.koloTarget.getFundIconValue,
+            size: 60,
+            color: KoloboxFundEnum.koloTarget.getFundIconColorValue,
+          ),
           const SizedBox(
             height: 20,
           ),
@@ -333,8 +315,6 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
     showCustomBottomSheet(const CreateKoloTargetWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
-      isActiveEmpty = false;
-      isPaidEmpty = false;
       leftRightStreamController.add(true);
     });
   }
@@ -342,23 +322,23 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
   Widget getActiveWidget() {
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (_, index) => Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: KoloTargetItemWidget(
-              onPressed: () {
-                navigatePush(
-                    context,
-                    const KoloTransactionDetailPage(
-                      isPaid: false,
-                    ));
-              },
-            ),
-          ),
-        ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   itemCount: transactions.length,
+        //   itemBuilder: (_, index) => Padding(
+        //     padding: const EdgeInsets.only(top: 15),
+        //     child: KoloTargetItemWidget(
+        //       onPressed: () {
+        //         navigatePush(
+        //             context,
+        //             const KoloTransactionDetailPage(
+        //               isPaid: false,
+        //             ));
+        //       },
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: 20,
         ),
@@ -369,24 +349,24 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
   Widget getPaidWidget() {
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (_, index) => Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: KoloTargetItemWidget(
-              isPaid: true,
-              onPressed: () {
-                navigatePush(
-                    context,
-                    const KoloTransactionDetailPage(
-                      isPaid: true,
-                    ));
-              },
-            ),
-          ),
-        ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   itemCount: transactions.length,
+        //   itemBuilder: (_, index) => Padding(
+        //     padding: const EdgeInsets.only(top: 15),
+        //     child: KoloTargetItemWidget(
+        //       isPaid: true,
+        //       onPressed: () {
+        //         navigatePush(
+        //             context,
+        //             const KoloTransactionDetailPage(
+        //               isPaid: true,
+        //             ));
+        //       },
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: 20,
         ),

@@ -14,9 +14,6 @@ import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../../routes/routes.dart';
-import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
-import '../../../kolotarget/presentation/widgets/kolo_target_item_widget.dart';
 import '../../../widgets/create_kolo_target/create_kolo_target_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
@@ -309,24 +306,24 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
   Widget getActiveWidget() {
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (_, index) => Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: KoloTargetItemWidget(
-              koloboxFundEnum: KoloboxFundEnum.koloGroup,
-              onPressed: () {
-                navigatePush(
-                    context,
-                    const KoloTransactionDetailPage(
-                      isPaid: false,
-                    ));
-              },
-            ),
-          ),
-        ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   itemCount: 5,
+        //   itemBuilder: (_, index) => Padding(
+        //     padding: const EdgeInsets.only(top: 15),
+        //     child: KoloTargetItemWidget(
+        //       koloboxFundEnum: KoloboxFundEnum.koloGroup,
+        //       onPressed: () {
+        //         navigatePush(
+        //             context,
+        //             const KoloTransactionDetailPage(
+        //               isPaid: false,
+        //             ));
+        //       },
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: 20,
         ),
@@ -337,25 +334,25 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
   Widget getPaidWidget() {
     return Column(
       children: [
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (_, index) => Padding(
-            padding: const EdgeInsets.only(top: 15),
-            child: KoloTargetItemWidget(
-              isPaid: true,
-              koloboxFundEnum: KoloboxFundEnum.koloGroup,
-              onPressed: () {
-                navigatePush(
-                    context,
-                    const KoloTransactionDetailPage(
-                      isPaid: true,
-                    ));
-              },
-            ),
-          ),
-        ),
+        // ListView.builder(
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   itemCount: 5,
+        //   itemBuilder: (_, index) => Padding(
+        //     padding: const EdgeInsets.only(top: 15),
+        //     child: KoloTargetItemWidget(
+        //       isPaid: true,
+        //       koloboxFundEnum: KoloboxFundEnum.koloGroup,
+        //       onPressed: () {
+        //         navigatePush(
+        //             context,
+        //             const KoloTransactionDetailPage(
+        //               isPaid: true,
+        //             ));
+        //       },
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: 20,
         ),

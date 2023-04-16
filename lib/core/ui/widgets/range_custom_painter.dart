@@ -7,8 +7,8 @@ class RangeCustomPainter extends CustomPainter {
   RangeCustomPainter({
     this.backColor = ColorList.greyLight8Color,
     this.selectedColor = ColorList.redDark2Color,
-    this.progress = 0,
     this.duration = 90,
+    this.progress = 0,
   });
 
   int progress, duration;
