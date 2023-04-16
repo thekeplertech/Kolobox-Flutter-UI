@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/account/bank_details/presentation/bank_details_page.dart';
 import 'package:kolobox_new_app/feature/account/history/presentation/history_page.dart';
 import 'package:kolobox_new_app/feature/account/notification/presentation/notification_settings_page.dart';
 import 'package:kolobox_new_app/feature/account/security/presentation/security_page.dart';
@@ -77,8 +78,13 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
                               thickness: 1),
-                          getSelectionOptionWidget(
-                              'Bank Details', imageBankDetailsIcon),
+                          InkWell(
+                            onTap: () {
+                              navigatePush(context, const BankDetailsPage());
+                            },
+                            child: getSelectionOptionWidget(
+                                'Bank Details', imageBankDetailsIcon),
+                          ),
                           Divider(
                               color: ColorList.greyDisableCircleColor,
                               height: 1,

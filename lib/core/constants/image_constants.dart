@@ -71,3 +71,7 @@ const imageWalletInfoIcon = "assets/images/wallet_info_icon.png";
 const imageNoHistoryIcon = "assets/images/no_history_icon.png";
 const imageNoNotificationIcon = "assets/images/no_notification_icon.png";
 const imageNotificationMenuIcon = "assets/images/notification_menu_icon.png";
+const bankDetailsIcon = "assets/images/bank_details.png";
+const copyIcon = "assets/images/copy.png";
+const deleteIcon = "assets/images/delete.png";
+const editIcon = "assets/images/edit.png";
