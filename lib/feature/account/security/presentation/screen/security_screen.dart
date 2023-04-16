@@ -36,7 +36,7 @@ class SecurityState extends BaseBlocWidgetState<SecurityScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const HomeAppBarWidget(
-                  leftIcon: imageBackArrowIcon, title: 'History'),
+                  leftIcon: imageBackArrowIcon, title: 'Security'),
               Padding(
                 padding: const EdgeInsets.only(
                     left: 28, right: 28, top: 5, bottom: 28),

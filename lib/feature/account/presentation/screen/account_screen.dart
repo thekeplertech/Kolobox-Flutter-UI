@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/widgets/edit_profile/edit_profile_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -10,6 +12,8 @@ import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../core/utils/date_helper.dart';
 import '../../../../routes/routes.dart';
+import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../settings/presentation/settings_page.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
@@ -208,7 +212,13 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 32,
                   onPressed: () {
-                    comingSoon();
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(HideDisableBottomScreenEvent());
+                    showCustomBottomSheet(const EditProfilePage())
+                        .then((value) {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ShowEnableBottomScreenEvent());
+                    });
                   },
                 ),
               ),
