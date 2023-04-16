@@ -252,6 +252,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                                   context,
                                   KoloTransactionDetailPage(
                                     goalResponseModel: goalResponseModel!,
+                                    interestAmount: interestAmount,
                                     isPaid: !isLeft,
                                   ));
                             },

@@ -6,19 +6,25 @@ import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../core/enums/kolobox_fund_enum.dart';
 import '../../../../core/ui/widgets/button.dart';
+import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../core/utils/date_helper.dart';
 import '../../../dashboard/data/models/investment_goal_response_model.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../../../widgets/inherited_state_container.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
   final InvestmentGoalResponseModel goalResponseModel;
+  final double interestAmount;
   final bool isPaid;
 
   const KoloTransactionDetailScreen({
     Key? key,
     required this.isPaid,
+    required this.interestAmount,
     required this.goalResponseModel,
   }) : super(key: key);
 
@@ -39,16 +45,21 @@ class KoloTransactionDetailState
       StreamController<bool>.broadcast();
   bool isRecurringDeposit = false;
 
-  // KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloFlex;
+  KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloTarget;
+  InvestmentGoalResponseModel? investmentGoalResponseModel;
+  double interestAmount = 0;
 
   @override
   void initState() {
+    investmentGoalResponseModel = widget.goalResponseModel;
+    interestAmount = widget.interestAmount;
     super.initState();
   }
 
   @override
   Widget getCustomBloc() {
-    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
+    koloboxFundEnum = StateContainer.of(context).getKoloBoxEnum() ??
+        KoloboxFundEnum.koloTarget;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
@@ -67,16 +78,17 @@ class KoloTransactionDetailState
                     const SizedBox(
                       height: 10,
                     ),
-                    // Text(
-                    //   '${koloboxFundEnum.getFundValue} Investment',
-                    //   style: AppStyle.b7SemiBold
-                    //       .copyWith(color: ColorList.blackSecondColor),
-                    // ),
+                    Text(
+                      '${koloboxFundEnum.getFundValue} Investment',
+                      style: AppStyle.b7SemiBold
+                          .copyWith(color: ColorList.blackSecondColor),
+                    ),
                     const SizedBox(
                       height: 4,
                     ),
                     Text(
-                      '₦ 150,000.00',
+                      CurrencyTextInputFormatter.formatAmountDouble(
+                          investmentGoalResponseModel?.amountSaved),
                       style: AppStyle.b2Bold
                           .copyWith(color: ColorList.primaryColor),
                     ),
@@ -95,7 +107,7 @@ class KoloTransactionDetailState
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Interest (4% p.a)',
+                            'Interest (${CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum.koloTarget.getInterestRate(), isSymbol: false)}% p.a)',
                             style: AppStyle.b8SemiBold
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
@@ -103,7 +115,8 @@ class KoloTransactionDetailState
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                '₦ 10,500.00',
+                                CurrencyTextInputFormatter.formatAmountDouble(
+                                    interestAmount),
                                 style: AppStyle.b7Bold
                                     .copyWith(color: ColorList.primaryColor),
                               ),
@@ -141,7 +154,7 @@ class KoloTransactionDetailState
                             height: 5,
                           ),
                           Text(
-                            'Buy a new car',
+                            investmentGoalResponseModel?.purpose ?? '',
                             style: AppStyle.b7Bold
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
@@ -149,7 +162,8 @@ class KoloTransactionDetailState
                             height: 5,
                           ),
                           Text(
-                            '₦ 2,500,000.00',
+                            CurrencyTextInputFormatter.formatAmountDouble(
+                                investmentGoalResponseModel?.goalAmount),
                             style: AppStyle.b8SemiBold
                                 .copyWith(color: ColorList.primaryColor),
                           ),
@@ -174,7 +188,7 @@ class KoloTransactionDetailState
                                   width: 3,
                                 ),
                                 Text(
-                                  '26 Jan 2023',
+                                  koloboxFundEnum.getStartDateValue(),
                                   style: AppStyle.b9SemiBold.copyWith(
                                       color: ColorList.blackSecondColor),
                                 ),
@@ -188,7 +202,10 @@ class KoloTransactionDetailState
                                   width: 3,
                                 ),
                                 Text(
-                                  '26 Jan 2023',
+                                  DateHelper.getDateFromDateTime(
+                                      investmentGoalResponseModel?.dueDate ??
+                                          '',
+                                      'dd MMM yyyy'),
                                   style: AppStyle.b9SemiBold.copyWith(
                                       color: widget.isPaid
                                           ? ColorList.redDarkColor
