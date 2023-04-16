@@ -5,6 +5,7 @@ import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/account/bank_details/presentation/bank_details_page.dart';
 import 'package:kolobox_new_app/feature/account/history/presentation/history_page.dart';
+import 'package:kolobox_new_app/feature/account/next_of_kin/presentation/next_of_kin_page.dart';
 import 'package:kolobox_new_app/feature/account/notification/presentation/notification_settings_page.dart';
 import 'package:kolobox_new_app/feature/account/security/presentation/security_page.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
@@ -107,8 +108,13 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
                               thickness: 1),
-                          getSelectionOptionWidget(
-                              'Next Of Kin', imageNextOfKinIcon),
+                          InkWell(
+                            onTap: () {
+                              navigatePush(context, const NextOfKinPage());
+                            },
+                            child: getSelectionOptionWidget(
+                                'Next Of Kin', imageNextOfKinIcon),
+                          ),
                           Divider(
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
