@@ -43,7 +43,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
       StreamController<bool>.broadcast();
   bool isLeft = true;
 
-  InvestmentGoalResponseModel? goalResponseModel;
+  InvestmentGoalModel? investmentGoalModel;
   EarningsDataModel? earningsDataModel;
   double interestAmount = 0;
 
@@ -75,7 +75,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
       body: BlocListener<KoloTargetBloc, KoloTargetState>(
         listener: (_, state) {
           if (state is GetGoalState) {
-            goalResponseModel = state.model;
+            investmentGoalModel = state.model.investmentGoalModel;
             leftRightStreamController.add(true);
           }
         },
@@ -241,17 +241,17 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
                         ),
-                        if (goalResponseModel == null) ...[
+                        if (investmentGoalModel == null) ...[
                           getEmptyWidget(isLeft),
                         ] else ...[
                           KoloTargetItemWidget(
-                            model: goalResponseModel!,
+                            model: investmentGoalModel!,
                             isPaid: !isLeft,
                             onPressed: () {
                               navigatePush(
                                   context,
                                   KoloTransactionDetailPage(
-                                    goalResponseModel: goalResponseModel!,
+                                    investmentGoalModel: investmentGoalModel!,
                                     interestAmount: interestAmount,
                                     isPaid: !isLeft,
                                   ));

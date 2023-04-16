@@ -9,7 +9,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/investment_goal_re
 import '../../../../core/enums/kolobox_fund_enum.dart';
 
 class KoloTargetItemWidget extends StatelessWidget {
-  final InvestmentGoalResponseModel model;
+  final InvestmentGoalModel model;
   final KoloboxFundEnum koloboxFundEnum;
   final bool isPaid;
   final Function() onPressed;

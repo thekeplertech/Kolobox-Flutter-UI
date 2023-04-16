@@ -1,4 +1,16 @@
 class InvestmentGoalResponseModel {
+  InvestmentGoalModel? investmentGoalModel;
+
+  InvestmentGoalResponseModel({this.investmentGoalModel});
+
+  InvestmentGoalResponseModel.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return;
+
+    investmentGoalModel = InvestmentGoalModel.fromJson(json);
+  }
+}
+
+class InvestmentGoalModel {
   String? dueDate;
   double? goalAmount;
   String? purpose;
@@ -8,7 +20,7 @@ class InvestmentGoalResponseModel {
   double? percentageAmountSaved;
   double? percentageDaysUsed;
 
-  InvestmentGoalResponseModel(
+  InvestmentGoalModel(
       {this.dueDate,
       this.goalAmount,
       this.purpose,
@@ -18,7 +30,7 @@ class InvestmentGoalResponseModel {
       this.percentageAmountSaved,
       this.percentageDaysUsed});
 
-  InvestmentGoalResponseModel.fromJson(Map<String, dynamic> json) {
+  InvestmentGoalModel.fromJson(Map<String, dynamic> json) {
     dueDate = json['due_date'] ?? '';
     purpose = json['purpose'] ?? '';
     goalAmount = json['goal_amount'] == null

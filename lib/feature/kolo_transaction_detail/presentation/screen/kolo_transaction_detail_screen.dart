@@ -17,7 +17,7 @@ import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
-  final InvestmentGoalResponseModel goalResponseModel;
+  final InvestmentGoalModel investmentGoalModel;
   final double interestAmount;
   final bool isPaid;
 
@@ -25,7 +25,7 @@ class KoloTransactionDetailScreen extends BaseBlocWidget {
     Key? key,
     required this.isPaid,
     required this.interestAmount,
-    required this.goalResponseModel,
+    required this.investmentGoalModel,
   }) : super(key: key);
 
   @override
@@ -46,12 +46,12 @@ class KoloTransactionDetailState
   bool isRecurringDeposit = false;
 
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloTarget;
-  InvestmentGoalResponseModel? investmentGoalResponseModel;
+  InvestmentGoalModel? investmentGoalModel;
   double interestAmount = 0;
 
   @override
   void initState() {
-    investmentGoalResponseModel = widget.goalResponseModel;
+    investmentGoalModel = widget.investmentGoalModel;
     interestAmount = widget.interestAmount;
     super.initState();
   }
@@ -88,7 +88,7 @@ class KoloTransactionDetailState
                     ),
                     Text(
                       CurrencyTextInputFormatter.formatAmountDouble(
-                          investmentGoalResponseModel?.amountSaved),
+                          investmentGoalModel?.amountSaved),
                       style: AppStyle.b2Bold
                           .copyWith(color: ColorList.primaryColor),
                     ),
@@ -154,7 +154,7 @@ class KoloTransactionDetailState
                             height: 5,
                           ),
                           Text(
-                            investmentGoalResponseModel?.purpose ?? '',
+                            investmentGoalModel?.purpose ?? '',
                             style: AppStyle.b7Bold
                                 .copyWith(color: ColorList.blackSecondColor),
                           ),
@@ -163,7 +163,7 @@ class KoloTransactionDetailState
                           ),
                           Text(
                             CurrencyTextInputFormatter.formatAmountDouble(
-                                investmentGoalResponseModel?.goalAmount),
+                                investmentGoalModel?.goalAmount),
                             style: AppStyle.b8SemiBold
                                 .copyWith(color: ColorList.primaryColor),
                           ),
@@ -203,8 +203,7 @@ class KoloTransactionDetailState
                                 ),
                                 Text(
                                   DateHelper.getDateFromDateTime(
-                                      investmentGoalResponseModel?.dueDate ??
-                                          '',
+                                      investmentGoalModel?.dueDate ?? '',
                                       'dd MMM yyyy'),
                                   style: AppStyle.b9SemiBold.copyWith(
                                       color: widget.isPaid

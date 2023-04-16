@@ -145,7 +145,14 @@ class DashboardRepoImpl extends DashboardRepo {
   Future<Either<Failure, Success>> getInvestmentGoalAPI() =>
       baseApiMethod(() => getInvestmentGoalFromAPI());
 
-  Future<Either<Failure, Success>> getInvestmentGoalFromAPI() async =>
-      Right(Success(InvestmentGoalResponseModel.fromJson(
-          (await remoteDashboardDataSource.getInvestmentGoalAPI()).data)));
+  Future<Either<Failure, Success>> getInvestmentGoalFromAPI() async {
+    dynamic data =
+        (await remoteDashboardDataSource.getInvestmentGoalAPI()).data;
+
+    if (data is Map<String, dynamic>) {
+      return Right(Success(InvestmentGoalResponseModel.fromJson(data)));
+    } else {
+      return Right(Success(InvestmentGoalResponseModel.fromJson(null)));
+    }
+  }
 }

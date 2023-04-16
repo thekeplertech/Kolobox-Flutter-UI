@@ -5,7 +5,7 @@ import '../../../core/base/base_page.dart';
 import 'screen/kolo_transaction_detail_screen.dart';
 
 class KoloTransactionDetailPage extends BasePage {
-  final InvestmentGoalResponseModel goalResponseModel;
+  final InvestmentGoalModel investmentGoalModel;
   final double interestAmount;
   final bool isPaid;
 
@@ -13,7 +13,7 @@ class KoloTransactionDetailPage extends BasePage {
     Key? key,
     required this.isPaid,
     required this.interestAmount,
-    required this.goalResponseModel,
+    required this.investmentGoalModel,
   }) : super(key: key);
 
   @override
@@ -27,6 +27,6 @@ class KoloTransactionDetailPageState
       KoloTransactionDetailScreen(
         isPaid: widget.isPaid,
         interestAmount: widget.interestAmount,
-        goalResponseModel: widget.goalResponseModel,
+        investmentGoalModel: widget.investmentGoalModel,
       );
 }
