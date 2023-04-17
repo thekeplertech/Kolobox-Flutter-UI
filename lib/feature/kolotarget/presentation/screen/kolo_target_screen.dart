@@ -9,7 +9,6 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:kolobox_new_app/feature/kolotarget/presentation/bloc/kolo_target_event.dart';
-import 'package:kolobox_new_app/feature/widgets/create_kolo_target/create_kolo_target_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
@@ -21,7 +20,9 @@ import '../../../../routes/routes.dart';
 import '../../../dashboard/data/models/earnings_data_model.dart';
 import '../../../dashboard/data/models/investment_goal_response_model.dart';
 import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
+import '../../../widgets/deposit/deposit_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../../../widgets/inherited_state_container.dart';
 import '../bloc/kolo_target_bloc.dart';
 import '../bloc/kolo_target_state.dart';
 import '../widgets/kolo_target_item_widget.dart';
@@ -312,11 +313,19 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
       );
 
   void onClickCreateTarget() {
+    StateContainer.of(context).openFundMyKoloBox(
+        fundEnum: KoloboxFundEnum.koloTarget,
+        popUntil: KoloboxFundEnum.koloTarget.getFundPageValue(false));
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const CreateKoloTargetWidget()).then((value) {
+    showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
-      leftRightStreamController.add(true);
+      if (StateContainer.of(context).isSuccessful) {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          callInvestmentGoal();
+        });
+      }
+      StateContainer.of(context).clearData();
     });
   }
 
