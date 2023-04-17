@@ -22,7 +22,7 @@ class KoloTargetBloc extends BaseBloc<KoloTargetEvent, KoloTargetState> {
 
   Future<void> callGetGoalEvent(GetGoalEvent event, Emitter emit) async {
     baseBlocObject!.add(LoadApiEvent());
-    final result = await dashboardRepo.getInvestmentGoalAPI();
+    final result = await dashboardRepo.getInvestmentGoal();
 
     result.fold((l) {
       baseBlocObject!.objectModel = l;

@@ -25,6 +25,9 @@ class ConfirmPinAndPayBloc
     on<TopUpEvent>((event, emit) async {
       await callTopUpEvent(event, emit);
     });
+    on<CreateInvestmentGoalEvent>((event, emit) async {
+      await callCreateInvestmentGoalEvent(event, emit);
+    });
   }
 
   Future<void> callVerifyPinEvent(VerifyPinEvent event, Emitter emit) async {
@@ -65,6 +68,20 @@ class ConfirmPinAndPayBloc
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(TopUpState(requestModel: event.model, responseModel: r.model));
+    });
+  }
+
+  Future<void> callCreateInvestmentGoalEvent(
+      CreateInvestmentGoalEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.createInvestmentGoal(event.model);
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(CreateInvestmentGoalState());
     });
   }
 }

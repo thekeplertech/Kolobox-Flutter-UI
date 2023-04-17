@@ -41,10 +41,12 @@ class StateContainerState extends State<StateContainer> {
   bool? _isFundYourKoloBox;
   bool? _isWallet;
   KoloboxFundEnum? _koloboxFundEnum;
-  String? _amount = '';
+  String? _amount = '', _targetAmount = '';
   PaymentGatewayEnum? _paymentGatewayEnum;
   String? _popUntil;
   PeriodEnum? _periodEnum;
+  DateTime? _targetDate;
+  String? _targetName;
   bool isSuccessful = false;
 
   @override
@@ -57,6 +59,12 @@ class StateContainerState extends State<StateContainer> {
   KoloboxFundEnum? getKoloBoxEnum() => _koloboxFundEnum;
 
   String getAmount() => _amount ?? '0.0';
+
+  String getTargetAmount() => _targetAmount ?? '0.0';
+
+  DateTime? getTargetDate() => _targetDate;
+
+  String? getTargetName() => _targetName;
 
   PaymentGatewayEnum? getPaymentGatewayEnum() => _paymentGatewayEnum;
 
@@ -72,6 +80,9 @@ class StateContainerState extends State<StateContainer> {
     bool? isFundYourKoloBox,
     KoloboxFundEnum? fundEnum,
     String? amount,
+    String? targetAmount,
+    String? targetName,
+    DateTime? targetDateTime,
     PaymentGatewayEnum? paymentEnum,
     PeriodEnum? periodEnum,
     String? popUntil,
@@ -80,6 +91,12 @@ class StateContainerState extends State<StateContainer> {
     _koloboxFundEnum = fundEnum;
     _amount =
         amount?.replaceAll(nigerianCurrency, '').replaceAll(',', '').trim();
+    _targetAmount = targetAmount
+        ?.replaceAll(nigerianCurrency, '')
+        .replaceAll(',', '')
+        .trim();
+    _targetName = targetName;
+    _targetDate = targetDateTime;
     _paymentGatewayEnum = paymentEnum;
     _periodEnum = periodEnum;
     if (popUntil != null) {
@@ -96,6 +113,8 @@ class StateContainerState extends State<StateContainer> {
   void clearData() {
     _koloboxFundEnum = null;
     _amount = null;
+    _targetAmount = null;
+    _targetDate = null;
     _paymentGatewayEnum = null;
     _popUntil = null;
     _isWallet = null;

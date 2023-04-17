@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
 
 import '../../../../core/apirepo/base_api_repo.dart';
@@ -34,5 +35,8 @@ abstract class DashboardRepo extends BaseApiRepo {
   Future<Either<Failure, Success>> topUp(
       String productId, TopUpRequestModel model);
 
-  Future<Either<Failure, Success>> getInvestmentGoalAPI();
+  Future<Either<Failure, Success>> getInvestmentGoal();
+
+  Future<Either<Failure, Success>> createInvestmentGoal(
+      CreateInvestmentGoalRequestModel model);
 }

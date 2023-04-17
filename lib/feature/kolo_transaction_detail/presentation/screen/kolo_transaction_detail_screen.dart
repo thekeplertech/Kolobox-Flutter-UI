@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
@@ -13,6 +14,15 @@ import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../core/utils/date_helper.dart';
 import '../../../dashboard/data/models/investment_goal_response_model.dart';
+import '../../../dashboard/data/models/transactions_data_model.dart';
+import '../../../dashboard/data/models/transactions_request_model.dart';
+import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../../../koloflex/presentation/bloc/kolo_flex_bloc.dart';
+import '../../../koloflex/presentation/bloc/kolo_flex_event.dart';
+import '../../../koloflex/presentation/bloc/kolo_flex_state.dart';
+import '../../../koloflex/presentation/widgets/transactions_item_widget.dart';
+import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
 
@@ -34,16 +44,22 @@ class KoloTransactionDetailScreen extends BaseBlocWidget {
 
 class KoloTransactionDetailState
     extends BaseBlocWidgetState<KoloTransactionDetailScreen> {
-  StreamController<bool> leftRightStreamController =
-      StreamController<bool>.broadcast();
-  bool isLeft = true;
+  // StreamController<bool> leftRightStreamController =
+  //     StreamController<bool>.broadcast();
+  // bool isLeft = true;
+  //
+  // bool isRecentEmpty = true;
+  // bool isFailedEmpty = true;
+  //
+  // StreamController<bool> recurringDepositStreamController =
+  //     StreamController<bool>.broadcast();
+  // bool isRecurringDeposit = false;
 
-  bool isRecentEmpty = true;
-  bool isFailedEmpty = true;
-
-  StreamController<bool> recurringDepositStreamController =
+  StreamController<bool> emptyStreamController =
       StreamController<bool>.broadcast();
-  bool isRecurringDeposit = false;
+  bool isEmpty = true;
+
+  List<Transactions> transactions = [];
 
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloTarget;
   InvestmentGoalModel? investmentGoalModel;
@@ -54,7 +70,14 @@ class KoloTransactionDetailState
     investmentGoalModel = widget.investmentGoalModel;
     interestAmount = widget.interestAmount;
     super.initState();
+    callTransactions();
   }
+
+  callTransactions() =>
+      BlocProvider.of<KoloFlexBloc>(context).add(GetTransactionsEvent(
+        model:
+            TransactionsRequestModel(productId: koloboxFundEnum.getProductId),
+      ));
 
   @override
   Widget getCustomBloc() {
@@ -63,398 +86,462 @@ class KoloTransactionDetailState
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
-      body: ScrollConfiguration(
-        behavior: NoOverFlowScrollbarBehaviour(),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HomeAppBarWidget(leftIcon: imageBackArrowIcon),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 18.52),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 10,
+      body: BlocListener<KoloFlexBloc, KoloFlexState>(
+        listener: (_, state) {
+          if (state is GetTransactionsState) {
+            transactions = state.model.transactions ?? [];
+            isEmpty = transactions.isEmpty;
+            emptyStreamController.add(isEmpty);
+          }
+        },
+        child: getChild(),
+      ),
+    );
+  }
+
+  ScrollConfiguration getChild() {
+    return ScrollConfiguration(
+      behavior: NoOverFlowScrollbarBehaviour(),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const HomeAppBarWidget(leftIcon: imageBackArrowIcon),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 28, vertical: 18.52),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    '${koloboxFundEnum.getFundValue} Investment',
+                    style: AppStyle.b7SemiBold
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    CurrencyTextInputFormatter.formatAmountDouble(
+                        investmentGoalModel?.amountSaved),
+                    style:
+                        AppStyle.b2Bold.copyWith(color: ColorList.primaryColor),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: ColorList.lightBlue7Color,
+                      borderRadius: BorderRadius.circular(14),
                     ),
-                    Text(
-                      '${koloboxFundEnum.getFundValue} Investment',
-                      style: AppStyle.b7SemiBold
-                          .copyWith(color: ColorList.blackSecondColor),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 13, vertical: 18),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Interest (${CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum.koloTarget.getInterestRate(), isSymbol: false)}% p.a)',
+                          style: AppStyle.b8SemiBold
+                              .copyWith(color: ColorList.blackSecondColor),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              CurrencyTextInputFormatter.formatAmountDouble(
+                                  interestAmount),
+                              style: AppStyle.b7Bold
+                                  .copyWith(color: ColorList.primaryColor),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              'Paid Interest',
+                              style: AppStyle.b9Medium
+                                  .copyWith(color: ColorList.blackThirdColor),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      CurrencyTextInputFormatter.formatAmountDouble(
-                          investmentGoalModel?.amountSaved),
-                      style: AppStyle.b2Bold
-                          .copyWith(color: ColorList.primaryColor),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: ColorList.lightBlue7Color,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 13, vertical: 18),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Interest (${CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum.koloTarget.getInterestRate(), isSymbol: false)}% p.a)',
-                            style: AppStyle.b8SemiBold
-                                .copyWith(color: ColorList.blackSecondColor),
+                        border: Border.all(
+                            color: ColorList.greyLight11Color, width: 1)),
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 12, bottom: 10),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Target',
+                          style: AppStyle.b9Medium
+                              .copyWith(color: ColorList.greyLight12Color),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          investmentGoalModel?.purpose ?? '',
+                          style: AppStyle.b7Bold
+                              .copyWith(color: ColorList.blackSecondColor),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          CurrencyTextInputFormatter.formatAmountDouble(
+                              investmentGoalModel?.goalAmount),
+                          style: AppStyle.b8SemiBold
+                              .copyWith(color: ColorList.primaryColor),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: ColorList.lightBlue9Color,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 12),
+                          child: Row(
                             children: [
                               Text(
-                                CurrencyTextInputFormatter.formatAmountDouble(
-                                    interestAmount),
-                                style: AppStyle.b7Bold
-                                    .copyWith(color: ColorList.primaryColor),
+                                'Start date',
+                                style: AppStyle.b9Medium.copyWith(
+                                    color: ColorList.greyLight12Color),
                               ),
                               const SizedBox(
-                                height: 3,
+                                width: 3,
                               ),
                               Text(
-                                'Paid Interest',
-                                style: AppStyle.b9Medium
-                                    .copyWith(color: ColorList.blackThirdColor),
+                                DateHelper.getDateFromDateTime(
+                                    koloboxFundEnum.getStartDateValue(),
+                                    'dd MMM yyyy'),
+                                style: AppStyle.b9SemiBold.copyWith(
+                                    color: ColorList.blackSecondColor),
+                              ),
+                              const Spacer(),
+                              Text(
+                                'End date',
+                                style: AppStyle.b9Medium.copyWith(
+                                    color: ColorList.greyLight12Color),
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Text(
+                                DateHelper.getDateFromDateTime(
+                                    investmentGoalModel?.dueDate ?? '',
+                                    'dd MMM yyyy'),
+                                style: AppStyle.b9SemiBold.copyWith(
+                                    color: widget.isPaid
+                                        ? ColorList.redDarkColor
+                                        : ColorList.blackSecondColor),
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                              color: ColorList.greyLight11Color, width: 1)),
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, top: 12, bottom: 10),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Target',
-                            style: AppStyle.b9Medium
-                                .copyWith(color: ColorList.greyLight12Color),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            investmentGoalModel?.purpose ?? '',
-                            style: AppStyle.b7Bold
-                                .copyWith(color: ColorList.blackSecondColor),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            CurrencyTextInputFormatter.formatAmountDouble(
-                                investmentGoalModel?.goalAmount),
-                            style: AppStyle.b8SemiBold
-                                .copyWith(color: ColorList.primaryColor),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: ColorList.lightBlue9Color,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 12),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Start date',
-                                  style: AppStyle.b9Medium.copyWith(
-                                      color: ColorList.greyLight12Color),
-                                ),
-                                const SizedBox(
-                                  width: 3,
-                                ),
-                                Text(
-                                  koloboxFundEnum.getStartDateValue(),
-                                  style: AppStyle.b9SemiBold.copyWith(
-                                      color: ColorList.blackSecondColor),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  'End date',
-                                  style: AppStyle.b9Medium.copyWith(
-                                      color: ColorList.greyLight12Color),
-                                ),
-                                const SizedBox(
-                                  width: 3,
-                                ),
-                                Text(
-                                  DateHelper.getDateFromDateTime(
-                                      investmentGoalModel?.dueDate ?? '',
-                                      'dd MMM yyyy'),
-                                  style: AppStyle.b9SemiBold.copyWith(
-                                      color: widget.isPaid
-                                          ? ColorList.redDarkColor
-                                          : ColorList.blackSecondColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    if (!widget.isPaid) ...[
-                      StreamBuilder<bool>(
-                          initialData: isRecurringDeposit,
-                          stream: recurringDepositStreamController.stream,
-                          builder: (context, snapshot) {
-                            return isRecurringDeposit
-                                ? getRecurringDepositDetailWidget()
-                                : GestureDetector(
-                                    onTap: () {
-                                      onClickRecurringDeposit();
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          border: Border.all(
-                                              color: ColorList.greyLight6Color,
-                                              width: 1)),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 20),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Enable recurring deposit',
-                                            style: AppStyle.b9Medium.copyWith(
-                                                color: ColorList.primaryColor),
-                                          ),
-                                          Image.asset(
-                                            imageSendIcon,
-                                            width: 20,
-                                            height: 20,
-                                            color: ColorList.primaryColor,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                          }),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                    if (widget.isPaid) ...[
-                      Button(
-                        'View Payout',
-                        backgroundColor: ColorList.lightBlue3Color,
-                        textColor: ColorList.primaryColor,
-                        overlayColor: ColorList.blueColor,
-                        borderRadius: 32,
-                        onPressed: () {
-                          comingSoon();
-                        },
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                    ],
-                    StreamBuilder<bool>(
-                      initialData: isLeft,
-                      stream: leftRightStreamController.stream,
-                      builder: (_, snapshot) => Column(
-                        children: [
-                          if (!isRecentEmpty && !widget.isPaid) ...[
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Button(
-                                    'Deposit',
-                                    backgroundColor: ColorList.lightBlue3Color,
-                                    textColor: ColorList.primaryColor,
-                                    overlayColor: ColorList.blueColor,
-                                    borderRadius: 24,
-                                    verticalPadding: 10,
-                                    onPressed: () {
-                                      onClickDeposit();
-                                    },
-                                    postIcon: imageDownload,
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  StreamBuilder<bool>(
+                      stream: emptyStreamController.stream,
+                      builder: (context, snapshot) {
+                        return transactions.isEmpty
+                            ? getEmptyWidget(true)
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Recent Transaction',
+                                    style: AppStyle.b8SemiBold.copyWith(
+                                        color: ColorList.blackSecondColor),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Button(
-                                    'Invite',
-                                    backgroundColor: ColorList.lightBlue3Color,
-                                    textColor: ColorList.primaryColor,
-                                    overlayColor: ColorList.blueColor,
-                                    borderRadius: 24,
-                                    verticalPadding: 10,
-                                    onPressed: () {
-                                      onClickInvite();
-                                    },
-                                    postIcon: imageUserIcon,
+                                  const SizedBox(
+                                    height: 8,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
-                          // if (koloboxFundEnum == KoloboxFundEnum.koloFamily ||
-                          //     koloboxFundEnum == KoloboxFundEnum.koloGroup) ...[
-                          //   Row(
-                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //     children: [
-                          //       Text(
-                          //         'Family Contributors',
-                          //         style: AppStyle.b8Bold.copyWith(
-                          //             color: ColorList.blackSecondColor),
-                          //       ),
-                          //       SizedBox(
-                          //         width: 84,
-                          //         child: Button(
-                          //           'See all',
-                          //           textColor: ColorList.white,
-                          //           backgroundColor: ColorList.blackSecondColor,
-                          //           overlayColor: ColorList.blueColor,
-                          //           borderRadius: 12,
-                          //           verticalPadding: 10,
-                          //           height: 30,
-                          //           textStyle: AppStyle.b10SemiBold
-                          //               .copyWith(color: ColorList.white),
-                          //           onPressed: () async {
-                          //             BlocProvider.of<DashboardBloc>(context)
-                          //                 .add(HideDisableBottomScreenEvent());
-                          //             navigatePush(context,
-                          //                     const FamilyContributorsPage())
-                          //                 .then((value) {
-                          //               BlocProvider.of<DashboardBloc>(context)
-                          //                   .add(ShowEnableBottomScreenEvent());
-                          //             });
-                          //           },
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   const SizedBox(
-                          //     height: 15,
-                          //   ),
-                          //   GridView.builder(
-                          //       gridDelegate:
-                          //           const SliverGridDelegateWithFixedCrossAxisCount(
-                          //         crossAxisCount: 2,
-                          //         crossAxisSpacing: 14,
-                          //         mainAxisSpacing: 14,
-                          //         childAspectRatio: 1.2,
-                          //       ),
-                          //       physics: const NeverScrollableScrollPhysics(),
-                          //       shrinkWrap: true,
-                          //       itemCount: 4,
-                          //       itemBuilder: (_, index) =>
-                          //           const FamilyContributorsWidget()),
-                          //   const SizedBox(
-                          //     height: 15,
-                          //   ),
-                          // ],
-                          Container(
-                            width: double.maxFinite,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: ColorList.greyLight6Color, width: 1),
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            padding: const EdgeInsets.all(5),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Button(
-                                    'Recent Deposit',
-                                    borderRadius: 12,
-                                    verticalPadding: 10,
-                                    height: 31,
-                                    backgroundColor: isLeft
-                                        ? ColorList.blackSecondColor
-                                        : ColorList.white,
-                                    overlayColor: ColorList.blueColor,
-                                    textStyle: AppStyle.b9SemiBold.copyWith(
-                                        color: isLeft
-                                            ? ColorList.white
-                                            : ColorList.blackThirdColor),
-                                    onPressed: () {
-                                      isLeft = true;
-                                      leftRightStreamController.add(isLeft);
-                                    },
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: transactions.length,
+                                      itemBuilder: (_, index) =>
+                                          TransactionsItemWidget(
+                                            transactions: transactions[index],
+                                            onPressed: () {
+                                              BlocProvider.of<DashboardBloc>(
+                                                      context)
+                                                  .add(
+                                                      HideDisableBottomScreenEvent());
+                                              showCustomBottomSheet(
+                                                DepositedWithdrawalInfoKoloboxWidget(
+                                                  transactions:
+                                                      transactions[index],
+                                                ),
+                                                height: 0.75,
+                                              ).then((value) {
+                                                BlocProvider.of<DashboardBloc>(
+                                                        context)
+                                                    .add(
+                                                        ShowEnableBottomScreenEvent());
+                                              });
+                                            },
+                                          )),
+                                  const SizedBox(
+                                    height: 20,
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Button(
-                                    'Failed Deposit',
-                                    borderRadius: 12,
-                                    verticalPadding: 10,
-                                    height: 31,
-                                    backgroundColor: !isLeft
-                                        ? ColorList.blackSecondColor
-                                        : ColorList.white,
-                                    overlayColor: ColorList.blueColor,
-                                    textStyle: AppStyle.b9SemiBold.copyWith(
-                                        color: !isLeft
-                                            ? ColorList.white
-                                            : ColorList.blackThirdColor),
-                                    onPressed: () {
-                                      isLeft = false;
-                                      leftRightStreamController.add(isLeft);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          if (isLeft) ...[
-                            if (isRecentEmpty)
-                              getEmptyWidget(true)
-                            else
-                              getRecentDepositWidget(),
-                          ] else ...[
-                            if (isFailedEmpty)
-                              getEmptyWidget(false)
-                            else
-                              getFailedDepositWidget(),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                                ],
+                              );
+                      }),
+                  // if (!widget.isPaid) ...[
+                  //   StreamBuilder<bool>(
+                  //       initialData: isRecurringDeposit,
+                  //       stream: recurringDepositStreamController.stream,
+                  //       builder: (context, snapshot) {
+                  //         return isRecurringDeposit
+                  //             ? getRecurringDepositDetailWidget()
+                  //             : GestureDetector(
+                  //                 onTap: () {
+                  //                   onClickRecurringDeposit();
+                  //                 },
+                  //                 child: Container(
+                  //                   decoration: BoxDecoration(
+                  //                       borderRadius:
+                  //                           BorderRadius.circular(14),
+                  //                       border: Border.all(
+                  //                           color: ColorList.greyLight6Color,
+                  //                           width: 1)),
+                  //                   padding: const EdgeInsets.symmetric(
+                  //                       vertical: 10, horizontal: 20),
+                  //                   child: Row(
+                  //                     mainAxisAlignment:
+                  //                         MainAxisAlignment.spaceBetween,
+                  //                     children: [
+                  //                       Text(
+                  //                         'Enable recurring deposit',
+                  //                         style: AppStyle.b9Medium.copyWith(
+                  //                             color: ColorList.primaryColor),
+                  //                       ),
+                  //                       Image.asset(
+                  //                         imageSendIcon,
+                  //                         width: 20,
+                  //                         height: 20,
+                  //                         color: ColorList.primaryColor,
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //               );
+                  //       }),
+                  //   const SizedBox(
+                  //     height: 15,
+                  //   ),
+                  // ],
+                  // if (widget.isPaid) ...[
+                  //   Button(
+                  //     'View Payout',
+                  //     backgroundColor: ColorList.lightBlue3Color,
+                  //     textColor: ColorList.primaryColor,
+                  //     overlayColor: ColorList.blueColor,
+                  //     borderRadius: 32,
+                  //     onPressed: () {
+                  //       comingSoon();
+                  //     },
+                  //   ),
+                  //   const SizedBox(
+                  //     height: 15,
+                  //   ),
+                  // ],
+                  // StreamBuilder<bool>(
+                  //   initialData: isLeft,
+                  //   stream: leftRightStreamController.stream,
+                  //   builder: (_, snapshot) => Column(
+                  //     children: [
+                  //       if (!isRecentEmpty && !widget.isPaid) ...[
+                  //         Row(
+                  //           children: [
+                  //             Expanded(
+                  //               child: Button(
+                  //                 'Deposit',
+                  //                 backgroundColor: ColorList.lightBlue3Color,
+                  //                 textColor: ColorList.primaryColor,
+                  //                 overlayColor: ColorList.blueColor,
+                  //                 borderRadius: 24,
+                  //                 verticalPadding: 10,
+                  //                 onPressed: () {
+                  //                   onClickDeposit();
+                  //                 },
+                  //                 postIcon: imageDownload,
+                  //               ),
+                  //             ),
+                  //             const SizedBox(width: 10),
+                  //             Expanded(
+                  //               child: Button(
+                  //                 'Invite',
+                  //                 backgroundColor: ColorList.lightBlue3Color,
+                  //                 textColor: ColorList.primaryColor,
+                  //                 overlayColor: ColorList.blueColor,
+                  //                 borderRadius: 24,
+                  //                 verticalPadding: 10,
+                  //                 onPressed: () {
+                  //                   onClickInvite();
+                  //                 },
+                  //                 postIcon: imageUserIcon,
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         const SizedBox(
+                  //           height: 20,
+                  //         ),
+                  //       ],
+                  //       // if (koloboxFundEnum == KoloboxFundEnum.koloFamily ||
+                  //       //     koloboxFundEnum == KoloboxFundEnum.koloGroup) ...[
+                  //       //   Row(
+                  //       //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       //     children: [
+                  //       //       Text(
+                  //       //         'Family Contributors',
+                  //       //         style: AppStyle.b8Bold.copyWith(
+                  //       //             color: ColorList.blackSecondColor),
+                  //       //       ),
+                  //       //       SizedBox(
+                  //       //         width: 84,
+                  //       //         child: Button(
+                  //       //           'See all',
+                  //       //           textColor: ColorList.white,
+                  //       //           backgroundColor: ColorList.blackSecondColor,
+                  //       //           overlayColor: ColorList.blueColor,
+                  //       //           borderRadius: 12,
+                  //       //           verticalPadding: 10,
+                  //       //           height: 30,
+                  //       //           textStyle: AppStyle.b10SemiBold
+                  //       //               .copyWith(color: ColorList.white),
+                  //       //           onPressed: () async {
+                  //       //             BlocProvider.of<DashboardBloc>(context)
+                  //       //                 .add(HideDisableBottomScreenEvent());
+                  //       //             navigatePush(context,
+                  //       //                     const FamilyContributorsPage())
+                  //       //                 .then((value) {
+                  //       //               BlocProvider.of<DashboardBloc>(context)
+                  //       //                   .add(ShowEnableBottomScreenEvent());
+                  //       //             });
+                  //       //           },
+                  //       //         ),
+                  //       //       ),
+                  //       //     ],
+                  //       //   ),
+                  //       //   const SizedBox(
+                  //       //     height: 15,
+                  //       //   ),
+                  //       //   GridView.builder(
+                  //       //       gridDelegate:
+                  //       //           const SliverGridDelegateWithFixedCrossAxisCount(
+                  //       //         crossAxisCount: 2,
+                  //       //         crossAxisSpacing: 14,
+                  //       //         mainAxisSpacing: 14,
+                  //       //         childAspectRatio: 1.2,
+                  //       //       ),
+                  //       //       physics: const NeverScrollableScrollPhysics(),
+                  //       //       shrinkWrap: true,
+                  //       //       itemCount: 4,
+                  //       //       itemBuilder: (_, index) =>
+                  //       //           const FamilyContributorsWidget()),
+                  //       //   const SizedBox(
+                  //       //     height: 15,
+                  //       //   ),
+                  //       // ],
+                  //       Container(
+                  //         width: double.maxFinite,
+                  //         decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //               color: ColorList.greyLight6Color, width: 1),
+                  //           borderRadius: BorderRadius.circular(14),
+                  //         ),
+                  //         padding: const EdgeInsets.all(5),
+                  //         child: Row(
+                  //           children: [
+                  //             Expanded(
+                  //               child: Button(
+                  //                 'Recent Deposit',
+                  //                 borderRadius: 12,
+                  //                 verticalPadding: 10,
+                  //                 height: 31,
+                  //                 backgroundColor: isLeft
+                  //                     ? ColorList.blackSecondColor
+                  //                     : ColorList.white,
+                  //                 overlayColor: ColorList.blueColor,
+                  //                 textStyle: AppStyle.b9SemiBold.copyWith(
+                  //                     color: isLeft
+                  //                         ? ColorList.white
+                  //                         : ColorList.blackThirdColor),
+                  //                 onPressed: () {
+                  //                   isLeft = true;
+                  //                   leftRightStreamController.add(isLeft);
+                  //                 },
+                  //               ),
+                  //             ),
+                  //             const SizedBox(
+                  //               width: 5,
+                  //             ),
+                  //             Expanded(
+                  //               child: Button(
+                  //                 'Failed Deposit',
+                  //                 borderRadius: 12,
+                  //                 verticalPadding: 10,
+                  //                 height: 31,
+                  //                 backgroundColor: !isLeft
+                  //                     ? ColorList.blackSecondColor
+                  //                     : ColorList.white,
+                  //                 overlayColor: ColorList.blueColor,
+                  //                 textStyle: AppStyle.b9SemiBold.copyWith(
+                  //                     color: !isLeft
+                  //                         ? ColorList.white
+                  //                         : ColorList.blackThirdColor),
+                  //                 onPressed: () {
+                  //                   isLeft = false;
+                  //                   leftRightStreamController.add(isLeft);
+                  //                 },
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //       const SizedBox(
+                  //         height: 20,
+                  //       ),
+                  //       if (isLeft) ...[
+                  //         if (isRecentEmpty)
+                  //           getEmptyWidget(true)
+                  //         else
+                  //           getRecentDepositWidget(),
+                  //       ] else ...[
+                  //         if (isFailedEmpty)
+                  //           getEmptyWidget(false)
+                  //         else
+                  //           getFailedDepositWidget(),
+                  //       ],
+                  //     ],
+                  //   ),
+                  // ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -744,6 +831,7 @@ class KoloTransactionDetailState
   @override
   void dispose() {
     super.dispose();
-    leftRightStreamController.close();
+    // leftRightStreamController.close();
+    emptyStreamController.close();
   }
 }

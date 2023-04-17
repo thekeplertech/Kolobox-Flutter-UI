@@ -2,9 +2,9 @@ const String monthlyValue = 'Monthly';
 const String weeklyValue = 'Weekly';
 const String dailyValue = 'Daily';
 
-const String monthlyPassValue = 'Monthly';
-const String weeklyPassValue = 'Weekly';
-const String dailyPassValue = 'Daily';
+const String monthlyPassValue = 'monthly';
+const String weeklyPassValue = 'weekly';
+const String dailyPassValue = 'daily';
 
 enum PeriodEnum { monthly, weekly, daily }
 
@@ -19,6 +19,7 @@ extension PeriodEnumExtensions on PeriodEnum {
         return dailyValue;
     }
   }
+
   String get getPeriodPassValue {
     switch (this) {
       case PeriodEnum.monthly:

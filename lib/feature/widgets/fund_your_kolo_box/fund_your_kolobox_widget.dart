@@ -93,6 +93,10 @@ class _FundYourKoloboxWidgetState
             );
             break;
           case KoloboxFundEnum.koloTarget:
+            showCustomBottomSheet(
+              const DepositYourKoloboxWidget(),
+            );
+            break;
           case KoloboxFundEnum.koloFamily:
           case KoloboxFundEnum.koloGroup:
           case KoloboxFundEnum.koloTargetPlus:

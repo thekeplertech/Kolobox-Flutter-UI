@@ -1,3 +1,4 @@
+import 'package:kolobox_new_app/feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
@@ -26,5 +27,8 @@ abstract class RemoteDashboardDataSource {
 
   Future<ApiResponse> topUp(String productId, TopUpRequestModel model);
 
-  Future<ApiResponse> getInvestmentGoalAPI();
+  Future<ApiResponse> getInvestmentGoal();
+
+  Future<ApiResponse> createInvestmentGoal(
+      CreateInvestmentGoalRequestModel model);
 }

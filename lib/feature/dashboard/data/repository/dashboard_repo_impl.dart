@@ -12,6 +12,7 @@ import '../../../../../core/models/success.dart';
 import '../../../../../di/injection_container.dart';
 import '../../../../core/preference/pref_helper.dart';
 import '../models/active_product_data_model.dart';
+import '../models/create_investment_goal_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/investment_goal_response_model.dart';
 import '../models/product_data_model.dart';
@@ -142,17 +143,27 @@ class DashboardRepoImpl extends DashboardRepo {
           (await remoteDashboardDataSource.topUp(productId, model)).data)));
 
   @override
-  Future<Either<Failure, Success>> getInvestmentGoalAPI() =>
+  Future<Either<Failure, Success>> getInvestmentGoal() =>
       baseApiMethod(() => getInvestmentGoalFromAPI());
 
   Future<Either<Failure, Success>> getInvestmentGoalFromAPI() async {
-    dynamic data =
-        (await remoteDashboardDataSource.getInvestmentGoalAPI()).data;
+    dynamic data = (await remoteDashboardDataSource.getInvestmentGoal()).data;
 
     if (data is Map<String, dynamic>) {
       return Right(Success(InvestmentGoalResponseModel.fromJson(data)));
     } else {
       return Right(Success(InvestmentGoalResponseModel.fromJson(null)));
     }
+  }
+
+  @override
+  Future<Either<Failure, Success>> createInvestmentGoal(
+          CreateInvestmentGoalRequestModel model) =>
+      baseApiMethod(() => createInvestmentGoalFromAPI(model));
+
+  Future<Either<Failure, Success>> createInvestmentGoalFromAPI(
+      CreateInvestmentGoalRequestModel model) async {
+    return Right(Success(
+        (await remoteDashboardDataSource.createInvestmentGoal(model)).data));
   }
 }

@@ -24,8 +24,6 @@ import '../../../../core/ui/widgets/button.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../notifications/presentation/notifications_page.dart';
-import '../../../widgets/deposit/deposit_your_kolobox_widget.dart';
-import '../../../widgets/inherited_state_container.dart';
 import '../../data/models/dashboard_amount_model.dart';
 import '../../data/models/wallet_data_model.dart';
 import '../widget/welcome_to_kolobox_widget.dart';
@@ -383,16 +381,16 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
       );
 
   void onClickDeposit() {
-    StateContainer.of(context).openFundMyKoloBox(isWallet: true);
-    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
-      BlocProvider.of<DashboardBloc>(context)
-          .add(ShowEnableBottomScreenEvent());
-      if (StateContainer.of(context).isSuccessful) {
-        callProductsAPI();
-      }
-      StateContainer.of(context).clearData();
-    });
+    // StateContainer.of(context).openFundMyKoloBox(isWallet: true);
+    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    // showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+    //   BlocProvider.of<DashboardBloc>(context)
+    //       .add(ShowEnableBottomScreenEvent());
+    //   if (StateContainer.of(context).isSuccessful) {
+    //     callProductsAPI();
+    //   }
+    //   StateContainer.of(context).clearData();
+    // });
   }
 
   @override

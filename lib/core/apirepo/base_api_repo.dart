@@ -26,6 +26,7 @@ abstract class BaseApiRepo {
     } on DioError catch (e) {
       logger?.d("Baseurl ${e.requestOptions.baseUrl}");
       logger?.d("DioError ${e.message}");
+      logger?.d("DioError ${e.response?.data?.toString()}");
       if (e.response != null) {
         int statusCode = e.response?.statusCode ?? 0;
         if (statusCode == 500) {

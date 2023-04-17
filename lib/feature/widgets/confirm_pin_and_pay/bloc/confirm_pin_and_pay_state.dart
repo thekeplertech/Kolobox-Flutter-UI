@@ -23,3 +23,5 @@ class TopUpState extends ConfirmPinAndPayState {
 
   TopUpState({required this.requestModel, required this.responseModel});
 }
+
+class CreateInvestmentGoalState extends ConfirmPinAndPayState {}
