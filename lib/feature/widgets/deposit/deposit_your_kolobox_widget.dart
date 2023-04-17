@@ -417,7 +417,7 @@ class _DepositYourKoloboxWidgetState
       Utils.showToast(
           context,
           ToastWidget(
-            'Enter amount',
+            'Enter ${(koloboxFundEnum == KoloboxFundEnum.koloTarget && !isInActive) ? 'target ' : ''}amount',
             borderColor: ColorList.redDarkColor,
             backgroundColor: ColorList.white,
             textColor: ColorList.black,
@@ -434,7 +434,7 @@ class _DepositYourKoloboxWidgetState
       Utils.showToast(
           context,
           ToastWidget(
-            'Amount is less than minimum amount required for this product',
+            '${(koloboxFundEnum == KoloboxFundEnum.koloTarget && !isInActive) ? 'Target ' : ''}Amount is less than minimum amount required for this product',
             borderColor: ColorList.redDarkColor,
             backgroundColor: ColorList.white,
             textColor: ColorList.black,

@@ -12,6 +12,7 @@ import 'package:retrofit/retrofit.dart';
 import '../../feature/auth/login/data/models/login_request_model.dart';
 import '../../feature/auth/register/data/models/register_request_model.dart';
 import '../../feature/auth/register/data/models/verify_user_request_model.dart';
+import '../../feature/dashboard/data/models/add_bank_request_model.dart';
 import '../../feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../feature/dashboard/data/models/verify_pin_request_model.dart';
 import '../models/api_response.dart';
@@ -80,4 +81,13 @@ abstract class RestHelper {
   @POST(ApiUrls.investmentGoalAPI)
   Future<ApiResponse> createInvestmentGoal(
       @Body() CreateInvestmentGoalRequestModel model);
+
+  @GET(ApiUrls.getBanksAPI)
+  Future<ApiResponse> getBanks();
+
+  @GET(ApiUrls.getAllMyBanksAPI)
+  Future<ApiResponse> getAllMyBanks();
+
+  @POST(ApiUrls.getAllMyBanksAPI)
+  Future<ApiResponse> addMyBanks(@Body() AddBankRequestModel model);
 }
