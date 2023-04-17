@@ -46,7 +46,7 @@ class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
               height: 6,
             ),
             Text(
-              'Enter your secure 6 digit pin to confirm',
+              'Enter your secure 4 digit pin to confirm',
               style:
                   AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
             ),

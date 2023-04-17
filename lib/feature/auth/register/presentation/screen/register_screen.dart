@@ -836,7 +836,7 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
           height: 10,
         ),
         Text(
-          'We have sent a 6 digit OTP code to your email address and phone number. Kindly input to verify and proceed',
+          'We have sent a 4 digit OTP code to your email address and phone number. Kindly input to verify and proceed',
           style: TextStyle(
             color: ColorList.blackThirdColor,
             fontSize: 12,
