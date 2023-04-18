@@ -5,6 +5,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request
 import '../../../../../core/http/rest_client.dart';
 import '../../../../../core/http/rest_helper.dart';
 import '../../../../../core/models/api_response.dart';
+import '../models/add_bank_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/transactions_request_model.dart';
@@ -81,5 +82,23 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
       CreateInvestmentGoalRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.createInvestmentGoal(model);
+  }
+
+  @override
+  Future<ApiResponse> getBanks() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getBanks();
+  }
+
+  @override
+  Future<ApiResponse> getAllMyBanks() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getAllMyBanks();
+  }
+
+  @override
+  Future<ApiResponse> addMyBanks(AddBankRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.addMyBanks(model);
   }
 }

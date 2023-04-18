@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/data_source/remote_dashboard_data_source.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_data_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_all_my_banks_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/domain/dashboard_repo.dart';
@@ -12,8 +13,10 @@ import '../../../../../core/models/success.dart';
 import '../../../../../di/injection_container.dart';
 import '../../../../core/preference/pref_helper.dart';
 import '../models/active_product_data_model.dart';
+import '../models/add_bank_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
 import '../models/earnings_request_model.dart';
+import '../models/get_banks_response_model.dart';
 import '../models/investment_goal_response_model.dart';
 import '../models/product_data_model.dart';
 import '../models/profile_data_model.dart';
@@ -165,5 +168,32 @@ class DashboardRepoImpl extends DashboardRepo {
       CreateInvestmentGoalRequestModel model) async {
     return Right(Success(
         (await remoteDashboardDataSource.createInvestmentGoal(model)).data));
+  }
+
+  @override
+  Future<Either<Failure, Success>> getBanks() =>
+      baseApiMethod(() => getBanksFromAPI());
+
+  Future<Either<Failure, Success>> getBanksFromAPI() async {
+    return Right(Success(GetBanksResponseModel.fromJson(
+        (await remoteDashboardDataSource.getBanks()).data)));
+  }
+
+  @override
+  Future<Either<Failure, Success>> getAllMyBanks() =>
+      baseApiMethod(() => getAllMyBanksFromAPI());
+
+  Future<Either<Failure, Success>> getAllMyBanksFromAPI() async =>
+      Right(Success(GetAllMyBanksResponseModel.fromJson(
+          (await remoteDashboardDataSource.getAllMyBanks()).data)));
+
+  @override
+  Future<Either<Failure, Success>> addMyBanks(AddBankRequestModel model) =>
+      baseApiMethod(() => addMyBanksFromAPI(model));
+
+  Future<Either<Failure, Success>> addMyBanksFromAPI(
+      AddBankRequestModel model) async {
+    return Right(
+        Success((await remoteDashboardDataSource.addMyBanks(model)).data));
   }
 }

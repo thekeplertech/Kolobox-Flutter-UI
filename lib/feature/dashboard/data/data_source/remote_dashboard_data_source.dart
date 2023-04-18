@@ -6,6 +6,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_reque
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
 
 import '../../../../../core/models/api_response.dart';
+import '../models/add_bank_request_model.dart';
 
 abstract class RemoteDashboardDataSource {
   Future<ApiResponse> wallet();
@@ -31,4 +32,10 @@ abstract class RemoteDashboardDataSource {
 
   Future<ApiResponse> createInvestmentGoal(
       CreateInvestmentGoalRequestModel model);
+
+  Future<ApiResponse> getBanks();
+
+  Future<ApiResponse> getAllMyBanks();
+
+  Future<ApiResponse> addMyBanks(AddBankRequestModel model);
 }

@@ -1,17 +1,25 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/account/bank_details/presentation/bloc/bank_detail_event.dart';
+import 'package:kolobox_new_app/feature/account/bank_details/presentation/widgets/bank_item_widget.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/add_bank_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_banks_response_model.dart';
+import 'package:kolobox_new_app/feature/widgets/bank_details/add_bank_details.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/button.dart';
 import '../../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../dashboard/data/models/get_all_my_banks_response_model.dart';
 import '../../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../../widgets/bank_details/delete_bank_details.dart';
 import '../../../../widgets/home_app_bar_widget.dart';
+import '../bloc/bank_detail_bloc.dart';
+import '../bloc/bank_detail_state.dart';
 
 class BankDetailsScreen extends BaseBlocWidget {
   const BankDetailsScreen({
@@ -23,161 +31,135 @@ class BankDetailsScreen extends BaseBlocWidget {
 }
 
 class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
+  StreamController<bool> myBankStreamController =
+      StreamController<bool>.broadcast();
+  List<MyBankData> myBanks = [];
+
   @override
   void initState() {
     super.initState();
+    callGetAllMyBanks();
   }
+
+  callGetAllMyBanks() =>
+      BlocProvider.of<BankDetailBloc>(context).add(GetAllMyBanksEvent());
 
   @override
   Widget getCustomBloc() {
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
-      body: ScrollConfiguration(
-        behavior: NoOverFlowScrollbarBehaviour(),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HomeAppBarWidget(
-                  leftIcon: imageBackArrowIcon, title: 'Bank Details'),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 28, right: 28, top: 15, bottom: 28),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: ColorList.primaryColor,
-                          borderRadius: BorderRadius.circular(14)),
-                      // padding: const EdgeInsets.symmetric(
-                      //     vertical: 20, horizontal: 16),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20, bottom: 20, left: 16, right: 10),
-                                child: Image.asset(
-                                  imageBankDetailsIcon,
-                                  color: ColorList.white,
-                                  height: 24,
-                                  width: 24,
-                                ),
+      body: BlocListener<BankDetailBloc, BankDetailState>(
+        listener: (_, state) {
+          if (state is GetAllBanksState) {
+            List<BankData> bankData = state.model.data ?? [];
+            onClickAddBankAccount(bankData);
+          }
+          if (state is GetAllMyBanksState) {
+            myBanks = state.model.banks ?? [];
+            myBankStreamController.add(true);
+          }
+          if (state is AddMyBanksState) {
+            Future.delayed(const Duration(milliseconds: 300), () {
+              callGetAllMyBanks();
+            });
+          }
+        },
+        child: getChild(),
+      ),
+    );
+  }
+
+  ScrollConfiguration getChild() {
+    return ScrollConfiguration(
+      behavior: NoOverFlowScrollbarBehaviour(),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const HomeAppBarWidget(
+                leftIcon: imageBackArrowIcon, title: 'Bank Details'),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 28, right: 28, top: 15, bottom: 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  StreamBuilder<bool>(
+                    stream: myBankStreamController.stream,
+                    builder: (context, snapshot) => ListView.builder(
+                        itemCount: myBanks.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (_, index) => Padding(
+                              padding:
+                                  EdgeInsets.only(top: (index == 0) ? 0 : 15),
+                              child: BankItemWidget(
+                                myBankData: myBanks[index],
                               ),
-                              Expanded(
-                                child: Text(
-                                  'Zenith Bank',
-                                  style: AppStyle.b7Medium
-                                      .copyWith(color: ColorList.white),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => comingSoon(),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 20, bottom: 20, left: 16, right: 8),
-                                  child: Image.asset(
-                                    deleteIcon,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => comingSoon(),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 20, bottom: 20, left: 8, right: 16),
-                                  child: Image.asset(
-                                    editIcon,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '0949830020004',
-                                        style: AppStyle.b7Medium
-                                            .copyWith(color: ColorList.white),
-                                      ),
-                                      Text(
-                                        'Dami Anoreq',
-                                        style: AppStyle.b7Medium
-                                            .copyWith(color: ColorList.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => comingSoon(),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 16),
-                                  child: Image.asset(
-                                    copyIcon,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                            )),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: SizedBox(
+                      width: 220,
+                      child: Button(
+                        'Add Bank Account',
+                        backgroundColor: ColorList.lightBlue3Color,
+                        textColor: ColorList.primaryColor,
+                        overlayColor: ColorList.blueColor,
+                        borderRadius: 24,
+                        verticalPadding: 10,
+                        onPressed: () {
+                          BlocProvider.of<BankDetailBloc>(context)
+                              .add(GetAllBanksEvent());
+                        },
+                        postIcon: bankDetailsIcon,
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: SizedBox(
-                        width: 220,
-                        child: Button(
-                          'Add Bank Account',
-                          backgroundColor: ColorList.lightBlue3Color,
-                          textColor: ColorList.primaryColor,
-                          overlayColor: ColorList.blueColor,
-                          borderRadius: 24,
-                          verticalPadding: 10,
-                          onPressed: () {
-                            BlocProvider.of<DashboardBloc>(context)
-                                .add(HideDisableBottomScreenEvent());
-                            showCustomBottomSheet(
-                                    const DeleteBankDetailsWidget())
-                                .then((value) {
-                              BlocProvider.of<DashboardBloc>(context)
-                                  .add(ShowEnableBottomScreenEvent());
-                            });
-                          },
-                          postIcon: bankDetailsIcon,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
+  onClickAddBankAccount(List<BankData> banks) {
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(AddBankDetailsWidget(
+      banks: banks,
+      onSave: (bankData, number, name) {
+        Future.delayed(
+          const Duration(milliseconds: 300),
+          () {
+            BlocProvider.of<BankDetailBloc>(context).add(
+              AddMyBanksEvent(
+                model: AddBankRequestModel(
+                  bankName: bankData.name ?? '',
+                  accountNumber: number,
+                  accountName: name,
+                  bankCode: bankData.code ?? '',
+                  payWithBank: bankData.payWithBank?.toString() ?? '',
+                ),
+              ),
+            );
+          },
+        );
+      },
+    )).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
+    myBankStreamController.close();
   }
 }
