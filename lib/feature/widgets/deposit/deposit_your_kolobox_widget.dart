@@ -395,6 +395,7 @@ class _DepositYourKoloboxWidgetState
   }
 
   onClickNext() {
+    print("$koloboxFundEnum ${koloboxFundEnum!.getMinimumAmountValue()}");
     if (targetNameTextEditingController.text.isEmpty &&
         koloboxFundEnum == KoloboxFundEnum.koloTarget &&
         !isInActive) {
@@ -471,6 +472,23 @@ class _DepositYourKoloboxWidgetState
           context,
           ToastWidget(
             'Enter save amount',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
+    if (double.parse(getOnlyAmount(saveAmountTextEditingController.text)) <
+        double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            '${(koloboxFundEnum == KoloboxFundEnum.koloTarget && !isInActive) ? 'Save ' : ''}Amount is less than minimum amount required for this product',
             borderColor: ColorList.redDarkColor,
             backgroundColor: ColorList.white,
             textColor: ColorList.black,

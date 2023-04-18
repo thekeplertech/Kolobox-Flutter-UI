@@ -265,7 +265,7 @@ class _DepositSummaryWidgetState
         CreateInvestmentGoalEvent(
           model: CreateInvestmentGoalRequestModel(
             purpose: StateContainer.of(context).getTargetName() ?? '',
-            amount: StateContainer.of(context).getAmount(),
+            amount: StateContainer.of(context).getTargetAmount(),
             dueDate: DateHelper.getTextFromDateTime(
                 StateContainer.of(context).getTargetDate()!, 'yyyy-MM-dd'),
           ),
