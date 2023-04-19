@@ -8,6 +8,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request
 import '../../../../../core/models/api_response.dart';
 import '../models/add_bank_request_model.dart';
 import '../models/delete_bank_request_model.dart';
+import '../models/update_bank_request_model.dart';
 
 abstract class RemoteDashboardDataSource {
   Future<ApiResponse> wallet();
@@ -42,4 +43,7 @@ abstract class RemoteDashboardDataSource {
 
   Future<ApiResponse> deleteMyBanks(
       String bankId, DeleteBankRequestModel model);
+
+  Future<ApiResponse> updateMyBanks(
+      String bankId, UpdateBankRequestModel model);
 }

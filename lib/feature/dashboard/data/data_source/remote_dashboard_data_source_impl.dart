@@ -10,6 +10,7 @@ import '../models/add_bank_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/transactions_request_model.dart';
+import '../models/update_bank_request_model.dart';
 import 'remote_dashboard_data_source.dart';
 
 class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
@@ -108,5 +109,12 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
       String bankId, DeleteBankRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.deleteMyBanks(bankId, model);
+  }
+
+  @override
+  Future<ApiResponse> updateMyBanks(
+      String bankId, UpdateBankRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.updateMyBanks(bankId, model);
   }
 }

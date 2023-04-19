@@ -12,6 +12,7 @@ import '../data/models/earnings_request_model.dart';
 import '../data/models/select_product_request_model.dart';
 import '../data/models/top_up_request_model.dart';
 import '../data/models/transactions_request_model.dart';
+import '../data/models/update_bank_request_model.dart';
 
 abstract class DashboardRepo extends BaseApiRepo {
   DashboardRepo(NetworkInfo? networkInfo) : super(networkInfo);
@@ -50,4 +51,7 @@ abstract class DashboardRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> deleteMyBanks(
       String bankId, DeleteBankRequestModel model);
+
+  Future<Either<Failure, Success>> updateMyBanks(
+      String bankId, UpdateBankRequestModel model);
 }

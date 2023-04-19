@@ -25,6 +25,7 @@ import '../models/select_product_request_model.dart';
 import '../models/select_product_response_model.dart';
 import '../models/top_up_request_model.dart';
 import '../models/transactions_request_model.dart';
+import '../models/update_bank_request_model.dart';
 import '../models/verify_pin_request_model.dart';
 
 class DashboardRepoImpl extends DashboardRepo {
@@ -207,5 +208,16 @@ class DashboardRepoImpl extends DashboardRepo {
       String bankId, DeleteBankRequestModel model) async {
     return Right(Success(
         (await remoteDashboardDataSource.deleteMyBanks(bankId, model)).data));
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateMyBanks(
+          String bankId, UpdateBankRequestModel model) =>
+      baseApiMethod(() => updateMyBanksFromAPI(bankId, model));
+
+  Future<Either<Failure, Success>> updateMyBanksFromAPI(
+      String bankId, UpdateBankRequestModel model) async {
+    return Right(Success(
+        (await remoteDashboardDataSource.updateMyBanks(bankId, model)).data));
   }
 }

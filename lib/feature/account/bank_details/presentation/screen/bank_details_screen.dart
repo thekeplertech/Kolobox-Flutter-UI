@@ -117,8 +117,6 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
                                             );
                                           },
                                           onUpdate: () {
-                                            comingSoon();
-                                            return;
                                             selectedBankDetailEnum =
                                                 BankDetailEnum.updateBank;
                                             selectedBankData = myBanks[index];
@@ -176,9 +174,7 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
     showCustomBottomSheet(AddBankDetailsPage(
       banks: allBankData,
       bankDetailEnum: selectedBankDetailEnum,
-      bankName: selectedBankData?.bankName ?? '',
-      accountNumber: selectedBankData?.accountNumber ?? '',
-      accountName: selectedBankData?.accountName ?? '',
+      selectedBankData: selectedBankData,
       onSave: () {
         Future.delayed(
           const Duration(milliseconds: 300),

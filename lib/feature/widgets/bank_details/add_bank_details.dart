@@ -10,6 +10,8 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/account/bank_details/presentation/bloc/bank_detail_event.dart';
 import 'package:kolobox_new_app/feature/account/bank_details/presentation/bloc/bank_detail_state.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/add_bank_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_all_my_banks_response_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/update_bank_request_model.dart';
 import 'package:kolobox_new_app/feature/widgets/bank_details/select_bank_widget.dart';
 
 import '../../../core/colors/color_list.dart';
@@ -26,18 +28,14 @@ class AddBankDetailsWidget extends BaseBlocWidget {
   final List<BankData> banks;
   final Function() onSave;
   final BankDetailEnum bankDetailEnum;
-  final String? bankName;
-  final String? accountNumber;
-  final String? accountName;
+  final MyBankData? selectedBankData;
 
   const AddBankDetailsWidget({
     Key? key,
     required this.banks,
     required this.onSave,
     this.bankDetailEnum = BankDetailEnum.addBank,
-    this.bankName,
-    this.accountNumber,
-    this.accountName,
+    this.selectedBankData,
   }) : super(key: key);
 
   @override
@@ -64,14 +62,18 @@ class _AddBankDetailsWidgetState
     bankDetailEnum = widget.bankDetailEnum;
     banks = widget.banks;
 
-    if (bankDetailEnum == BankDetailEnum.updateBank) {
-      int pos = banks.indexWhere((element) => element.name == widget.bankName);
+    if (bankDetailEnum == BankDetailEnum.updateBank &&
+        widget.selectedBankData != null) {
+      int pos = banks.indexWhere((element) =>
+          element.name == (widget.selectedBankData?.bankName ?? ''));
       if (pos != -1) {
         selectedBankData = banks[pos];
       }
 
-      numberTextEditingController.text = widget.accountNumber ?? '';
-      nameTextEditingController.text = widget.accountName ?? '';
+      numberTextEditingController.text =
+          widget.selectedBankData?.accountNumber ?? '';
+      nameTextEditingController.text =
+          widget.selectedBankData?.accountName ?? '';
     }
     super.initState();
   }
@@ -81,6 +83,11 @@ class _AddBankDetailsWidgetState
     return BlocListener<BankDetailBloc, BankDetailState>(
       listener: (_, state) {
         if (state is AddMyBanksState) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            widget.onSave();
+            goBack(context);
+          });
+        } else if (state is UpdateMyBanksState) {
           Future.delayed(const Duration(milliseconds: 300), () {
             widget.onSave();
             goBack(context);
@@ -258,17 +265,19 @@ class _AddBankDetailsWidgetState
         ),
       );
     } else {
-      // BlocProvider.of<BankDetailBloc>(context).add(
-      //   UpdateMyBanksEvent(
-      //     model: AddBankRequestModel(
-      //       bankName: selectedBankData?.name ?? '',
-      //       accountNumber: numberTextEditingController.text,
-      //       accountName: nameTextEditingController.text,
-      //       bankCode: selectedBankData?.code ?? '',
-      //       payWithBank: selectedBankData?.payWithBank?.toString() ?? '',
-      //     ),
-      //   ),
-      // );
+      BlocProvider.of<BankDetailBloc>(context).add(
+        UpdateMyBanksEvent(
+          model: UpdateBankRequestModel(
+            bankName: selectedBankData?.name ?? '',
+            accountNumber: numberTextEditingController.text,
+            accountName: nameTextEditingController.text,
+            code: selectedBankData?.code ?? '',
+            payWithBank: selectedBankData?.payWithBank?.toString() ?? '',
+            pin: '5987',
+          ),
+          bankId: widget.selectedBankData?.id ?? '',
+        ),
+      );
     }
   }
 
