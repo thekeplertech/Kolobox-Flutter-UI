@@ -8,10 +8,14 @@ import '../../../../dashboard/data/models/get_all_my_banks_response_model.dart';
 
 class BankItemWidget extends BaseScreen {
   final MyBankData myBankData;
+  final Function() onDelete;
+  final Function() onUpdate;
 
   const BankItemWidget({
     Key? key,
     required this.myBankData,
+    required this.onDelete,
+    required this.onUpdate,
   }) : super(key: key);
 
   @override
@@ -46,7 +50,7 @@ class _BankItemWidgetState extends BaseScreenState<BankItemWidget> {
                 ),
               ),
               GestureDetector(
-                onTap: () => comingSoon(),
+                onTap: () => widget.onDelete(),
                 child: Padding(
                   padding: const EdgeInsets.only(
                       top: 20, bottom: 20, left: 16, right: 8),
@@ -56,7 +60,7 @@ class _BankItemWidgetState extends BaseScreenState<BankItemWidget> {
                 ),
               ),
               GestureDetector(
-                onTap: () => comingSoon(),
+                onTap: () => widget.onUpdate(),
                 child: Padding(
                   padding: const EdgeInsets.only(
                       top: 20, bottom: 20, left: 8, right: 16),

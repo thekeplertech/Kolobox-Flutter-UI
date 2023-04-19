@@ -14,6 +14,7 @@ import '../../feature/auth/register/data/models/register_request_model.dart';
 import '../../feature/auth/register/data/models/verify_user_request_model.dart';
 import '../../feature/dashboard/data/models/add_bank_request_model.dart';
 import '../../feature/dashboard/data/models/create_investment_goal_request_model.dart';
+import '../../feature/dashboard/data/models/delete_bank_request_model.dart';
 import '../../feature/dashboard/data/models/verify_pin_request_model.dart';
 import '../models/api_response.dart';
 import 'api_constants.dart';
@@ -90,4 +91,8 @@ abstract class RestHelper {
 
   @POST(ApiUrls.getAllMyBanksAPI)
   Future<ApiResponse> addMyBanks(@Body() AddBankRequestModel model);
+
+  @DELETE(ApiUrls.deleteMyBanksAPI)
+  Future<ApiResponse> deleteMyBanks(
+      @Path("bankId") String bankId, @Body() DeleteBankRequestModel model);
 }

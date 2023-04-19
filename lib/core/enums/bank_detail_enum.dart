@@ -1,0 +1,1 @@
+enum BankDetailEnum { addBank, updateBank }

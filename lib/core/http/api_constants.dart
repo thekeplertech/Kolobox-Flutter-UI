@@ -21,6 +21,7 @@ class ApiUrls {
   static const String investmentGoalAPI = "user/investment/goal";
   static const String getBanksAPI = "helpers/banks";
   static const String getAllMyBanksAPI = "user/me/bank";
+  static const String deleteMyBanksAPI = "user/me/bank/{bankId}";
 }
 
 const String USERS_API = "users";

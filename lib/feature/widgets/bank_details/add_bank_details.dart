@@ -2,9 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kolobox_new_app/core/base/base_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kolobox_new_app/core/base/base_bloc_widget.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
+import 'package:kolobox_new_app/core/enums/bank_detail_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/account/bank_details/presentation/bloc/bank_detail_event.dart';
+import 'package:kolobox_new_app/feature/account/bank_details/presentation/bloc/bank_detail_state.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/add_bank_request_model.dart';
 import 'package:kolobox_new_app/feature/widgets/bank_details/select_bank_widget.dart';
 
 import '../../../core/colors/color_list.dart';
@@ -14,23 +19,33 @@ import '../../../core/ui/widgets/custom_text_field.dart';
 import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/utils.dart';
 import '../../../routes/routes.dart';
+import '../../account/bank_details/presentation/bloc/bank_detail_bloc.dart';
 import '../../dashboard/data/models/get_banks_response_model.dart';
 
-class AddBankDetailsWidget extends BaseScreen {
+class AddBankDetailsWidget extends BaseBlocWidget {
   final List<BankData> banks;
-  final Function(BankData, String, String) onSave;
+  final Function() onSave;
+  final BankDetailEnum bankDetailEnum;
+  final String? bankName;
+  final String? accountNumber;
+  final String? accountName;
 
   const AddBankDetailsWidget({
     Key? key,
     required this.banks,
     required this.onSave,
+    this.bankDetailEnum = BankDetailEnum.addBank,
+    this.bankName,
+    this.accountNumber,
+    this.accountName,
   }) : super(key: key);
 
   @override
   State<AddBankDetailsWidget> createState() => _AddBankDetailsWidgetState();
 }
 
-class _AddBankDetailsWidgetState extends BaseScreenState<AddBankDetailsWidget> {
+class _AddBankDetailsWidgetState
+    extends BaseBlocWidgetState<AddBankDetailsWidget> {
   final TextEditingController numberTextEditingController =
       TextEditingController();
   final TextEditingController nameTextEditingController =
@@ -42,116 +57,145 @@ class _AddBankDetailsWidgetState extends BaseScreenState<AddBankDetailsWidget> {
   List<BankData> banks = [];
   BankData? selectedBankData;
 
+  BankDetailEnum bankDetailEnum = BankDetailEnum.addBank;
+
   @override
   void initState() {
-    super.initState();
+    bankDetailEnum = widget.bankDetailEnum;
     banks = widget.banks;
+
+    if (bankDetailEnum == BankDetailEnum.updateBank) {
+      int pos = banks.indexWhere((element) => element.name == widget.bankName);
+      if (pos != -1) {
+        selectedBankData = banks[pos];
+      }
+
+      numberTextEditingController.text = widget.accountNumber ?? '';
+      nameTextEditingController.text = widget.accountName ?? '';
+    }
+    super.initState();
   }
 
   @override
-  Widget body(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'Add Bank Account',
-                  style: AppStyle.b4Bold
-                      .copyWith(color: ColorList.blackSecondColor),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    goBack(context);
-                  },
-                  child: Image.asset(imageClose),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          Text(
-            'Select Bank',
-            style:
-                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          StreamBuilder<bool>(
-              stream: bankStreamController.stream,
-              builder: (context, snapshot) {
-                return CustomTextField(
-                  selectedBankData?.name ?? 'Select a bank',
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.none,
-                  onPressed: () => showDialogSelectBanks(),
-                  iconData: KoloBoxIcons.dropDownArrow,
-                );
-              }),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            'Personal Bank Account Number',
-            style:
-                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          CustomTextField(
-            'Enter your personal bank account number',
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.next,
-            textCapitalization: TextCapitalization.none,
-            inputFormatter: [FilteringTextInputFormatter.digitsOnly],
-            controller: numberTextEditingController,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Text(
-            'Account Name',
-            style:
-                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
-          ),
-          const SizedBox(
-            height: 7,
-          ),
-          CustomTextField(
-            'Enter your account name',
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.done,
-            textCapitalization: TextCapitalization.words,
-            controller: nameTextEditingController,
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          Button(
-            'Save',
-            backgroundColor: ColorList.primaryColor,
-            textColor: ColorList.white,
-            overlayColor: ColorList.blueColor,
-            borderRadius: 32,
-            onPressed: () => onClickSave(),
-          ),
-        ],
-      ),
+  Widget getCustomBloc() {
+    return BlocListener<BankDetailBloc, BankDetailState>(
+      listener: (_, state) {
+        if (state is AddMyBanksState) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            widget.onSave();
+            goBack(context);
+          });
+        }
+      },
+      child: getChild(),
     );
   }
 
+  Widget getChild() => Padding(
+        padding:
+            const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    bankDetailEnum == BankDetailEnum.addBank
+                        ? 'Add Bank Account'
+                        : 'Edit Bank Details',
+                    style: AppStyle.b4Bold
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      goBack(context);
+                    },
+                    child: Image.asset(imageClose),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Text(
+              'Select Bank',
+              style:
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            StreamBuilder<bool>(
+                stream: bankStreamController.stream,
+                builder: (context, snapshot) {
+                  return CustomTextField(
+                    selectedBankData?.name ?? 'Select a bank',
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.none,
+                    onPressed: () => showDialogSelectBanks(),
+                    iconData: KoloBoxIcons.dropDownArrow,
+                  );
+                }),
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Personal Bank Account Number',
+              style:
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            CustomTextField(
+              'Enter your personal bank account number',
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              textCapitalization: TextCapitalization.none,
+              inputFormatter: [FilteringTextInputFormatter.digitsOnly],
+              controller: numberTextEditingController,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Account Name',
+              style:
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            const SizedBox(
+              height: 7,
+            ),
+            CustomTextField(
+              'Enter your account name',
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.done,
+              textCapitalization: TextCapitalization.words,
+              controller: nameTextEditingController,
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            Button(
+              'Save',
+              backgroundColor: ColorList.primaryColor,
+              textColor: ColorList.white,
+              overlayColor: ColorList.blueColor,
+              borderRadius: 32,
+              onPressed: () => onClickSave(),
+            ),
+          ],
+        ),
+      );
+
   onClickSave() {
+    hideKeyboard();
     if (selectedBankData == null) {
       Utils.showToast(
           context,
@@ -200,9 +244,32 @@ class _AddBankDetailsWidgetState extends BaseScreenState<AddBankDetailsWidget> {
           ));
       return;
     }
-    widget.onSave(selectedBankData!, numberTextEditingController.text,
-        nameTextEditingController.text);
-    goBack(context);
+
+    if (bankDetailEnum == BankDetailEnum.addBank) {
+      BlocProvider.of<BankDetailBloc>(context).add(
+        AddMyBanksEvent(
+          model: AddBankRequestModel(
+            bankName: selectedBankData?.name ?? '',
+            accountNumber: numberTextEditingController.text,
+            accountName: nameTextEditingController.text,
+            bankCode: selectedBankData?.code ?? '',
+            payWithBank: selectedBankData?.payWithBank?.toString() ?? '',
+          ),
+        ),
+      );
+    } else {
+      // BlocProvider.of<BankDetailBloc>(context).add(
+      //   UpdateMyBanksEvent(
+      //     model: AddBankRequestModel(
+      //       bankName: selectedBankData?.name ?? '',
+      //       accountNumber: numberTextEditingController.text,
+      //       accountName: nameTextEditingController.text,
+      //       bankCode: selectedBankData?.code ?? '',
+      //       payWithBank: selectedBankData?.payWithBank?.toString() ?? '',
+      //     ),
+      //   ),
+      // );
+    }
   }
 
   showDialogSelectBanks() {

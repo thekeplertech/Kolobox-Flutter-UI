@@ -18,3 +18,5 @@ class GetAllMyBanksState extends BankDetailState {
 }
 
 class AddMyBanksState extends BankDetailState {}
+
+class DeleteMyBanksState extends BankDetailState {}

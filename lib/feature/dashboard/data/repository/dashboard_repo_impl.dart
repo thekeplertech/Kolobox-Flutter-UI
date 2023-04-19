@@ -15,6 +15,7 @@ import '../../../../core/preference/pref_helper.dart';
 import '../models/active_product_data_model.dart';
 import '../models/add_bank_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
+import '../models/delete_bank_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/get_banks_response_model.dart';
 import '../models/investment_goal_response_model.dart';
@@ -195,5 +196,16 @@ class DashboardRepoImpl extends DashboardRepo {
       AddBankRequestModel model) async {
     return Right(
         Success((await remoteDashboardDataSource.addMyBanks(model)).data));
+  }
+
+  @override
+  Future<Either<Failure, Success>> deleteMyBanks(
+          String bankId, DeleteBankRequestModel model) =>
+      baseApiMethod(() => deleteMyBanksFromAPI(bankId, model));
+
+  Future<Either<Failure, Success>> deleteMyBanksFromAPI(
+      String bankId, DeleteBankRequestModel model) async {
+    return Right(Success(
+        (await remoteDashboardDataSource.deleteMyBanks(bankId, model)).data));
   }
 }

@@ -110,33 +110,188 @@ class _DepositYourKoloboxWidgetState
                 height: 12,
               ),
             ],
-            if (isInActive) ...[
+            if (isKoloFlex()) ...[
               getOptionWidget(),
               const SizedBox(
                 height: 15,
               ),
-            ],
-            if (!isInActive &&
-                koloboxFundEnum == KoloboxFundEnum.koloTarget) ...[
               Text(
-                'Name your target',
+                'Enter Amount',
                 style: AppStyle.b8Regular
-                    .copyWith(color: ColorList.blackSecondColor),
+                    .copyWith(color: ColorList.blackThirdColor),
               ),
               const SizedBox(
                 height: 7,
               ),
               CustomTextField(
-                'Enter your target name',
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.words,
-                controller: targetNameTextEditingController,
+                '₦ 0.00',
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                textCapitalization: TextCapitalization.none,
+                inputFormatter: [
+                  CurrencyTextInputFormatter(
+                    name: '₦ ',
+                  )
+                ],
+                textStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                hintStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                textAlign: TextAlign.center,
+                contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                controller: amountTextEditingController,
               ),
               const SizedBox(
                 height: 15,
               ),
+            ] else if (isKoloTarget()) ...[
+              if (isInActive) ...[
+                getOptionWidget(),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Enter Amount',
+                  style: AppStyle.b8Regular
+                      .copyWith(color: ColorList.blackThirdColor),
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                CustomTextField(
+                  '₦ 0.00',
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.done,
+                  textCapitalization: TextCapitalization.none,
+                  inputFormatter: [
+                    CurrencyTextInputFormatter(
+                      name: '₦ ',
+                    )
+                  ],
+                  textStyle:
+                      AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                  hintStyle:
+                      AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                  textAlign: TextAlign.center,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                  controller: amountTextEditingController,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ] else ...[
+                Text(
+                  'Name your target',
+                  style: AppStyle.b8Regular
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                CustomTextField(
+                  'Enter your target name',
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.words,
+                  controller: targetNameTextEditingController,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Target Amount',
+                  style: AppStyle.b8Regular
+                      .copyWith(color: ColorList.blackThirdColor),
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                CustomTextField(
+                  '₦ 0.00',
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.done,
+                  textCapitalization: TextCapitalization.none,
+                  inputFormatter: [
+                    CurrencyTextInputFormatter(
+                      name: '₦ ',
+                    )
+                  ],
+                  textStyle:
+                      AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                  hintStyle:
+                      AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                  textAlign: TextAlign.center,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                  controller: amountTextEditingController,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Target date (Target date equals end date)',
+                  style: AppStyle.b9Medium
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                StreamBuilder<bool>(
+                    stream: targetDateStreamController.stream,
+                    builder: (context, snapshot) {
+                      return CustomTextField(
+                        targetDateTime == null
+                            ? 'Select date'
+                            : DateHelper.getTextFromDateTime(
+                                targetDateTime!, 'dd MMMM yyyy'),
+                        postIcon: imageCalendar,
+                        onPressed: () {
+                          onClickTargetDate();
+                        },
+                      );
+                    }),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'How much you plan to save now',
+                  style: AppStyle.b9Medium
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+                const SizedBox(
+                  height: 7,
+                ),
+                CustomTextField(
+                  '₦ 0.00',
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.done,
+                  textCapitalization: TextCapitalization.none,
+                  inputFormatter: [
+                    CurrencyTextInputFormatter(
+                      name: '₦ ',
+                    )
+                  ],
+                  textStyle: AppStyle.b3Bold
+                      .copyWith(color: ColorList.blackSecondColor),
+                  hintStyle: AppStyle.b3Bold
+                      .copyWith(color: ColorList.blackSecondColor),
+                  textAlign: TextAlign.center,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                  controller: saveAmountTextEditingController,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
             ],
+            // if (isInActive) ...[
+            //   getOptionWidget(),
+            //   const SizedBox(
+            //     height: 15,
+            //   ),
+            // ],
+            // if (!isInActive &&
+            //     koloboxFundEnum == KoloboxFundEnum.koloTarget) ...[
+            // ],
             // if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
             //   Text(
             //     'Select a kolotarget to make this deposit to',
@@ -171,94 +326,11 @@ class _DepositYourKoloboxWidgetState
             //     height: 12,
             //   ),
             // ],
-            Text(
-              (!isInActive && koloboxFundEnum == KoloboxFundEnum.koloTarget)
-                  ? 'Target Amount'
-                  : 'Enter Amount',
-              style:
-                  AppStyle.b8Regular.copyWith(color: ColorList.blackThirdColor),
-            ),
-            const SizedBox(
-              height: 7,
-            ),
-            CustomTextField(
-              '₦ 0.00',
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.done,
-              textCapitalization: TextCapitalization.none,
-              inputFormatter: [
-                CurrencyTextInputFormatter(
-                  name: '₦ ',
-                )
-              ],
-              textStyle:
-                  AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
-              hintStyle:
-                  AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
-              textAlign: TextAlign.center,
-              contentPadding: const EdgeInsets.symmetric(vertical: 25),
-              controller: amountTextEditingController,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            if (!isInActive &&
-                koloboxFundEnum == KoloboxFundEnum.koloTarget) ...[
-              Text(
-                'Target date (Target date equals end date)',
-                style: AppStyle.b9Medium
-                    .copyWith(color: ColorList.blackSecondColor),
-              ),
-              const SizedBox(
-                height: 7,
-              ),
-              StreamBuilder<bool>(
-                  stream: targetDateStreamController.stream,
-                  builder: (context, snapshot) {
-                    return CustomTextField(
-                      targetDateTime == null
-                          ? 'Select date'
-                          : DateHelper.getTextFromDateTime(
-                              targetDateTime!, 'dd MMMM yyyy'),
-                      postIcon: imageCalendar,
-                      onPressed: () {
-                        onClickTargetDate();
-                      },
-                    );
-                  }),
-              const SizedBox(
-                height: 15,
-              ),
-              Text(
-                'How much you plan to save now',
-                style: AppStyle.b9Medium
-                    .copyWith(color: ColorList.blackSecondColor),
-              ),
-              const SizedBox(
-                height: 7,
-              ),
-              CustomTextField(
-                '₦ 0.00',
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.done,
-                textCapitalization: TextCapitalization.none,
-                inputFormatter: [
-                  CurrencyTextInputFormatter(
-                    name: '₦ ',
-                  )
-                ],
-                textStyle:
-                    AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
-                hintStyle:
-                    AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
-                textAlign: TextAlign.center,
-                contentPadding: const EdgeInsets.symmetric(vertical: 25),
-                controller: saveAmountTextEditingController,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-            ],
+
+            // if (!isInActive &&
+            //     koloboxFundEnum == KoloboxFundEnum.koloTarget) ...[
+
+            // ],
             if (!isInActive) ...[
               Text(
                 'Select recurring period',
@@ -355,11 +427,217 @@ class _DepositYourKoloboxWidgetState
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () => onClickNext(),
+              onPressed: () {
+                hideKeyboard();
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  onClickNext();
+                });
+              },
             ),
           ],
         ),
       );
+
+  onClickNext() {
+    if (isKoloFlex()) {
+      if (amountTextEditingController.text.isEmpty) {
+        Utils.showToast(
+            context,
+            ToastWidget(
+              'Enter amount',
+              borderColor: ColorList.redDarkColor,
+              backgroundColor: ColorList.white,
+              textColor: ColorList.black,
+              messageIcon: imageCloseRed,
+              closeWidget: Image.asset(
+                imageClose,
+                color: ColorList.black,
+              ),
+            ));
+        return;
+      }
+      if (double.parse(getOnlyAmount(amountTextEditingController.text)) <
+          double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+        Utils.showToast(
+            context,
+            ToastWidget(
+              'Amount is less than minimum amount required for this product',
+              borderColor: ColorList.redDarkColor,
+              backgroundColor: ColorList.white,
+              textColor: ColorList.black,
+              messageIcon: imageCloseRed,
+              closeWidget: Image.asset(
+                imageClose,
+                color: ColorList.black,
+              ),
+            ));
+        return;
+      }
+      StateContainer.of(context).openFundMyKoloBox(
+        fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+        amount: amountTextEditingController.text,
+        targetAmount: amountTextEditingController.text,
+        periodEnum: selectedPeriodEnum,
+        targetDateTime: targetDateTime,
+        targetName: targetNameTextEditingController.text,
+      );
+    } else if (isKoloTarget()) {
+      if (isInActive) {
+        if (amountTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter amount',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (double.parse(getOnlyAmount(amountTextEditingController.text)) <
+            double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Amount is less than minimum amount required for this product',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        StateContainer.of(context).openFundMyKoloBox(
+          fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+          amount: amountTextEditingController.text,
+          targetAmount: amountTextEditingController.text,
+          periodEnum: selectedPeriodEnum,
+          targetDateTime: targetDateTime,
+          targetName: targetNameTextEditingController.text,
+        );
+      } else {
+        if (targetNameTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter your target name',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (amountTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter target amount',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (double.parse(getOnlyAmount(amountTextEditingController.text)) <
+            double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Target Amount is less than minimum amount required for this product',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (targetDateTime == null) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Select target date',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (saveAmountTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter save amount',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (double.parse(getOnlyAmount(saveAmountTextEditingController.text)) <
+            double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Save Amount is less than minimum amount required for this product',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        StateContainer.of(context).openFundMyKoloBox(
+          fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+          amount: saveAmountTextEditingController.text,
+          targetAmount: amountTextEditingController.text,
+          periodEnum: selectedPeriodEnum,
+          targetDateTime: targetDateTime,
+          targetName: targetNameTextEditingController.text,
+        );
+      }
+    }
+
+    showCustomBottomSheet(DepositSummaryWidgetPage(
+      key: Key('deposit_summary_${DateTime.now().millisecondsSinceEpoch}'),
+    ));
+  }
 
   String getDepositTitle() {
     String message = 'Deposit';
@@ -394,128 +672,6 @@ class _DepositYourKoloboxWidgetState
     return ProductItemWidget(fundEnum: fundEnum);
   }
 
-  onClickNext() {
-    print("$koloboxFundEnum ${koloboxFundEnum!.getMinimumAmountValue()}");
-    if (targetNameTextEditingController.text.isEmpty &&
-        koloboxFundEnum == KoloboxFundEnum.koloTarget &&
-        !isInActive) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            'Enter your target name',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
-    if (amountTextEditingController.text.isEmpty) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            'Enter ${(koloboxFundEnum == KoloboxFundEnum.koloTarget && !isInActive) ? 'target ' : ''}amount',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
-    if (double.parse(getOnlyAmount(amountTextEditingController.text)) <
-        double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            '${(koloboxFundEnum == KoloboxFundEnum.koloTarget && !isInActive) ? 'Target ' : ''}Amount is less than minimum amount required for this product',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
-    if (targetDateTime == null &&
-        koloboxFundEnum == KoloboxFundEnum.koloTarget &&
-        !isInActive) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            'Select target date',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
-    if (saveAmountTextEditingController.text.isEmpty &&
-        koloboxFundEnum == KoloboxFundEnum.koloTarget &&
-        !isInActive) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            'Enter save amount',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
-    if (double.parse(getOnlyAmount(saveAmountTextEditingController.text)) <
-        double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            '${(koloboxFundEnum == KoloboxFundEnum.koloTarget && !isInActive) ? 'Save ' : ''}Amount is less than minimum amount required for this product',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
-
-    StateContainer.of(context).openFundMyKoloBox(
-      fundEnum: StateContainer.of(context).getKoloBoxEnum(),
-      amount: !isInActive
-          ? saveAmountTextEditingController.text
-          : amountTextEditingController.text,
-      targetAmount: amountTextEditingController.text,
-      periodEnum: selectedPeriodEnum,
-      targetDateTime: targetDateTime,
-      targetName: targetNameTextEditingController.text,
-    );
-    showCustomBottomSheet(DepositSummaryWidgetPage(
-      key: Key('deposit_summary_${DateTime.now().millisecondsSinceEpoch}'),
-    ));
-  }
-
   Future<void> onClickTargetDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -528,6 +684,16 @@ class _DepositYourKoloboxWidgetState
       targetDateStreamController.add(true);
     }
   }
+
+  bool isKoloFlex() => koloboxFundEnum == KoloboxFundEnum.koloFlex;
+
+  bool isKoloTarget() => koloboxFundEnum == KoloboxFundEnum.koloTarget;
+
+  bool isKoloTargetPlus() => koloboxFundEnum == KoloboxFundEnum.koloTargetPlus;
+
+  bool isKoloFamily() => koloboxFundEnum == KoloboxFundEnum.koloFamily;
+
+  bool isKoloGroup() => koloboxFundEnum == KoloboxFundEnum.koloGroup;
 
   @override
   void dispose() {

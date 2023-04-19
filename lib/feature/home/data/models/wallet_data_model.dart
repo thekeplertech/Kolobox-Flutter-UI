@@ -1,7 +1,9 @@
+import '../../../dashboard/data/models/transactions_data_model.dart';
+
 class WalletDataModel {
   UserWallet? userWallet;
   List<WalletHistory>? walletHistory;
-  List<TransactionHistory>? transactionHistory;
+  List<Transactions>? transactionHistory;
 
   WalletDataModel.fromJson(Map<String, dynamic> json) {
     userWallet = json['userWallet'] != null
@@ -14,9 +16,9 @@ class WalletDataModel {
       });
     }
     if (json['transactionHistory'] != null) {
-      transactionHistory = <TransactionHistory>[];
+      transactionHistory = <Transactions>[];
       json['transactionHistory'].forEach((v) {
-        transactionHistory!.add(TransactionHistory.fromJson(v));
+        transactionHistory!.add(Transactions.fromJson(v));
       });
     }
   }

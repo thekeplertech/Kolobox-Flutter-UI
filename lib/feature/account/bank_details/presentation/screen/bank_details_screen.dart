@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
+import 'package:kolobox_new_app/core/enums/bank_detail_enum.dart';
 import 'package:kolobox_new_app/feature/account/bank_details/presentation/bloc/bank_detail_event.dart';
 import 'package:kolobox_new_app/feature/account/bank_details/presentation/widgets/bank_item_widget.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/add_bank_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/delete_bank_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/get_banks_response_model.dart';
-import 'package:kolobox_new_app/feature/widgets/bank_details/add_bank_details.dart';
+import 'package:kolobox_new_app/feature/widgets/bank_details/add_bank_details_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/button.dart';
@@ -35,6 +36,11 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
       StreamController<bool>.broadcast();
   List<MyBankData> myBanks = [];
 
+  List<BankData> allBankData = [];
+
+  BankDetailEnum selectedBankDetailEnum = BankDetailEnum.addBank;
+  MyBankData? selectedBankData;
+
   @override
   void initState() {
     super.initState();
@@ -52,14 +58,12 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
       body: BlocListener<BankDetailBloc, BankDetailState>(
         listener: (_, state) {
           if (state is GetAllBanksState) {
-            List<BankData> bankData = state.model.data ?? [];
-            onClickAddBankAccount(bankData);
-          }
-          if (state is GetAllMyBanksState) {
+            allBankData = state.model.data ?? [];
+            onClickAddBankAccount();
+          } else if (state is GetAllMyBanksState) {
             myBanks = state.model.banks ?? [];
             myBankStreamController.add(true);
-          }
-          if (state is AddMyBanksState) {
+          } else if (state is DeleteMyBanksState) {
             Future.delayed(const Duration(milliseconds: 300), () {
               callGetAllMyBanks();
             });
@@ -87,20 +91,52 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
                 children: [
                   StreamBuilder<bool>(
                     stream: myBankStreamController.stream,
-                    builder: (context, snapshot) => ListView.builder(
-                        itemCount: myBanks.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (_, index) => Padding(
-                              padding:
-                                  EdgeInsets.only(top: (index == 0) ? 0 : 15),
-                              child: BankItemWidget(
-                                myBankData: myBanks[index],
+                    builder: (context, snapshot) => (myBanks.isEmpty)
+                        ? const SizedBox()
+                        : Column(
+                            children: [
+                              ListView.builder(
+                                  itemCount: myBanks.length,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (_, index) => Padding(
+                                        padding: EdgeInsets.only(
+                                            top: (index == 0) ? 0 : 15),
+                                        child: BankItemWidget(
+                                          myBankData: myBanks[index],
+                                          onDelete: () {
+                                            BlocProvider.of<BankDetailBloc>(
+                                                    context)
+                                                .add(
+                                              DeleteMyBanksEvent(
+                                                bankId: myBanks[index].id ?? '',
+                                                model: DeleteBankRequestModel(
+                                                  pin: '4561',
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          onUpdate: () {
+                                            comingSoon();
+                                            return;
+                                            selectedBankDetailEnum =
+                                                BankDetailEnum.updateBank;
+                                            selectedBankData = myBanks[index];
+                                            if (allBankData.isEmpty) {
+                                              BlocProvider.of<BankDetailBloc>(
+                                                      context)
+                                                  .add(GetAllBanksEvent());
+                                            } else {
+                                              onClickAddBankAccount();
+                                            }
+                                          },
+                                        ),
+                                      )),
+                              const SizedBox(
+                                height: 20,
                               ),
-                            )),
-                  ),
-                  const SizedBox(
-                    height: 20,
+                            ],
+                          ),
                   ),
                   Center(
                     child: SizedBox(
@@ -113,8 +149,14 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
                         borderRadius: 24,
                         verticalPadding: 10,
                         onPressed: () {
-                          BlocProvider.of<BankDetailBloc>(context)
-                              .add(GetAllBanksEvent());
+                          selectedBankDetailEnum = BankDetailEnum.addBank;
+                          selectedBankData = null;
+                          if (allBankData.isEmpty) {
+                            BlocProvider.of<BankDetailBloc>(context)
+                                .add(GetAllBanksEvent());
+                          } else {
+                            onClickAddBankAccount();
+                          }
                         },
                         postIcon: bankDetailsIcon,
                       ),
@@ -129,25 +171,19 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
     );
   }
 
-  onClickAddBankAccount(List<BankData> banks) {
+  onClickAddBankAccount() {
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(AddBankDetailsWidget(
-      banks: banks,
-      onSave: (bankData, number, name) {
+    showCustomBottomSheet(AddBankDetailsPage(
+      banks: allBankData,
+      bankDetailEnum: selectedBankDetailEnum,
+      bankName: selectedBankData?.bankName ?? '',
+      accountNumber: selectedBankData?.accountNumber ?? '',
+      accountName: selectedBankData?.accountName ?? '',
+      onSave: () {
         Future.delayed(
           const Duration(milliseconds: 300),
           () {
-            BlocProvider.of<BankDetailBloc>(context).add(
-              AddMyBanksEvent(
-                model: AddBankRequestModel(
-                  bankName: bankData.name ?? '',
-                  accountNumber: number,
-                  accountName: name,
-                  bankCode: bankData.code ?? '',
-                  payWithBank: bankData.payWithBank?.toString() ?? '',
-                ),
-              ),
-            );
+            callGetAllMyBanks();
           },
         );
       },

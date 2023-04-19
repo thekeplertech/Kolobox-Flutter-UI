@@ -127,44 +127,8 @@ class _DepositSummaryWidgetState
               const SizedBox(
                 height: 15,
               ),
-              if (!isInActive) ...[
-                ProductItemWidget(fundEnum: koloboxFundEnum!),
-                const SizedBox(
-                  height: 15,
-                ),
-                if (koloboxFundEnum == KoloboxFundEnum.koloTarget) ...[
-                  getKoloTargetSummaryWidget(),
-                ],
-              ],
-              if (isInActive) ...[
-                Container(
-                  decoration: BoxDecoration(
-                    color: ColorList.primaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.all(20),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Deposit Amount',
-                          style: AppStyle.b8Regular
-                              .copyWith(color: ColorList.white),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          CurrencyTextInputFormatter.formatAmount(
-                              StateContainer.of(context).getAmount()),
-                          style:
-                              AppStyle.b3Bold.copyWith(color: ColorList.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              if (isKoloFlex()) ...[
+                getDepositAmount(StateContainer.of(context).getAmount()),
                 const SizedBox(
                   height: 15,
                 ),
@@ -180,7 +144,70 @@ class _DepositSummaryWidgetState
                 const SizedBox(
                   height: 15,
                 ),
+              ] else if (isKoloTarget()) ...[
+                if (isInActive) ...[
+                  getDepositAmount(StateContainer.of(context).getAmount()),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Deposit into my',
+                    style: AppStyle.b9Regular
+                        .copyWith(color: ColorList.blackThirdColor),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  ProductItemWidget(fundEnum: koloboxFundEnum!),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       'Selected Investing towards',
+                  //       style: AppStyle.b9Medium
+                  //           .copyWith(color: ColorList.blackSecondColor),
+                  //     ),
+                  //     Text(
+                  //       'Renting a new home',
+                  //       style: AppStyle.b8SemiBold
+                  //           .copyWith(color: ColorList.blackSecondColor),
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
+                ] else ...[
+                  ProductItemWidget(fundEnum: koloboxFundEnum!),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  if (koloboxFundEnum == KoloboxFundEnum.koloTarget) ...[
+                    getKoloTargetSummaryWidget(),
+                  ],
+                ],
               ],
+              // if (isInActive) ...[
+              //   getDepositAmount(),
+              //   const SizedBox(
+              //     height: 15,
+              //   ),
+              //   Text(
+              //     'Deposit into my',
+              //     style: AppStyle.b9Regular
+              //         .copyWith(color: ColorList.blackThirdColor),
+              //   ),
+              //   const SizedBox(
+              //     height: 5,
+              //   ),
+              //   ProductItemWidget(fundEnum: koloboxFundEnum!),
+              //   const SizedBox(
+              //     height: 15,
+              //   ),
+              // ],
               // if (koloboxFundEnum != KoloboxFundEnum.koloFlex) ...[
               //   Row(
               //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -257,20 +284,24 @@ class _DepositSummaryWidgetState
       paymentEnum: PaymentGatewayEnum.payStack,
     );
 
-    if (isInActive) {
+    if (isKoloFlex()) {
       initiatePayment();
-    } else if (koloboxFundEnum == KoloboxFundEnum.koloTarget) {
-      // Create Goal
-      BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
-        CreateInvestmentGoalEvent(
-          model: CreateInvestmentGoalRequestModel(
-            purpose: StateContainer.of(context).getTargetName() ?? '',
-            amount: StateContainer.of(context).getTargetAmount(),
-            dueDate: DateHelper.getTextFromDateTime(
-                StateContainer.of(context).getTargetDate()!, 'yyyy-MM-dd'),
+    } else if (isKoloTarget()) {
+      if (isInActive) {
+        initiatePayment();
+      } else {
+        // Create Goal
+        BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+          CreateInvestmentGoalEvent(
+            model: CreateInvestmentGoalRequestModel(
+              purpose: StateContainer.of(context).getTargetName() ?? '',
+              amount: StateContainer.of(context).getTargetAmount(),
+              dueDate: DateHelper.getTextFromDateTime(
+                  StateContainer.of(context).getTargetDate()!, 'yyyy-MM-dd'),
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -356,6 +387,34 @@ class _DepositSummaryWidgetState
               ));
         });
       },
+    );
+  }
+
+  Container getDepositAmount(String amount) {
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorList.primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      width: double.maxFinite,
+      padding: const EdgeInsets.all(20),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              'Deposit Amount',
+              style: AppStyle.b8Regular.copyWith(color: ColorList.white),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              CurrencyTextInputFormatter.formatAmount(amount),
+              style: AppStyle.b3Bold.copyWith(color: ColorList.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -516,4 +575,14 @@ class _DepositSummaryWidgetState
       ],
     );
   }
+
+  bool isKoloFlex() => koloboxFundEnum == KoloboxFundEnum.koloFlex;
+
+  bool isKoloTarget() => koloboxFundEnum == KoloboxFundEnum.koloTarget;
+
+  bool isKoloTargetPlus() => koloboxFundEnum == KoloboxFundEnum.koloTargetPlus;
+
+  bool isKoloFamily() => koloboxFundEnum == KoloboxFundEnum.koloFamily;
+
+  bool isKoloGroup() => koloboxFundEnum == KoloboxFundEnum.koloGroup;
 }

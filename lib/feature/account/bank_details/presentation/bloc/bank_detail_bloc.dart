@@ -24,6 +24,9 @@ class BankDetailBloc extends BaseBloc<BankDetailEvent, BankDetailState> {
     on<AddMyBanksEvent>((event, emit) async {
       await callAddMyBanksEvent(event, emit);
     });
+    on<DeleteMyBanksEvent>((event, emit) async {
+      await callDeleteMyBanksEvent(event, emit);
+    });
   }
 
   Future<void> callGetAllMyBanksEvent(
@@ -64,6 +67,20 @@ class BankDetailBloc extends BaseBloc<BankDetailEvent, BankDetailState> {
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(AddMyBanksState());
+    });
+  }
+
+  Future<void> callDeleteMyBanksEvent(
+      DeleteMyBanksEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.deleteMyBanks(event.bankId, event.model);
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(DeleteMyBanksState());
     });
   }
 }

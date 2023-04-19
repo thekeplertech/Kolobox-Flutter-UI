@@ -40,7 +40,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
   void initState() {
     super.initState();
     if (FlavorConfig.isDev()) {
-      emailTextEditingController.text = 'parth12345678931@mailinator.com';
+      emailTextEditingController.text = 'parth12345678@mailinator.com';
       passwordTextEditingController.text = 'kolobox@123';
       // emailTextEditingController.text = 'tulbadex@gmail.com';
       // passwordTextEditingController.text = 'password';
@@ -276,6 +276,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
   }
 
   void onClickLogin() {
+    hideKeyboard();
     if (emailTextEditingController.text.isEmpty) {
       Utils.showToast(
           context,
