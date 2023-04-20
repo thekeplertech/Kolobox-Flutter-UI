@@ -7,6 +7,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_request_m
 import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/update_profile_request_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../feature/auth/login/data/models/login_request_model.dart';
@@ -100,4 +101,7 @@ abstract class RestHelper {
   @PUT(ApiUrls.deleteMyBanksAPI)
   Future<ApiResponse> updateMyBanks(
       @Path("bankId") String bankId, @Body() UpdateBankRequestModel model);
+
+  @PUT(ApiUrls.updateProfileAPI)
+  Future<ApiResponse> updateProfile(@Body() UpdateProfileRequestModel model);
 }

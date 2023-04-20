@@ -10,14 +10,9 @@ import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/confirm_pin_
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../../../core/ui/widgets/toast_widget.dart';
-import '../../../../../core/utils/utils.dart';
-import '../../../../auth/login/data/models/create_pin_request_model.dart';
-import '../../../../auth/login/presentation/bloc/login_event.dart';
 import '../../../../auth/login/presentation/bloc/login_state.dart';
 import '../../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../../widgets/create_pin_widget.dart';
 import '../../../../widgets/home_app_bar_widget.dart';
 
 class SecurityScreen extends BaseBlocWidget {
@@ -133,52 +128,10 @@ class SecurityState extends BaseBlocWidgetState<SecurityScreen> {
 
   onClickUpdateTransactionPin() {
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(ConfirmPinAndPayPage(
-      onSuccess: () {
-        logger?.d("verification success");
-        showDialogForCreatePin();
-      },
-    )).then((value) {
+    showCustomBottomSheet(const ConfirmPinAndPayPage()).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
     });
-  }
-
-  void showDialogForCreatePin() {
-    showCustomBottomSheet(CreatePinWidget(
-      onBack: (value1) {
-        Future.delayed(const Duration(milliseconds: 200), () {
-          showCustomBottomSheet(CreatePinWidget(
-            isConfirmPin: true,
-            onBack: (value2) {
-              Future.delayed(const Duration(milliseconds: 200), () {
-                if (value1 == value2) {
-                  BlocProvider.of<LoginBloc>(context).add(CallCreatePinEvent(
-                    loginResponseModel: prefHelper!.getLoginResponseModel(),
-                    createPinRequestModel: CreatePinRequestModel(pin: value2),
-                  ));
-                } else {
-                  Utils.showToast(
-                      context,
-                      ToastWidget(
-                        'Create PIN and confirm PIN does not match.',
-                        borderColor: ColorList.redDarkColor,
-                        backgroundColor: ColorList.white,
-                        textColor: ColorList.black,
-                        messageIcon: imageCloseRed,
-                        closeWidget: Image.asset(
-                          imageClose,
-                          color: ColorList.black,
-                        ),
-                      ));
-                  showDialogForCreatePin();
-                }
-              });
-            },
-          ));
-        });
-      },
-    ));
   }
 
   @override

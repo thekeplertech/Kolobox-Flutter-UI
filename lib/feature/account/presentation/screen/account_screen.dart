@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
@@ -25,6 +27,9 @@ class AccountScreen extends BaseBlocWidget {
 }
 
 class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
+  StreamController<bool> profileStreamController =
+      StreamController<bool>.broadcast();
+
   @override
   void initState() {
     super.initState();
@@ -67,141 +72,11 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            '${prefHelper?.getLoginResponseModel().firstname} ${prefHelper?.getLoginResponseModel().lastname}',
-                            style: AppStyle.b4SemiBold
-                                .copyWith(color: ColorList.blackSecondColor),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            '@${prefHelper?.getLoginResponseModel().id}',
-                            style: AppStyle.b8Medium
-                                .copyWith(color: ColorList.primaryColor),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          getShareIdWidget(),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Date Of Birth',
-                                style: AppStyle.b8Medium.copyWith(
-                                    color: ColorList.blackSecondColor),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  DateHelper.getDateFromDateTime(
-                                      prefHelper?.getLoginResponseModel().dob,
-                                      'MMM dd, yyyy'),
-                                  style: AppStyle.b8Bold.copyWith(
-                                      color: ColorList.blackSecondColor),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Divider(
-                              color: ColorList.greyDisableCircleColor,
-                              height: 1,
-                              thickness: 1),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Occupation',
-                                style: AppStyle.b8Medium.copyWith(
-                                    color: ColorList.blackSecondColor),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  prefHelper
-                                          ?.getLoginResponseModel()
-                                          .occupation ??
-                                      '',
-                                  style: AppStyle.b8Bold.copyWith(
-                                      color: ColorList.blackSecondColor),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Divider(
-                              color: ColorList.greyDisableCircleColor,
-                              height: 1,
-                              thickness: 1),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Email',
-                                style: AppStyle.b8Medium.copyWith(
-                                    color: ColorList.blackSecondColor),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  prefHelper?.getLoginResponseModel().email ??
-                                      '',
-                                  style: AppStyle.b8Bold.copyWith(
-                                      color: ColorList.greyLight2Color),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 9.5,
-                              ),
-                              Image.asset(imageSecurityShieldIcon),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Divider(
-                              color: ColorList.greyDisableCircleColor,
-                              height: 1,
-                              thickness: 1),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Phone',
-                                style: AppStyle.b8Medium.copyWith(
-                                    color: ColorList.blackSecondColor),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  prefHelper?.getLoginResponseModel().phone ??
-                                      '',
-                                  style: AppStyle.b8Bold.copyWith(
-                                      color: ColorList.greyLight2Color),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 9.5,
-                              ),
-                              Image.asset(imageSecurityShieldIcon),
-                            ],
-                          ),
+                          StreamBuilder<bool>(
+                              stream: profileStreamController.stream,
+                              builder: (context, snapshot) {
+                                return getDataWidget();
+                              }),
                           const SizedBox(
                             height: 10,
                           ),
@@ -230,6 +105,7 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                         .then((value) {
                       BlocProvider.of<DashboardBloc>(context)
                           .add(ShowEnableBottomScreenEvent());
+                      profileStreamController.add(true);
                     });
                   },
                 ),
@@ -238,6 +114,135 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
           ),
         ),
       );
+
+  Column getDataWidget() {
+    return Column(
+      children: [
+        Text(
+          '${prefHelper?.getLoginResponseModel().firstname} ${prefHelper?.getLoginResponseModel().lastname}',
+          style:
+              AppStyle.b4SemiBold.copyWith(color: ColorList.blackSecondColor),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(
+          '@${prefHelper?.getLoginResponseModel().id}',
+          style: AppStyle.b8Medium.copyWith(color: ColorList.primaryColor),
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        getShareIdWidget(),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Date Of Birth',
+              style:
+                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            Expanded(
+              child: Text(
+                DateHelper.getDateFromDateTime(
+                    prefHelper?.getLoginResponseModel().dob, 'MMM dd, yyyy'),
+                style:
+                    AppStyle.b8Bold.copyWith(color: ColorList.blackSecondColor),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Divider(
+            color: ColorList.greyDisableCircleColor, height: 1, thickness: 1),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Occupation',
+              style:
+                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            Expanded(
+              child: Text(
+                prefHelper?.getLoginResponseModel().occupation ?? '',
+                style:
+                    AppStyle.b8Bold.copyWith(color: ColorList.blackSecondColor),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Divider(
+            color: ColorList.greyDisableCircleColor, height: 1, thickness: 1),
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          children: [
+            Text(
+              'Email',
+              style:
+                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            Expanded(
+              child: Text(
+                prefHelper?.getLoginResponseModel().email ?? '',
+                style:
+                    AppStyle.b8Bold.copyWith(color: ColorList.greyLight2Color),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            const SizedBox(
+              width: 9.5,
+            ),
+            Image.asset(imageSecurityShieldIcon),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Divider(
+            color: ColorList.greyDisableCircleColor, height: 1, thickness: 1),
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          children: [
+            Text(
+              'Phone',
+              style:
+                  AppStyle.b8Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            Expanded(
+              child: Text(
+                prefHelper?.getLoginResponseModel().phone ?? '',
+                style:
+                    AppStyle.b8Bold.copyWith(color: ColorList.greyLight2Color),
+                textAlign: TextAlign.end,
+              ),
+            ),
+            const SizedBox(
+              width: 9.5,
+            ),
+            Image.asset(imageSecurityShieldIcon),
+          ],
+        ),
+      ],
+    );
+  }
 
   Widget getShareIdWidget() => GestureDetector(
         onTap: () => comingSoon(),
@@ -280,5 +285,6 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
   @override
   void dispose() {
     super.dispose();
+    profileStreamController.close();
   }
 }

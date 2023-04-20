@@ -1,23 +1,67 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:kolobox_new_app/core/base/base_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kolobox_new_app/core/base/base_bloc_widget.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/utils/date_helper.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/update_profile_request_model.dart';
+import 'package:kolobox_new_app/feature/widgets/edit_profile/bloc/edit_profile_bloc.dart';
+import 'package:kolobox_new_app/feature/widgets/edit_profile/bloc/edit_profile_event.dart';
+import 'package:kolobox_new_app/feature/widgets/edit_profile/bloc/edit_profile_state.dart';
 
 import '../../../core/colors/color_list.dart';
 import '../../../core/ui/widgets/button.dart';
 import '../../../core/ui/widgets/custom_text_field.dart';
 import '../../../routes/routes.dart';
 
-class EditProfileWidget extends BaseScreen {
+class EditProfileWidget extends BaseBlocWidget {
   const EditProfileWidget({Key? key}) : super(key: key);
 
   @override
   State<EditProfileWidget> createState() => _EditProfileWidgetState();
 }
 
-class _EditProfileWidgetState extends BaseScreenState<EditProfileWidget> {
+class _EditProfileWidgetState extends BaseBlocWidgetState<EditProfileWidget> {
+  final TextEditingController occupationTextEditingController =
+      TextEditingController();
+
+  StreamController<bool> dateOfBirthStreamController =
+      StreamController<bool>.broadcast();
+
+  DateTime? dateOfBirth;
+
   @override
-  Widget body(BuildContext context) {
+  void initState() {
+    super.initState();
+    occupationTextEditingController.text =
+        prefHelper?.getLoginResponseModel().occupation ?? '';
+    dateOfBirth =
+        DateHelper.getDateTime(prefHelper?.getLoginResponseModel().dob ?? '');
+
+    print(prefHelper?.getLoginResponseModel().dob ?? '');
+
+    print(dateOfBirth.toString());
+    dateOfBirth = DateTime.parse(dateOfBirth.toString());
+    print(dateOfBirth.toString());
+  }
+
+  @override
+  Widget getCustomBloc() {
+    return BlocListener<EditProfileBloc, EditProfileState>(
+      listener: (_, state) {
+        if (state is UpdateProfileState) {
+          Future.delayed(const Duration(milliseconds: 300), () {
+            goBack(context);
+          });
+        }
+      },
+      child: getChild(),
+    );
+  }
+
+  Padding getChild() {
     return Padding(
       padding: const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
       child: Column(
@@ -89,11 +133,20 @@ class _EditProfileWidgetState extends BaseScreenState<EditProfileWidget> {
           const SizedBox(
             height: 7,
           ),
-          CustomTextField(
-            'Select your date of birth',
-            postIcon: imageCalendar,
-            onPressed: () {},
-          ),
+          StreamBuilder<bool>(
+              stream: dateOfBirthStreamController.stream,
+              builder: (context, snapshot) {
+                return CustomTextField(
+                  dateOfBirth == null
+                      ? 'Select your date of birth'
+                      : DateHelper.getTextFromDateTime(
+                          dateOfBirth!, 'dd MMMM yyyy'),
+                  postIcon: imageCalendar,
+                  onPressed: () {
+                    onClickDOB();
+                  },
+                );
+              }),
           const SizedBox(
             height: 15,
           ),
@@ -110,6 +163,7 @@ class _EditProfileWidgetState extends BaseScreenState<EditProfileWidget> {
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.done,
             textCapitalization: TextCapitalization.words,
+            controller: occupationTextEditingController,
           ),
           const SizedBox(
             height: 35,
@@ -139,7 +193,7 @@ class _EditProfileWidgetState extends BaseScreenState<EditProfileWidget> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 32,
                   onPressed: () {
-                    goBack(context);
+                    onClickUpdateProfile();
                   },
                 ),
               ),
@@ -150,8 +204,41 @@ class _EditProfileWidgetState extends BaseScreenState<EditProfileWidget> {
     );
   }
 
+  onClickUpdateProfile() {
+    BlocProvider.of<EditProfileBloc>(context).add(UpdateProfileEvent(
+        model: UpdateProfileRequestModel(
+      firstname: prefHelper?.getLoginResponseModel().firstname ?? '',
+      lastname: prefHelper?.getLoginResponseModel().lastname ?? '',
+      email: prefHelper?.getLoginResponseModel().email ?? '',
+      phone: prefHelper?.getLoginResponseModel().phone ?? '',
+      nextOfKin: prefHelper?.getLoginResponseModel().nextOfKin ?? '',
+      emailNotification:
+          prefHelper?.getLoginResponseModel().emailNotification ?? false,
+      smsNotification:
+          prefHelper?.getLoginResponseModel().smsNotification ?? false,
+      occupation: occupationTextEditingController.text,
+      dob: DateHelper.getTextFromDateTime(dateOfBirth!, 'yyyy-MM-dd'),
+    )));
+    // goBack(context);
+  }
+
+  Future<void> onClickDOB() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1990, 1),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      dateOfBirth = picked;
+      dateOfBirthStreamController.add(true);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
+    occupationTextEditingController.dispose();
+    dateOfBirthStreamController.close();
   }
 }

@@ -11,7 +11,9 @@ import '../../../../../core/http/network_info.dart';
 import '../../../../../core/models/failure.dart';
 import '../../../../../core/models/success.dart';
 import '../../../../../di/injection_container.dart';
+import '../../../../core/models/api_response.dart';
 import '../../../../core/preference/pref_helper.dart';
+import '../../../auth/login/data/models/login_response_model.dart';
 import '../models/active_product_data_model.dart';
 import '../models/add_bank_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
@@ -26,6 +28,7 @@ import '../models/select_product_response_model.dart';
 import '../models/top_up_request_model.dart';
 import '../models/transactions_request_model.dart';
 import '../models/update_bank_request_model.dart';
+import '../models/update_profile_request_model.dart';
 import '../models/verify_pin_request_model.dart';
 
 class DashboardRepoImpl extends DashboardRepo {
@@ -219,5 +222,23 @@ class DashboardRepoImpl extends DashboardRepo {
       String bankId, UpdateBankRequestModel model) async {
     return Right(Success(
         (await remoteDashboardDataSource.updateMyBanks(bankId, model)).data));
+  }
+
+  @override
+  Future<Either<Failure, Success>> updateProfile(
+          UpdateProfileRequestModel model) =>
+      baseApiMethod(() => updateProfileFromAPI(model));
+
+  Future<Either<Failure, Success>> updateProfileFromAPI(
+      UpdateProfileRequestModel model) async {
+    ApiResponse apiResponse =
+        await remoteDashboardDataSource.updateProfile(model);
+    LoginResponseModel responseModel =
+        LoginResponseModel.fromJson(apiResponse.data);
+    responseModel.isLoggedIn = true;
+    PrefHelper helper = sl();
+    responseModel.token = helper.getLoginResponseModel().token;
+    await helper.setLoginResponseModel(responseModel);
+    return Right(Success(responseModel));
   }
 }

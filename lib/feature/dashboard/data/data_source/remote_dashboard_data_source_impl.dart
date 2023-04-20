@@ -1,6 +1,7 @@
 import 'package:kolobox_new_app/feature/dashboard/data/models/delete_bank_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/update_profile_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
 
 import '../../../../../core/http/rest_client.dart';
@@ -116,5 +117,11 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
       String bankId, UpdateBankRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.updateMyBanks(bankId, model);
+  }
+
+  @override
+  Future<ApiResponse> updateProfile(UpdateProfileRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.updateProfile(model);
   }
 }

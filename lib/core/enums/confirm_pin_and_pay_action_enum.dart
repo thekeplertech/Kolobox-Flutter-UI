@@ -1,1 +1,1 @@
-enum ConfirmPinAndPayActionEnum { verifyPin }
+enum ConfirmPinAndPayActionEnum { verifyPin, updatePin }

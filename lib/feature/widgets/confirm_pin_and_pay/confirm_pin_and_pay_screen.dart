@@ -24,11 +24,17 @@ import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/utils.dart';
 import '../../../di/injection_container.dart';
 import '../../../routes/routes.dart';
+import '../../auth/login/data/models/create_pin_request_model.dart';
+import '../../auth/login/data/models/login_response_model.dart';
+import '../../auth/login/presentation/bloc/login_bloc.dart';
+import '../../auth/login/presentation/bloc/login_event.dart';
+import '../../auth/login/presentation/bloc/login_state.dart';
 import '../../transaction_successful/presentation/transaction_successful_page.dart';
+import '../create_pin_widget.dart';
 
 class ConfirmPinAndPayScreen extends BaseBlocWidget {
   final ConfirmPinAndPayActionEnum actionEnum;
-  final Function() onSuccess;
+  final Function()? onSuccess;
 
   const ConfirmPinAndPayScreen({
     Key? key,
@@ -50,34 +56,44 @@ class ConfirmPinAndPayScreenState
   }
 
   @override
-  Widget getCustomBloc() =>
-      BlocListener<ConfirmPinAndPayBloc, ConfirmPinAndPayState>(
-        listener: (_, state) {
-          if (state is VerifyPinState) {
-            // Pin verification success
-            Future.delayed(const Duration(milliseconds: 200), () {
-              widget.onSuccess();
-              goBack(context);
-            });
-            // Future.delayed(const Duration(milliseconds: 200), () {
-            //   initiatePayment();
-            // });
-          } else if (state is SelectProductState) {
-            Future.delayed(const Duration(milliseconds: 200), () {
-              callPayment(
-                  state.requestModel.depositAmount,
-                  state.responseModel.data?.accessCode ?? '',
-                  state.responseModel.data?.reference ?? '');
-            });
-          } else if (state is TopUpState) {
-            Future.delayed(const Duration(milliseconds: 200), () {
-              callPayment(
-                  state.requestModel.depositAmount,
-                  state.responseModel.topUpData?.accessCode ?? '',
-                  state.responseModel.topUpData?.reference ?? '');
-            });
-          }
-        },
+  Widget getCustomBloc() => MultiBlocListener(
+        listeners: [
+          BlocListener<LoginBloc, LoginState>(
+            listener: (_, state) {
+              if (state is CallLoginState) {
+                print('adsfasdfasfdasfd ads fsa fsa fd dfs dafa ');
+              }
+            },
+          ),
+          BlocListener<ConfirmPinAndPayBloc, ConfirmPinAndPayState>(
+            listener: (_, state) {
+              if (state is VerifyPinState) {
+                // Pin verification success
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  if (widget.onSuccess != null) widget.onSuccess!();
+                  goBack(context);
+                });
+                // Future.delayed(const Duration(milliseconds: 200), () {
+                //   initiatePayment();
+                // });
+              } else if (state is SelectProductState) {
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  callPayment(
+                      state.requestModel.depositAmount,
+                      state.responseModel.data?.accessCode ?? '',
+                      state.responseModel.data?.reference ?? '');
+                });
+              } else if (state is TopUpState) {
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  callPayment(
+                      state.requestModel.depositAmount,
+                      state.responseModel.topUpData?.accessCode ?? '',
+                      state.responseModel.topUpData?.reference ?? '');
+                });
+              }
+            },
+          ),
+        ],
         child: getChild(),
       );
 
@@ -285,6 +301,43 @@ class ConfirmPinAndPayScreenState
         });
       },
     );
+  }
+
+  void showDialogForCreatePin(LoginResponseModel model) {
+    showCustomBottomSheet(CreatePinWidget(
+      onBack: (value1) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          showCustomBottomSheet(CreatePinWidget(
+            isConfirmPin: true,
+            onBack: (value2) {
+              Future.delayed(const Duration(milliseconds: 200), () {
+                if (value1 == value2) {
+                  BlocProvider.of<LoginBloc>(context).add(CallCreatePinEvent(
+                    loginResponseModel: model,
+                    createPinRequestModel: CreatePinRequestModel(pin: value2),
+                  ));
+                } else {
+                  Utils.showToast(
+                      context,
+                      ToastWidget(
+                        'Create PIN and confirm PIN does not match.',
+                        borderColor: ColorList.redDarkColor,
+                        backgroundColor: ColorList.white,
+                        textColor: ColorList.black,
+                        messageIcon: imageCloseRed,
+                        closeWidget: Image.asset(
+                          imageClose,
+                          color: ColorList.black,
+                        ),
+                      ));
+                  showDialogForCreatePin(model);
+                }
+              });
+            },
+          ));
+        });
+      },
+    ));
   }
 
   @override
