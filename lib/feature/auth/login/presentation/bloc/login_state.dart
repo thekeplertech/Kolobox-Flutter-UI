@@ -17,6 +17,12 @@ class CreatePinState extends LoginState {
   CreatePinState({required this.model});
 }
 
+class UpdatePinState extends LoginState {
+  final String message;
+
+  UpdatePinState({required this.message});
+}
+
 class UpdatePasswordState extends LoginState {
   final String message;
 

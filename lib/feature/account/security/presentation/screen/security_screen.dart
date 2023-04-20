@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
+import 'package:kolobox_new_app/core/enums/confirm_pin_and_pay_action_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/account/update_password/presentation/update_password_page.dart';
 import 'package:kolobox_new_app/feature/auth/login/presentation/bloc/login_bloc.dart';
@@ -149,7 +150,9 @@ class SecurityState extends BaseBlocWidgetState<SecurityScreen> {
 
   onClickUpdateTransactionPin() {
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const ConfirmPinAndPayPage()).then((value) {
+    showCustomBottomSheet(const ConfirmPinAndPayPage(
+      actionEnum: ConfirmPinAndPayActionEnum.updatePin,
+    )).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
     });

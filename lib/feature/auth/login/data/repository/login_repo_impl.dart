@@ -11,6 +11,7 @@ import '../../domain/login_repo.dart';
 import '../data_source/remote_login_data_source.dart';
 import '../models/create_pin_request_model.dart';
 import '../models/login_request_model.dart';
+import '../models/update_pin_request_model.dart';
 
 class LoginRepoImpl extends LoginRepo {
   RemoteLoginDataSource remoteLoginDataSource = sl();
@@ -44,5 +45,14 @@ class LoginRepoImpl extends LoginRepo {
     // PrefHelper helper = sl();
     // await helper.setLoginResponseModel(responseModel);
     return Right(Success(null));
+  }
+
+  @override
+  Future<Either<Failure, Success>> updatePin(UpdatePinRequestModel model) =>
+      baseApiMethod(() => updatePinFromAPI(model));
+
+  Future<Either<Failure, Success>> updatePinFromAPI(
+      UpdatePinRequestModel model) async {
+    return Right(Success((await remoteLoginDataSource.updatePin(model)).data));
   }
 }

@@ -3,6 +3,7 @@ import 'package:kolobox_new_app/feature/auth/login/data/models/login_response_mo
 import 'package:kolobox_new_app/feature/dashboard/data/models/update_password_request_model.dart';
 
 import '../../data/models/create_pin_request_model.dart';
+import '../../data/models/update_pin_request_model.dart';
 
 abstract class LoginEvent {}
 
@@ -19,6 +20,14 @@ class CallCreatePinEvent extends LoginEvent {
   CallCreatePinEvent({
     required this.loginResponseModel,
     required this.createPinRequestModel,
+  });
+}
+
+class CallUpdatePinEvent extends LoginEvent {
+  final UpdatePinRequestModel updatePinRequestModel;
+
+  CallUpdatePinEvent({
+    required this.updatePinRequestModel,
   });
 }
 

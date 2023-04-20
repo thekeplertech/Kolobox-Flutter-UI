@@ -11,6 +11,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/update_profile_req
 import 'package:retrofit/retrofit.dart';
 
 import '../../feature/auth/login/data/models/login_request_model.dart';
+import '../../feature/auth/login/data/models/update_pin_request_model.dart';
 import '../../feature/auth/register/data/models/register_request_model.dart';
 import '../../feature/auth/register/data/models/verify_user_request_model.dart';
 import '../../feature/dashboard/data/models/add_bank_request_model.dart';
@@ -67,6 +68,9 @@ abstract class RestHelper {
 
   @POST(ApiUrls.createPinAPI)
   Future<ApiResponse> createPin(@Body() CreatePinRequestModel model);
+
+  @PUT(ApiUrls.createPinAPI)
+  Future<ApiResponse> updatePin(@Body() UpdatePinRequestModel model);
 
   @POST(ApiUrls.verifyPinAPI)
   Future<ApiResponse> verifyPin(@Body() VerifyPinRequestModel model);

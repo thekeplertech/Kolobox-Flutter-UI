@@ -4,6 +4,7 @@ import '../../../../../core/http/rest_client.dart';
 import '../../../../../core/http/rest_helper.dart';
 import '../../../../../core/models/api_response.dart';
 import '../models/create_pin_request_model.dart';
+import '../models/update_pin_request_model.dart';
 import 'remote_login_data_source.dart';
 
 class RemoteLoginDataSourceImpl implements RemoteLoginDataSource {
@@ -21,5 +22,11 @@ class RemoteLoginDataSourceImpl implements RemoteLoginDataSource {
   Future<ApiResponse> createPin(CreatePinRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.createPin(model);
+  }
+
+  @override
+  Future<ApiResponse> updatePin(UpdatePinRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.updatePin(model);
   }
 }

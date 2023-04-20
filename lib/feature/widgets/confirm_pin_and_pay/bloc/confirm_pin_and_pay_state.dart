@@ -3,12 +3,17 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_mod
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_response_model.dart';
 
 import '../../../dashboard/data/models/select_product_request_model.dart';
+import '../../../dashboard/data/models/verify_pin_request_model.dart';
 
 abstract class ConfirmPinAndPayState {}
 
 class InitialState extends ConfirmPinAndPayState {}
 
-class VerifyPinState extends ConfirmPinAndPayState {}
+class VerifyPinState extends ConfirmPinAndPayState {
+  final VerifyPinRequestModel model;
+
+  VerifyPinState({required this.model});
+}
 
 class SelectProductState extends ConfirmPinAndPayState {
   final SelectProductRequestModel requestModel;

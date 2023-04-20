@@ -6,6 +6,7 @@ import '../../../../core/models/failure.dart';
 import '../../../../core/models/success.dart';
 import '../data/models/create_pin_request_model.dart';
 import '../data/models/login_request_model.dart';
+import '../data/models/update_pin_request_model.dart';
 
 abstract class LoginRepo extends BaseApiRepo {
   LoginRepo(NetworkInfo? networkInfo) : super(networkInfo);
@@ -13,4 +14,6 @@ abstract class LoginRepo extends BaseApiRepo {
   Future<Either<Failure, Success>> login(LoginRequestModel model);
 
   Future<Either<Failure, Success>> createPin(CreatePinRequestModel model);
+
+  Future<Either<Failure, Success>> updatePin(UpdatePinRequestModel model);
 }

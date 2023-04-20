@@ -45,12 +45,12 @@ class AddBankDetailsWidget extends BaseBlocWidget {
 class _AddBankDetailsWidgetState
     extends BaseBlocWidgetState<AddBankDetailsWidget> {
   final TextEditingController numberTextEditingController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController nameTextEditingController =
-      TextEditingController();
+  TextEditingController();
 
   StreamController<bool> bankStreamController =
-      StreamController<bool>.broadcast();
+  StreamController<bool>.broadcast();
 
   List<BankData> banks = [];
   BankData? selectedBankData;
@@ -65,7 +65,7 @@ class _AddBankDetailsWidgetState
     if (bankDetailEnum == BankDetailEnum.updateBank &&
         widget.selectedBankData != null) {
       int pos = banks.indexWhere((element) =>
-          element.name == (widget.selectedBankData?.bankName ?? ''));
+      element.name == (widget.selectedBankData?.bankName ?? ''));
       if (pos != -1) {
         selectedBankData = banks[pos];
       }
@@ -98,9 +98,10 @@ class _AddBankDetailsWidgetState
     );
   }
 
-  Widget getChild() => Padding(
+  Widget getChild() =>
+      Padding(
         padding:
-            const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
+        const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -132,7 +133,7 @@ class _AddBankDetailsWidgetState
             Text(
               'Select Bank',
               style:
-                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+              AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 7,
@@ -155,7 +156,7 @@ class _AddBankDetailsWidgetState
             Text(
               'Personal Bank Account Number',
               style:
-                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+              AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 7,
@@ -174,7 +175,7 @@ class _AddBankDetailsWidgetState
             Text(
               'Account Name',
               style:
-                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+              AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 7,
@@ -252,6 +253,11 @@ class _AddBankDetailsWidgetState
       return;
     }
 
+
+    callSubmit();
+  }
+
+  callSubmit() {
     if (bankDetailEnum == BankDetailEnum.addBank) {
       BlocProvider.of<BankDetailBloc>(context).add(
         AddMyBanksEvent(

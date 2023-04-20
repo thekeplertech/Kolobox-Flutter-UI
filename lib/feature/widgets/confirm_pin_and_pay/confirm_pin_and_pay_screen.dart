@@ -8,6 +8,7 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/pay_stack_payment_gateway/pay_stack_payment.dart';
 import 'package:kolobox_new_app/core/ui/extension.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/auth/login/data/models/update_pin_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
@@ -24,7 +25,6 @@ import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/utils.dart';
 import '../../../di/injection_container.dart';
 import '../../../routes/routes.dart';
-import '../../auth/login/data/models/create_pin_request_model.dart';
 import '../../auth/login/data/models/login_response_model.dart';
 import '../../auth/login/presentation/bloc/login_bloc.dart';
 import '../../auth/login/presentation/bloc/login_event.dart';
@@ -60,8 +60,20 @@ class ConfirmPinAndPayScreenState
         listeners: [
           BlocListener<LoginBloc, LoginState>(
             listener: (_, state) {
-              if (state is CallLoginState) {
-                print('adsfasdfasfdasfd ads fsa fsa fd dfs dafa ');
+              if (state is UpdatePinState) {
+                Utils.showToast(
+                    context,
+                    ToastWidget(
+                      state.message,
+                      closeWidget: Image.asset(
+                        imageClose,
+                        color: ColorList.white,
+                      ),
+                    ),
+                    isTab: true);
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  goBack(context);
+                });
               }
             },
           ),
@@ -70,8 +82,16 @@ class ConfirmPinAndPayScreenState
               if (state is VerifyPinState) {
                 // Pin verification success
                 Future.delayed(const Duration(milliseconds: 200), () {
-                  if (widget.onSuccess != null) widget.onSuccess!();
-                  goBack(context);
+                  switch (widget.actionEnum) {
+                    case ConfirmPinAndPayActionEnum.verifyPin:
+                      if (widget.onSuccess != null) widget.onSuccess!();
+                      goBack(context);
+                      break;
+                    case ConfirmPinAndPayActionEnum.updatePin:
+                      showDialogForCreatePin(
+                          prefHelper!.getLoginResponseModel(), state.model.pin);
+                      break;
+                  }
                 });
                 // Future.delayed(const Duration(milliseconds: 200), () {
                 //   initiatePayment();
@@ -303,7 +323,7 @@ class ConfirmPinAndPayScreenState
     );
   }
 
-  void showDialogForCreatePin(LoginResponseModel model) {
+  void showDialogForCreatePin(LoginResponseModel model, String oldPin) {
     showCustomBottomSheet(CreatePinWidget(
       onBack: (value1) {
         Future.delayed(const Duration(milliseconds: 200), () {
@@ -312,9 +332,11 @@ class ConfirmPinAndPayScreenState
             onBack: (value2) {
               Future.delayed(const Duration(milliseconds: 200), () {
                 if (value1 == value2) {
-                  BlocProvider.of<LoginBloc>(context).add(CallCreatePinEvent(
-                    loginResponseModel: model,
-                    createPinRequestModel: CreatePinRequestModel(pin: value2),
+                  BlocProvider.of<LoginBloc>(context).add(CallUpdatePinEvent(
+                    updatePinRequestModel: UpdatePinRequestModel(
+                      oldPin: oldPin,
+                      newPin: value2,
+                    ),
                   ));
                 } else {
                   Utils.showToast(
@@ -330,7 +352,7 @@ class ConfirmPinAndPayScreenState
                           color: ColorList.black,
                         ),
                       ));
-                  showDialogForCreatePin(model);
+                  showDialogForCreatePin(model, oldPin);
                 }
               });
             },

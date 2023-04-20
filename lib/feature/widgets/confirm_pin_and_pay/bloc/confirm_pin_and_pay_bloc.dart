@@ -39,7 +39,7 @@ class ConfirmPinAndPayBloc
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(VerifyPinState());
+      emit(VerifyPinState(model: event.model));
     });
   }
 
