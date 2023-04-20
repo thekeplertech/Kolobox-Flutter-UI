@@ -9,6 +9,7 @@ import '../../../../../core/models/api_response.dart';
 import '../models/add_bank_request_model.dart';
 import '../models/delete_bank_request_model.dart';
 import '../models/update_bank_request_model.dart';
+import '../models/update_password_request_model.dart';
 import '../models/update_profile_request_model.dart';
 
 abstract class RemoteDashboardDataSource {
@@ -49,4 +50,6 @@ abstract class RemoteDashboardDataSource {
       String bankId, UpdateBankRequestModel model);
 
   Future<ApiResponse> updateProfile(UpdateProfileRequestModel model);
+
+  Future<ApiResponse> updatePassword(UpdatePasswordRequestModel model);
 }

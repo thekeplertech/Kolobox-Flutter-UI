@@ -110,7 +110,13 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               thickness: 1),
                           InkWell(
                             onTap: () {
-                              navigatePush(context, const NextOfKinPage());
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(HideDisableBottomScreenEvent());
+                              navigatePush(context, const NextOfKinPage())
+                                  .then((value) {
+                                BlocProvider.of<DashboardBloc>(context)
+                                    .add(ShowEnableBottomScreenEvent());
+                              });
                             },
                             child: getSelectionOptionWidget(
                                 'Next Of Kin', imageNextOfKinIcon),

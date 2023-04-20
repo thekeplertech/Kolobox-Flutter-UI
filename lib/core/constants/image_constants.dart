@@ -52,6 +52,8 @@ const imageSecurityIcon = "assets/images/security_icon.png";
 const imageSecurityShieldIcon = "assets/images/security_shield_icon.png";
 const imageSupportCenterIcon = "assets/images/support_center.png";
 const imageUserPlaceHolder = "assets/images/user_place_holder.png";
+const imageUserPlaceHolderNextOfKin =
+    "assets/images/user_place_holder_next_of_kin.png";
 const imageSettingIcon = "assets/images/setting_icon.png";
 const imageShareIdIcon = "assets/images/share_id_icon.png";
 const imageBackArrowIcon = "assets/images/back_arrow_icon.png";

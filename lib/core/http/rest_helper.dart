@@ -17,6 +17,7 @@ import '../../feature/dashboard/data/models/add_bank_request_model.dart';
 import '../../feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../feature/dashboard/data/models/delete_bank_request_model.dart';
 import '../../feature/dashboard/data/models/update_bank_request_model.dart';
+import '../../feature/dashboard/data/models/update_password_request_model.dart';
 import '../../feature/dashboard/data/models/verify_pin_request_model.dart';
 import '../models/api_response.dart';
 import 'api_constants.dart';
@@ -104,4 +105,7 @@ abstract class RestHelper {
 
   @PUT(ApiUrls.updateProfileAPI)
   Future<ApiResponse> updateProfile(@Body() UpdateProfileRequestModel model);
+
+  @PUT(ApiUrls.updatePasswordAPI)
+  Future<ApiResponse> updatePassword(@Body() UpdatePasswordRequestModel model);
 }

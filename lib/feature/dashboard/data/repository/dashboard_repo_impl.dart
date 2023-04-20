@@ -28,6 +28,7 @@ import '../models/select_product_response_model.dart';
 import '../models/top_up_request_model.dart';
 import '../models/transactions_request_model.dart';
 import '../models/update_bank_request_model.dart';
+import '../models/update_password_request_model.dart';
 import '../models/update_profile_request_model.dart';
 import '../models/verify_pin_request_model.dart';
 
@@ -240,5 +241,16 @@ class DashboardRepoImpl extends DashboardRepo {
     responseModel.token = helper.getLoginResponseModel().token;
     await helper.setLoginResponseModel(responseModel);
     return Right(Success(responseModel));
+  }
+
+  @override
+  Future<Either<Failure, Success>> updatePassword(
+          UpdatePasswordRequestModel model) =>
+      baseApiMethod(() => updatePasswordFromAPI(model));
+
+  Future<Either<Failure, Success>> updatePasswordFromAPI(
+      UpdatePasswordRequestModel model) async {
+    return Right(
+        Success((await remoteDashboardDataSource.updatePassword(model)).data));
   }
 }

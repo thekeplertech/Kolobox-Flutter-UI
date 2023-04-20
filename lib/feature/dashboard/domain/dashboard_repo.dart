@@ -13,6 +13,7 @@ import '../data/models/select_product_request_model.dart';
 import '../data/models/top_up_request_model.dart';
 import '../data/models/transactions_request_model.dart';
 import '../data/models/update_bank_request_model.dart';
+import '../data/models/update_password_request_model.dart';
 import '../data/models/update_profile_request_model.dart';
 
 abstract class DashboardRepo extends BaseApiRepo {
@@ -58,4 +59,7 @@ abstract class DashboardRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> updateProfile(
       UpdateProfileRequestModel model);
+
+  Future<Either<Failure, Success>> updatePassword(
+      UpdatePasswordRequestModel model);
 }

@@ -12,6 +12,7 @@ import '../models/create_investment_goal_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/transactions_request_model.dart';
 import '../models/update_bank_request_model.dart';
+import '../models/update_password_request_model.dart';
 import 'remote_dashboard_data_source.dart';
 
 class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
@@ -123,5 +124,11 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
   Future<ApiResponse> updateProfile(UpdateProfileRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.updateProfile(model);
+  }
+
+  @override
+  Future<ApiResponse> updatePassword(UpdatePasswordRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.updatePassword(model);
   }
 }
