@@ -97,22 +97,29 @@ class SecurityState extends BaseBlocWidgetState<SecurityScreen> {
                     onTap: () {
                       BlocProvider.of<DashboardBloc>(context)
                           .add(HideDisableBottomScreenEvent());
-                      showCustomBottomSheet(ConfirmPinAndPayPage(
-                        onSuccess: () {
-                          Future.delayed(const Duration(milliseconds: 300), () {
-                            BlocProvider.of<DashboardBloc>(context)
-                                .add(HideDisableBottomScreenEvent());
-                            navigatePush(context, const UpdatePasswordPage())
-                                .then((value) {
-                              BlocProvider.of<DashboardBloc>(context)
-                                  .add(ShowEnableBottomScreenEvent());
-                            });
-                          });
-                        },
-                      )).then((value) {
+                      navigatePush(context, const UpdatePasswordPage())
+                          .then((value) {
                         BlocProvider.of<DashboardBloc>(context)
                             .add(ShowEnableBottomScreenEvent());
                       });
+                      // BlocProvider.of<DashboardBloc>(context)
+                      //     .add(HideDisableBottomScreenEvent());
+                      // showCustomBottomSheet(ConfirmPinAndPayPage(
+                      //   onSuccess: () {
+                      //     Future.delayed(const Duration(milliseconds: 300), () {
+                      //       BlocProvider.of<DashboardBloc>(context)
+                      //           .add(HideDisableBottomScreenEvent());
+                      //       navigatePush(context, const UpdatePasswordPage())
+                      //           .then((value) {
+                      //         BlocProvider.of<DashboardBloc>(context)
+                      //             .add(ShowEnableBottomScreenEvent());
+                      //       });
+                      //     });
+                      //   },
+                      // )).then((value) {
+                      //   BlocProvider.of<DashboardBloc>(context)
+                      //       .add(ShowEnableBottomScreenEvent());
+                      // });
                     },
                     child: AbsorbPointer(
                       child: Container(

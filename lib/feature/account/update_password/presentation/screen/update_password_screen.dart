@@ -66,7 +66,8 @@ class UpdatePasswordScreenState
                     imageClose,
                     color: ColorList.white,
                   ),
-                ));
+                ),
+                isTab: true);
             Future.delayed(const Duration(milliseconds: 300)).then((value) {
               goBack(context);
             });
