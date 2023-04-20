@@ -178,7 +178,7 @@ class _EditProfileWidgetState extends BaseBlocWidgetState<EditProfileWidget> {
                   overlayColor: ColorList.redDarkColor,
                   borderRadius: 32,
                   onPressed: () {
-                    comingSoon();
+                    goBack(context);
                   },
                 ),
               ),
@@ -193,6 +193,7 @@ class _EditProfileWidgetState extends BaseBlocWidgetState<EditProfileWidget> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 32,
                   onPressed: () {
+                    hideKeyboard();
                     onClickUpdateProfile();
                   },
                 ),
@@ -223,6 +224,7 @@ class _EditProfileWidgetState extends BaseBlocWidgetState<EditProfileWidget> {
   }
 
   Future<void> onClickDOB() async {
+    hideKeyboard();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),

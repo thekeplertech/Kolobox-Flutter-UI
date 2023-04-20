@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
@@ -9,6 +11,7 @@ import '../../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../../core/utils/date_helper.dart';
 import '../../../../widgets/home_app_bar_widget.dart';
+import '../../../../widgets/next_ok_kin/edit_next_of_kin_page.dart';
 
 class NextOfKinScreen extends BaseBlocWidget {
   const NextOfKinScreen({
@@ -20,6 +23,9 @@ class NextOfKinScreen extends BaseBlocWidget {
 }
 
 class NextOfKinScreenState extends BaseBlocWidgetState<NextOfKinScreen> {
+  StreamController<bool> dataStreamController =
+      StreamController<bool>.broadcast();
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +50,11 @@ class NextOfKinScreenState extends BaseBlocWidgetState<NextOfKinScreen> {
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 28, right: 28, top: 15, bottom: 28),
-                      child: getDataWidget(),
+                      child: StreamBuilder<bool>(
+                          stream: dataStreamController.stream,
+                          builder: (context, snapshot) {
+                            return getDataWidget();
+                          }),
                     ),
                   ],
                 ),
@@ -61,14 +71,9 @@ class NextOfKinScreenState extends BaseBlocWidgetState<NextOfKinScreen> {
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
               onPressed: () {
-                // BlocProvider.of<DashboardBloc>(context)
-                //     .add(HideDisableBottomScreenEvent());
-                // showCustomBottomSheet(const EditProfilePage())
-                //     .then((value) {
-                //   BlocProvider.of<DashboardBloc>(context)
-                //       .add(ShowEnableBottomScreenEvent());
-                //   profileStreamController.add(true);
-                // });
+                showCustomBottomSheet(const EditNextOfKinPage()).then((value) {
+                  dataStreamController.add(true);
+                });
               },
             ),
           ),
@@ -256,5 +261,6 @@ class NextOfKinScreenState extends BaseBlocWidgetState<NextOfKinScreen> {
   @override
   void dispose() {
     super.dispose();
+    dataStreamController.close();
   }
 }
