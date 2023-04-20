@@ -23,6 +23,9 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
     on<CallCreatePinEvent>((event, emit) async {
       await callCreatePinEvent(event, emit);
     });
+    on<UpdatePasswordEvent>((event, emit) async {
+      await callUpdatePasswordEvent(event, emit);
+    });
   }
 
   Future<void> callLoginEvent(CallLoginEvent event, Emitter emit) async {
@@ -61,6 +64,20 @@ class LoginBloc extends BaseBloc<LoginEvent, LoginState> {
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(CallLoginState(model: event.loginResponseModel, isPinSet: true));
+    });
+  }
+
+  Future<void> callUpdatePasswordEvent(
+      UpdatePasswordEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.updatePassword(event.model);
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(UpdatePasswordState(message: r.model));
     });
   }
 }

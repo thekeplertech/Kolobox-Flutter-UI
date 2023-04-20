@@ -4,12 +4,14 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/account/update_password/presentation/update_password_page.dart';
 import 'package:kolobox_new_app/feature/auth/login/presentation/bloc/login_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/confirm_pin_and_pay_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../../routes/routes.dart';
 import '../../../../auth/login/presentation/bloc/login_state.dart';
 import '../../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../../dashboard/presentation/bloc/dashboard_event.dart';
@@ -91,7 +93,26 @@ class SecurityState extends BaseBlocWidgetState<SecurityScreen> {
                       height: 10,
                       thickness: 1),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(HideDisableBottomScreenEvent());
+                      showCustomBottomSheet(ConfirmPinAndPayPage(
+                        onSuccess: () {
+                          Future.delayed(const Duration(milliseconds: 300), () {
+                            BlocProvider.of<DashboardBloc>(context)
+                                .add(HideDisableBottomScreenEvent());
+                            navigatePush(context, const UpdatePasswordPage())
+                                .then((value) {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(ShowEnableBottomScreenEvent());
+                            });
+                          });
+                        },
+                      )).then((value) {
+                        BlocProvider.of<DashboardBloc>(context)
+                            .add(ShowEnableBottomScreenEvent());
+                      });
+                    },
                     child: AbsorbPointer(
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 12),
