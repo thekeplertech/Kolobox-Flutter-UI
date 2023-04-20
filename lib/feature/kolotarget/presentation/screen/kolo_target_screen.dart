@@ -255,7 +255,8 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                                     investmentGoalModel: investmentGoalModel!,
                                     interestAmount: interestAmount,
                                     isPaid: !isLeft,
-                                  ));
+                                  ),
+                                  routeName: koloTransactionDetailPageValue);
                             },
                           ),
                         ],

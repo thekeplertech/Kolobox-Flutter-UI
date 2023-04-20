@@ -247,11 +247,13 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
     switch (fundEnum) {
       case KoloboxFundEnum.koloFlex:
         navigatePush(
-            context, KoloFlexPage(earningsDataModel: earningsDataModel));
+            context, KoloFlexPage(earningsDataModel: earningsDataModel),
+            routeName: koloFlexPageValue);
         break;
       case KoloboxFundEnum.koloTarget:
         navigatePush(
-            context, KoloTargetPage(earningsDataModel: earningsDataModel));
+            context, KoloTargetPage(earningsDataModel: earningsDataModel),
+            routeName: koloTargetPageValue);
         break;
       case KoloboxFundEnum.koloTargetPlus:
         comingSoon();

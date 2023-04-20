@@ -26,6 +26,7 @@ class CreatePinWidget extends BaseScreen {
 }
 
 class _CreatePinWidgetState extends BaseScreenState<CreatePinWidget> {
+  // This widget is used for creating pin after fresh login
   TextEditingController otpTextEditingController = TextEditingController();
 
   @override

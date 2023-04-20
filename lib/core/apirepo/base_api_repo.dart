@@ -44,7 +44,7 @@ abstract class BaseApiRepo {
             Failure(
               apiStatus: statusCode,
               model: e.response?.data?.toString() ?? '',
-              message: e.response?.data?['message'] ?? '',
+              message: e.response?.data?['message'].toString() ?? '',
             ),
           );
         } else if (statusCode == 401) {

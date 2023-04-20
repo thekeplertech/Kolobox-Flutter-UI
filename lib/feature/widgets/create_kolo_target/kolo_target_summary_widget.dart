@@ -9,7 +9,6 @@ import 'package:kolobox_new_app/routes/routes.dart';
 import '../../../core/colors/color_list.dart';
 import '../../../core/constants/kolo_box_icon.dart';
 import '../../../core/ui/widgets/button.dart';
-import '../confirm_with_pin_widget.dart';
 
 class KoloTargetSummaryWidget extends BaseScreen {
   const KoloTargetSummaryWidget({Key? key}) : super(key: key);
@@ -300,7 +299,7 @@ class _KoloTargetSummaryWidgetState
             overlayColor: ColorList.blueColor,
             borderRadius: 32,
             onPressed: () {
-              showCustomBottomSheet(const ConfirmWithPinWidget());
+              // showCustomBottomSheet(const ConfirmWithPinWidget());
             },
           ),
         ],

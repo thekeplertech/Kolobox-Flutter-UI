@@ -121,13 +121,7 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               thickness: 1),
                           InkWell(
                             onTap: () {
-                              BlocProvider.of<DashboardBloc>(context)
-                                  .add(HideDisableBottomScreenEvent());
-                              navigatePush(context, const SecurityPage())
-                                  .then((value) {
-                                BlocProvider.of<DashboardBloc>(context)
-                                    .add(ShowEnableBottomScreenEvent());
-                              });
+                              navigatePush(context, const SecurityPage());
                             },
                             child: getSelectionOptionWidget(
                                 'Security', imageSecurityIcon),

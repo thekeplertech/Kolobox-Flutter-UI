@@ -19,6 +19,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
+import '../../../core/enums/confirm_pin_and_pay_action_enum.dart';
 import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/utils.dart';
 import '../../../di/injection_container.dart';
@@ -26,8 +27,13 @@ import '../../../routes/routes.dart';
 import '../../transaction_successful/presentation/transaction_successful_page.dart';
 
 class ConfirmPinAndPayScreen extends BaseBlocWidget {
+  final ConfirmPinAndPayActionEnum actionEnum;
+  final Function() onSuccess;
+
   const ConfirmPinAndPayScreen({
     Key? key,
+    required this.actionEnum,
+    required this.onSuccess,
   }) : super(key: key);
 
   @override
@@ -48,9 +54,14 @@ class ConfirmPinAndPayScreenState
       BlocListener<ConfirmPinAndPayBloc, ConfirmPinAndPayState>(
         listener: (_, state) {
           if (state is VerifyPinState) {
+            // Pin verification success
             Future.delayed(const Duration(milliseconds: 200), () {
-              initiatePayment();
+              widget.onSuccess();
+              goBack(context);
             });
+            // Future.delayed(const Duration(milliseconds: 200), () {
+            //   initiatePayment();
+            // });
           } else if (state is SelectProductState) {
             Future.delayed(const Duration(milliseconds: 200), () {
               callPayment(

@@ -85,7 +85,7 @@ navigateAndRemoveAll(
 
 // use this method to navigate screen with push any widget
 Future<dynamic> navigatePush(BuildContext context, Widget? route,
-    {bool? fullscreenDialog}) async {
+    {bool? fullscreenDialog, String? routeName}) async {
   try {
     var string = "";
     if (route != null) string += "route= $route";
@@ -99,8 +99,8 @@ Future<dynamic> navigatePush(BuildContext context, Widget? route,
           builder: (BuildContext context) => route!,
           fullscreenDialog:
               ((fullscreenDialog == null) ? false : fullscreenDialog),
-          settings:
-              RouteSettings(name: (route != null) ? route.toString() : "")),
+          settings: RouteSettings(
+              name: routeName ?? ((route != null) ? route.toString() : ""))),
     );
   } catch (e) {
     logger!.e("navigatePush ex$e");

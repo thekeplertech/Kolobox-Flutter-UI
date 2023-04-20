@@ -95,12 +95,15 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                                 style: AppStyle.b8Medium.copyWith(
                                     color: ColorList.blackSecondColor),
                               ),
-                              Text(
-                                DateHelper.getDateFromDateTime(
-                                    prefHelper?.getLoginResponseModel().dob,
-                                    'MMM dd, yyyy'),
-                                style: AppStyle.b8Bold.copyWith(
-                                    color: ColorList.blackSecondColor),
+                              Expanded(
+                                child: Text(
+                                  DateHelper.getDateFromDateTime(
+                                      prefHelper?.getLoginResponseModel().dob,
+                                      'MMM dd, yyyy'),
+                                  style: AppStyle.b8Bold.copyWith(
+                                      color: ColorList.blackSecondColor),
+                                  textAlign: TextAlign.end,
+                                ),
                               ),
                             ],
                           ),
@@ -122,13 +125,16 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                                 style: AppStyle.b8Medium.copyWith(
                                     color: ColorList.blackSecondColor),
                               ),
-                              Text(
-                                prefHelper
-                                        ?.getLoginResponseModel()
-                                        .occupation ??
-                                    '',
-                                style: AppStyle.b8Bold.copyWith(
-                                    color: ColorList.blackSecondColor),
+                              Expanded(
+                                child: Text(
+                                  prefHelper
+                                          ?.getLoginResponseModel()
+                                          .occupation ??
+                                      '',
+                                  style: AppStyle.b8Bold.copyWith(
+                                      color: ColorList.blackSecondColor),
+                                  textAlign: TextAlign.end,
+                                ),
                               ),
                             ],
                           ),
@@ -149,11 +155,14 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                                 style: AppStyle.b8Medium.copyWith(
                                     color: ColorList.blackSecondColor),
                               ),
-                              const Spacer(),
-                              Text(
-                                prefHelper?.getLoginResponseModel().email ?? '',
-                                style: AppStyle.b8Bold
-                                    .copyWith(color: ColorList.greyLight2Color),
+                              Expanded(
+                                child: Text(
+                                  prefHelper?.getLoginResponseModel().email ??
+                                      '',
+                                  style: AppStyle.b8Bold.copyWith(
+                                      color: ColorList.greyLight2Color),
+                                  textAlign: TextAlign.end,
+                                ),
                               ),
                               const SizedBox(
                                 width: 9.5,
@@ -178,11 +187,14 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                                 style: AppStyle.b8Medium.copyWith(
                                     color: ColorList.blackSecondColor),
                               ),
-                              const Spacer(),
-                              Text(
-                                prefHelper?.getLoginResponseModel().phone ?? '',
-                                style: AppStyle.b8Bold
-                                    .copyWith(color: ColorList.greyLight2Color),
+                              Expanded(
+                                child: Text(
+                                  prefHelper?.getLoginResponseModel().phone ??
+                                      '',
+                                  style: AppStyle.b8Bold.copyWith(
+                                      color: ColorList.greyLight2Color),
+                                  textAlign: TextAlign.end,
+                                ),
                               ),
                               const SizedBox(
                                 width: 9.5,

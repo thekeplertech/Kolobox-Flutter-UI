@@ -80,8 +80,9 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
     if (!FlavorConfig.isProd()) {
       firstNameTextEditingController.text = 'Parth';
       lastNameTextEditingController.text = 'Suthar';
-      emailAddressTextEditingController.text = 'parth12@mailinator.com';
-      phoneNumberTextEditingController.text = '95584957841';
+      emailAddressTextEditingController.text =
+          'parth12345678912345@mailinator.com';
+      phoneNumberTextEditingController.text = '95584963843';
       nextOfKinTextEditingController.text = 'First Next of kin';
       occupationTextEditingController.text = 'First Occupation';
       passwordTextEditingController.text = 'kolobox@123';

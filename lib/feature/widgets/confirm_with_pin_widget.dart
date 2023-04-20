@@ -17,12 +17,14 @@ class ConfirmWithPinWidget extends BaseScreen {
 }
 
 class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
+  // This widget is not used
+
   @override
   Widget body(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding:
-            const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
+        const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
         child: Column(
           children: [
             Align(
@@ -40,7 +42,7 @@ class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
             Text(
               'Confirm with PIN',
               style:
-                  AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
+              AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 6,
@@ -48,7 +50,7 @@ class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
             Text(
               'Enter your secure 4 digit pin to confirm',
               style:
-                  AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
+              AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 30,
