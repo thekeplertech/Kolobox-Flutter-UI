@@ -23,6 +23,7 @@ import '../../../core/utils/utils.dart';
 import '../../../routes/routes.dart';
 import '../../account/bank_details/presentation/bloc/bank_detail_bloc.dart';
 import '../../dashboard/data/models/get_banks_response_model.dart';
+import '../confirm_pin_and_pay/confirm_pin_and_pay_page.dart';
 
 class AddBankDetailsWidget extends BaseBlocWidget {
   final List<BankData> banks;
@@ -45,12 +46,12 @@ class AddBankDetailsWidget extends BaseBlocWidget {
 class _AddBankDetailsWidgetState
     extends BaseBlocWidgetState<AddBankDetailsWidget> {
   final TextEditingController numberTextEditingController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController nameTextEditingController =
-  TextEditingController();
+      TextEditingController();
 
   StreamController<bool> bankStreamController =
-  StreamController<bool>.broadcast();
+      StreamController<bool>.broadcast();
 
   List<BankData> banks = [];
   BankData? selectedBankData;
@@ -65,7 +66,7 @@ class _AddBankDetailsWidgetState
     if (bankDetailEnum == BankDetailEnum.updateBank &&
         widget.selectedBankData != null) {
       int pos = banks.indexWhere((element) =>
-      element.name == (widget.selectedBankData?.bankName ?? ''));
+          element.name == (widget.selectedBankData?.bankName ?? ''));
       if (pos != -1) {
         selectedBankData = banks[pos];
       }
@@ -98,10 +99,9 @@ class _AddBankDetailsWidgetState
     );
   }
 
-  Widget getChild() =>
-      Padding(
+  Widget getChild() => Padding(
         padding:
-        const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
+            const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -133,7 +133,7 @@ class _AddBankDetailsWidgetState
             Text(
               'Select Bank',
               style:
-              AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 7,
@@ -156,7 +156,7 @@ class _AddBankDetailsWidgetState
             Text(
               'Personal Bank Account Number',
               style:
-              AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 7,
@@ -175,7 +175,7 @@ class _AddBankDetailsWidgetState
             Text(
               'Account Name',
               style:
-              AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 7,
@@ -253,8 +253,13 @@ class _AddBankDetailsWidgetState
       return;
     }
 
-
-    callSubmit();
+    showCustomBottomSheet(ConfirmPinAndPayPage(
+      onSuccess: () {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          callSubmit();
+        });
+      },
+    ));
   }
 
   callSubmit() {
