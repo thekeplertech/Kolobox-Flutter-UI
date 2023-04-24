@@ -3,7 +3,7 @@ class Failure {
       {this.message = "Check Internet Connection", this.apiStatus, this.model});
 
   dynamic model;
-  final String? message;
+  String? message;
   final int? apiStatus;
 }
 

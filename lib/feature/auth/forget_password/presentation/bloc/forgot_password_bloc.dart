@@ -34,6 +34,9 @@ class ForgotPasswordBloc
 
     result.fold((l) {
       baseBlocObject!.objectModel = l;
+      if (baseBlocObject!.objectModel.apiStatus == 400) {
+        baseBlocObject!.objectModel.message = 'Email id is not registered';
+      }
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());

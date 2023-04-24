@@ -54,6 +54,12 @@ class ForgotPasswordScreenState
   static const int maxPasswordStrength = 4;
   int passwordStrength = 0;
 
+  StreamController<int> resendStreamController =
+      StreamController<int>.broadcast();
+
+  Timer? _timer;
+  int _timeLeft = 0;
+
   PageController pageController = PageController(initialPage: 0);
 
   @override
@@ -63,6 +69,25 @@ class ForgotPasswordScreenState
       emailTextEditingController.text = 'parth123456789@mailinator.com';
       // emailTextEditingController.text = 'tulbadex@gmail.com';
     }
+  }
+
+  startResendTimer() {
+    _timeLeft = 30;
+    resendStreamController.add(_timeLeft);
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_timeLeft > 0) {
+        _timeLeft--;
+      } else {
+        _timer?.cancel();
+      }
+      resendStreamController.add(_timeLeft);
+    });
+  }
+
+  stopResendTimer() {
+    _timer?.cancel();
+    _timeLeft = 0;
+    resendStreamController.add(_timeLeft);
   }
 
   @override
@@ -92,11 +117,13 @@ class ForgotPasswordScreenState
                       ),
                     ));
 
+                pageIndicatorPosition = 1;
                 pageController.animateToPage(
-                  ++pageIndicatorPosition,
+                  pageIndicatorPosition,
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.easeIn,
                 );
+                startResendTimer();
               });
             }
             if (state is ForgotPasswordValidateState) {
@@ -392,14 +419,25 @@ class ForgotPasswordScreenState
                     ),
                   ),
                 ),
-                Text(
-                  'Resend in 0:30 Sec',
-                  style: TextStyle(
-                    color: ColorList.blackThirdColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                StreamBuilder<int>(
+                    stream: resendStreamController.stream,
+                    builder: (context, snapshot) {
+                      logger?.d("Resend timer $_timeLeft");
+                      return (_timeLeft == 0)
+                          ? GestureDetector(
+                              onTap: () => onClickNext(),
+                              child: Text(
+                                'Resend',
+                                style: AppStyle.b8Bold
+                                    .copyWith(color: ColorList.primaryColor),
+                              ),
+                            )
+                          : Text(
+                              'Resend in ${getFormattedTime()} Sec',
+                              style: AppStyle.b9Medium
+                                  .copyWith(color: ColorList.blackThirdColor),
+                            );
+                    }),
               ],
             ),
           ],
@@ -693,14 +731,21 @@ class ForgotPasswordScreenState
         ),
       );
 
+  String getFormattedTime() {
+    String seconds = _timeLeft.toString().padLeft(2, '0');
+    return '00:$seconds';
+  }
+
   @override
   void dispose() {
-    super.dispose();
-    pageController.dispose();
+    stopResendTimer();
     emailTextEditingController.dispose();
     otpTextEditingController.dispose();
     passwordTextEditingController.dispose();
     cPasswordTextEditingController.dispose();
+    super.dispose();
+    pageController.dispose();
+    resendStreamController.close();
     pageIndicatorStreamController.close();
   }
 }
