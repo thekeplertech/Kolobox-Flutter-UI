@@ -23,6 +23,7 @@ import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/toast_widget.dart';
 import '../../../../core/utils/utils.dart';
 import '../../../../di/injection_container.dart';
+import '../../../dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../../dashboard/data/models/select_product_request_model.dart';
 import '../../../dashboard/data/models/top_up_request_model.dart';
 import '../../../widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
@@ -71,6 +72,9 @@ class TransactionSuccessfulScreenState
   String _amount = '';
   String _errorMessage = '';
 
+  KoloboxFundEnum? koloboxFundEnum;
+  bool isInActive = false;
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +89,13 @@ class TransactionSuccessfulScreenState
     //   }
     // });
     // scaleController.forward();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    koloboxFundEnum = StateContainer.of(context).getKoloBoxEnum();
+    isInActive = koloboxFundEnum?.isInActiveProduct() ?? false;
   }
 
   @override
@@ -141,6 +152,11 @@ class TransactionSuccessfulScreenState
                           state.requestModel.depositAmount,
                           state.responseModel.topUpData?.accessCode ?? '',
                           state.responseModel.topUpData?.reference ?? '');
+                    });
+                  } else if (state is CreateInvestmentGoalState) {
+                    // Goal created pay the save amount Go to success page
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      onSuccess(state.referenceCode, state.amount, true, true);
                     });
                   }
                 },
@@ -394,24 +410,42 @@ class TransactionSuccessfulScreenState
       accessCode,
       (referenceCode) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          _referenceCode = referenceCode;
-          _amount = amount;
-          _isDeposited = true;
-          _isSuccess = true;
-          dataStreamController.add(true);
+          if (!isInActive && isKoloTarget()) {
+            // Create Goal
+            BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+              CreateInvestmentGoalEvent(
+                model: CreateInvestmentGoalRequestModel(
+                  purpose: StateContainer.of(context).getTargetName() ?? '',
+                  amount: StateContainer.of(context).getTargetAmount(),
+                  dueDate: DateHelper.getTextFromDateTime(
+                      StateContainer.of(context).getTargetDate()!,
+                      'yyyy-MM-dd'),
+                ),
+                amount: amount,
+                referenceCode: referenceCode,
+              ),
+            );
+          } else {
+            onSuccess(referenceCode, amount, true, true);
+          }
         });
       },
       (errorMessage) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          _referenceCode = referenceCode;
-          _amount = amount;
-          _isDeposited = true;
-          _isSuccess = false;
           _errorMessage = errorMessage;
-          dataStreamController.add(true);
+          onSuccess(referenceCode, amount, true, false);
         });
       },
     );
+  }
+
+  void onSuccess(
+      String referenceCode, String amount, bool isDeposited, bool isSuccess) {
+    _referenceCode = referenceCode;
+    _amount = amount;
+    _isDeposited = isDeposited;
+    _isSuccess = isSuccess;
+    dataStreamController.add(true);
   }
 
   @override
@@ -421,4 +455,14 @@ class TransactionSuccessfulScreenState
     dataStreamController.close();
     super.dispose();
   }
+
+  bool isKoloFlex() => koloboxFundEnum == KoloboxFundEnum.koloFlex;
+
+  bool isKoloTarget() => koloboxFundEnum == KoloboxFundEnum.koloTarget;
+
+  bool isKoloTargetPlus() => koloboxFundEnum == KoloboxFundEnum.koloTargetPlus;
+
+  bool isKoloFamily() => koloboxFundEnum == KoloboxFundEnum.koloFamily;
+
+  bool isKoloGroup() => koloboxFundEnum == KoloboxFundEnum.koloGroup;
 }

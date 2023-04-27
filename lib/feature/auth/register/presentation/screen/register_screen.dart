@@ -81,8 +81,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
       firstNameTextEditingController.text = 'Parth';
       lastNameTextEditingController.text = 'Suthar';
       emailAddressTextEditingController.text =
-          'parth12345678912345@mailinator.com';
-      phoneNumberTextEditingController.text = '95584963843';
+          'parth1234567891234567@mailinator.com';
+      phoneNumberTextEditingController.text = '95585963853';
       nextOfKinTextEditingController.text = 'First Next of kin';
       occupationTextEditingController.text = 'First Occupation';
       passwordTextEditingController.text = 'kolobox@123';

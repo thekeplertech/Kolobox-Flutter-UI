@@ -29,4 +29,10 @@ class TopUpState extends ConfirmPinAndPayState {
   TopUpState({required this.requestModel, required this.responseModel});
 }
 
-class CreateInvestmentGoalState extends ConfirmPinAndPayState {}
+class CreateInvestmentGoalState extends ConfirmPinAndPayState {
+  final String referenceCode;
+  final String amount;
+
+  CreateInvestmentGoalState(
+      {required this.referenceCode, required this.amount});
+}

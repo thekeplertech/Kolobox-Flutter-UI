@@ -8,7 +8,6 @@ import 'package:kolobox_new_app/core/enums/period_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
@@ -20,6 +19,7 @@ import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/date_helper.dart';
 import '../../../core/utils/utils.dart';
 import '../../../di/injection_container.dart';
+import '../../dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../dashboard/data/models/select_product_request_model.dart';
 import '../../dashboard/data/models/top_up_request_model.dart';
 import '../../transaction_successful/presentation/transaction_successful_page.dart';
@@ -67,9 +67,9 @@ class _DepositSummaryWidgetState
                   state.responseModel.topUpData?.reference ?? '');
             });
           } else if (state is CreateInvestmentGoalState) {
-            // Goal created pay the save amount
+            // Goal created pay the save amount Go to success page
             Future.delayed(const Duration(milliseconds: 300), () {
-              initiatePayment();
+              onSuccess(state.amount, state.referenceCode);
             });
           }
         },
@@ -287,21 +287,7 @@ class _DepositSummaryWidgetState
     if (isKoloFlex()) {
       initiatePayment();
     } else if (isKoloTarget()) {
-      if (isInActive) {
-        initiatePayment();
-      } else {
-        // Create Goal
-        BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
-          CreateInvestmentGoalEvent(
-            model: CreateInvestmentGoalRequestModel(
-              purpose: StateContainer.of(context).getTargetName() ?? '',
-              amount: StateContainer.of(context).getTargetAmount(),
-              dueDate: DateHelper.getTextFromDateTime(
-                  StateContainer.of(context).getTargetDate()!, 'yyyy-MM-dd'),
-            ),
-          ),
-        );
-      }
+      initiatePayment();
     }
   }
 
@@ -364,30 +350,55 @@ class _DepositSummaryWidgetState
       accessCode,
       (referenceCode) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          navigatePush(
-              context,
-              TransactionSuccessfulPage(
-                referenceCode: referenceCode,
+          if (!isInActive && isKoloTarget()) {
+            // Create Goal
+            BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+              CreateInvestmentGoalEvent(
+                model: CreateInvestmentGoalRequestModel(
+                  purpose: StateContainer.of(context).getTargetName() ?? '',
+                  amount: StateContainer.of(context).getTargetAmount(),
+                  dueDate: DateHelper.getTextFromDateTime(
+                      StateContainer.of(context).getTargetDate()!,
+                      'yyyy-MM-dd'),
+                ),
                 amount: amount,
-                isDeposited: true,
-                isSuccess: true,
-              ));
+                referenceCode: referenceCode,
+              ),
+            );
+          } else {
+            onSuccess(amount, referenceCode);
+          }
         });
       },
       (errorMessage) {
         Future.delayed(const Duration(milliseconds: 300), () {
-          navigatePush(
-              context,
-              TransactionSuccessfulPage(
-                referenceCode: referenceCode,
-                amount: amount,
-                isDeposited: true,
-                isSuccess: false,
-                errorMessage: errorMessage,
-              ));
+          onFailure(amount, referenceCode, errorMessage);
         });
       },
     );
+  }
+
+  void onSuccess(String amount, String referenceCode) {
+    navigatePush(
+        context,
+        TransactionSuccessfulPage(
+          referenceCode: referenceCode,
+          amount: amount,
+          isDeposited: true,
+          isSuccess: true,
+        ));
+  }
+
+  void onFailure(String amount, String referenceCode, String errorMessage) {
+    navigatePush(
+        context,
+        TransactionSuccessfulPage(
+          referenceCode: referenceCode,
+          amount: amount,
+          isDeposited: true,
+          isSuccess: false,
+          errorMessage: errorMessage,
+        ));
   }
 
   Container getDepositAmount(String amount) {

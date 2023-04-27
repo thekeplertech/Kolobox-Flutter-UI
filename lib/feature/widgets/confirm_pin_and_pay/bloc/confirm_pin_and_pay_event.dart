@@ -27,6 +27,9 @@ class TopUpEvent extends ConfirmPinAndPayEvent {
 
 class CreateInvestmentGoalEvent extends ConfirmPinAndPayEvent {
   final CreateInvestmentGoalRequestModel model;
+  final String referenceCode;
+  final String amount;
 
-  CreateInvestmentGoalEvent({required this.model});
+  CreateInvestmentGoalEvent(
+      {required this.referenceCode, required this.amount, required this.model});
 }

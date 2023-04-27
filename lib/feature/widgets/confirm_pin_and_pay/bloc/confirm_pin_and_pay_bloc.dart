@@ -81,7 +81,8 @@ class ConfirmPinAndPayBloc
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(CreateInvestmentGoalState());
+      emit(CreateInvestmentGoalState(
+          amount: event.amount, referenceCode: event.referenceCode));
     });
   }
 }
