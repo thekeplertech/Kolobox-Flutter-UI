@@ -15,6 +15,7 @@ class ApiUrls {
   static const String getEarningsAPI = "user/me/product/earnings";
   static const String getTransactionsAPI = "user/me/product/transactions";
   static const String createPinAPI = "user/me/pin";
+  static const String getMyEarningsAPI = "user/me/earning";
   static const String verifyPinAPI = "helpers/verifyPin";
   static const String selectProductAPI = "product/{userId}/selection";
   static const String topUpAPI = "product/{productId}/account/topup";

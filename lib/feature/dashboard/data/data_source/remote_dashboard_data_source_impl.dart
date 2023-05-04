@@ -45,6 +45,12 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
   }
 
   @override
+  Future<ApiResponse> getMyEarnings() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getMyEarnings();
+  }
+
+  @override
   Future<ApiResponse> getEarnings(EarningsRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.getEarnings(model);

@@ -27,6 +27,8 @@ abstract class DashboardRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> getActiveProducts();
 
+  Future<Either<Failure, Success>> getMyEarnings();
+
   Future<Either<Failure, Success>> getEarnings(EarningsRequestModel model);
 
   Future<Either<Failure, Success>> getTransactions(

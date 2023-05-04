@@ -6,7 +6,6 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
@@ -30,11 +29,8 @@ import '../widgets/account_item_widget.dart';
 import '../widgets/transactions_item_widget.dart';
 
 class KoloFlexScreen extends BaseBlocWidget {
-  final EarningsDataModel earningsDataModel;
-
   const KoloFlexScreen({
     Key? key,
-    required this.earningsDataModel,
   }) : super(key: key);
 
   @override
@@ -51,24 +47,11 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
   bool isEmpty = true;
 
   List<Transactions> transactions = [];
-  EarningsDataModel? earningsDataModel;
-  double interestAmount = 0;
 
   @override
   void initState() {
-    earningsDataModel = widget.earningsDataModel;
-    checkEarningsData();
     super.initState();
     callTransactions();
-  }
-
-  checkEarningsData() {
-    interestAmount = 0;
-    if (!(earningsDataModel?.products?.isEmpty ?? true)) {
-      for (var element in earningsDataModel!.products!) {
-        interestAmount += double.parse(element.earning?.toString() ?? '0');
-      }
-    }
   }
 
   callTransactions() =>
@@ -134,7 +117,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                   ),
                   Text(
                     CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloFlex.getDepositAmountValue()),
+                        KoloboxFundEnum.koloFlex.getEarningsAmountValue()),
                     style: AppStyle.b2Bold
                         .copyWith(color: ColorList.koloFlexTextColor),
                   ),
@@ -161,8 +144,7 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              CurrencyTextInputFormatter.formatAmountDouble(
-                                  interestAmount),
+                              CurrencyTextInputFormatter.formatAmountDouble(10),
                               style: AppStyle.b7Bold
                                   .copyWith(color: ColorList.koloFlexTextColor),
                             ),

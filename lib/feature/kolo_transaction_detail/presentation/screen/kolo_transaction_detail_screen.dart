@@ -124,8 +124,8 @@ class KoloTransactionDetailState
                     height: 4,
                   ),
                   Text(
-                    CurrencyTextInputFormatter.formatAmountDouble(
-                        investmentGoalModel?.amountSaved),
+                    CurrencyTextInputFormatter.formatAmount(
+                        KoloboxFundEnum.koloTarget.getEarningsAmountValue()),
                     style:
                         AppStyle.b2Bold.copyWith(color: ColorList.primaryColor),
                   ),

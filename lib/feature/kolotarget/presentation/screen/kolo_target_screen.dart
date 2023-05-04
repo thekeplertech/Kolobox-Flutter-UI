@@ -17,7 +17,6 @@ import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
-import '../../../dashboard/data/models/earnings_data_model.dart';
 import '../../../dashboard/data/models/investment_goal_response_model.dart';
 import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
 import '../../../widgets/deposit/deposit_your_kolobox_widget.dart';
@@ -28,11 +27,8 @@ import '../bloc/kolo_target_state.dart';
 import '../widgets/kolo_target_item_widget.dart';
 
 class KoloTargetScreen extends BaseBlocWidget {
-  final EarningsDataModel earningsDataModel;
-
   const KoloTargetScreen({
     Key? key,
-    required this.earningsDataModel,
   }) : super(key: key);
 
   @override
@@ -45,24 +41,11 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
   bool isLeft = true;
 
   InvestmentGoalModel? investmentGoalModel;
-  EarningsDataModel? earningsDataModel;
-  double interestAmount = 0;
 
   @override
   void initState() {
-    earningsDataModel = widget.earningsDataModel;
-    checkEarningsData();
     super.initState();
     callInvestmentGoal();
-  }
-
-  checkEarningsData() {
-    interestAmount = 0;
-    if (!(earningsDataModel?.products?.isEmpty ?? true)) {
-      for (var element in earningsDataModel!.products!) {
-        interestAmount += double.parse(element.earning?.toString() ?? '0');
-      }
-    }
   }
 
   callInvestmentGoal() =>
@@ -124,7 +107,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                   ),
                   Text(
                     CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloTarget.getDepositAmountValue()),
+                        KoloboxFundEnum.koloTarget.getEarningsAmountValue()),
                     style:
                         AppStyle.b2Bold.copyWith(color: ColorList.primaryColor),
                   ),
@@ -152,7 +135,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                           children: [
                             Text(
                               CurrencyTextInputFormatter.formatAmountDouble(
-                                  interestAmount),
+                                  KoloboxFundEnum.koloTarget.getInterest()),
                               style: AppStyle.b7Bold
                                   .copyWith(color: ColorList.primaryColor),
                             ),
@@ -247,13 +230,16 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                         ] else ...[
                           KoloTargetItemWidget(
                             model: investmentGoalModel!,
+                            amount: KoloboxFundEnum.koloTarget
+                                .getEarningsAmountValue(),
                             isPaid: !isLeft,
                             onPressed: () {
                               navigatePush(
                                   context,
                                   KoloTransactionDetailPage(
                                     investmentGoalModel: investmentGoalModel!,
-                                    interestAmount: interestAmount,
+                                    interestAmount: KoloboxFundEnum.koloTarget
+                                        .getInterest(),
                                     isPaid: !isLeft,
                                   ),
                                   routeName: koloTransactionDetailPageValue);

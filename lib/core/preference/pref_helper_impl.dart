@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../../feature/auth/login/data/models/login_response_model.dart';
 import '../../feature/dashboard/data/models/active_product_data_model.dart';
+import '../../feature/dashboard/data/models/my_earning_data_model.dart';
 import '../../feature/dashboard/data/models/product_data_model.dart';
 import '../../feature/dashboard/data/models/profile_data_model.dart';
 import 'pref_constants.dart';
@@ -89,6 +90,20 @@ class PrefHelperImpl implements PrefHelper {
   @override
   Future<void> setActiveProductDataModel(ActiveProductDataModel model) async =>
       await Prefs.setString(keyActiveProduct, jsonEncode(model));
+
+  @override
+  MyEarningDataModel? getMyEarningDataModel() {
+    String data = Prefs.getString(keyMyEarnings, '');
+    if (data.isNotEmpty) {
+      return MyEarningDataModel.fromJson(jsonDecode(data));
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> setMyEarningDataModel(MyEarningDataModel model) async =>
+      await Prefs.setString(keyMyEarnings, jsonEncode(model));
 
   @override
   String getToken() => Prefs.getString(keyToken, '');

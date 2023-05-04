@@ -3,6 +3,7 @@ import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/constants/kolo_box_icon.dart';
 import 'package:kolobox_new_app/core/utils/date_helper.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/active_product_data_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/my_earning_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/product_data_model.dart';
 
 import '../../di/injection_container.dart';
@@ -27,6 +28,9 @@ const String koloTargetProductId = '-M1VwdRAFcArdU1acs3n';
 const String koloTargetPlusProductId = 'jfhfjfbhfhjfbh';
 const String koloFamilyProductId = '233jfhfjfjffbh';
 const String koloGroupProductId = '-M1VwdgOP70p28p1oVOv';
+
+const String koloFlexProductName = 'KOLO-FLEX';
+const String koloTargetProductName = 'KOLO-TARGET';
 
 enum KoloboxFundEnum {
   koloFlex,
@@ -156,6 +160,23 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
+  String get getProductName {
+    switch (this) {
+      case KoloboxFundEnum.koloFlex:
+        return koloFlexProductName;
+      case KoloboxFundEnum.koloTarget:
+        return koloTargetProductName;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return koloTargetPlusProductId;
+      // case KoloboxFundEnum.koloFamily:
+      //   return koloFamilyProductId;
+      // case KoloboxFundEnum.koloGroup:
+      //   return koloGroupProductId;
+      default:
+        return '';
+    }
+  }
+
   String get getActiveId {
     PrefHelper helper = sl();
     ActiveProductDataModel? active = helper.getActiveProductDataModel();
@@ -194,13 +215,31 @@ extension EnumExtensions on KoloboxFundEnum {
     PrefHelper helper = sl();
     ActiveProductDataModel? active = helper.getActiveProductDataModel();
 
-    int? index = active?.products
-        ?.indexWhere((element) => element.productId == getProductId);
+    int? index = active?.products?.indexWhere((element) =>
+        element.productId == getProductId &&
+        (element.verified ?? false) &&
+        !(element.canceled ?? true));
 
     if (index != null && index != -1) {
       return active?.products?[index].depositAmount ?? '0.0';
     } else {
       return '0.0';
+    }
+  }
+
+  String getEarningsAmountValue() {
+    PrefHelper helper = sl();
+    MyEarningDataModel? myEarning = helper.getMyEarningDataModel();
+
+    int? index = myEarning?.earnings?.indexWhere((element) =>
+        element.name == getProductName &&
+        (element.verified ?? false) &&
+        !(element.canceled ?? true));
+
+    if (index != null && index != -1) {
+      return (myEarning?.earnings?[index].amount ?? 0).toString();
+    } else {
+      return '0';
     }
   }
 
@@ -263,13 +302,15 @@ extension EnumExtensions on KoloboxFundEnum {
 
   int getTenor() {
     PrefHelper helper = sl();
-    ProductDataModel? model = helper.getProductDataModel();
+    MyEarningDataModel? model = helper.getMyEarningDataModel();
 
-    int? index =
-        model?.products?.indexWhere((element) => element.id == getProductId);
+    int? index = model?.earnings?.indexWhere((element) =>
+        element.name == getProductName &&
+        (element.verified ?? false) &&
+        !(element.canceled ?? true));
 
     if (index != null && index != -1) {
-      return model?.products?[index].tenor ?? 0;
+      return model?.earnings?[index].tenor ?? 0;
     } else {
       return 0;
     }
@@ -277,15 +318,33 @@ extension EnumExtensions on KoloboxFundEnum {
 
   String getInterestRate() {
     PrefHelper helper = sl();
-    ProductDataModel? model = helper.getProductDataModel();
+    MyEarningDataModel? model = helper.getMyEarningDataModel();
 
-    int? index =
-        model?.products?.indexWhere((element) => element.id == getProductId);
+    int? index = model?.earnings?.indexWhere((element) =>
+        element.name == getProductName &&
+        (element.verified ?? false) &&
+        !(element.canceled ?? true));
 
     if (index != null && index != -1) {
-      return model?.products?[index].interestRate ?? '0.0';
+      return model?.earnings?[index].interestRate ?? '0.0';
     } else {
       return '0.0';
+    }
+  }
+
+  double getInterest() {
+    PrefHelper helper = sl();
+    MyEarningDataModel? model = helper.getMyEarningDataModel();
+
+    int? index = model?.earnings?.indexWhere((element) =>
+        element.name == getProductName &&
+        (element.verified ?? false) &&
+        !(element.canceled ?? true));
+
+    if (index != null && index != -1) {
+      return model?.earnings?[index].interest?.toDouble() ?? 0.0;
+    } else {
+      return 0.0;
     }
   }
 
@@ -338,6 +397,16 @@ extension EnumIdExtensions on String {
         return KoloboxFundEnum.koloFamily;
       case koloGroupProductId:
         return KoloboxFundEnum.koloGroup;
+    }
+    return null;
+  }
+
+  KoloboxFundEnum? getEnumFromProductName() {
+    switch (this) {
+      case koloFlexProductName:
+        return KoloboxFundEnum.koloFlex;
+      case koloTargetProductName:
+        return KoloboxFundEnum.koloTarget;
     }
     return null;
   }

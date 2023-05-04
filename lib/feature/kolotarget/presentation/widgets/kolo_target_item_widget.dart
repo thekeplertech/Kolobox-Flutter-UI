@@ -12,6 +12,7 @@ class KoloTargetItemWidget extends StatelessWidget {
   final InvestmentGoalModel model;
   final KoloboxFundEnum koloboxFundEnum;
   final bool isPaid;
+  final String amount;
   final Function() onPressed;
 
   const KoloTargetItemWidget({
@@ -19,6 +20,7 @@ class KoloTargetItemWidget extends StatelessWidget {
     this.isPaid = false,
     required this.onPressed,
     required this.model,
+    required this.amount,
     this.koloboxFundEnum = KoloboxFundEnum.koloTarget,
   }) : super(key: key);
 
@@ -61,8 +63,7 @@ class KoloTargetItemWidget extends StatelessWidget {
                         height: 2,
                       ),
                       Text(
-                        CurrencyTextInputFormatter.formatAmountDouble(
-                            model.amountSaved),
+                        CurrencyTextInputFormatter.formatAmount(amount),
                         style: AppStyle.b8SemiBold
                             .copyWith(color: ColorList.primaryColor),
                       ),

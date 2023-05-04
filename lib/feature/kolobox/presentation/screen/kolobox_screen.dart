@@ -6,7 +6,6 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_data_model.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_bloc.dart';
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_state.dart';
 
@@ -16,7 +15,6 @@ import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
-import '../../../dashboard/data/models/earnings_request_model.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
@@ -25,7 +23,6 @@ import '../../../notifications/presentation/notifications_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
-import '../bloc/kolobox_event.dart';
 
 class KoloboxScreen extends BaseBlocWidget {
   const KoloboxScreen({Key? key}) : super(key: key);
@@ -51,9 +48,9 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
           behavior: NoOverFlowScrollbarBehaviour(),
           child: BlocListener<KoloboxBloc, KoloboxState>(
             listener: (_, state) {
-              if (state is CallEarningsState) {
-                openDetailScreen(state.fundEnum, state.earningsDataModel);
-              }
+              // if (state is CallEarningsState) {
+              //   openDetailScreen(state.fundEnum, state.earningsDataModel);
+              // }
             },
             child: StreamBuilder<bool>(
                 stream: childStreamController.stream,
@@ -140,7 +137,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   getListWidget(
                     KoloboxFundEnum.koloFlex,
                     CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloFlex.getDepositAmountValue()),
+                        KoloboxFundEnum.koloFlex.getEarningsAmountValue()),
                     ColorList.koloFlexTextColor,
                   ),
                   const SizedBox(
@@ -149,7 +146,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   getListWidget(
                     KoloboxFundEnum.koloTarget,
                     CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloTarget.getDepositAmountValue()),
+                        KoloboxFundEnum.koloTarget.getEarningsAmountValue()),
                     ColorList.primaryColor,
                   ),
                   const SizedBox(
@@ -157,8 +154,9 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   ),
                   getListWidget(
                     KoloboxFundEnum.koloTargetPlus,
-                    CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloTargetPlus.getDepositAmountValue()),
+                    CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum
+                        .koloTargetPlus
+                        .getEarningsAmountValue()),
                     ColorList.primaryColor,
                   ),
                   const SizedBox(
@@ -167,7 +165,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   getListWidget(
                     KoloboxFundEnum.koloFamily,
                     CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloFamily.getDepositAmountValue()),
+                        KoloboxFundEnum.koloFamily.getEarningsAmountValue()),
                     ColorList.primaryColor,
                   ),
                   const SizedBox(
@@ -176,7 +174,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   getListWidget(
                     KoloboxFundEnum.koloGroup,
                     CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloGroup.getDepositAmountValue()),
+                        KoloboxFundEnum.koloGroup.getEarningsAmountValue()),
                     ColorList.koloGroupTextColor,
                   ),
                   const SizedBox(
@@ -196,10 +194,11 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
   ) =>
       GestureDetector(
         onTap: () {
-          BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
-            model: EarningsRequestModel(userProductId: fundEnum.getActiveId),
-            fundEnum: fundEnum,
-          ));
+          // BlocProvider.of<KoloboxBloc>(context).add(CallEarningsEvent(
+          //   model: EarningsRequestModel(userProductId: fundEnum.getActiveId),
+          //   fundEnum: fundEnum,
+          // ));
+          openDetailScreen(fundEnum);
         },
         child: Container(
           width: double.maxFinite,
@@ -242,18 +241,13 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
         ),
       );
 
-  openDetailScreen(
-      KoloboxFundEnum fundEnum, EarningsDataModel earningsDataModel) {
+  openDetailScreen(KoloboxFundEnum fundEnum) {
     switch (fundEnum) {
       case KoloboxFundEnum.koloFlex:
-        navigatePush(
-            context, KoloFlexPage(earningsDataModel: earningsDataModel),
-            routeName: koloFlexPageValue);
+        navigatePush(context, KoloFlexPage(), routeName: koloFlexPageValue);
         break;
       case KoloboxFundEnum.koloTarget:
-        navigatePush(
-            context, KoloTargetPage(earningsDataModel: earningsDataModel),
-            routeName: koloTargetPageValue);
+        navigatePush(context, KoloTargetPage(), routeName: koloTargetPageValue);
         break;
       case KoloboxFundEnum.koloTargetPlus:
         comingSoon();

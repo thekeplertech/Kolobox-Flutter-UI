@@ -21,6 +21,7 @@ import '../models/delete_bank_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/get_banks_response_model.dart';
 import '../models/investment_goal_response_model.dart';
+import '../models/my_earning_data_model.dart';
 import '../models/product_data_model.dart';
 import '../models/profile_data_model.dart';
 import '../models/select_product_request_model.dart';
@@ -98,6 +99,18 @@ class DashboardRepoImpl extends DashboardRepo {
         (await remoteDashboardDataSource.getActiveProducts()).data);
     PrefHelper helper = sl();
     await helper.setActiveProductDataModel(model);
+    return Right(Success(model));
+  }
+
+  @override
+  Future<Either<Failure, Success>> getMyEarnings() =>
+      baseApiMethod(() => getMyEarningsFromAPI());
+
+  Future<Either<Failure, Success>> getMyEarningsFromAPI() async {
+    MyEarningDataModel model = MyEarningDataModel.fromJson(
+        (await remoteDashboardDataSource.getMyEarnings()).data);
+    PrefHelper helper = sl();
+    await helper.setMyEarningDataModel(model);
     return Right(Success(model));
   }
 

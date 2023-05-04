@@ -5,7 +5,7 @@ void main() {
   FlavorConfig(
     flavor: Flavor.prod,
     baseUrl: "https://api-staging.kolobox.ng/",
-    payStackKey: 'pk_test_6ab4aa429d840baeec8966b61aadc1998595a81d',
+    payStackKey: 'pk_live_378b706593bd2d885b9bc12720740bb79d72de4d',
   );
   mainDelegate();
 }
