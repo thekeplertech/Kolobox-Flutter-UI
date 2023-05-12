@@ -463,28 +463,28 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
       }
     }
 
-    if (KoloboxFundEnum.koloTargetPlus.isInActiveProduct()) {
-      int targetPlusRemainingTenor =
-          KoloboxFundEnum.koloTargetPlus.tenorAvailableForWithdrawal();
-      int targetPlusTotalTenor = KoloboxFundEnum.koloTargetPlus.getTenorValue();
-      if (targetPlusRemainingTenor == 0 || targetPlusTotalTenor == 0) {
-        availableForWithdrawals.add(AccountDataModel(
-          name: 'Kolo Target Plus',
-          amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
-          remainingTenor: targetPlusRemainingTenor,
-          totalTenor: targetPlusTotalTenor,
-          startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
-        ));
-      } else {
-        balances.add(AccountDataModel(
-          name: 'Kolo Target Plus',
-          amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
-          remainingTenor: targetPlusRemainingTenor,
-          totalTenor: targetPlusTotalTenor,
-          startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
-        ));
-      }
-    }
+    // if (KoloboxFundEnum.koloTargetPlus.isInActiveProduct()) {
+    //   int targetPlusRemainingTenor =
+    //       KoloboxFundEnum.koloTargetPlus.tenorAvailableForWithdrawal();
+    //   int targetPlusTotalTenor = KoloboxFundEnum.koloTargetPlus.getTenorValue();
+    //   if (targetPlusRemainingTenor == 0 || targetPlusTotalTenor == 0) {
+    //     availableForWithdrawals.add(AccountDataModel(
+    //       name: 'Kolo Target Plus',
+    //       amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
+    //       remainingTenor: targetPlusRemainingTenor,
+    //       totalTenor: targetPlusTotalTenor,
+    //       startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
+    //     ));
+    //   } else {
+    //     balances.add(AccountDataModel(
+    //       name: 'Kolo Target Plus',
+    //       amount: KoloboxFundEnum.koloTargetPlus.getDepositAmountValue(),
+    //       remainingTenor: targetPlusRemainingTenor,
+    //       totalTenor: targetPlusTotalTenor,
+    //       startDate: KoloboxFundEnum.koloTargetPlus.getStartDateValue(),
+    //     ));
+    //   }
+    // }
 
     if (KoloboxFundEnum.koloFamily.isInActiveProduct()) {
       int familyRemainingTenor =

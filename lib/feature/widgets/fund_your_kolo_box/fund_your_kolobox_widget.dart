@@ -66,10 +66,10 @@ class _FundYourKoloboxWidgetState
             const SizedBox(
               height: 18,
             ),
-            getOptionWidget(KoloboxFundEnum.koloTargetPlus),
-            const SizedBox(
-              height: 18,
-            ),
+            // getOptionWidget(KoloboxFundEnum.koloTargetPlus),
+            // const SizedBox(
+            //   height: 18,
+            // ),
             getOptionWidget(KoloboxFundEnum.koloFamily),
             const SizedBox(
               height: 18,
@@ -99,7 +99,7 @@ class _FundYourKoloboxWidgetState
             break;
           case KoloboxFundEnum.koloFamily:
           case KoloboxFundEnum.koloGroup:
-          case KoloboxFundEnum.koloTargetPlus:
+            // case KoloboxFundEnum.koloTargetPlus:
             comingSoon();
             break;
         }

@@ -152,16 +152,16 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   const SizedBox(
                     height: 18,
                   ),
-                  getListWidget(
-                    KoloboxFundEnum.koloTargetPlus,
-                    CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum
-                        .koloTargetPlus
-                        .getEarningsAmountValue()),
-                    ColorList.primaryColor,
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
+                  // getListWidget(
+                  //   KoloboxFundEnum.koloTargetPlus,
+                  //   CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum
+                  //       .koloTargetPlus
+                  //       .getEarningsAmountValue()),
+                  //   ColorList.primaryColor,
+                  // ),
+                  // const SizedBox(
+                  //   height: 18,
+                  // ),
                   getListWidget(
                     KoloboxFundEnum.koloFamily,
                     CurrencyTextInputFormatter.formatAmount(
@@ -251,9 +251,9 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
         navigatePush(context, const KoloTargetPage(),
             routeName: koloTargetPageValue);
         break;
-      case KoloboxFundEnum.koloTargetPlus:
-        comingSoon();
-        break;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   comingSoon();
+      //   break;
       case KoloboxFundEnum.koloFamily:
         comingSoon();
         // navigatePush(context, const KoloFamilyPage());

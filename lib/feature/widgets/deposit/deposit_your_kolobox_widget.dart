@@ -689,7 +689,7 @@ class _DepositYourKoloboxWidgetState
 
   bool isKoloTarget() => koloboxFundEnum == KoloboxFundEnum.koloTarget;
 
-  bool isKoloTargetPlus() => koloboxFundEnum == KoloboxFundEnum.koloTargetPlus;
+  // bool isKoloTargetPlus() => koloboxFundEnum == KoloboxFundEnum.koloTargetPlus;
 
   bool isKoloFamily() => koloboxFundEnum == KoloboxFundEnum.koloFamily;
 

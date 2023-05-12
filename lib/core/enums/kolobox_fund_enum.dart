@@ -12,13 +12,13 @@ import '../preference/pref_helper.dart';
 
 const String koloFlexValue = 'Koloflex';
 const String koloTargetValue = 'Kolotarget';
-const String koloTargetPlusValue = 'Kolotarget+';
+// const String koloTargetPlusValue = 'Kolotarget+';
 const String koloFamilyValue = 'Kolofamily';
 const String koloGroupValue = 'Kologroup';
 
 const String koloFlexPageValue = 'KoloFlexPage';
 const String koloTargetPageValue = 'KoloTargetPage';
-const String koloTargetPlusPageValue = 'KoloTargetPlusPage';
+// const String koloTargetPlusPageValue = 'KoloTargetPlusPage';
 const String koloFamilyPageValue = 'KoloFamilyPage';
 const String koloGroupPageValue = 'KoloGroupPage';
 const String koloTransactionDetailPageValue = 'KoloTransactionDetailPage';
@@ -33,13 +33,13 @@ const String koloFlexProductName = 'KOLO-FLEX';
 const String koloTargetProductName = 'KOLO-TARGET';
 const String koloGroupProductName = 'KOLO-GROUP';
 const String koloFamilyProductName = 'KOLO-FAMILY';
-const String koloTargetPlusProductName = 'KOLO-TARGET-PLUS';
+// const String koloTargetPlusProductName = 'KOLO-TARGET-PLUS';
 const String koloFundsProductName = 'KOLO-FUNDS';
 
 enum KoloboxFundEnum {
   koloFlex,
   koloTarget,
-  koloTargetPlus,
+  // koloTargetPlus,
   koloFamily,
   koloGroup
 }
@@ -51,8 +51,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFlexValue;
       case KoloboxFundEnum.koloTarget:
         return koloTargetValue;
-      case KoloboxFundEnum.koloTargetPlus:
-        return koloTargetPlusValue;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return koloTargetPlusValue;
       case KoloboxFundEnum.koloFamily:
         return koloFamilyValue;
       case KoloboxFundEnum.koloGroup:
@@ -67,8 +67,8 @@ extension EnumExtensions on KoloboxFundEnum {
       case KoloboxFundEnum.koloFamily:
       case KoloboxFundEnum.koloGroup:
         return true;
-      case KoloboxFundEnum.koloTargetPlus:
-        return false;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return false;
     }
   }
 
@@ -82,8 +82,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return KoloBoxIcons.koloFamily;
       case KoloboxFundEnum.koloGroup:
         return KoloBoxIcons.koloGroup;
-      case KoloboxFundEnum.koloTargetPlus:
-        return KoloBoxIcons.koloTarget;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return KoloBoxIcons.koloTarget;
     }
   }
 
@@ -97,8 +97,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return ColorList.koloFamilyIconColor;
       case KoloboxFundEnum.koloGroup:
         return ColorList.koloGroupIconColor;
-      case KoloboxFundEnum.koloTargetPlus:
-        return ColorList.koloFlexTextColor;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return ColorList.koloFlexTextColor;
     }
   }
 
@@ -108,8 +108,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return ColorList.koloFlexColor;
       case KoloboxFundEnum.koloTarget:
         return ColorList.koloTargetColor;
-      case KoloboxFundEnum.koloTargetPlus:
-        return ColorList.koloTargetPlusColor;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return ColorList.koloTargetPlusColor;
       case KoloboxFundEnum.koloFamily:
         return ColorList.koloFamilyColor;
       case KoloboxFundEnum.koloGroup:
@@ -123,8 +123,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return ColorList.koloFlexTextColor;
       case KoloboxFundEnum.koloTarget:
         return ColorList.primaryColor;
-      case KoloboxFundEnum.koloTargetPlus:
-        return ColorList.blackSecondColor;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return ColorList.blackSecondColor;
       case KoloboxFundEnum.koloFamily:
         return ColorList.koloFamilyTextColor;
       case KoloboxFundEnum.koloGroup:
@@ -138,8 +138,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return imageFlexIcon;
       case KoloboxFundEnum.koloTarget:
         return imageTargetIcon;
-      case KoloboxFundEnum.koloTargetPlus:
-        return imageTargetPlusIcon;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return imageTargetPlusIcon;
       case KoloboxFundEnum.koloFamily:
         return imageTargetPlusIcon;
       case KoloboxFundEnum.koloGroup:
@@ -167,8 +167,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFlexProductName;
       case KoloboxFundEnum.koloTarget:
         return koloTargetProductName;
-      case KoloboxFundEnum.koloTargetPlus:
-        return koloTargetPlusProductName;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return koloTargetPlusProductName;
       case KoloboxFundEnum.koloFamily:
         return koloFamilyProductName;
       case KoloboxFundEnum.koloGroup:
@@ -203,8 +203,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFlexPageValue;
       case KoloboxFundEnum.koloTarget:
         return koloTargetPageValue;
-      case KoloboxFundEnum.koloTargetPlus:
-        return koloTargetPlusPageValue;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return koloTargetPlusPageValue;
       case KoloboxFundEnum.koloFamily:
         return koloFamilyPageValue;
       case KoloboxFundEnum.koloGroup:
@@ -406,8 +406,8 @@ extension EnumIdExtensions on String {
         return KoloboxFundEnum.koloFlex;
       case koloTargetProductName:
         return KoloboxFundEnum.koloTarget;
-      case koloTargetPlusProductName:
-        return KoloboxFundEnum.koloTarget;
+      // case koloTargetPlusProductName:
+      //   return KoloboxFundEnum.koloTarget;
       case koloGroupProductName:
         return KoloboxFundEnum.koloTarget;
       case koloFamilyProductName:
