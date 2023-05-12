@@ -7,6 +7,7 @@ import '../../../../core/http/network_info.dart';
 import '../../../../core/models/failure.dart';
 import '../../../../core/models/success.dart';
 import '../data/models/add_bank_request_model.dart';
+import '../data/models/create_group_request_model.dart';
 import '../data/models/delete_bank_request_model.dart';
 import '../data/models/earnings_request_model.dart';
 import '../data/models/select_product_request_model.dart';
@@ -46,6 +47,12 @@ abstract class DashboardRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> createInvestmentGoal(
       CreateInvestmentGoalRequestModel model);
+
+  Future<Either<Failure, Success>> createGroup(CreateGroupRequestModel model);
+
+  Future<Either<Failure, Success>> getGroupTypes();
+
+  Future<Either<Failure, Success>> getGroupTenors();
 
   Future<Either<Failure, Success>> getBanks();
 

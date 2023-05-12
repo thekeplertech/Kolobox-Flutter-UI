@@ -20,7 +20,7 @@ class MyEarningDataModel {
 }
 
 class MyEarningsData {
-  int? amount;
+  double? amount;
   String? id;
   String? startDate;
   bool? canceled;
@@ -29,7 +29,7 @@ class MyEarningsData {
   String? interestRate;
   int? tenor;
   int? topup;
-  int? interest;
+  double? interest;
   String? endStart;
 
   MyEarningsData(
@@ -46,7 +46,9 @@ class MyEarningsData {
       this.endStart});
 
   MyEarningsData.fromJson(Map<String, dynamic> json) {
-    amount = json['amount'] ?? 0;
+    amount = json['amount'] == null
+        ? 0.0
+        : double.tryParse(json['amount'].toString());
     id = json['id'] ?? '';
     startDate = json['start_date'] ?? '';
     canceled = json['canceled'] ?? false;
@@ -55,7 +57,9 @@ class MyEarningsData {
     interestRate = json['interest_rate'] ?? '';
     tenor = json['tenor'] ?? 0;
     topup = json['topup'] ?? 0;
-    interest = json['interest'] ?? 0;
+    interest = json['interest'] == null
+        ? 0.0
+        : double.tryParse(json['interest'].toString());
     endStart = json['end_start'] ?? '';
   }
 

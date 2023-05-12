@@ -3,10 +3,10 @@ import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
-import '../deposit/deposit_your_kolobox_widget.dart';
 import '../inherited_state_container.dart';
 
 class FundYourKoloboxWidget extends BaseScreen {
@@ -88,17 +88,16 @@ class _FundYourKoloboxWidgetState
         StateContainer.of(context).openFundMyKoloBox(fundEnum: fundEnum);
         switch (fundEnum) {
           case KoloboxFundEnum.koloFlex:
-            showCustomBottomSheet(
-              const DepositYourKoloboxWidget(),
-            );
-            break;
           case KoloboxFundEnum.koloTarget:
+          case KoloboxFundEnum.koloGroup:
             showCustomBottomSheet(
-              const DepositYourKoloboxWidget(),
+              DepositYourKoloboxWidgetPage(
+                key: Key(
+                    'deposit_your_kolobox_${DateTime.now().millisecondsSinceEpoch}'),
+              ),
             );
             break;
           case KoloboxFundEnum.koloFamily:
-          case KoloboxFundEnum.koloGroup:
             // case KoloboxFundEnum.koloTargetPlus:
             comingSoon();
             break;

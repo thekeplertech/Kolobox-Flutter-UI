@@ -8,6 +8,7 @@ import '../../../../../core/http/rest_client.dart';
 import '../../../../../core/http/rest_helper.dart';
 import '../../../../../core/models/api_response.dart';
 import '../models/add_bank_request_model.dart';
+import '../models/create_group_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/transactions_request_model.dart';
@@ -92,6 +93,24 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
       CreateInvestmentGoalRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.createInvestmentGoal(model);
+  }
+
+  @override
+  Future<ApiResponse> createGroup(CreateGroupRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.createGroup(model);
+  }
+
+  @override
+  Future<ApiResponse> getGroupTypes() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getGroupTypes();
+  }
+
+  @override
+  Future<ApiResponse> getGroupTenors() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getGroupTenors();
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/enums/period_enum.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_group_tenor_response_model.dart';
 
 import '../../core/enums/payment_gateway_enum.dart';
 
@@ -45,6 +46,7 @@ class StateContainerState extends State<StateContainer> {
   PaymentGatewayEnum? _paymentGatewayEnum;
   String? _popUntil;
   PeriodEnum? _periodEnum;
+  GroupTenorModel? _groupTenorModel;
   DateTime? _targetDate;
   String? _targetName;
   bool isSuccessful = false;
@@ -70,6 +72,8 @@ class StateContainerState extends State<StateContainer> {
 
   PeriodEnum getPeriodEnum() => _periodEnum ?? PeriodEnum.monthly;
 
+  GroupTenorModel? getGroupTenorModel() => _groupTenorModel;
+
   String getPopUntil() => _popUntil ?? '/';
 
   bool? isWallet() => _isWallet;
@@ -85,6 +89,7 @@ class StateContainerState extends State<StateContainer> {
     DateTime? targetDateTime,
     PaymentGatewayEnum? paymentEnum,
     PeriodEnum? periodEnum,
+    GroupTenorModel? groupTenorModel,
     String? popUntil,
     bool? isWallet,
   }) {
@@ -99,6 +104,7 @@ class StateContainerState extends State<StateContainer> {
     _targetDate = targetDateTime;
     _paymentGatewayEnum = paymentEnum;
     _periodEnum = periodEnum;
+    _groupTenorModel = groupTenorModel;
     if (popUntil != null) {
       _popUntil = popUntil;
     }
@@ -116,6 +122,7 @@ class StateContainerState extends State<StateContainer> {
     _targetAmount = null;
     _targetDate = null;
     _paymentGatewayEnum = null;
+    _groupTenorModel = null;
     _popUntil = null;
     _isWallet = null;
     _isFundYourKoloBox = null;

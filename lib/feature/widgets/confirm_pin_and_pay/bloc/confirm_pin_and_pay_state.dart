@@ -2,6 +2,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_res
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_response_model.dart';
 
+import '../../../dashboard/data/models/get_group_tenor_response_model.dart';
 import '../../../dashboard/data/models/select_product_request_model.dart';
 import '../../../dashboard/data/models/verify_pin_request_model.dart';
 
@@ -35,4 +36,17 @@ class CreateInvestmentGoalState extends ConfirmPinAndPayState {
 
   CreateInvestmentGoalState(
       {required this.referenceCode, required this.amount});
+}
+
+class CreateGroupState extends ConfirmPinAndPayState {
+  final String referenceCode;
+  final String amount;
+
+  CreateGroupState({required this.referenceCode, required this.amount});
+}
+
+class GetTenorState extends ConfirmPinAndPayState {
+  final GetGroupTenorResponseModel model;
+
+  GetTenorState({required this.model});
 }

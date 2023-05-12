@@ -18,6 +18,7 @@ import '../../../../routes/routes.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
+import '../../../kologroup/presentation/kolo_group_page.dart';
 import '../../../kolotarget/presentation/kolo_target_page.dart';
 import '../../../notifications/presentation/notifications_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
@@ -259,8 +260,9 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
         // navigatePush(context, const KoloFamilyPage());
         break;
       case KoloboxFundEnum.koloGroup:
-        comingSoon();
-        // navigatePush(context, const KoloGroupPage());
+        // comingSoon();
+        navigatePush(context, const KoloGroupPage(),
+            routeName: koloGroupPageValue);
         break;
     }
   }

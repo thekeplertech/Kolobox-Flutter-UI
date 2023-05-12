@@ -1,3 +1,4 @@
+import 'package:kolobox_new_app/feature/dashboard/data/models/create_group_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
@@ -38,6 +39,12 @@ abstract class RemoteDashboardDataSource {
 
   Future<ApiResponse> createInvestmentGoal(
       CreateInvestmentGoalRequestModel model);
+
+  Future<ApiResponse> createGroup(CreateGroupRequestModel model);
+
+  Future<ApiResponse> getGroupTypes();
+
+  Future<ApiResponse> getGroupTenors();
 
   Future<ApiResponse> getBanks();
 

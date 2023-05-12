@@ -19,6 +19,7 @@ import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/date_helper.dart';
 import '../../../core/utils/utils.dart';
 import '../../../di/injection_container.dart';
+import '../../dashboard/data/models/create_group_request_model.dart';
 import '../../dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../dashboard/data/models/select_product_request_model.dart';
 import '../../dashboard/data/models/top_up_request_model.dart';
@@ -68,6 +69,11 @@ class _DepositSummaryWidgetState
             });
           } else if (state is CreateInvestmentGoalState) {
             // Goal created pay the save amount Go to success page
+            Future.delayed(const Duration(milliseconds: 300), () {
+              onSuccess(state.amount, state.referenceCode);
+            });
+          } else if (state is CreateGroupState) {
+            // Group created pay the save amount Go to success page
             Future.delayed(const Duration(milliseconds: 300), () {
               onSuccess(state.amount, state.referenceCode);
             });
@@ -189,6 +195,18 @@ class _DepositSummaryWidgetState
                     getKoloTargetSummaryWidget(),
                   ],
                 ],
+              ] else if (isKoloGroup()) ...[
+                if (isInActive)
+                  ...[]
+                else ...[
+                  ProductItemWidget(fundEnum: koloboxFundEnum!),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  if (koloboxFundEnum == KoloboxFundEnum.koloGroup) ...[
+                    getKoloGroupSummaryWidget(),
+                  ],
+                ],
               ],
               // if (isInActive) ...[
               //   getDepositAmount(),
@@ -278,6 +296,7 @@ class _DepositSummaryWidgetState
       fundEnum: StateContainer.of(context).getKoloBoxEnum(),
       amount: StateContainer.of(context).getAmount(),
       periodEnum: StateContainer.of(context).getPeriodEnum(),
+      groupTenorModel: StateContainer.of(context).getGroupTenorModel(),
       targetAmount: StateContainer.of(context).getTargetAmount(),
       targetDateTime: StateContainer.of(context).getTargetDate(),
       targetName: StateContainer.of(context).getTargetName(),
@@ -287,6 +306,8 @@ class _DepositSummaryWidgetState
     if (isKoloFlex()) {
       initiatePayment();
     } else if (isKoloTarget()) {
+      initiatePayment();
+    } else if (isKoloGroup()) {
       initiatePayment();
     }
   }
@@ -360,6 +381,24 @@ class _DepositSummaryWidgetState
                   dueDate: DateHelper.getTextFromDateTime(
                       StateContainer.of(context).getTargetDate()!,
                       'yyyy-MM-dd'),
+                ),
+                amount: amount,
+                referenceCode: referenceCode,
+              ),
+            );
+          } else if (!isInActive && isKoloGroup()) {
+            // Create Group
+            BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+              CreateGroupEvent(
+                model: CreateGroupRequestModel(
+                  name: StateContainer.of(context).getTargetName() ?? '',
+                  tenorId:
+                      StateContainer.of(context).getGroupTenorModel()?.id ?? '',
+                  groupTypeId: "",
+                  minimumAmount: StateContainer.of(context).getTargetAmount(),
+                  frequency: StateContainer.of(context)
+                      .getPeriodEnum()
+                      .getPeriodPassValue,
                 ),
                 amount: amount,
                 referenceCode: referenceCode,
@@ -448,6 +487,146 @@ class _DepositSummaryWidgetState
   }
 
   Widget getKoloTargetSummaryWidget() {
+    String targetName = StateContainer.of(context).getTargetName() ?? '';
+    DateTime? targetDate = StateContainer.of(context).getTargetDate();
+    String amount = StateContainer.of(context).getAmount();
+    String targetAmount = StateContainer.of(context).getTargetAmount();
+    PeriodEnum periodEnum = StateContainer.of(context).getPeriodEnum();
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Target',
+                  style: AppStyle.b9Medium
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  targetName,
+                  style: AppStyle.b7Bold
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+              ],
+            ),
+            if (targetDate != null) ...[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'End date',
+                    style: AppStyle.b9Medium
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    DateHelper.getTextFromDateTime(targetDate, 'dd MMMM yyyy'),
+                    style: AppStyle.b7Bold
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Container(
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+              border: Border.all(color: ColorList.greyLight7Color, width: 1),
+              borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.all(25),
+          child: Column(
+            children: [
+              Text(
+                'Target amount',
+                style: AppStyle.b9Regular
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                CurrencyTextInputFormatter.formatAmount(targetAmount),
+                style:
+                    AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: ColorList.primaryColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          width: double.maxFinite,
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  'Saving now',
+                  style: AppStyle.b8Regular.copyWith(color: ColorList.white),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  CurrencyTextInputFormatter.formatAmount(amount),
+                  style: AppStyle.b3Bold.copyWith(color: ColorList.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Container(
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+              color: ColorList.lightBlue11Color,
+              borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Text(
+                'Recurring period',
+                style: AppStyle.b8Medium
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 3,
+              ),
+              Text(
+                periodEnum.getPeriodValue,
+                style:
+                    AppStyle.b6Bold.copyWith(color: ColorList.blackSecondColor),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+      ],
+    );
+  }
+
+  Widget getKoloGroupSummaryWidget() {
     String targetName = StateContainer.of(context).getTargetName() ?? '';
     DateTime? targetDate = StateContainer.of(context).getTargetDate();
     String amount = StateContainer.of(context).getAmount();

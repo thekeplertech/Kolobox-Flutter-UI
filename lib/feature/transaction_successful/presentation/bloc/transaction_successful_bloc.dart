@@ -29,6 +29,7 @@ class TransactionSuccessfulBloc
     await helper.setAccountApiCall(false);
     await dashboardRepo.getProducts();
     final result = await dashboardRepo.getActiveProducts();
+    await dashboardRepo.getMyEarnings();
 
     result.fold((l) {
       baseBlocObject!.objectModel = l;

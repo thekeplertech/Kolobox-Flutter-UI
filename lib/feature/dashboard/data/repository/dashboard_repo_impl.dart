@@ -11,15 +11,19 @@ import '../../../../../core/http/network_info.dart';
 import '../../../../../core/models/failure.dart';
 import '../../../../../core/models/success.dart';
 import '../../../../../di/injection_container.dart';
+import '../../../../core/enums/kolobox_fund_enum.dart';
 import '../../../../core/models/api_response.dart';
 import '../../../../core/preference/pref_helper.dart';
 import '../../../auth/login/data/models/login_response_model.dart';
 import '../models/active_product_data_model.dart';
 import '../models/add_bank_request_model.dart';
+import '../models/create_group_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
 import '../models/delete_bank_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/get_banks_response_model.dart';
+import '../models/get_group_tenor_response_model.dart';
+import '../models/get_group_type_response_model.dart';
 import '../models/investment_goal_response_model.dart';
 import '../models/my_earning_data_model.dart';
 import '../models/product_data_model.dart';
@@ -188,6 +192,40 @@ class DashboardRepoImpl extends DashboardRepo {
     return Right(Success(
         (await remoteDashboardDataSource.createInvestmentGoal(model)).data));
   }
+
+  @override
+  Future<Either<Failure, Success>> createGroup(CreateGroupRequestModel model) =>
+      baseApiMethod(() => createGroupFromAPI(model));
+
+  Future<Either<Failure, Success>> createGroupFromAPI(
+      CreateGroupRequestModel model) async {
+    GetGroupTypeResponseModel typeModel = GetGroupTypeResponseModel.fromJson(
+        (await remoteDashboardDataSource.getGroupTypes()).data);
+    List<GroupTypeModel> types = typeModel.types ?? [];
+    int pos = types.indexWhere(
+        (element) => element.name == KoloboxFundEnum.koloGroup.getProductName);
+    if (pos != -1) {
+      model.groupTypeId = types[pos].id ?? '';
+    }
+    return Right(
+        Success((await remoteDashboardDataSource.createGroup(model)).data));
+  }
+
+  @override
+  Future<Either<Failure, Success>> getGroupTypes() =>
+      baseApiMethod(() => getGroupTypesFromAPI());
+
+  Future<Either<Failure, Success>> getGroupTypesFromAPI() async =>
+      Right(Success(GetGroupTypeResponseModel.fromJson(
+          (await remoteDashboardDataSource.getGroupTypes()).data)));
+
+  @override
+  Future<Either<Failure, Success>> getGroupTenors() =>
+      baseApiMethod(() => getGroupTenorsFromAPI());
+
+  Future<Either<Failure, Success>> getGroupTenorsFromAPI() async =>
+      Right(Success(GetGroupTenorResponseModel.fromJson(
+          (await remoteDashboardDataSource.getGroupTenors()).data)));
 
   @override
   Future<Either<Failure, Success>> getBanks() =>

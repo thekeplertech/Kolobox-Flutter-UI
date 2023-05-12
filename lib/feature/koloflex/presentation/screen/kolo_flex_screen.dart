@@ -11,6 +11,7 @@ import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bl
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:kolobox_new_app/feature/koloflex/data/models/account_data_model.dart';
 import 'package:kolobox_new_app/feature/koloflex/presentation/bloc/kolo_flex_bloc.dart';
+import 'package:kolobox_new_app/feature/widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import 'package:kolobox_new_app/feature/widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
@@ -20,7 +21,6 @@ import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/data/models/transactions_data_model.dart';
-import '../../../widgets/deposit/deposit_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
 import '../bloc/kolo_flex_event.dart';
@@ -259,7 +259,9 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
         fundEnum: KoloboxFundEnum.koloFlex,
         popUntil: KoloboxFundEnum.koloFlex.getFundPageValue(false));
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+    showCustomBottomSheet(DepositYourKoloboxWidgetPage(
+      key: Key('deposit_your_kolobox_${DateTime.now().millisecondsSinceEpoch}'),
+    )).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
       if (StateContainer.of(context).isSuccessful) {

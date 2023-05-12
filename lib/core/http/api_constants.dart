@@ -20,6 +20,9 @@ class ApiUrls {
   static const String selectProductAPI = "product/{userId}/selection";
   static const String topUpAPI = "product/{productId}/account/topup";
   static const String investmentGoalAPI = "user/investment/goal";
+  static const String createGroupAPI = "group/create";
+  static const String groupTenorsAPI = "group/tenors";
+  static const String groupTypesAPI = "group/types";
   static const String getBanksAPI = "helpers/banks";
   static const String getAllMyBanksAPI = "user/me/bank";
   static const String deleteMyBanksAPI = "user/me/bank/{bankId}";

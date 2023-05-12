@@ -15,6 +15,7 @@ import '../../feature/auth/login/data/models/update_pin_request_model.dart';
 import '../../feature/auth/register/data/models/register_request_model.dart';
 import '../../feature/auth/register/data/models/verify_user_request_model.dart';
 import '../../feature/dashboard/data/models/add_bank_request_model.dart';
+import '../../feature/dashboard/data/models/create_group_request_model.dart';
 import '../../feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../feature/dashboard/data/models/delete_bank_request_model.dart';
 import '../../feature/dashboard/data/models/update_bank_request_model.dart';
@@ -92,6 +93,15 @@ abstract class RestHelper {
   @POST(ApiUrls.investmentGoalAPI)
   Future<ApiResponse> createInvestmentGoal(
       @Body() CreateInvestmentGoalRequestModel model);
+
+  @POST(ApiUrls.createGroupAPI)
+  Future<ApiResponse> createGroup(@Body() CreateGroupRequestModel model);
+
+  @GET(ApiUrls.groupTypesAPI)
+  Future<ApiResponse> getGroupTypes();
+
+  @GET(ApiUrls.groupTenorsAPI)
+  Future<ApiResponse> getGroupTenors();
 
   @GET(ApiUrls.getBanksAPI)
   Future<ApiResponse> getBanks();

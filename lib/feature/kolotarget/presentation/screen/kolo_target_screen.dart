@@ -9,6 +9,7 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'package:kolobox_new_app/feature/dashboard/presentation/bloc/dashboard_event.dart';
 import 'package:kolobox_new_app/feature/kolotarget/presentation/bloc/kolo_target_event.dart';
+import 'package:kolobox_new_app/feature/widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
@@ -19,7 +20,6 @@ import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
 import '../../../dashboard/data/models/investment_goal_response_model.dart';
 import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
-import '../../../widgets/deposit/deposit_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
 import '../bloc/kolo_target_bloc.dart';
@@ -304,7 +304,9 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
         fundEnum: KoloboxFundEnum.koloTarget,
         popUntil: KoloboxFundEnum.koloTarget.getFundPageValue(false));
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
+    showCustomBottomSheet(DepositYourKoloboxWidgetPage(
+      key: Key('deposit_your_kolobox_${DateTime.now().millisecondsSinceEpoch}'),
+    )).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
       if (StateContainer.of(context).isSuccessful) {

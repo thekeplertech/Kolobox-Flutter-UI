@@ -19,6 +19,6 @@ class KoloFlexPageState extends BasePageState<KoloFlexPage> {
   @override
   Widget getChildBlocWidget(BuildContext context) => BlocProvider<KoloFlexBloc>(
         create: (context) => KoloFlexBloc(BlocProvider.of<MasterBloc>(context)),
-        child: KoloFlexScreen(),
+        child: const KoloFlexScreen(),
       );
 }

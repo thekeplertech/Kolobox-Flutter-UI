@@ -28,6 +28,12 @@ class ConfirmPinAndPayBloc
     on<CreateInvestmentGoalEvent>((event, emit) async {
       await callCreateInvestmentGoalEvent(event, emit);
     });
+    on<CreateGroupEvent>((event, emit) async {
+      await callCreateGroupEvent(event, emit);
+    });
+    on<GetTenorEvent>((event, emit) async {
+      await callGetTenorEvent(event, emit);
+    });
   }
 
   Future<void> callVerifyPinEvent(VerifyPinEvent event, Emitter emit) async {
@@ -83,6 +89,53 @@ class ConfirmPinAndPayBloc
       baseBlocObject!.add(LoadedApiEvent());
       emit(CreateInvestmentGoalState(
           amount: event.amount, referenceCode: event.referenceCode));
+    });
+  }
+
+  // Future<void> callCreateGroupEvent(
+  //     CreateGroupEvent event, Emitter emit) async {
+  //   baseBlocObject!.add(LoadApiEvent());
+  //   final result = await dashboardRepo.getGroupTypes();
+  //
+  //   result.fold((l) {
+  //     createGroupEvent(event, emit);
+  //   }, (r) {
+  //     GetGroupTypeResponseModel model = r.model;
+  //     List<GroupTypeModel> types = model.types ?? [];
+  //     int pos = types.indexWhere((element) =>
+  //         element.name == KoloboxFundEnum.koloGroup.getProductName);
+  //     if (pos != -1) {
+  //       event.model.groupTypeId = types[pos].id ?? '';
+  //     }
+  //     createGroupEvent(event, emit);
+  //   });
+  // }
+
+  Future<void> callCreateGroupEvent(
+      CreateGroupEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.createGroup(event.model);
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(CreateGroupState(
+          amount: event.amount, referenceCode: event.referenceCode));
+    });
+  }
+
+  Future<void> callGetTenorEvent(GetTenorEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.getGroupTenors();
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(GetTenorState(model: r.model));
     });
   }
 }

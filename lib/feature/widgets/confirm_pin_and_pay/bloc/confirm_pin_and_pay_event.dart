@@ -3,6 +3,8 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_req
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
 
+import '../../../dashboard/data/models/create_group_request_model.dart';
+
 abstract class ConfirmPinAndPayEvent {}
 
 class VerifyPinEvent extends ConfirmPinAndPayEvent {
@@ -33,3 +35,14 @@ class CreateInvestmentGoalEvent extends ConfirmPinAndPayEvent {
   CreateInvestmentGoalEvent(
       {required this.referenceCode, required this.amount, required this.model});
 }
+
+class CreateGroupEvent extends ConfirmPinAndPayEvent {
+  final CreateGroupRequestModel model;
+  final String referenceCode;
+  final String amount;
+
+  CreateGroupEvent(
+      {required this.referenceCode, required this.amount, required this.model});
+}
+
+class GetTenorEvent extends ConfirmPinAndPayEvent {}

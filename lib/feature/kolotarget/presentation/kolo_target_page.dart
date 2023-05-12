@@ -21,6 +21,6 @@ class KoloTargetPageState extends BasePageState<KoloTargetPage> {
       BlocProvider<KoloTargetBloc>(
         create: (context) =>
             KoloTargetBloc(BlocProvider.of<MasterBloc>(context)),
-        child: KoloTargetScreen(),
+        child: const KoloTargetScreen(),
       );
 }
