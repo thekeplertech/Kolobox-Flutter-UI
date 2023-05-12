@@ -21,6 +21,7 @@ class ApiUrls {
   static const String topUpAPI = "product/{productId}/account/topup";
   static const String investmentGoalAPI = "user/investment/goal";
   static const String createGroupAPI = "group/create";
+  static const String getGroupListAPI = "group/user_group_list";
   static const String groupTenorsAPI = "group/tenors";
   static const String groupTypesAPI = "group/types";
   static const String getBanksAPI = "helpers/banks";

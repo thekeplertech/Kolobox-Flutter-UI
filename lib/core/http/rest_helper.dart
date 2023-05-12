@@ -97,6 +97,9 @@ abstract class RestHelper {
   @POST(ApiUrls.createGroupAPI)
   Future<ApiResponse> createGroup(@Body() CreateGroupRequestModel model);
 
+  @GET(ApiUrls.getGroupListAPI)
+  Future<ApiResponse> getGroupList();
+
   @GET(ApiUrls.groupTypesAPI)
   Future<ApiResponse> getGroupTypes();
 

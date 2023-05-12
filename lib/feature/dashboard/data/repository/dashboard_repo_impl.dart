@@ -22,6 +22,7 @@ import '../models/create_investment_goal_request_model.dart';
 import '../models/delete_bank_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/get_banks_response_model.dart';
+import '../models/get_group_list_response_model.dart';
 import '../models/get_group_tenor_response_model.dart';
 import '../models/get_group_type_response_model.dart';
 import '../models/investment_goal_response_model.dart';
@@ -218,6 +219,14 @@ class DashboardRepoImpl extends DashboardRepo {
   Future<Either<Failure, Success>> getGroupTypesFromAPI() async =>
       Right(Success(GetGroupTypeResponseModel.fromJson(
           (await remoteDashboardDataSource.getGroupTypes()).data)));
+
+  @override
+  Future<Either<Failure, Success>> getGroupList() =>
+      baseApiMethod(() => getGroupListFromAPI());
+
+  Future<Either<Failure, Success>> getGroupListFromAPI() async =>
+      Right(Success(GetGroupListResponseModel.fromJson(
+          (await remoteDashboardDataSource.getGroupList()).data)));
 
   @override
   Future<Either<Failure, Success>> getGroupTenors() =>

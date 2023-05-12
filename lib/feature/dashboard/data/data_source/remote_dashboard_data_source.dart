@@ -44,6 +44,8 @@ abstract class RemoteDashboardDataSource {
 
   Future<ApiResponse> getGroupTypes();
 
+  Future<ApiResponse> getGroupList();
+
   Future<ApiResponse> getGroupTenors();
 
   Future<ApiResponse> getBanks();

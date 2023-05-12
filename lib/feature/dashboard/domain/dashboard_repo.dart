@@ -52,6 +52,8 @@ abstract class DashboardRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> getGroupTypes();
 
+  Future<Either<Failure, Success>> getGroupList();
+
   Future<Either<Failure, Success>> getGroupTenors();
 
   Future<Either<Failure, Success>> getBanks();

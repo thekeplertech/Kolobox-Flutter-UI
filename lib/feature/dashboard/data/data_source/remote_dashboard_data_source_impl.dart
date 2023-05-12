@@ -108,6 +108,12 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
   }
 
   @override
+  Future<ApiResponse> getGroupList() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getGroupList();
+  }
+
+  @override
   Future<ApiResponse> getGroupTenors() async {
     RestHelper helper = await restClient!.getClient();
     return helper.getGroupTenors();
