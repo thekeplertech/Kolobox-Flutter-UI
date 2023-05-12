@@ -244,10 +244,12 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
   openDetailScreen(KoloboxFundEnum fundEnum) {
     switch (fundEnum) {
       case KoloboxFundEnum.koloFlex:
-        navigatePush(context, KoloFlexPage(), routeName: koloFlexPageValue);
+        navigatePush(context, const KoloFlexPage(),
+            routeName: koloFlexPageValue);
         break;
       case KoloboxFundEnum.koloTarget:
-        navigatePush(context, KoloTargetPage(), routeName: koloTargetPageValue);
+        navigatePush(context, const KoloTargetPage(),
+            routeName: koloTargetPageValue);
         break;
       case KoloboxFundEnum.koloTargetPlus:
         comingSoon();

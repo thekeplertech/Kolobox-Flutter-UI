@@ -23,14 +23,18 @@ const String koloFamilyPageValue = 'KoloFamilyPage';
 const String koloGroupPageValue = 'KoloGroupPage';
 const String koloTransactionDetailPageValue = 'KoloTransactionDetailPage';
 
-const String koloFlexProductId = '-M1VwdR7fF9uCEf_vU0B';
-const String koloTargetProductId = '-M1VwdRAFcArdU1acs3n';
-const String koloTargetPlusProductId = 'jfhfjfbhfhjfbh';
-const String koloFamilyProductId = '233jfhfjfjffbh';
-const String koloGroupProductId = '-M1VwdgOP70p28p1oVOv';
+// String koloFlexProductId = '-M1VwdR7fF9uCEf_vU0B';
+// String koloTargetProductId = '-M1VwdRAFcArdU1acs3n';
+// String koloTargetPlusProductId = 'jfhfjfbhfhjfbh';
+// String koloFamilyProductId = '233jfhfjfjffbh';
+// String koloGroupProductId = '-M1VwdgOP70p28p1oVOv';
 
 const String koloFlexProductName = 'KOLO-FLEX';
 const String koloTargetProductName = 'KOLO-TARGET';
+const String koloGroupProductName = 'KOLO-GROUP';
+const String koloFamilyProductName = 'KOLO-FAMILY';
+const String koloTargetPlusProductName = 'KOLO-TARGET-PLUS';
+const String koloFundsProductName = 'KOLO-FUNDS';
 
 enum KoloboxFundEnum {
   koloFlex,
@@ -144,19 +148,16 @@ extension EnumExtensions on KoloboxFundEnum {
   }
 
   String get getProductId {
-    switch (this) {
-      case KoloboxFundEnum.koloFlex:
-        return koloFlexProductId;
-      case KoloboxFundEnum.koloTarget:
-        return koloTargetProductId;
-      case KoloboxFundEnum.koloTargetPlus:
-        return koloTargetPlusProductId;
-      case KoloboxFundEnum.koloFamily:
-        return koloFamilyProductId;
-      case KoloboxFundEnum.koloGroup:
-        return koloGroupProductId;
-      default:
-        return koloFlexProductId;
+    PrefHelper helper = sl();
+    ProductDataModel? productModel = helper.getProductDataModel();
+    List<Products> products = productModel?.products ?? [];
+
+    int pos = products.indexWhere((element) => element.name == getProductName);
+
+    if (pos != -1) {
+      return products[pos].id ?? '';
+    } else {
+      return '';
     }
   }
 
@@ -166,12 +167,12 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFlexProductName;
       case KoloboxFundEnum.koloTarget:
         return koloTargetProductName;
-      // case KoloboxFundEnum.koloTargetPlus:
-      //   return koloTargetPlusProductId;
-      // case KoloboxFundEnum.koloFamily:
-      //   return koloFamilyProductId;
-      // case KoloboxFundEnum.koloGroup:
-      //   return koloGroupProductId;
+      case KoloboxFundEnum.koloTargetPlus:
+        return koloTargetPlusProductName;
+      case KoloboxFundEnum.koloFamily:
+        return koloFamilyProductName;
+      case KoloboxFundEnum.koloGroup:
+        return koloGroupProductName;
       default:
         return '';
     }
@@ -386,19 +387,17 @@ extension EnumExtensions on KoloboxFundEnum {
 
 extension EnumIdExtensions on String {
   KoloboxFundEnum? getEnumFromProductId() {
-    switch (this) {
-      case koloFlexProductId:
-        return KoloboxFundEnum.koloFlex;
-      case koloTargetProductId:
-        return KoloboxFundEnum.koloTarget;
-      case koloTargetPlusProductId:
-        return KoloboxFundEnum.koloTargetPlus;
-      case koloFamilyProductId:
-        return KoloboxFundEnum.koloFamily;
-      case koloGroupProductId:
-        return KoloboxFundEnum.koloGroup;
+    PrefHelper helper = sl();
+    ProductDataModel? productModel = helper.getProductDataModel();
+    List<Products> products = productModel?.products ?? [];
+
+    int pos = products.indexWhere((element) => element.id == this);
+
+    if (pos != -1) {
+      return products[pos].name?.getEnumFromProductName();
+    } else {
+      return null;
     }
-    return null;
   }
 
   KoloboxFundEnum? getEnumFromProductName() {
@@ -406,6 +405,12 @@ extension EnumIdExtensions on String {
       case koloFlexProductName:
         return KoloboxFundEnum.koloFlex;
       case koloTargetProductName:
+        return KoloboxFundEnum.koloTarget;
+      case koloTargetPlusProductName:
+        return KoloboxFundEnum.koloTarget;
+      case koloGroupProductName:
+        return KoloboxFundEnum.koloTarget;
+      case koloFamilyProductName:
         return KoloboxFundEnum.koloTarget;
     }
     return null;
