@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,16 +33,21 @@ class LoginScreen extends BaseBlocWidget {
 }
 
 class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
+  StreamController<bool> passwordStreamController =
+      StreamController<bool>.broadcast();
   final TextEditingController emailTextEditingController =
       TextEditingController();
   final TextEditingController passwordTextEditingController =
       TextEditingController();
 
+  bool isPasswordObscure = true;
+
   @override
   void initState() {
     super.initState();
     if (FlavorConfig.isDev()) {
-      emailTextEditingController.text = 'parth123456789123456@mailinator.com';
+      emailTextEditingController.text =
+          'parth123456789123456789@mailinator.com';
       passwordTextEditingController.text = 'kolobox@123';
       // emailTextEditingController.text = 'tulbadex@gmail.com';
       // passwordTextEditingController.text = 'password';
@@ -163,13 +170,26 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                     const SizedBox(
                       height: 7,
                     ),
-                    CustomTextField(
-                      'Enter password',
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      controller: passwordTextEditingController,
-                      obscureText: true,
-                    ),
+                    StreamBuilder<bool>(
+                        stream: passwordStreamController.stream,
+                        builder: (context, snapshot) {
+                          return CustomTextField(
+                            'Enter password',
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            controller: passwordTextEditingController,
+                            obscureText: isPasswordObscure,
+                            postWidget: GestureDetector(
+                              onTap: () {
+                                isPasswordObscure = !isPasswordObscure;
+                                passwordStreamController.add(true);
+                              },
+                              child: Icon(isPasswordObscure
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                            ),
+                          );
+                        }),
                     const SizedBox(
                       height: 4,
                     ),
@@ -353,6 +373,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
   void dispose() {
     emailTextEditingController.dispose();
     passwordTextEditingController.dispose();
+    passwordStreamController.close();
     super.dispose();
   }
 }

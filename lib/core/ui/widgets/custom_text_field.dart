@@ -19,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.textStyle,
     this.hintStyle,
+    this.postWidget,
     this.obscureText = false,
     this.textAlign = TextAlign.start,
     this.maxLines = 1,
@@ -41,6 +42,7 @@ class CustomTextField extends StatelessWidget {
   final TextAlign textAlign;
   final int maxLines;
   final EdgeInsets? contentPadding;
+  final Widget? postWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +110,12 @@ class CustomTextField extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Icon(iconData, size: 8),
+            ),
+          ],
+          if (postWidget != null) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              child: postWidget,
             ),
           ],
         ],

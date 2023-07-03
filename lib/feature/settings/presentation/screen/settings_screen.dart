@@ -5,7 +5,6 @@ import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/account/bank_details/presentation/bank_details_page.dart';
 import 'package:kolobox_new_app/feature/account/history/presentation/history_page.dart';
-import 'package:kolobox_new_app/feature/account/next_of_kin/presentation/next_of_kin_page.dart';
 import 'package:kolobox_new_app/feature/account/notification/presentation/notification_settings_page.dart';
 import 'package:kolobox_new_app/feature/account/security/presentation/security_page.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
@@ -15,6 +14,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../account/profile/presentation/profile_page.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../widgets/home_app_bar_widget.dart';
@@ -53,10 +53,10 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                       padding: const EdgeInsets.only(left: 28, right: 28),
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          getSupportCenterWidget(),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // getSupportCenterWidget(),
                           InkWell(
                               onTap: () {
                                 BlocProvider.of<DashboardBloc>(context)
@@ -112,14 +112,14 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                             onTap: () {
                               BlocProvider.of<DashboardBloc>(context)
                                   .add(HideDisableBottomScreenEvent());
-                              navigatePush(context, const NextOfKinPage())
+                              navigatePush(context, const ProfilePage())
                                   .then((value) {
                                 BlocProvider.of<DashboardBloc>(context)
                                     .add(ShowEnableBottomScreenEvent());
                               });
                             },
                             child: getSelectionOptionWidget(
-                                'Next Of Kin', imageNextOfKinIcon),
+                                'Profile', imageNextOfKinIcon),
                           ),
                           Divider(
                               color: ColorList.greyDisableCircleColor,

@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/colors/color_list.dart';
 
-class ExploreItemWidget extends StatelessWidget {
-  const ExploreItemWidget({Key? key}) : super(key: key);
+class ProductItemWidget extends StatelessWidget {
+  final String title;
+  final String text;
+
+  const ProductItemWidget({Key? key, required this.title, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,8 @@ class ExploreItemWidget extends StatelessWidget {
                   right: 21,
                 ),
                 child: Text(
-                  'Kolotarget',
-                  style: TextStyle(
+                  title,
+                  style: const TextStyle(
                     color: ColorList.primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -52,7 +56,7 @@ class ExploreItemWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Phasellus efficitur accumsan orci in fringilla hasellus dictum euismod.',
+                        text,
                         style: TextStyle(
                           color: ColorList.greyDark2Color,
                           fontSize: 10,
@@ -64,7 +68,7 @@ class ExploreItemWidget extends StatelessWidget {
                     ),
                     Text(
                       'Explore',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: ColorList.primaryColor,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,

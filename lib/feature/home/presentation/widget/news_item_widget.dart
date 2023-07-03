@@ -3,7 +3,13 @@ import 'package:flutter/material.dart';
 import '../../../../core/colors/color_list.dart';
 
 class NewsItemWidget extends StatelessWidget {
-  const NewsItemWidget({Key? key}) : super(key: key);
+  final String icon;
+  final String title;
+  final String text;
+
+  const NewsItemWidget(
+      {Key? key, required this.icon, required this.title, required this.text})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +39,8 @@ class NewsItemWidget extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    'https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072821__480.jpg',
+                  child: Image.asset(
+                    icon,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -42,7 +48,7 @@ class NewsItemWidget extends StatelessWidget {
                   height: 11,
                 ),
                 Text(
-                  'Jul 28, 2022',
+                  title,
                   style: TextStyle(
                     color: ColorList.greyLight2Color,
                     fontSize: 10,
@@ -54,14 +60,14 @@ class NewsItemWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: Text(
-                    '10 reasons to start investing during global rescission asd fja;lksdjf lsakjf;ksaj f;lksa jf;lksa jf;slk jf;salk fj;lkj ;lk j;lk j;lkj',
+                    text,
                     style: TextStyle(
                       color: ColorList.blackSecondColor,
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 3,
+                    maxLines: 5,
                   ),
                 ),
               ],

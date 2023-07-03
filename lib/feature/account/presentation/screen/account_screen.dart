@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/widgets/edit_profile/edit_profile_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -18,6 +17,7 @@ import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../settings/presentation/settings_page.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../../profile/presentation/profile_page.dart';
 
 class AccountScreen extends BaseBlocWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -44,9 +44,9 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
           child: Column(
             children: [
               HomeAppBarWidget(
-                leftIcon: imageDashboardIcon,
+                // leftIcon: imageDashboardIcon,
                 rightIcon: imageSettingIcon,
-                onLeftPressed: () => comingSoon(),
+                // onLeftPressed: () => comingSoon(),
                 onRightPressed: () =>
                     navigatePush(context, const SettingsPage()),
               ),
@@ -101,8 +101,7 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
                   onPressed: () {
                     BlocProvider.of<DashboardBloc>(context)
                         .add(HideDisableBottomScreenEvent());
-                    showCustomBottomSheet(const EditProfilePage())
-                        .then((value) {
+                    navigatePush(context, const ProfilePage()).then((value) {
                       BlocProvider.of<DashboardBloc>(context)
                           .add(ShowEnableBottomScreenEvent());
                       profileStreamController.add(true);

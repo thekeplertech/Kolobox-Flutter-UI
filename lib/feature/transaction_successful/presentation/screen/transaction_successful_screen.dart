@@ -14,6 +14,7 @@ import 'package:kolobox_new_app/feature/transaction_successful/presentation/bloc
 import 'package:kolobox_new_app/feature/transaction_successful/presentation/bloc/transaction_successful_event.dart';
 import 'package:kolobox_new_app/feature/transaction_successful/presentation/bloc/transaction_successful_state.dart';
 import 'package:kolobox_new_app/feature/widgets/product_item_widget.dart';
+import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -130,7 +131,15 @@ class TransactionSuccessfulScreenState
     //   ],
     // );
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        if (_isSuccess) {
+          BlocProvider.of<TransactionSuccessfulBloc>(context)
+              .add(CallProductEvent());
+        } else {
+          goBack(context);
+        }
+        return false;
+      },
       child: Scaffold(
         backgroundColor: ColorList.white,
         body: Padding(
@@ -308,17 +317,17 @@ class TransactionSuccessfulScreenState
             //     ],
             //   ),
             // ),
-            const SizedBox(
-              height: 15,
-            ),
-            Button(
-              'Share',
-              backgroundColor: ColorList.lightBlue3Color,
-              textColor: ColorList.primaryColor,
-              overlayColor: ColorList.blueColor,
-              borderRadius: 32,
-              onPressed: () => comingSoon(),
-            ),
+            // const SizedBox(
+            //   height: 15,
+            // ),
+            // Button(
+            //   'Share',
+            //   backgroundColor: ColorList.lightBlue3Color,
+            //   textColor: ColorList.primaryColor,
+            //   overlayColor: ColorList.blueColor,
+            //   borderRadius: 32,
+            //   onPressed: () => comingSoon(),
+            // ),
             const SizedBox(
               height: 15,
             ),
@@ -341,6 +350,17 @@ class TransactionSuccessfulScreenState
                 overlayColor: ColorList.redDark2Color,
                 borderRadius: 32,
                 onPressed: () => initiatePayment(),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Button(
+                'Close',
+                backgroundColor: ColorList.primaryColor,
+                textColor: ColorList.white,
+                overlayColor: ColorList.blueColor,
+                borderRadius: 32,
+                onPressed: () => goBack(context),
               ),
             ],
           ],

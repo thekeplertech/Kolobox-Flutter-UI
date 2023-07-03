@@ -29,16 +29,16 @@ class EditNextOfKinWidget extends BaseBlocWidget {
 class _EditNextOfKinWidgetState
     extends BaseBlocWidgetState<EditNextOfKinWidget> {
   final TextEditingController firstNameTextEditingController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController lastNameTextEditingController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController phoneTextEditingController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController occupationTextEditingController =
-  TextEditingController();
+      TextEditingController();
 
   StreamController<bool> dateOfBirthStreamController =
-  StreamController<bool>.broadcast();
+      StreamController<bool>.broadcast();
 
   DateTime? dateOfBirth;
 
@@ -46,25 +46,15 @@ class _EditNextOfKinWidgetState
   void initState() {
     super.initState();
     firstNameTextEditingController.text =
-        prefHelper
-            ?.getLoginResponseModel()
-            .firstname ?? '';
+        prefHelper?.getLoginResponseModel().firstname ?? '';
     lastNameTextEditingController.text =
-        prefHelper
-            ?.getLoginResponseModel()
-            .lastname ?? '';
+        prefHelper?.getLoginResponseModel().lastname ?? '';
     phoneTextEditingController.text =
-        prefHelper
-            ?.getLoginResponseModel()
-            .phone ?? '';
+        prefHelper?.getLoginResponseModel().phone ?? '';
     occupationTextEditingController.text =
-        prefHelper
-            ?.getLoginResponseModel()
-            .occupation ?? '';
+        prefHelper?.getLoginResponseModel().occupation ?? '';
     dateOfBirth =
-        DateHelper.getDateTime(prefHelper
-            ?.getLoginResponseModel()
-            .dob ?? '');
+        DateHelper.getDateTime(prefHelper?.getLoginResponseModel().dob ?? '');
   }
 
   @override
@@ -91,7 +81,7 @@ class _EditNextOfKinWidgetState
             children: [
               Expanded(
                 child: Text(
-                  'Next Of Kin',
+                  'Edit Profile',
                   style: AppStyle.b4Bold
                       .copyWith(color: ColorList.blackSecondColor),
                 ),
@@ -113,7 +103,7 @@ class _EditNextOfKinWidgetState
           Text(
             'First Name',
             style:
-            AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
           ),
           const SizedBox(
             height: 7,
@@ -131,7 +121,7 @@ class _EditNextOfKinWidgetState
           Text(
             'Last Name',
             style:
-            AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
           ),
           const SizedBox(
             height: 7,
@@ -149,7 +139,7 @@ class _EditNextOfKinWidgetState
           Text(
             'Date Of Birth',
             style:
-            AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
           ),
           const SizedBox(
             height: 7,
@@ -161,7 +151,7 @@ class _EditNextOfKinWidgetState
                   dateOfBirth == null
                       ? 'Select your date of birth'
                       : DateHelper.getTextFromDateTime(
-                      dateOfBirth!, 'dd MMMM yyyy'),
+                          dateOfBirth!, 'dd MMMM yyyy'),
                   postIcon: imageCalendar,
                   onPressed: () {
                     onClickDOB();
@@ -174,7 +164,7 @@ class _EditNextOfKinWidgetState
           Text(
             'Phone Number',
             style:
-            AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
           ),
           const SizedBox(
             height: 7,
@@ -193,7 +183,7 @@ class _EditNextOfKinWidgetState
           Text(
             'Occupation',
             style:
-            AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
           ),
           const SizedBox(
             height: 7,
@@ -345,26 +335,18 @@ class _EditNextOfKinWidgetState
 
     BlocProvider.of<EditProfileBloc>(context).add(UpdateProfileEvent(
         model: UpdateProfileRequestModel(
-          firstname: firstNameTextEditingController.text,
-          lastname: lastNameTextEditingController.text,
-          email: prefHelper
-              ?.getLoginResponseModel()
-              .email ?? '',
-          phone: phoneTextEditingController.text,
-          nextOfKin: prefHelper
-              ?.getLoginResponseModel()
-              .nextOfKin ?? '',
-          emailNotification:
-          prefHelper
-              ?.getLoginResponseModel()
-              .emailNotification ?? false,
-          smsNotification:
-          prefHelper
-              ?.getLoginResponseModel()
-              .smsNotification ?? false,
-          occupation: occupationTextEditingController.text,
-          dob: DateHelper.getTextFromDateTime(dateOfBirth!, 'yyyy-MM-dd'),
-        )));
+      firstname: firstNameTextEditingController.text,
+      lastname: lastNameTextEditingController.text,
+      email: prefHelper?.getLoginResponseModel().email ?? '',
+      phone: phoneTextEditingController.text,
+      nextOfKin: prefHelper?.getLoginResponseModel().nextOfKin ?? '',
+      emailNotification:
+          prefHelper?.getLoginResponseModel().emailNotification ?? false,
+      smsNotification:
+          prefHelper?.getLoginResponseModel().smsNotification ?? false,
+      occupation: occupationTextEditingController.text,
+      dob: DateHelper.getTextFromDateTime(dateOfBirth!, 'yyyy-MM-dd'),
+    )));
     // goBack(context);
   }
 

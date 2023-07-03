@@ -19,6 +19,7 @@ import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/data/models/get_group_list_response_model.dart';
 import '../../../widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../../../widgets/inherited_state_container.dart';
 import '../bloc/kolo_group_bloc.dart';
 import '../bloc/kolo_group_state.dart';
 import '../widgets/kolo_group_item_widget.dart';
@@ -302,6 +303,9 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
       );
 
   void onClickCreateNew() {
+    StateContainer.of(context).openFundMyKoloBox(
+        fundEnum: KoloboxFundEnum.koloGroup,
+        popUntil: KoloboxFundEnum.koloGroup.getFundPageValue(false));
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(
       DepositYourKoloboxWidgetPage(
@@ -311,6 +315,12 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
     ).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
+      if (StateContainer.of(context).isSuccessful) {
+        // Future.delayed(const Duration(milliseconds: 300), () {
+        //   callInvestmentGoal();
+        // });
+      }
+      StateContainer.of(context).clearData();
     });
     // showCustomBottomSheet(const CreateKoloTargetWidget()).then((value) {
     //   BlocProvider.of<DashboardBloc>(context)

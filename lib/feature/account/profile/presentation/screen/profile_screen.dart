@@ -13,16 +13,16 @@ import '../../../../../core/utils/date_helper.dart';
 import '../../../../widgets/home_app_bar_widget.dart';
 import '../../../../widgets/next_ok_kin/edit_next_of_kin_page.dart';
 
-class NextOfKinScreen extends BaseBlocWidget {
-  const NextOfKinScreen({
+class ProfileScreen extends BaseBlocWidget {
+  const ProfileScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  NextOfKinScreenState createState() => NextOfKinScreenState();
+  ProfileScreenState createState() => ProfileScreenState();
 }
 
-class NextOfKinScreenState extends BaseBlocWidgetState<NextOfKinScreen> {
+class ProfileScreenState extends BaseBlocWidgetState<ProfileScreen> {
   StreamController<bool> dataStreamController =
       StreamController<bool>.broadcast();
 
@@ -46,7 +46,7 @@ class NextOfKinScreenState extends BaseBlocWidgetState<NextOfKinScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const HomeAppBarWidget(
-                        leftIcon: imageBackArrowIcon, title: 'Next Of Kin'),
+                        leftIcon: imageBackArrowIcon, title: 'Profile'),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 28, right: 28, top: 15, bottom: 28),

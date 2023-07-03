@@ -73,6 +73,13 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
   int passwordStrength = 0;
 
   PageController pageController = PageController(initialPage: 0);
+  StreamController<bool> passwordStreamController =
+      StreamController<bool>.broadcast();
+  StreamController<bool> confirmPasswordStreamController =
+      StreamController<bool>.broadcast();
+
+  bool isPasswordObscure = true;
+  bool isConfirmPasswordObscure = true;
 
   @override
   void initState() {
@@ -81,8 +88,8 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
       firstNameTextEditingController.text = 'Parth';
       lastNameTextEditingController.text = 'Suthar';
       emailAddressTextEditingController.text =
-          'parth1234567891234567@mailinator.com';
-      phoneNumberTextEditingController.text = '95585963853';
+          'parth123456789123456789@mailinator.com';
+      phoneNumberTextEditingController.text = '95585963851';
       nextOfKinTextEditingController.text = 'First Next of kin';
       occupationTextEditingController.text = 'First Occupation';
       passwordTextEditingController.text = 'kolobox@123';
@@ -500,14 +507,27 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               const SizedBox(
                 height: 7,
               ),
-              CustomTextField(
-                'Create secure password',
-                controller: passwordTextEditingController,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.next,
-                obscureText: true,
-                onChanged: (value) => changePasswordUpdated(),
-              ),
+              StreamBuilder<bool>(
+                  stream: passwordStreamController.stream,
+                  builder: (context, snapshot) {
+                    return CustomTextField(
+                      'Create secure password',
+                      controller: passwordTextEditingController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      onChanged: (value) => changePasswordUpdated(),
+                      obscureText: isPasswordObscure,
+                      postWidget: GestureDetector(
+                        onTap: () {
+                          isPasswordObscure = !isPasswordObscure;
+                          passwordStreamController.add(true);
+                        },
+                        child: Icon(isPasswordObscure
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                      ),
+                    );
+                  }),
               const SizedBox(
                 height: 24,
               ),
@@ -519,14 +539,27 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
               const SizedBox(
                 height: 7,
               ),
-              CustomTextField(
-                'Confirm created password',
-                controller: cPasswordTextEditingController,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-                obscureText: true,
-                onChanged: (value) => changePasswordUpdated(),
-              ),
+              StreamBuilder<bool>(
+                  stream: confirmPasswordStreamController.stream,
+                  builder: (context, snapshot) {
+                    return CustomTextField(
+                      'Confirm created password',
+                      controller: cPasswordTextEditingController,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      onChanged: (value) => changePasswordUpdated(),
+                      obscureText: isConfirmPasswordObscure,
+                      postWidget: GestureDetector(
+                        onTap: () {
+                          isConfirmPasswordObscure = !isConfirmPasswordObscure;
+                          confirmPasswordStreamController.add(true);
+                        },
+                        child: Icon(isConfirmPasswordObscure
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                      ),
+                    );
+                  }),
               const SizedBox(
                 height: 24,
               ),
@@ -1026,5 +1059,7 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
     occupationTextEditingController.dispose();
     passwordTextEditingController.dispose();
     cPasswordTextEditingController.dispose();
+    passwordStreamController.close();
+    confirmPasswordStreamController.close();
   }
 }

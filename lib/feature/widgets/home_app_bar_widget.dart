@@ -16,7 +16,7 @@ class HomeAppBarWidget extends BaseScreen {
   final String? title;
   final String? amount;
   final StreamController<bool>? walletBalanceStreamController;
-  final String leftIcon;
+  final String? leftIcon;
   final String? rightIcon;
   final Function()? onLeftPressed;
   final Function()? onRightPressed;
@@ -26,7 +26,7 @@ class HomeAppBarWidget extends BaseScreen {
     this.title,
     this.amount,
     this.walletBalanceStreamController,
-    required this.leftIcon,
+    this.leftIcon,
     this.rightIcon,
     this.onLeftPressed,
     this.onRightPressed,
@@ -44,60 +44,65 @@ class _HomeAppBarWidgetState extends BaseScreenState<HomeAppBarWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              GestureDetector(
-                onTap: () => widget.onLeftPressed == null
-                    ? goBack(context)
-                    : widget.onLeftPressed!(),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 30, right: 15, top: 11, bottom: 11),
-                  child: Image.asset(widget.leftIcon),
+              if (widget.leftIcon != null) ...[
+                GestureDetector(
+                  onTap: () => widget.onLeftPressed == null
+                      ? goBack(context)
+                      : widget.onLeftPressed!(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 30, right: 15, top: 11, bottom: 11),
+                    child: Image.asset(widget.leftIcon!),
+                  ),
                 ),
-              ),
+              ],
               const Spacer(),
               if (widget.walletBalanceStreamController != null) ...[
-                GestureDetector(
-                  onTap: () => BlocProvider.of<DashboardBloc>(context)
-                      .add(SelectTabEvent(tabEnum: DashboardTabEnum.wallet)),
-                  child: AbsorbPointer(
-                    child: Row(
-                      children: [
-                        Text(
-                          'Wallet balance',
-                          style: AppStyle.b9Medium
-                              .copyWith(color: ColorList.blackThirdColor),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        StreamBuilder<bool>(
-                            stream:
-                                widget.walletBalanceStreamController!.stream,
-                            builder: (context, snapshot) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                    color: ColorList.lightBlue2Color,
-                                    borderRadius: BorderRadius.circular(24)),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 4,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset(imageWalletBalance),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      widget.amount ?? '',
-                                      style: AppStyle.b9Bold.copyWith(
-                                          color: ColorList.primaryColor),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
-                      ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 11, bottom: 11),
+                  child: GestureDetector(
+                    onTap: () => BlocProvider.of<DashboardBloc>(context)
+                        .add(SelectTabEvent(tabEnum: DashboardTabEnum.wallet)),
+                    child: AbsorbPointer(
+                      child: Row(
+                        children: [
+                          Text(
+                            'Wallet balance',
+                            style: AppStyle.b9Medium
+                                .copyWith(color: ColorList.blackThirdColor),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          StreamBuilder<bool>(
+                              stream:
+                                  widget.walletBalanceStreamController!.stream,
+                              builder: (context, snapshot) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                      color: ColorList.lightBlue2Color,
+                                      borderRadius: BorderRadius.circular(24)),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 4,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(imageWalletBalance),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        widget.amount ?? '',
+                                        style: AppStyle.b9Bold.copyWith(
+                                            color: ColorList.primaryColor),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -110,6 +115,10 @@ class _HomeAppBarWidgetState extends BaseScreenState<HomeAppBarWidget> {
                         left: 10, right: 30, top: 11, bottom: 11),
                     child: Image.asset(widget.rightIcon!),
                   ),
+                ),
+              ] else ...[
+                const SizedBox(
+                  width: 30,
                 ),
               ],
             ],

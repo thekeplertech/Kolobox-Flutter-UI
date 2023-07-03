@@ -10,6 +10,7 @@ import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_bloc.d
 import 'package:kolobox_new_app/feature/kolobox/presentation/bloc/kolobox_state.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
@@ -20,7 +21,6 @@ import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
 import '../../../kologroup/presentation/kolo_group_page.dart';
 import '../../../kolotarget/presentation/kolo_target_page.dart';
-import '../../../notifications/presentation/notifications_page.dart';
 import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
@@ -71,17 +71,17 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                   prefHelper?.getProfileDataModel().wallet?.accountBalance,
                   isSymbol: false),
               walletBalanceStreamController: childStreamController,
-              leftIcon: imageDashboardIcon,
-              rightIcon: imageNotification,
-              onLeftPressed: () => comingSoon(),
-              onRightPressed: () {
-                BlocProvider.of<DashboardBloc>(context)
-                    .add(HideDisableBottomScreenEvent());
-                navigatePush(context, const NotificationsPage()).then((value) {
-                  BlocProvider.of<DashboardBloc>(context)
-                      .add(ShowEnableBottomScreenEvent());
-                });
-              },
+              // leftIcon: imageDashboardIcon,
+              // rightIcon: imageNotification,
+              // onLeftPressed: () => comingSoon(),
+              // onRightPressed: () {
+              //   BlocProvider.of<DashboardBloc>(context)
+              //       .add(HideDisableBottomScreenEvent());
+              //   navigatePush(context, const NotificationsPage()).then((value) {
+              //     BlocProvider.of<DashboardBloc>(context)
+              //         .add(ShowEnableBottomScreenEvent());
+              //   });
+              // },
             ),
             Padding(
               padding:
@@ -179,7 +179,7 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
                     ColorList.koloGroupTextColor,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: dashboardTabHeight,
                   ),
                 ],
               ),

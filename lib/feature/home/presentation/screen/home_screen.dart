@@ -16,17 +16,16 @@ import 'package:kolobox_new_app/feature/home/presentation/widget/learn_item_widg
 import 'package:kolobox_new_app/feature/home/presentation/widget/news_item_widget.dart';
 import 'package:kolobox_new_app/feature/home/presentation/widget/refer_and_earn_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/home_app_bar_widget.dart';
-import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/image_constants.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../notifications/presentation/notifications_page.dart';
+import '../../../widgets/fund_your_kolo_box/fund_your_kolobox_widget.dart';
+import '../../../widgets/inherited_state_container.dart';
 import '../../data/models/dashboard_amount_model.dart';
 import '../../data/models/wallet_data_model.dart';
-import '../widget/welcome_to_kolobox_widget.dart';
 
 class HomeScreen extends BaseBlocWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -104,18 +103,18 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                     prefHelper?.getProfileDataModel().wallet?.accountBalance,
                     isSymbol: false),
                 walletBalanceStreamController: walletBalanceStreamController,
-                leftIcon: imageDashboardIcon,
-                rightIcon: imageNotification,
-                onLeftPressed: () => comingSoon(),
-                onRightPressed: () {
-                  BlocProvider.of<DashboardBloc>(context)
-                      .add(HideDisableBottomScreenEvent());
-                  navigatePush(context, const NotificationsPage())
-                      .then((value) {
-                    BlocProvider.of<DashboardBloc>(context)
-                        .add(ShowEnableBottomScreenEvent());
-                  });
-                },
+                // leftIcon: imageDashboardIcon,
+                // rightIcon: imageNotification,
+                // onLeftPressed: () => comingSoon(),
+                // onRightPressed: () {
+                //   BlocProvider.of<DashboardBloc>(context)
+                //       .add(HideDisableBottomScreenEvent());
+                //   navigatePush(context, const NotificationsPage())
+                //       .then((value) {
+                //     BlocProvider.of<DashboardBloc>(context)
+                //         .add(ShowEnableBottomScreenEvent());
+                //   });
+                // },
               ),
               getHeaderWidget(),
               Padding(
@@ -125,7 +124,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   bottom: 12,
                 ),
                 child: Text(
-                  'Explore',
+                  'Products',
                   style: AppStyle.b7SemiBold
                       .copyWith(color: ColorList.greyLight2Color),
                 ),
@@ -142,28 +141,44 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 2),
-                        child: ExploreItemWidget(),
+                        child: ProductItemWidget(
+                          title: 'KOLO FLEX',
+                          text:
+                              'This is an unlocked plan that allows flexibility and liquidity of funds. Tenor: Investment is made for a period of 30 days. . Access: Withdrawal can be made anytime subsequently. . Interest rate: 8% annual percentage rate (APR)',
+                        ),
                       ),
                       SizedBox(
                         width: 16,
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 2),
-                        child: ExploreItemWidget(),
+                        child: ProductItemWidget(
+                          title: 'KOLO TARGET',
+                          text:
+                              'This is a locked plan aimed at individuals trying to save towards a target – a car, rent, school fees etc. . Tenor: return is expected on this class of investment over a period of 3 Months (90days). . Access: Withdrawal is not allowed till due date. . Interest rate: 10% annual percentage rate (APR).',
+                        ),
                       ),
                       SizedBox(
                         width: 16,
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 2),
-                        child: ExploreItemWidget(),
+                        child: ProductItemWidget(
+                          title: 'KOLO GROUP',
+                          text:
+                              ': This is a locked collective plan where customers can now invest as a group, saving towards better financial opportunities e.g. cooperative society, association etc. . How to Use: A user will serve as the Administrator; set up, name the group, invite members and recommend amount and frequency. . Tenor: A fixed return is expected on this investment class over 6 months (180 days). . Access: Withdrawal is not allowed till the due date. . Interest rate: 10% annual percentage rate (APR)',
+                        ),
                       ),
                       SizedBox(
                         width: 16,
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 2),
-                        child: ExploreItemWidget(),
+                        child: ProductItemWidget(
+                          title: 'KOLO FAMILY',
+                          text:
+                              'This is a locked collective plan where customers can now invest as a group, saving towards better financial opportunities e.g. cooperative society, association etc. . Tenor: A fixed return is expected on this investment class over 6 months (180 days). . Access: Withdrawal is not allowed till the due date. . Interest rate: 10% annual percentage rate (APR)',
+                        ),
                       ),
                       SizedBox(
                         width: 28,
@@ -180,13 +195,13 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   bottom: 12,
                 ),
                 child: Text(
-                  'News',
+                  'Testimony',
                   style: AppStyle.b7SemiBold
                       .copyWith(color: ColorList.greyLight2Color),
                 ),
               ),
               SizedBox(
-                height: 200,
+                height: 180,
                 child: ScrollConfiguration(
                   behavior: NoOverFlowScrollbarBehaviour(),
                   child: ListView(
@@ -197,21 +212,60 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(bottom: 2),
-                          child: NewsItemWidget(),
+                          child: NewsItemWidget(
+                            icon: testimonyOneIcon,
+                            title: 'Titi Oyewole',
+                            text:
+                                'I started using Kolobox last month to save towards my tour in December and i am astonished at how much I have saved within that short period of time, now i am rest assured my tour will happen and this is all thanks to Kolobox.',
+                          ),
                         ),
                         SizedBox(
                           width: 16,
                         ),
                         Padding(
                           padding: EdgeInsets.only(bottom: 2),
-                          child: NewsItemWidget(),
+                          child: NewsItemWidget(
+                            icon: testimonyTwoIcon,
+                            title: 'Olamide Komolafe',
+                            text:
+                                'Kolobox has made me so fond of investment and has helped curtail my excessive spending habit.With it I can set any target and the best part is i get an interest of 12% APR with KoloTarget. It is such a great App and is super easy to use with no hidden charges.I have no regret joining them.',
+                          ),
                         ),
                         SizedBox(
                           width: 16,
                         ),
                         Padding(
                           padding: EdgeInsets.only(bottom: 2),
-                          child: NewsItemWidget(),
+                          child: NewsItemWidget(
+                            icon: testimonyThreeIcon,
+                            title: 'Olufunmilayo Oni',
+                            text:
+                                'Having my fitness store and being a personal trainer i have so many tall dreams but my life became easier since i got the plug \\"KoloboxNG\\" that has helped me save a lot to achieve most of it. Now i save and get interest accrued,withdraw,buy new stock and reinvest again.',
+                          ),
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 2),
+                          child: NewsItemWidget(
+                            icon: testimonyFourIcon,
+                            title: 'Yetunde Olawale',
+                            text:
+                                'For a long time i used to love doing "Ajo" -The traditional way of saving but i lost interest because there were so many defaults and risk involved.And at the end of this i was frustrated and often times hurt because of late payments and backlog from some members of the contribution.Then came my ray of hope in the person of my bestfriend,Oju who hinted me about this new hip app that i can use for saving and is so easy because with just a couple of clicks i am done with my transactions.The best part is after the initial payment into my E-Wallet my debit card automatically is synced with my account and i don\'t have to go through the rigour of putting that in everytime i have to save.I could go on and on but the truth is my makeup business and i are grateful we decided to do it the Kolobox way.You should try it too!!!',
+                          ),
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 2),
+                          child: NewsItemWidget(
+                            icon: testimonyFiveIcon,
+                            title: 'Tobi Sadiq',
+                            text:
+                                'I have been looking for a simple and easy to use platform that is not so classist and is highly flexible, then my cousin made mention of koloboxng. I tried it out and found out not only does it not add irrelevant charges but like the name implies it is nostalgic and takes me back to my childhood way of saving in a wooden box.',
+                          ),
                         ),
                         SizedBox(
                           width: 28,
@@ -244,22 +298,41 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 2),
-                        child: LearnItemWidget(),
+                        child: LearnItemWidget(
+                          title: 'Where are my investments going',
+                          url: 'https://www.youtube.com/embed/ZzX_bqz2Vyw',
+                        ),
                       ),
                       SizedBox(
                         width: 16,
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 2),
-                        child: LearnItemWidget(),
+                        child: LearnItemWidget(
+                          title: 'How Do I Sign Up for KOLOBOX',
+                          url: 'https://www.youtube.com/embed/GDF1MGe3cgk',
+                        ),
                       ),
                       SizedBox(
                         width: 16,
                       ),
                       Padding(
                         padding: EdgeInsets.only(bottom: 2),
-                        child: LearnItemWidget(),
+                        child: LearnItemWidget(
+                          title: 'How Does KOLOBOX work',
+                          url: 'https://www.youtube.com/embed/dIZX5x1_yNY',
+                        ),
                       ),
+                      // SizedBox(
+                      //   width: 16,
+                      // ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 2),
+                      //   child: LearnItemWidget(
+                      //     title: 'Why KOLOBOX?',
+                      //     url: 'https://www.youtube.com/embed/NZyiZRbG90w',
+                      //   ),
+                      // ),
                       SizedBox(
                         width: 28,
                       ),
@@ -267,7 +340,10 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   ),
                 ),
               ),
-              getReferAndEarnWidget(),
+              const SizedBox(
+                height: 40,
+              ),
+              // getReferAndEarnWidget(),
             ],
           ),
         ),
@@ -278,7 +354,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
           top: 10,
           left: 28,
           right: 28,
-          bottom: 45,
+          bottom: 25,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,15 +381,30 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                   overlayColor: ColorList.blueColor,
                   borderRadius: 24,
                   verticalPadding: 10,
-                  onPressed: () => comingSoon(),
+                  onPressed: () {
+                    StateContainer.of(context)
+                        .openFundMyKoloBox(isFundYourKoloBox: true);
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(HideDisableBottomScreenEvent());
+                    showCustomBottomSheet(const FundYourKoloboxWidget())
+                        .then((value) {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ShowEnableBottomScreenEvent());
+                      if (StateContainer.of(context).isSuccessful) {
+                        //   childStreamController.add(true);
+                        callProductsAPI();
+                      }
+                      StateContainer.of(context).clearData();
+                    });
+                  },
                   postIcon: imageDownload,
                 ),
               ),
             ),
-            const SizedBox(
-              height: 23,
-            ),
-            const WelcomeToKoloboxWidget(),
+            // const SizedBox(
+            //   height: 23,
+            // ),
+            // const WelcomeToKoloboxWidget(),
           ],
         ),
       );
