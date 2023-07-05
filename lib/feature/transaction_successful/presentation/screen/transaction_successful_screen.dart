@@ -396,6 +396,10 @@ class TransactionSuccessfulScreenState
 
     if (isInActive) {
       // Call for top up api
+      String groupId = '';
+      if (isKoloGroup()) {
+        groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
+      }
       BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
           productId:
               StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
@@ -404,6 +408,7 @@ class TransactionSuccessfulScreenState
                 StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
             depositAmount:
                 getOnlyAmount(StateContainer.of(context).getAmount()),
+            groupId: groupId,
           )));
     } else {
       // Call for select product api

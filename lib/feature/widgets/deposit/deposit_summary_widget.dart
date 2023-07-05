@@ -213,6 +213,22 @@ class _DepositSummaryWidgetState
                   const SizedBox(
                     height: 15,
                   ),
+                  Text(
+                    'Deposit into my group',
+                    style: AppStyle.b9Regular
+                        .copyWith(color: ColorList.blackThirdColor),
+                  ),
+                  const SizedBox(
+                    height: 7,
+                  ),
+                  Text(
+                    StateContainer.of(context).getGroupModel()?.name ?? '',
+                    style: AppStyle.b8Medium
+                        .copyWith(color: ColorList.blackThirdColor),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
                 ] else ...[
                   ProductItemWidget(fundEnum: koloboxFundEnum!),
                   const SizedBox(
@@ -312,6 +328,7 @@ class _DepositSummaryWidgetState
       amount: StateContainer.of(context).getAmount(),
       periodEnum: StateContainer.of(context).getPeriodEnum(),
       groupTenorModel: StateContainer.of(context).getGroupTenorModel(),
+      groupModel: StateContainer.of(context).getGroupModel(),
       targetAmount: StateContainer.of(context).getTargetAmount(),
       targetDateTime: StateContainer.of(context).getTargetDate(),
       targetName: StateContainer.of(context).getTargetName(),
@@ -351,6 +368,10 @@ class _DepositSummaryWidgetState
 
     if (isInActive) {
       // Call for top up api
+      String groupId = '';
+      if (isKoloGroup() && StateContainer.of(context).getGroupModel() != null) {
+        groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
+      }
       BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
           productId:
               StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
@@ -359,6 +380,7 @@ class _DepositSummaryWidgetState
                 StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
             depositAmount:
                 getOnlyAmount(StateContainer.of(context).getAmount()),
+            groupId: groupId,
           )));
     } else {
       // Call for select product api

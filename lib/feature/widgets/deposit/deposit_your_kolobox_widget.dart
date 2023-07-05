@@ -901,6 +901,7 @@ class _DepositYourKoloboxWidgetState
           targetAmount: amountTextEditingController.text,
           periodEnum: selectedPeriodEnum,
           groupTenorModel: selectedTenorModel,
+          groupModel: selectedGroupModel,
           targetDateTime: targetDateTime,
           targetName: targetNameTextEditingController.text,
         );

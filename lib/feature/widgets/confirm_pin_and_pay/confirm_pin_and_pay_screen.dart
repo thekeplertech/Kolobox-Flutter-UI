@@ -2,20 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
-import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/pay_stack_payment_gateway/pay_stack_payment.dart';
-import 'package:kolobox_new_app/core/ui/extension.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/auth/login/data/models/update_pin_request_model.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_event.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_state.dart';
-import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
@@ -235,56 +229,57 @@ class ConfirmPinAndPayScreenState
     ));
   }
 
-  void initiatePayment() {
-    bool isInActive =
-        StateContainer.of(context).getKoloBoxEnum()?.isInActiveProduct() ??
-            false;
-    logger?.d('In Active Product $isInActive');
-
-    PayStackPayment payStackPayment = sl();
-
-    if (!payStackPayment.initialized) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            'Payment gateway is not initialized. Please try after a moment.',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
-
-    if (isInActive) {
-      // Call for top up api
-      BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
-          productId:
-              StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
-          model: TopUpRequestModel(
-            productId:
-                StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
-            depositAmount:
-                getOnlyAmount(StateContainer.of(context).getAmount()),
-          )));
-    } else {
-      // Call for select product api
-      BlocProvider.of<ConfirmPinAndPayBloc>(context).add(SelectProductEvent(
-          userId: prefHelper?.getLoginResponseModel().id ?? '',
-          model: SelectProductRequestModel(
-            productId:
-                StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
-            savingFrequency:
-                StateContainer.of(context).getPeriodEnum().getPeriodPassValue,
-            depositAmount:
-                getOnlyAmount(StateContainer.of(context).getAmount()),
-          )));
-    }
-  }
+  // void initiatePayment() {
+  //   bool isInActive =
+  //       StateContainer.of(context).getKoloBoxEnum()?.isInActiveProduct() ??
+  //           false;
+  //   logger?.d('In Active Product $isInActive');
+  //
+  //   PayStackPayment payStackPayment = sl();
+  //
+  //   if (!payStackPayment.initialized) {
+  //     Utils.showToast(
+  //         context,
+  //         ToastWidget(
+  //           'Payment gateway is not initialized. Please try after a moment.',
+  //           borderColor: ColorList.redDarkColor,
+  //           backgroundColor: ColorList.white,
+  //           textColor: ColorList.black,
+  //           messageIcon: imageCloseRed,
+  //           closeWidget: Image.asset(
+  //             imageClose,
+  //             color: ColorList.black,
+  //           ),
+  //         ));
+  //     return;
+  //   }
+  //
+  //   if (isInActive) {
+  //     // Call for top up api
+  //     BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
+  //         productId:
+  //             StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
+  //         model: TopUpRequestModel(
+  //           productId:
+  //               StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
+  //           depositAmount:
+  //               getOnlyAmount(StateContainer.of(context).getAmount()),
+  //           groupId: '',
+  //         )));
+  //   } else {
+  //     // Call for select product api
+  //     BlocProvider.of<ConfirmPinAndPayBloc>(context).add(SelectProductEvent(
+  //         userId: prefHelper?.getLoginResponseModel().id ?? '',
+  //         model: SelectProductRequestModel(
+  //           productId:
+  //               StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
+  //           savingFrequency:
+  //               StateContainer.of(context).getPeriodEnum().getPeriodPassValue,
+  //           depositAmount:
+  //               getOnlyAmount(StateContainer.of(context).getAmount()),
+  //         )));
+  //   }
+  // }
 
   void callPayment(
       String amount, String accessCode, String referenceCode) async {
