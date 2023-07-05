@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_group_list_response_model.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/enums/kolobox_fund_enum.dart';
@@ -22,12 +23,14 @@ import '../../../koloflex/presentation/bloc/kolo_flex_bloc.dart';
 import '../../../koloflex/presentation/bloc/kolo_flex_event.dart';
 import '../../../koloflex/presentation/bloc/kolo_flex_state.dart';
 import '../../../koloflex/presentation/widgets/transactions_item_widget.dart';
+import '../../../widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
-  final InvestmentGoalModel investmentGoalModel;
+  final InvestmentGoalModel? investmentGoalModel;
+  final GroupModel? groupModel;
   final double interestAmount;
   final bool isPaid;
 
@@ -36,6 +39,7 @@ class KoloTransactionDetailScreen extends BaseBlocWidget {
     required this.isPaid,
     required this.interestAmount,
     required this.investmentGoalModel,
+    required this.groupModel,
   }) : super(key: key);
 
   @override
@@ -63,11 +67,13 @@ class KoloTransactionDetailState
 
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloTarget;
   InvestmentGoalModel? investmentGoalModel;
+  GroupModel? groupModel;
   double interestAmount = 0;
 
   @override
   void initState() {
     investmentGoalModel = widget.investmentGoalModel;
+    groupModel = widget.groupModel;
     interestAmount = widget.interestAmount;
     super.initState();
     callTransactions();
@@ -125,7 +131,7 @@ class KoloTransactionDetailState
                   ),
                   Text(
                     CurrencyTextInputFormatter.formatAmount(
-                        KoloboxFundEnum.koloTarget.getEarningsAmountValue()),
+                        koloboxFundEnum.getEarningsAmountValue()),
                     style:
                         AppStyle.b2Bold.copyWith(color: ColorList.primaryColor),
                   ),
@@ -144,7 +150,7 @@ class KoloTransactionDetailState
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Interest (${CurrencyTextInputFormatter.formatAmount(KoloboxFundEnum.koloTarget.getInterestRate(), isSymbol: false)}% p.a)',
+                          'Interest (${CurrencyTextInputFormatter.formatAmount(koloboxFundEnum.getInterestRate(), isSymbol: false)}% p.a)',
                           style: AppStyle.b8SemiBold
                               .copyWith(color: ColorList.blackSecondColor),
                         ),
@@ -191,7 +197,8 @@ class KoloTransactionDetailState
                           height: 5,
                         ),
                         Text(
-                          investmentGoalModel?.purpose ?? '',
+                          investmentGoalModel?.purpose ??
+                              (groupModel?.name ?? ''),
                           style: AppStyle.b7Bold
                               .copyWith(color: ColorList.blackSecondColor),
                         ),
@@ -199,8 +206,12 @@ class KoloTransactionDetailState
                           height: 5,
                         ),
                         Text(
-                          CurrencyTextInputFormatter.formatAmountDouble(
-                              investmentGoalModel?.goalAmount),
+                          (investmentGoalModel?.goalAmount != null)
+                              ? CurrencyTextInputFormatter.formatAmountDouble(
+                                  investmentGoalModel?.goalAmount)
+                              : CurrencyTextInputFormatter.formatAmountDouble(
+                                  double.parse(
+                                      groupModel?.minimumAmount ?? '0.0')),
                           style: AppStyle.b8SemiBold
                               .copyWith(color: ColorList.primaryColor),
                         ),
@@ -242,7 +253,8 @@ class KoloTransactionDetailState
                               ),
                               Text(
                                 DateHelper.getDateFromDateTime(
-                                    investmentGoalModel?.dueDate ?? '',
+                                    investmentGoalModel?.dueDate ??
+                                        (groupModel?.createdAt ?? ''),
                                     'dd MMM yyyy'),
                                 style: AppStyle.b9SemiBold.copyWith(
                                     color: widget.isPaid
@@ -254,6 +266,27 @@ class KoloTransactionDetailState
                         ),
                       ],
                     ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Button(
+                          'Deposit',
+                          backgroundColor: ColorList.lightBlue3Color,
+                          textColor: ColorList.primaryColor,
+                          overlayColor: ColorList.blueColor,
+                          borderRadius: 24,
+                          verticalPadding: 10,
+                          onPressed: () {
+                            onClickDeposit();
+                          },
+                          postIcon: imageDownload,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 15,
@@ -609,17 +642,21 @@ class KoloTransactionDetailState
   }
 
   void onClickDeposit() {
-    comingSoon();
-    // StateContainer.of(context).isFromDetail = true;
-    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    // showCustomBottomSheet(const DepositYourKoloboxWidget()).then((value) {
-    //   BlocProvider.of<DashboardBloc>(context)
-    //       .add(ShowEnableBottomScreenEvent());
-    //   StateContainer.of(context).isFromDetail = false;
-    //   isRecentEmpty = false;
-    //   isFailedEmpty = false;
-    //   leftRightStreamController.add(true);
-    // });
+    StateContainer.of(context).openFundMyKoloBox(
+      fundEnum: KoloboxFundEnum.koloTarget,
+      popUntil: KoloboxFundEnum.koloGroup.getFundPageValue(true),
+    );
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(DepositYourKoloboxWidgetPage(
+      key: Key('deposit_your_kolobox_${DateTime.now().millisecondsSinceEpoch}'),
+    )).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      if (StateContainer.of(context).isSuccessful) {
+        StateContainer.of(context).clearData();
+        callTransactions();
+      }
+    });
   }
 
   void onClickInvite() {

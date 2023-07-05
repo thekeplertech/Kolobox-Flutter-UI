@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
@@ -23,10 +22,12 @@ import '../../../core/ui/widgets/custom_text_field.dart';
 import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/date_helper.dart';
 import '../../../core/utils/utils.dart';
+import '../../dashboard/data/models/get_group_list_response_model.dart';
 import '../../dashboard/data/models/get_group_tenor_response_model.dart';
 import '../confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import '../confirm_pin_and_pay/bloc/confirm_pin_and_pay_state.dart';
 import '../recurring_deposit/select_recurring_period_widget.dart';
+import '../select_group/select_group_widget.dart';
 import '../select_tenor/select_tenor_widget.dart';
 
 class DepositYourKoloboxWidget extends BaseBlocWidget {
@@ -57,8 +58,13 @@ class _DepositYourKoloboxWidgetState
       StreamController<bool>.broadcast();
   DateTime? targetDateTime;
 
+  StreamController<bool> groupStreamController =
+      StreamController<bool>.broadcast();
+
   List<GroupTenorModel> tenors = [];
+  List<GroupModel> groups = [];
   GroupTenorModel? selectedTenorModel;
+  GroupModel? selectedGroupModel;
 
   KoloboxFundEnum? koloboxFundEnum;
   bool isInActive = false;
@@ -78,6 +84,12 @@ class _DepositYourKoloboxWidgetState
             tenors = state.model.tenors ?? [];
             Future.delayed(const Duration(milliseconds: 200), () {
               showTenorDialog();
+            });
+          }
+          if (state is GetGroupState) {
+            groups = state.model.types ?? [];
+            Future.delayed(const Duration(milliseconds: 200), () {
+              showGroupDialog();
             });
           }
         },
@@ -313,6 +325,37 @@ class _DepositYourKoloboxWidgetState
                 height: 15,
               ),
               Text(
+                'Select group',
+                style: AppStyle.b8Medium
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              StreamBuilder<bool>(
+                  stream: groupStreamController.stream,
+                  builder: (context, snapshot) {
+                    return CustomTextField(
+                      selectedGroupModel?.name ?? 'Select group',
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.words,
+                      onPressed: () {
+                        hideKeyboard();
+                        if (groups.isNotEmpty) {
+                          showGroupDialog();
+                        } else {
+                          BlocProvider.of<ConfirmPinAndPayBloc>(context)
+                              .add(GetGroupEvent());
+                        }
+                      },
+                      iconData: KoloBoxIcons.dropDownArrow,
+                    );
+                  }),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
                 'Enter Amount',
                 style: AppStyle.b8Regular
                     .copyWith(color: ColorList.blackThirdColor),
@@ -336,7 +379,7 @@ class _DepositYourKoloboxWidgetState
                     AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
                 textAlign: TextAlign.center,
                 contentPadding: const EdgeInsets.symmetric(vertical: 25),
-                controller: amountTextEditingController,
+                controller: saveAmountTextEditingController,
               ),
               const SizedBox(
                 height: 15,
@@ -803,6 +846,64 @@ class _DepositYourKoloboxWidgetState
       }
     } else if (isKoloGroup()) {
       if (isInActive) {
+        if (selectedGroupModel == null) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Select group',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (saveAmountTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter save amount',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (double.parse(getOnlyAmount(saveAmountTextEditingController.text)) <
+            double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Save Amount is less than minimum amount required for this product',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        StateContainer.of(context).openFundMyKoloBox(
+          fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+          amount: saveAmountTextEditingController.text,
+          targetAmount: amountTextEditingController.text,
+          periodEnum: selectedPeriodEnum,
+          groupTenorModel: selectedTenorModel,
+          targetDateTime: targetDateTime,
+          targetName: targetNameTextEditingController.text,
+        );
       } else {
         if (targetNameTextEditingController.text.isEmpty) {
           Utils.showToast(
@@ -976,6 +1077,17 @@ class _DepositYourKoloboxWidgetState
     ));
   }
 
+  showGroupDialog() {
+    showCustomBottomSheet(SelectGroupWidget(
+      selectedGroupModel: selectedGroupModel,
+      groupModels: groups,
+      onPop: (model) {
+        selectedGroupModel = model;
+        groupStreamController.add(true);
+      },
+    ));
+  }
+
   bool isKoloFlex() => koloboxFundEnum == KoloboxFundEnum.koloFlex;
 
   bool isKoloTarget() => koloboxFundEnum == KoloboxFundEnum.koloTarget;
@@ -992,6 +1104,7 @@ class _DepositYourKoloboxWidgetState
     amountTextEditingController.dispose();
     periodStreamController.close();
     tenorStreamController.close();
+    groupStreamController.close();
     targetDateStreamController.close();
   }
 }

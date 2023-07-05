@@ -46,3 +46,5 @@ class CreateGroupEvent extends ConfirmPinAndPayEvent {
 }
 
 class GetTenorEvent extends ConfirmPinAndPayEvent {}
+
+class GetGroupEvent extends ConfirmPinAndPayEvent {}

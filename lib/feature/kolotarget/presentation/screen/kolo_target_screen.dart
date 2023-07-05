@@ -234,6 +234,8 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                                 .getEarningsAmountValue(),
                             isPaid: !isLeft,
                             onPressed: () {
+                              StateContainer.of(context).openFundMyKoloBox(
+                                  fundEnum: KoloboxFundEnum.koloTarget);
                               navigatePush(
                                   context,
                                   KoloTransactionDetailPage(
@@ -318,60 +320,60 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
     });
   }
 
-  Widget getActiveWidget() {
-    return Column(
-      children: [
-        // ListView.builder(
-        //   shrinkWrap: true,
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   itemCount: transactions.length,
-        //   itemBuilder: (_, index) => Padding(
-        //     padding: const EdgeInsets.only(top: 15),
-        //     child: KoloTargetItemWidget(
-        //       onPressed: () {
-        //         navigatePush(
-        //             context,
-        //             const KoloTransactionDetailPage(
-        //               isPaid: false,
-        //             ));
-        //       },
-        //     ),
-        //   ),
-        // ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
-    );
-  }
+  // Widget getActiveWidget() {
+  //   return Column(
+  //     children: [
+  // ListView.builder(
+  //   shrinkWrap: true,
+  //   physics: const NeverScrollableScrollPhysics(),
+  //   itemCount: transactions.length,
+  //   itemBuilder: (_, index) => Padding(
+  //     padding: const EdgeInsets.only(top: 15),
+  //     child: KoloTargetItemWidget(
+  //       onPressed: () {
+  //         navigatePush(
+  //             context,
+  //             const KoloTransactionDetailPage(
+  //               isPaid: false,
+  //             ));
+  //       },
+  //     ),
+  //   ),
+  // ),
+  // const SizedBox(
+  //   height: 20,
+  // ),
+  // ],
+  // );
+  // }
 
-  Widget getPaidWidget() {
-    return Column(
-      children: [
-        // ListView.builder(
-        //   shrinkWrap: true,
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   itemCount: transactions.length,
-        //   itemBuilder: (_, index) => Padding(
-        //     padding: const EdgeInsets.only(top: 15),
-        //     child: KoloTargetItemWidget(
-        //       isPaid: true,
-        //       onPressed: () {
-        //         navigatePush(
-        //             context,
-        //             const KoloTransactionDetailPage(
-        //               isPaid: true,
-        //             ));
-        //       },
-        //     ),
-        //   ),
-        // ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
-    );
-  }
+  // Widget getPaidWidget() {
+  //   return Column(
+  //     children: [
+  // ListView.builder(
+  //   shrinkWrap: true,
+  //   physics: const NeverScrollableScrollPhysics(),
+  //   itemCount: transactions.length,
+  //   itemBuilder: (_, index) => Padding(
+  //     padding: const EdgeInsets.only(top: 15),
+  //     child: KoloTargetItemWidget(
+  //       isPaid: true,
+  //       onPressed: () {
+  //         navigatePush(
+  //             context,
+  //             const KoloTransactionDetailPage(
+  //               isPaid: true,
+  //             ));
+  //       },
+  //     ),
+  //   ),
+  // ),
+  // const SizedBox(
+  //   height: 20,
+  // ),
+  // ],
+  // );
+  // }
 
   @override
   void dispose() {

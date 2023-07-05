@@ -16,7 +16,9 @@ import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
+import '../../../../routes/routes.dart';
 import '../../../dashboard/data/models/get_group_list_response_model.dart';
+import '../../../kolo_transaction_detail/presentation/kolo_transaction_detail_page.dart';
 import '../../../widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
@@ -158,21 +160,21 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
                     stream: leftRightStreamController.stream,
                     builder: (_, snapshot) => Column(
                       children: [
-                        if (groupModels.isNotEmpty) ...[
-                          Button(
-                            'Create New',
-                            backgroundColor: ColorList.lightBlue3Color,
-                            textColor: ColorList.primaryColor,
-                            overlayColor: ColorList.blueColor,
-                            borderRadius: 32,
-                            onPressed: () {
-                              onClickCreateNew();
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                        ],
+                        // if (groupModels.isNotEmpty) ...[
+                        //   Button(
+                        //     'Create New',
+                        //     backgroundColor: ColorList.lightBlue3Color,
+                        //     textColor: ColorList.primaryColor,
+                        //     overlayColor: ColorList.blueColor,
+                        //     borderRadius: 32,
+                        //     onPressed: () {
+                        //       onClickCreateNew();
+                        //     },
+                        //   ),
+                        //   const SizedBox(
+                        //     height: 15,
+                        //   ),
+                        // ],
                         Container(
                           width: double.maxFinite,
                           decoration: BoxDecoration(
@@ -352,11 +354,15 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
             child: KoloGroupItemWidget(
               model: groupModels[index],
               onPressed: () {
-                // navigatePush(
-                //     context,
-                //     const KoloTransactionDetailPage(
-                //       isPaid: false,
-                //     ));
+                StateContainer.of(context)
+                    .openFundMyKoloBox(fundEnum: KoloboxFundEnum.koloGroup);
+                navigatePush(
+                    context,
+                    KoloTransactionDetailPage(
+                      groupModel: groupModels[index],
+                      interestAmount: KoloboxFundEnum.koloGroup.getInterest(),
+                      isPaid: isLeft,
+                    ));
               },
             ),
           ),

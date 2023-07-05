@@ -196,9 +196,24 @@ class _DepositSummaryWidgetState
                   ],
                 ],
               ] else if (isKoloGroup()) ...[
-                if (isInActive)
-                  ...[]
-                else ...[
+                if (isInActive) ...[
+                  getDepositAmount(StateContainer.of(context).getAmount()),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Deposit into my',
+                    style: AppStyle.b9Regular
+                        .copyWith(color: ColorList.blackThirdColor),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  ProductItemWidget(fundEnum: koloboxFundEnum!),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                ] else ...[
                   ProductItemWidget(fundEnum: koloboxFundEnum!),
                   const SizedBox(
                     height: 15,

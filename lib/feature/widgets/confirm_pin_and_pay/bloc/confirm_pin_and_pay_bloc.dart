@@ -34,6 +34,9 @@ class ConfirmPinAndPayBloc
     on<GetTenorEvent>((event, emit) async {
       await callGetTenorEvent(event, emit);
     });
+    on<GetGroupEvent>((event, emit) async {
+      await callGetGroupEvent(event, emit);
+    });
   }
 
   Future<void> callVerifyPinEvent(VerifyPinEvent event, Emitter emit) async {
@@ -136,6 +139,19 @@ class ConfirmPinAndPayBloc
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(GetTenorState(model: r.model));
+    });
+  }
+
+  Future<void> callGetGroupEvent(GetGroupEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.getGroupList();
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(GetGroupState(model: r.model));
     });
   }
 }

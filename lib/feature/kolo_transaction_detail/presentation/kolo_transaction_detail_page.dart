@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_group_list_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/investment_goal_response_model.dart';
 
 import '../../../core/base/base_page.dart';
@@ -8,7 +9,8 @@ import '../../koloflex/presentation/bloc/kolo_flex_bloc.dart';
 import 'screen/kolo_transaction_detail_screen.dart';
 
 class KoloTransactionDetailPage extends BasePage {
-  final InvestmentGoalModel investmentGoalModel;
+  final InvestmentGoalModel? investmentGoalModel;
+  final GroupModel? groupModel;
   final double interestAmount;
   final bool isPaid;
 
@@ -16,7 +18,8 @@ class KoloTransactionDetailPage extends BasePage {
     Key? key,
     required this.isPaid,
     required this.interestAmount,
-    required this.investmentGoalModel,
+    this.investmentGoalModel,
+    this.groupModel,
   }) : super(key: key);
 
   @override
@@ -32,6 +35,7 @@ class KoloTransactionDetailPageState
           isPaid: widget.isPaid,
           interestAmount: widget.interestAmount,
           investmentGoalModel: widget.investmentGoalModel,
+          groupModel: widget.groupModel,
         ),
       );
 }
