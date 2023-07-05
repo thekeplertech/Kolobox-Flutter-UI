@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,7 +85,7 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    if (!FlavorConfig.isProd()) {
+    if (FlavorConfig.isDev() && kDebugMode) {
       firstNameTextEditingController.text = 'Parth';
       lastNameTextEditingController.text = 'Suthar';
       emailAddressTextEditingController.text =

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +46,7 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    if (FlavorConfig.isDev()) {
+    if (FlavorConfig.isDev() && kDebugMode) {
       emailTextEditingController.text =
           'parth1234567891234567890@mailinator.com';
       passwordTextEditingController.text = 'kolobox@123';
