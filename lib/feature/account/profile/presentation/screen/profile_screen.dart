@@ -173,6 +173,31 @@ class ProfileScreenState extends BaseBlocWidgetState<ProfileScreen> {
         Row(
           children: [
             Text(
+              'Next of Kin',
+              style:
+                  AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+            ),
+            Expanded(
+              child: Text(
+                prefHelper?.getLoginResponseModel().nextOfKin ?? '',
+                style:
+                    AppStyle.b9Bold.copyWith(color: ColorList.blackSecondColor),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Divider(
+            color: ColorList.greyDisableCircleColor, height: 1, thickness: 1),
+        const SizedBox(
+          height: 25,
+        ),
+        Row(
+          children: [
+            Text(
               'Phone',
               style:
                   AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
@@ -217,43 +242,6 @@ class ProfileScreenState extends BaseBlocWidgetState<ProfileScreen> {
         ),
         Divider(
             color: ColorList.greyDisableCircleColor, height: 1, thickness: 1),
-      ],
-    );
-  }
-
-  Widget getEmptyWidget() {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 150,
-        ),
-        Image.asset(
-          imageUserPlaceHolder,
-          width: 48,
-          height: 48,
-        ),
-        const SizedBox(
-          height: 15,
-        ),
-        Text(
-          'You don’t have a next of kin',
-          style: AppStyle.b9Medium.copyWith(color: ColorList.blackThirdColor),
-        ),
-        const SizedBox(
-          height: 25,
-        ),
-        SizedBox(
-          width: 150,
-          child: Button(
-            'Add',
-            backgroundColor: ColorList.lightBlue3Color,
-            textColor: ColorList.primaryColor,
-            overlayColor: ColorList.blueColor,
-            borderRadius: 24,
-            verticalPadding: 10,
-            onPressed: () => comingSoon(),
-          ),
-        ),
       ],
     );
   }

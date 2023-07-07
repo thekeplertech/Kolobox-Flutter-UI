@@ -32,6 +32,8 @@ class _EditNextOfKinWidgetState
       TextEditingController();
   final TextEditingController lastNameTextEditingController =
       TextEditingController();
+  final TextEditingController nextOfKinTextEditingController =
+      TextEditingController();
   final TextEditingController phoneTextEditingController =
       TextEditingController();
   final TextEditingController occupationTextEditingController =
@@ -49,6 +51,8 @@ class _EditNextOfKinWidgetState
         prefHelper?.getLoginResponseModel().firstname ?? '';
     lastNameTextEditingController.text =
         prefHelper?.getLoginResponseModel().lastname ?? '';
+    nextOfKinTextEditingController.text =
+        prefHelper?.getLoginResponseModel().nextOfKin ?? '';
     phoneTextEditingController.text =
         prefHelper?.getLoginResponseModel().phone ?? '';
     occupationTextEditingController.text =
@@ -158,6 +162,24 @@ class _EditNextOfKinWidgetState
                   },
                 );
               }),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            'Next of Kin',
+            style:
+                AppStyle.b9Medium.copyWith(color: ColorList.blackSecondColor),
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          CustomTextField(
+            'Enter next of kin',
+            controller: nextOfKinTextEditingController,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.done,
+            textCapitalization: TextCapitalization.words,
+          ),
           const SizedBox(
             height: 15,
           ),
@@ -284,6 +306,22 @@ class _EditNextOfKinWidgetState
           ));
       return;
     }
+    if (nextOfKinTextEditingController.text.isEmpty) {
+      Utils.showToast(
+          context,
+          ToastWidget(
+            'Enter next of kin',
+            borderColor: ColorList.redDarkColor,
+            backgroundColor: ColorList.white,
+            textColor: ColorList.black,
+            messageIcon: imageCloseRed,
+            closeWidget: Image.asset(
+              imageClose,
+              color: ColorList.black,
+            ),
+          ));
+      return;
+    }
     if (phoneTextEditingController.text.isEmpty) {
       Utils.showToast(
           context,
@@ -339,7 +377,7 @@ class _EditNextOfKinWidgetState
       lastname: lastNameTextEditingController.text,
       email: prefHelper?.getLoginResponseModel().email ?? '',
       phone: phoneTextEditingController.text,
-      nextOfKin: prefHelper?.getLoginResponseModel().nextOfKin ?? '',
+      nextOfKin: nextOfKinTextEditingController.text,
       emailNotification:
           prefHelper?.getLoginResponseModel().emailNotification ?? false,
       smsNotification:
@@ -368,6 +406,7 @@ class _EditNextOfKinWidgetState
     super.dispose();
     firstNameTextEditingController.dispose();
     lastNameTextEditingController.dispose();
+    nextOfKinTextEditingController.dispose();
     phoneTextEditingController.dispose();
     occupationTextEditingController.dispose();
     dateOfBirthStreamController.close();
