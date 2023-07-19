@@ -160,21 +160,21 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
                     stream: leftRightStreamController.stream,
                     builder: (_, snapshot) => Column(
                       children: [
-                        // if (groupModels.isNotEmpty) ...[
-                        //   Button(
-                        //     'Create New',
-                        //     backgroundColor: ColorList.lightBlue3Color,
-                        //     textColor: ColorList.primaryColor,
-                        //     overlayColor: ColorList.blueColor,
-                        //     borderRadius: 32,
-                        //     onPressed: () {
-                        //       onClickCreateNew();
-                        //     },
-                        //   ),
-                        //   const SizedBox(
-                        //     height: 15,
-                        //   ),
-                        // ],
+                        if (groupModels.isNotEmpty) ...[
+                          Button(
+                            'Create New',
+                            backgroundColor: ColorList.lightBlue3Color,
+                            textColor: ColorList.primaryColor,
+                            overlayColor: ColorList.blueColor,
+                            borderRadius: 32,
+                            onPressed: () {
+                              onClickCreateNew();
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                        ],
                         Container(
                           width: double.maxFinite,
                           decoration: BoxDecoration(
@@ -313,14 +313,15 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
       DepositYourKoloboxWidgetPage(
         key: Key(
             'deposit_your_kolobox_${DateTime.now().millisecondsSinceEpoch}'),
+        isCreateGroup: true,
       ),
     ).then((value) {
       BlocProvider.of<DashboardBloc>(context)
           .add(ShowEnableBottomScreenEvent());
       if (StateContainer.of(context).isSuccessful) {
-        // Future.delayed(const Duration(milliseconds: 300), () {
-        //   callInvestmentGoal();
-        // });
+        Future.delayed(const Duration(milliseconds: 300), () {
+          callGroup();
+        });
       }
       StateContainer.of(context).clearData();
     });
@@ -362,6 +363,7 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
                       groupModel: groupModels[index],
                       interestAmount: KoloboxFundEnum.koloGroup.getInterest(),
                       isPaid: isLeft,
+                      koloboxFundEnum: KoloboxFundEnum.koloGroup,
                     ));
               },
             ),

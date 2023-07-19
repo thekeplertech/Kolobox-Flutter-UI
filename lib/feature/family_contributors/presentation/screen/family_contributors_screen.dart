@@ -2,16 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_family_user_list_response_model.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
+import '../../../../core/enums/kolobox_fund_enum.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../kolo_transaction_detail/presentation/widgets/family_contributors_widget.dart';
+import '../../../dashboard/data/models/group_users_data_model.dart';
 import '../../../widgets/home_app_bar_widget.dart';
+import '../widgets/family_contributors_widget.dart';
 
 class FamilyContributorsScreen extends BaseBlocWidget {
+  final KoloboxFundEnum koloboxFundEnum;
+  final List<GroupUsers>? groupUsers;
+  final List<FamilyUserModel>? familyUsers;
+
   const FamilyContributorsScreen({
     Key? key,
+    required this.koloboxFundEnum,
+    this.groupUsers,
+    this.familyUsers,
   }) : super(key: key);
 
   @override
@@ -44,7 +54,9 @@ class FamilyContributorsState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Family Contributors',
+                      widget.koloboxFundEnum == KoloboxFundEnum.koloFamily
+                          ? 'Family Contributors'
+                          : 'Contributors',
                       style: AppStyle.b4Bold
                           .copyWith(color: ColorList.blackSecondColor),
                     ),
@@ -59,20 +71,41 @@ class FamilyContributorsState
                     const SizedBox(
                       height: 25,
                     ),
-                    GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 14,
-                        mainAxisSpacing: 14,
-                        childAspectRatio: 1.2,
+                    if (widget.groupUsers != null) ...[
+                      GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14,
+                          childAspectRatio: 1.2,
+                        ),
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: widget.groupUsers?.length,
+                        itemBuilder: (_, index) => FamilyContributorsWidget(
+                          groupUser: widget.groupUsers![index],
+                          koloboxFundEnum: widget.koloboxFundEnum,
+                        ),
                       ),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 12,
-                      itemBuilder: (_, index) =>
-                          const FamilyContributorsWidget(),
-                    ),
+                    ] else if (widget.familyUsers != null) ...[
+                      GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14,
+                          childAspectRatio: 1.2,
+                        ),
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: widget.familyUsers?.length,
+                        itemBuilder: (_, index) => FamilyContributorsWidget(
+                          familyUserModel: widget.familyUsers![index],
+                          koloboxFundEnum: widget.koloboxFundEnum,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

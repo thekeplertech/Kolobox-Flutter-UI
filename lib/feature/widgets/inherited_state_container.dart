@@ -51,6 +51,7 @@ class StateContainerState extends State<StateContainer> {
   GroupModel? _groupModel;
   DateTime? _targetDate;
   String? _targetName;
+  bool? _isCreateGroup;
   bool isSuccessful = false;
 
   @override
@@ -69,6 +70,8 @@ class StateContainerState extends State<StateContainer> {
   DateTime? getTargetDate() => _targetDate;
 
   String? getTargetName() => _targetName;
+
+  bool? isCreateGroup() => _isCreateGroup;
 
   PaymentGatewayEnum? getPaymentGatewayEnum() => _paymentGatewayEnum;
 
@@ -90,6 +93,7 @@ class StateContainerState extends State<StateContainer> {
     String? amount,
     String? targetAmount,
     String? targetName,
+    bool? isCreateGroup,
     DateTime? targetDateTime,
     PaymentGatewayEnum? paymentEnum,
     PeriodEnum? periodEnum,
@@ -106,6 +110,7 @@ class StateContainerState extends State<StateContainer> {
         .replaceAll(',', '')
         .trim();
     _targetName = targetName;
+    _isCreateGroup = isCreateGroup;
     _targetDate = targetDateTime;
     _paymentGatewayEnum = paymentEnum;
     _periodEnum = periodEnum;
@@ -127,6 +132,8 @@ class StateContainerState extends State<StateContainer> {
     _amount = null;
     _targetAmount = null;
     _targetDate = null;
+    _targetName = null;
+    _isCreateGroup = null;
     _paymentGatewayEnum = null;
     _groupTenorModel = null;
     _groupModel = null;

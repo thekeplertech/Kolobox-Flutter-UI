@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/ui/extension.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
 import '../../../core/colors/color_list.dart';
@@ -26,7 +25,6 @@ class _InviteFamilyMemberSuccessfullyWidgetState
     return Padding(
       padding: const EdgeInsets.only(top: 45, left: 28, right: 28, bottom: 31),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(child: Image.asset(imageConfirm)),
           const SizedBox(
@@ -57,22 +55,18 @@ class _InviteFamilyMemberSuccessfullyWidgetState
             height: 40,
           ),
           Button(
-            'Next',
+            'Ok',
             backgroundColor: ColorList.primaryColor,
             textColor: ColorList.white,
             overlayColor: ColorList.blueColor,
             borderRadius: 32,
             onPressed: () {
-              // BlocProvider.of<DashboardBloc>(context).add(
-              //   ClearBackStackEvent(
-              //     until: StateContainer.of(context).isFromFundMyKoloBox
-              //         ? '/'
-              //         : StateContainer.of(context)
-              //             .koloboxFundEnum
-              //             .getFundPageValue(
-              //                 StateContainer.of(context).isFromDetail),
-              //   ),
-              // );
+              Future.delayed(const Duration(milliseconds: 300), () {
+                StateContainer.of(context).isSuccessful = true;
+                BlocProvider.of<DashboardBloc>(context).add(ClearBackStackEvent(
+                  until: StateContainer.of(context).getPopUntil(),
+                ));
+              });
             },
           ),
         ],

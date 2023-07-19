@@ -5,6 +5,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/investment_goal_re
 
 import '../../../core/base/base_page.dart';
 import '../../../core/bloc/master_bloc.dart';
+import '../../../core/enums/kolobox_fund_enum.dart';
 import '../../koloflex/presentation/bloc/kolo_flex_bloc.dart';
 import 'screen/kolo_transaction_detail_screen.dart';
 
@@ -13,6 +14,7 @@ class KoloTransactionDetailPage extends BasePage {
   final GroupModel? groupModel;
   final double interestAmount;
   final bool isPaid;
+  final KoloboxFundEnum koloboxFundEnum;
 
   const KoloTransactionDetailPage({
     Key? key,
@@ -20,6 +22,7 @@ class KoloTransactionDetailPage extends BasePage {
     required this.interestAmount,
     this.investmentGoalModel,
     this.groupModel,
+    required this.koloboxFundEnum,
   }) : super(key: key);
 
   @override
@@ -36,6 +39,7 @@ class KoloTransactionDetailPageState
           interestAmount: widget.interestAmount,
           investmentGoalModel: widget.investmentGoalModel,
           groupModel: widget.groupModel,
+          koloboxFundEnum: widget.koloboxFundEnum,
         ),
       );
 }

@@ -27,12 +27,16 @@ import '../../dashboard/data/models/get_group_tenor_response_model.dart';
 import '../confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import '../confirm_pin_and_pay/bloc/confirm_pin_and_pay_state.dart';
 import '../recurring_deposit/select_recurring_period_widget.dart';
+import '../select_group/select_family_widget.dart';
 import '../select_group/select_group_widget.dart';
 import '../select_tenor/select_tenor_widget.dart';
 
 class DepositYourKoloboxWidget extends BaseBlocWidget {
+  final bool isCreateGroup;
+
   const DepositYourKoloboxWidget({
     Key? key,
+    required this.isCreateGroup,
   }) : super(key: key);
 
   @override
@@ -63,8 +67,10 @@ class _DepositYourKoloboxWidgetState
 
   List<GroupTenorModel> tenors = [];
   List<GroupModel> groups = [];
+  List<GroupModel> families = [];
   GroupTenorModel? selectedTenorModel;
   GroupModel? selectedGroupModel;
+  GroupModel? selectedFamilyModel;
 
   KoloboxFundEnum? koloboxFundEnum;
   bool isInActive = false;
@@ -90,6 +96,12 @@ class _DepositYourKoloboxWidgetState
             groups = state.model.types ?? [];
             Future.delayed(const Duration(milliseconds: 200), () {
               showGroupDialog();
+            });
+          }
+          if (state is GetFamilyState) {
+            families = state.model.types ?? [];
+            Future.delayed(const Duration(milliseconds: 200), () {
+              showFamilyDialog();
             });
           }
         },
@@ -319,7 +331,7 @@ class _DepositYourKoloboxWidgetState
               ),
             ],
           ] else if (isKoloGroup()) ...[
-            if (isInActive) ...[
+            if (isInActive && !widget.isCreateGroup) ...[
               getOptionWidget(),
               const SizedBox(
                 height: 15,
@@ -395,6 +407,181 @@ class _DepositYourKoloboxWidgetState
               ),
               CustomTextField(
                 'Enter your target name',
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.words,
+                controller: targetNameTextEditingController,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Target Amount',
+                style: AppStyle.b8Regular
+                    .copyWith(color: ColorList.blackThirdColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              CustomTextField(
+                '₦ 0.00',
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                textCapitalization: TextCapitalization.none,
+                inputFormatter: [
+                  CurrencyTextInputFormatter(
+                    name: '₦ ',
+                  )
+                ],
+                textStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                hintStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                textAlign: TextAlign.center,
+                contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                controller: amountTextEditingController,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Select tenor',
+                style: AppStyle.b8Medium
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              StreamBuilder<bool>(
+                  stream: tenorStreamController.stream,
+                  builder: (context, snapshot) {
+                    return CustomTextField(
+                      selectedTenorModel?.tenor ?? 'Select Tenor',
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.words,
+                      onPressed: () {
+                        hideKeyboard();
+                        if (tenors.isNotEmpty) {
+                          showTenorDialog();
+                        } else {
+                          BlocProvider.of<ConfirmPinAndPayBloc>(context)
+                              .add(GetTenorEvent());
+                        }
+                      },
+                      iconData: KoloBoxIcons.dropDownArrow,
+                    );
+                  }),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'How much you plan to save now',
+                style: AppStyle.b9Medium
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              CustomTextField(
+                '₦ 0.00',
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                textCapitalization: TextCapitalization.none,
+                inputFormatter: [
+                  CurrencyTextInputFormatter(
+                    name: '₦ ',
+                  )
+                ],
+                textStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+                hintStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.blackSecondColor),
+                textAlign: TextAlign.center,
+                contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                controller: saveAmountTextEditingController,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+            ],
+          ] else if (isKoloFamily()) ...[
+            if (isInActive && !widget.isCreateGroup) ...[
+              getOptionWidget(),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Select family',
+                style: AppStyle.b8Medium
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              StreamBuilder<bool>(
+                  stream: groupStreamController.stream,
+                  builder: (context, snapshot) {
+                    return CustomTextField(
+                      selectedFamilyModel?.name ?? 'Select family',
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.words,
+                      onPressed: () {
+                        hideKeyboard();
+                        if (families.isNotEmpty) {
+                          showFamilyDialog();
+                        } else {
+                          BlocProvider.of<ConfirmPinAndPayBloc>(context)
+                              .add(GetFamilyEvent());
+                        }
+                      },
+                      iconData: KoloBoxIcons.dropDownArrow,
+                    );
+                  }),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Enter Amount',
+                style: AppStyle.b8Regular
+                    .copyWith(color: ColorList.blackThirdColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              CustomTextField(
+                '₦ 0.00',
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.done,
+                textCapitalization: TextCapitalization.none,
+                inputFormatter: [
+                  CurrencyTextInputFormatter(
+                    name: '₦ ',
+                  )
+                ],
+                textStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                hintStyle:
+                    AppStyle.b3Bold.copyWith(color: ColorList.primaryColor),
+                textAlign: TextAlign.center,
+                contentPadding: const EdgeInsets.symmetric(vertical: 25),
+                controller: saveAmountTextEditingController,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+            ] else ...[
+              Text(
+                'Name your family',
+                style: AppStyle.b8Regular
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              CustomTextField(
+                'Enter your family name',
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.words,
@@ -845,7 +1032,7 @@ class _DepositYourKoloboxWidgetState
         );
       }
     } else if (isKoloGroup()) {
-      if (isInActive) {
+      if (isInActive && !widget.isCreateGroup) {
         if (selectedGroupModel == null) {
           Utils.showToast(
               context,
@@ -1012,6 +1199,178 @@ class _DepositYourKoloboxWidgetState
           groupTenorModel: selectedTenorModel,
           targetDateTime: targetDateTime,
           targetName: targetNameTextEditingController.text,
+          isCreateGroup: widget.isCreateGroup,
+        );
+      }
+    } else if (isKoloFamily()) {
+      if (isInActive && !widget.isCreateGroup) {
+        if (selectedFamilyModel == null) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Select family',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (saveAmountTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter save amount',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (double.parse(getOnlyAmount(saveAmountTextEditingController.text)) <
+            double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Save Amount is less than minimum amount required for this product',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        StateContainer.of(context).openFundMyKoloBox(
+          fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+          amount: saveAmountTextEditingController.text,
+          targetAmount: amountTextEditingController.text,
+          periodEnum: selectedPeriodEnum,
+          groupTenorModel: selectedTenorModel,
+          groupModel: selectedFamilyModel,
+          targetDateTime: targetDateTime,
+          targetName: targetNameTextEditingController.text,
+        );
+      } else {
+        if (targetNameTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter your family name',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (amountTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter target amount',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (double.parse(getOnlyAmount(amountTextEditingController.text)) <
+            double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Target Amount is less than minimum amount required for this product',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (selectedTenorModel == null) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Select tenor',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (saveAmountTextEditingController.text.isEmpty) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Enter save amount',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        if (double.parse(getOnlyAmount(saveAmountTextEditingController.text)) <
+            double.parse(koloboxFundEnum!.getMinimumAmountValue())) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Save Amount is less than minimum amount required for this product',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
+        StateContainer.of(context).openFundMyKoloBox(
+          fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+          amount: saveAmountTextEditingController.text,
+          targetAmount: amountTextEditingController.text,
+          periodEnum: selectedPeriodEnum,
+          groupTenorModel: selectedTenorModel,
+          targetDateTime: targetDateTime,
+          targetName: targetNameTextEditingController.text,
+          isCreateGroup: widget.isCreateGroup,
         );
       }
     }
@@ -1084,6 +1443,17 @@ class _DepositYourKoloboxWidgetState
       groupModels: groups,
       onPop: (model) {
         selectedGroupModel = model;
+        groupStreamController.add(true);
+      },
+    ));
+  }
+
+  showFamilyDialog() {
+    showCustomBottomSheet(SelectFamilyWidget(
+      selectedGroupModel: selectedFamilyModel,
+      groupModels: families,
+      onPop: (model) {
+        selectedFamilyModel = model;
         groupStreamController.add(true);
       },
     ));

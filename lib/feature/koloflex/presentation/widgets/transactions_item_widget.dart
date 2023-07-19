@@ -6,15 +6,18 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_
 import '../../../../core/colors/color_list.dart';
 import '../../../../core/constants/kolo_box_icon.dart';
 import '../../../../core/ui/style/app_style.dart';
+import '../../../dashboard/data/models/group_transactions_data_model.dart';
 
 class TransactionsItemWidget extends StatelessWidget {
   final Function() onPressed;
-  final Transactions transactions;
+  final Transactions? transactions;
+  final GroupTransactions? groupTransactions;
 
   const TransactionsItemWidget({
     Key? key,
     required this.onPressed,
-    required this.transactions,
+    this.transactions,
+    this.groupTransactions,
   }) : super(key: key);
 
   @override
@@ -62,8 +65,15 @@ class TransactionsItemWidget extends StatelessWidget {
                         height: 4,
                       ),
                       Text(
-                        DateHelper.getDateFromDateTime(
-                            transactions.createdAt, 'MMM dd, yyyy - hh:mm a'),
+                        (transactions?.createdAt != null
+                            ? DateHelper.getDateFromDateTime(
+                                transactions?.createdAt,
+                                'MMM dd, yyyy - hh:mm a')
+                            : (groupTransactions?.createdAt != null
+                                ? DateHelper.getDateFromDateTime(
+                                    groupTransactions?.createdAt,
+                                    'MMM dd, yyyy - hh:mm a')
+                                : '')),
                         style: AppStyle.b10SemiBold
                             .copyWith(color: ColorList.greyLight2Color),
                       ),
@@ -71,9 +81,14 @@ class TransactionsItemWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  CurrencyTextInputFormatter.formatAmount(isDeposit()
-                      ? transactions.depositAmount
-                      : transactions.withdrawalAmount),
+                  (transactions != null
+                      ? CurrencyTextInputFormatter.formatAmount(isDeposit()
+                          ? transactions?.depositAmount
+                          : transactions?.withdrawalAmount)
+                      : (groupTransactions != null
+                          ? CurrencyTextInputFormatter.formatAmount(
+                              groupTransactions?.totalAmount)
+                          : '')),
                   style: AppStyle.b8SemiBold
                       .copyWith(color: ColorList.blackSecondColor),
                 ),
@@ -92,5 +107,7 @@ class TransactionsItemWidget extends StatelessWidget {
     );
   }
 
-  bool isDeposit() => double.parse(transactions.depositAmount ?? '0') != 0;
+  bool isDeposit() => transactions != null
+      ? double.parse(transactions?.depositAmount ?? '0') != 0
+      : true;
 }

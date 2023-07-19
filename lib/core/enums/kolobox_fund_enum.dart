@@ -409,7 +409,7 @@ extension EnumIdExtensions on String {
       // case koloTargetPlusProductName:
       //   return KoloboxFundEnum.koloTarget;
       case koloGroupProductName:
-        return KoloboxFundEnum.koloTarget;
+        return KoloboxFundEnum.koloGroup;
       case koloFamilyProductName:
         return KoloboxFundEnum.koloTarget;
     }

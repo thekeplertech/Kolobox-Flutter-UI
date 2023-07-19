@@ -8,6 +8,7 @@ import 'package:kolobox_new_app/core/enums/period_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_group_list_response_model.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
@@ -19,6 +20,7 @@ import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/date_helper.dart';
 import '../../../core/utils/utils.dart';
 import '../../../di/injection_container.dart';
+import '../../dashboard/data/models/create_family_request_model.dart';
 import '../../dashboard/data/models/create_group_request_model.dart';
 import '../../dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../dashboard/data/models/select_product_request_model.dart';
@@ -55,6 +57,43 @@ class _DepositSummaryWidgetState
         listener: (_, state) {
           if (state is SelectProductState) {
             Future.delayed(const Duration(milliseconds: 200), () {
+              if (isKoloGroup()) {
+                StateContainer.of(context).openFundMyKoloBox(
+                  fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+                  amount: StateContainer.of(context).getAmount(),
+                  periodEnum: StateContainer.of(context).getPeriodEnum(),
+                  groupTenorModel:
+                      StateContainer.of(context).getGroupTenorModel(),
+                  groupModel: state.createGroupResponseModel != null
+                      ? GroupModel(
+                          groupId: state.createGroupResponseModel?.id,
+                          name: state.createGroupResponseModel?.name,
+                        )
+                      : null,
+                  targetAmount: StateContainer.of(context).getTargetAmount(),
+                  targetDateTime: StateContainer.of(context).getTargetDate(),
+                  targetName: StateContainer.of(context).getTargetName(),
+                  paymentEnum: PaymentGatewayEnum.payStack,
+                );
+              } else if (isKoloFamily()) {
+                StateContainer.of(context).openFundMyKoloBox(
+                  fundEnum: StateContainer.of(context).getKoloBoxEnum(),
+                  amount: StateContainer.of(context).getAmount(),
+                  periodEnum: StateContainer.of(context).getPeriodEnum(),
+                  groupTenorModel:
+                      StateContainer.of(context).getGroupTenorModel(),
+                  groupModel: state.createFamilyResponseModel != null
+                      ? GroupModel(
+                          groupId: state.createFamilyResponseModel?.id,
+                          name: state.createFamilyResponseModel?.name,
+                        )
+                      : null,
+                  targetAmount: StateContainer.of(context).getTargetAmount(),
+                  targetDateTime: StateContainer.of(context).getTargetDate(),
+                  targetName: StateContainer.of(context).getTargetName(),
+                  paymentEnum: PaymentGatewayEnum.payStack,
+                );
+              }
               callPayment(
                   state.requestModel.depositAmount,
                   state.responseModel.data?.accessCode ?? '',
@@ -73,9 +112,54 @@ class _DepositSummaryWidgetState
               onSuccess(state.amount, state.referenceCode);
             });
           } else if (state is CreateGroupState) {
-            // Group created pay the save amount Go to success page
+            // Group created now select product
             Future.delayed(const Duration(milliseconds: 300), () {
-              onSuccess(state.amount, state.referenceCode);
+              // Call for select product api
+              BlocProvider.of<ConfirmPinAndPayBloc>(context)
+                  .add(SelectProductEvent(
+                userId: prefHelper?.getLoginResponseModel().id ?? '',
+                model: SelectProductRequestModel(
+                  productId: StateContainer.of(context)
+                          .getKoloBoxEnum()
+                          ?.getProductId ??
+                      '',
+                  savingFrequency: StateContainer.of(context)
+                      .getPeriodEnum()
+                      .getPeriodPassValue,
+                  depositAmount:
+                      getOnlyAmount(StateContainer.of(context).getAmount()),
+                  groupId: state.responseModel.id ?? '',
+                  subUserId: isKoloFamily()
+                      ? prefHelper?.getLoginResponseModel().id ?? ''
+                      : '',
+                ),
+                createGroupResponseModel: state.responseModel,
+              ));
+            });
+          } else if (state is CreateFamilyState) {
+            // Group created now select product
+            Future.delayed(const Duration(milliseconds: 300), () {
+              // Call for select product api
+              BlocProvider.of<ConfirmPinAndPayBloc>(context)
+                  .add(SelectProductEvent(
+                userId: prefHelper?.getLoginResponseModel().id ?? '',
+                model: SelectProductRequestModel(
+                  productId: StateContainer.of(context)
+                          .getKoloBoxEnum()
+                          ?.getProductId ??
+                      '',
+                  savingFrequency: StateContainer.of(context)
+                      .getPeriodEnum()
+                      .getPeriodPassValue,
+                  depositAmount:
+                      getOnlyAmount(StateContainer.of(context).getAmount()),
+                  groupId: state.responseModel.id ?? '',
+                  subUserId: isKoloFamily()
+                      ? prefHelper?.getLoginResponseModel().id ?? ''
+                      : '',
+                ),
+                createFamilyResponseModel: state.responseModel,
+              ));
             });
           }
         },
@@ -196,7 +280,8 @@ class _DepositSummaryWidgetState
                   ],
                 ],
               ] else if (isKoloGroup()) ...[
-                if (isInActive) ...[
+                if (isInActive &&
+                    !(StateContainer.of(context).isCreateGroup() ?? false)) ...[
                   getDepositAmount(StateContainer.of(context).getAmount()),
                   const SizedBox(
                     height: 15,
@@ -236,6 +321,50 @@ class _DepositSummaryWidgetState
                   ),
                   if (koloboxFundEnum == KoloboxFundEnum.koloGroup) ...[
                     getKoloGroupSummaryWidget(),
+                  ],
+                ],
+              ] else if (isKoloFamily()) ...[
+                if (isInActive &&
+                    !(StateContainer.of(context).isCreateGroup() ?? false)) ...[
+                  getDepositAmount(StateContainer.of(context).getAmount()),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Deposit into my',
+                    style: AppStyle.b9Regular
+                        .copyWith(color: ColorList.blackThirdColor),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  ProductItemWidget(fundEnum: koloboxFundEnum!),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    'Deposit into my group',
+                    style: AppStyle.b9Regular
+                        .copyWith(color: ColorList.blackThirdColor),
+                  ),
+                  const SizedBox(
+                    height: 7,
+                  ),
+                  Text(
+                    StateContainer.of(context).getGroupModel()?.name ?? '',
+                    style: AppStyle.b8Medium
+                        .copyWith(color: ColorList.blackThirdColor),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                ] else ...[
+                  ProductItemWidget(fundEnum: koloboxFundEnum!),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  if (koloboxFundEnum == KoloboxFundEnum.koloFamily) ...[
+                    getKoloFamilySummaryWidget(),
                   ],
                 ],
               ],
@@ -333,6 +462,7 @@ class _DepositSummaryWidgetState
       targetDateTime: StateContainer.of(context).getTargetDate(),
       targetName: StateContainer.of(context).getTargetName(),
       paymentEnum: PaymentGatewayEnum.payStack,
+      isCreateGroup: StateContainer.of(context).isCreateGroup(),
     );
 
     if (isKoloFlex()) {
@@ -340,6 +470,8 @@ class _DepositSummaryWidgetState
     } else if (isKoloTarget()) {
       initiatePayment();
     } else if (isKoloGroup()) {
+      initiatePayment();
+    } else if (isKoloFamily()) {
       initiatePayment();
     }
   }
@@ -366,34 +498,116 @@ class _DepositSummaryWidgetState
       return;
     }
 
-    if (isInActive) {
-      // Call for top up api
-      String groupId = '';
-      if (isKoloGroup() && StateContainer.of(context).getGroupModel() != null) {
-        groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
+    if (StateContainer.of(context).isCreateGroup() ?? false) {
+      if (isKoloGroup()) {
+        // Create Group
+        BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+          CreateGroupEvent(
+            model: CreateGroupRequestModel(
+              name: StateContainer.of(context).getTargetName() ?? '',
+              tenorId:
+                  StateContainer.of(context).getGroupTenorModel()?.id ?? '',
+              groupTypeId: "",
+              minimumAmount: StateContainer.of(context).getTargetAmount(),
+              frequency:
+                  StateContainer.of(context).getPeriodEnum().getPeriodPassValue,
+            ),
+          ),
+        );
+      } else {
+        // Create Family
+        BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+          CreateFamilyEvent(
+            model: CreateFamilyRequestModel(
+              name: StateContainer.of(context).getTargetName() ?? '',
+              tenorId:
+                  StateContainer.of(context).getGroupTenorModel()?.id ?? '',
+              groupTypeId: "",
+              minimumAmount: StateContainer.of(context).getTargetAmount(),
+              frequency:
+                  StateContainer.of(context).getPeriodEnum().getPeriodPassValue,
+            ),
+          ),
+        );
       }
-      BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
-          productId:
-              StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
-          model: TopUpRequestModel(
-            productId:
-                StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
-            depositAmount:
-                getOnlyAmount(StateContainer.of(context).getAmount()),
-            groupId: groupId,
-          )));
     } else {
-      // Call for select product api
-      BlocProvider.of<ConfirmPinAndPayBloc>(context).add(SelectProductEvent(
-          userId: prefHelper?.getLoginResponseModel().id ?? '',
-          model: SelectProductRequestModel(
+      if (isInActive) {
+        // Call for top up api
+        String groupId = '';
+        String subUserId = '';
+        if (isKoloGroup() &&
+            StateContainer.of(context).getGroupModel() != null) {
+          groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
+        } else if (isKoloFamily() &&
+            StateContainer.of(context).getGroupModel() != null) {
+          groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
+          subUserId = prefHelper?.getLoginResponseModel().id ?? '';
+        }
+        BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
             productId:
                 StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
-            savingFrequency:
-                StateContainer.of(context).getPeriodEnum().getPeriodPassValue,
-            depositAmount:
-                getOnlyAmount(StateContainer.of(context).getAmount()),
-          )));
+            model: TopUpRequestModel(
+              productId:
+                  StateContainer.of(context).getKoloBoxEnum()?.getProductId ??
+                      '',
+              depositAmount:
+                  getOnlyAmount(StateContainer.of(context).getAmount()),
+              groupId: groupId,
+              subUserId: subUserId,
+            )));
+      } else {
+        if (isKoloGroup()) {
+          // Create Group
+          BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+            CreateGroupEvent(
+              model: CreateGroupRequestModel(
+                name: StateContainer.of(context).getTargetName() ?? '',
+                tenorId:
+                    StateContainer.of(context).getGroupTenorModel()?.id ?? '',
+                groupTypeId: "",
+                minimumAmount: StateContainer.of(context).getTargetAmount(),
+                frequency: StateContainer.of(context)
+                    .getPeriodEnum()
+                    .getPeriodPassValue,
+              ),
+            ),
+          );
+        } else if (isKoloFamily()) {
+          // Create Group
+          BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+            CreateFamilyEvent(
+              model: CreateFamilyRequestModel(
+                name: StateContainer.of(context).getTargetName() ?? '',
+                tenorId:
+                    StateContainer.of(context).getGroupTenorModel()?.id ?? '',
+                groupTypeId: "",
+                minimumAmount: StateContainer.of(context).getTargetAmount(),
+                frequency: StateContainer.of(context)
+                    .getPeriodEnum()
+                    .getPeriodPassValue,
+              ),
+            ),
+          );
+        } else {
+          // Call for select product api
+          BlocProvider.of<ConfirmPinAndPayBloc>(context).add(SelectProductEvent(
+              userId: prefHelper?.getLoginResponseModel().id ?? '',
+              model: SelectProductRequestModel(
+                productId:
+                    StateContainer.of(context).getKoloBoxEnum()?.getProductId ??
+                        '',
+                savingFrequency: StateContainer.of(context)
+                    .getPeriodEnum()
+                    .getPeriodPassValue,
+                depositAmount:
+                    getOnlyAmount(StateContainer.of(context).getAmount()),
+                groupId: '',
+                subUserId: isKoloFamily()
+                    ? prefHelper?.getLoginResponseModel().id ?? ''
+                    : '',
+              )));
+        }
+      }
     }
   }
 
@@ -418,24 +632,6 @@ class _DepositSummaryWidgetState
                   dueDate: DateHelper.getTextFromDateTime(
                       StateContainer.of(context).getTargetDate()!,
                       'yyyy-MM-dd'),
-                ),
-                amount: amount,
-                referenceCode: referenceCode,
-              ),
-            );
-          } else if (!isInActive && isKoloGroup()) {
-            // Create Group
-            BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
-              CreateGroupEvent(
-                model: CreateGroupRequestModel(
-                  name: StateContainer.of(context).getTargetName() ?? '',
-                  tenorId:
-                      StateContainer.of(context).getGroupTenorModel()?.id ?? '',
-                  groupTypeId: "",
-                  minimumAmount: StateContainer.of(context).getTargetAmount(),
-                  frequency: StateContainer.of(context)
-                      .getPeriodEnum()
-                      .getPeriodPassValue,
                 ),
                 amount: amount,
                 referenceCode: referenceCode,
@@ -727,6 +923,146 @@ class _DepositSummaryWidgetState
             children: [
               Text(
                 'Target amount',
+                style: AppStyle.b9Regular
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                CurrencyTextInputFormatter.formatAmount(targetAmount),
+                style:
+                    AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: ColorList.primaryColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          width: double.maxFinite,
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: Column(
+              children: [
+                Text(
+                  'Saving now',
+                  style: AppStyle.b8Regular.copyWith(color: ColorList.white),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  CurrencyTextInputFormatter.formatAmount(amount),
+                  style: AppStyle.b3Bold.copyWith(color: ColorList.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Container(
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+              color: ColorList.lightBlue11Color,
+              borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Text(
+                'Recurring period',
+                style: AppStyle.b8Medium
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 3,
+              ),
+              Text(
+                periodEnum.getPeriodValue,
+                style:
+                    AppStyle.b6Bold.copyWith(color: ColorList.blackSecondColor),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+      ],
+    );
+  }
+
+  Widget getKoloFamilySummaryWidget() {
+    String targetName = StateContainer.of(context).getTargetName() ?? '';
+    DateTime? targetDate = StateContainer.of(context).getTargetDate();
+    String amount = StateContainer.of(context).getAmount();
+    String targetAmount = StateContainer.of(context).getTargetAmount();
+    PeriodEnum periodEnum = StateContainer.of(context).getPeriodEnum();
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Family Name',
+                  style: AppStyle.b9Medium
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  targetName,
+                  style: AppStyle.b7Bold
+                      .copyWith(color: ColorList.blackSecondColor),
+                ),
+              ],
+            ),
+            if (targetDate != null) ...[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'End date',
+                    style: AppStyle.b9Medium
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    DateHelper.getTextFromDateTime(targetDate, 'dd MMMM yyyy'),
+                    style: AppStyle.b7Bold
+                        .copyWith(color: ColorList.blackSecondColor),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        Container(
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+              border: Border.all(color: ColorList.greyLight7Color, width: 1),
+              borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.all(25),
+          child: Column(
+            children: [
+              Text(
+                'Family Target amount',
                 style: AppStyle.b9Regular
                     .copyWith(color: ColorList.blackSecondColor),
               ),

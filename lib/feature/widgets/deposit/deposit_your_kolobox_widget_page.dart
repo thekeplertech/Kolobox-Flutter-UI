@@ -7,8 +7,11 @@ import '../confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import 'deposit_your_kolobox_widget.dart';
 
 class DepositYourKoloboxWidgetPage extends BasePage {
+  final bool isCreateGroup;
+
   const DepositYourKoloboxWidgetPage({
     Key? key,
+    this.isCreateGroup = false,
   }) : super(key: key);
 
   @override
@@ -22,6 +25,8 @@ class DepositYourKoloboxWidgetPageState
       BlocProvider<ConfirmPinAndPayBloc>(
         create: (context) =>
             ConfirmPinAndPayBloc(BlocProvider.of<MasterBloc>(context)),
-        child: const DepositYourKoloboxWidget(),
+        child: DepositYourKoloboxWidget(
+          isCreateGroup: widget.isCreateGroup,
+        ),
       );
 }

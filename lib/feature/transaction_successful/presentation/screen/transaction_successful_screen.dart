@@ -394,12 +394,17 @@ class TransactionSuccessfulScreenState
       return;
     }
 
+    // Call for top up api
+    String groupId = '';
+    String subUserId = '';
+    if (isKoloGroup()) {
+      groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
+    }
+    if (isKoloFamily()) {
+      groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
+      subUserId = prefHelper?.getLoginResponseModel().id ?? '';
+    }
     if (isInActive) {
-      // Call for top up api
-      String groupId = '';
-      if (isKoloGroup()) {
-        groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
-      }
       BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
           productId:
               StateContainer.of(context).getKoloBoxEnum()?.getProductId ?? '',
@@ -409,6 +414,7 @@ class TransactionSuccessfulScreenState
             depositAmount:
                 getOnlyAmount(StateContainer.of(context).getAmount()),
             groupId: groupId,
+            subUserId: subUserId,
           )));
     } else {
       // Call for select product api
@@ -420,6 +426,10 @@ class TransactionSuccessfulScreenState
             savingFrequency: 'monthly',
             depositAmount:
                 getOnlyAmount(StateContainer.of(context).getAmount()),
+            groupId: groupId,
+            subUserId: isKoloFamily()
+                ? prefHelper?.getLoginResponseModel().id ?? ''
+                : '',
           )));
     }
   }

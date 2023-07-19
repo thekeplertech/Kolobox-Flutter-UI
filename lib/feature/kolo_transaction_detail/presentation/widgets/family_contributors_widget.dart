@@ -3,8 +3,16 @@ import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 
-class FamilyContributorsWidget extends StatelessWidget {
-  const FamilyContributorsWidget({Key? key}) : super(key: key);
+import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
+import '../../../dashboard/data/models/group_users_data_model.dart';
+
+class FamilyContributorssWidget extends StatelessWidget {
+  final GroupUsers groupUsers;
+
+  const FamilyContributorssWidget({
+    Key? key,
+    required this.groupUsers,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,26 +36,27 @@ class FamilyContributorsWidget extends StatelessWidget {
               height: 25,
             ),
           ),
+          // const SizedBox(
+          //   height: 4,
+          // ),
+          // Text(
+          //   'Babe',
+          //   style:
+          //       AppStyle.b10Medium.copyWith(color: ColorList.greyLight12Color),
+          // ),
           const SizedBox(
-            height: 4,
+            height: 6,
           ),
           Text(
-            'Babe',
-            style:
-                AppStyle.b10Medium.copyWith(color: ColorList.greyLight12Color),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Text(
-            '@Analpeal',
+            '@${groupUsers.userName}',
             style: AppStyle.b10Medium.copyWith(color: ColorList.primaryColor),
           ),
           const SizedBox(
             height: 4,
           ),
           Text(
-            '₦ 100,000.00',
+            CurrencyTextInputFormatter.formatAmount(
+                groupUsers.groupDeposit?.toString()),
             style: AppStyle.b9Bold.copyWith(color: ColorList.primaryColor),
           ),
         ],

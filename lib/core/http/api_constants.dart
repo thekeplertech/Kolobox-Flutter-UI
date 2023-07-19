@@ -14,6 +14,9 @@ class ApiUrls {
   static const String getActiveProductAPI = "user/me/active/products";
   static const String getEarningsAPI = "user/me/product/earnings";
   static const String getTransactionsAPI = "user/me/product/transactions";
+  static const String getGroupTransactionsAPI = "group/group_transactions";
+  static const String getGroupUsersAPI = "group/group_users";
+  static const String getInviteGroupAPI = "group/invite";
   static const String createPinAPI = "user/me/pin";
   static const String getMyEarningsAPI = "user/me/earning";
   static const String verifyPinAPI = "helpers/verifyPin";
@@ -21,7 +24,12 @@ class ApiUrls {
   static const String topUpAPI = "product/{productId}/account/topup";
   static const String investmentGoalAPI = "user/investment/goal";
   static const String createGroupAPI = "group/create";
-  static const String getGroupListAPI = "group/user_group_list";
+
+  // static const String getGroupListAPI = "group/user_group_list";
+  static const String getGroupListAPI = "group/user_kolo_group_list";
+  static const String getFamilyListAPI = "group/user_kolo_family_list";
+  static const String getFamilyUserListAPI = "group/subuser";
+  static const String createFamilyUserListAPI = "group/subuser/create";
   static const String groupTenorsAPI = "group/tenors";
   static const String groupTypesAPI = "group/types";
   static const String getBanksAPI = "helpers/banks";

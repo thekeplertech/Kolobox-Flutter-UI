@@ -18,6 +18,7 @@ import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../routes/routes.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../../../kolofamily/presentation/kolo_family_page.dart';
 import '../../../koloflex/presentation/kolo_flex_page.dart';
 import '../../../kologroup/presentation/kolo_group_page.dart';
 import '../../../kolotarget/presentation/kolo_target_page.dart';
@@ -256,11 +257,10 @@ class KoloboxScreenState extends BaseBlocWidgetState<KoloboxScreen> {
       //   comingSoon();
       //   break;
       case KoloboxFundEnum.koloFamily:
-        comingSoon();
-        // navigatePush(context, const KoloFamilyPage());
+        navigatePush(context, const KoloFamilyPage(),
+            routeName: koloFamilyPageValue);
         break;
       case KoloboxFundEnum.koloGroup:
-        // comingSoon();
         navigatePush(context, const KoloGroupPage(),
             routeName: koloGroupPageValue);
         break;

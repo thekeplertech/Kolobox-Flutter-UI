@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
+import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/get_family_user_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/get_group_list_response_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/group_users_request_model.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/enums/kolobox_fund_enum.dart';
@@ -14,11 +17,16 @@ import '../../../../core/ui/widgets/currency_text_input_formatter.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../../core/utils/date_helper.dart';
+import '../../../../routes/routes.dart';
+import '../../../dashboard/data/models/get_family_user_list_response_model.dart';
+import '../../../dashboard/data/models/group_transactions_data_model.dart';
+import '../../../dashboard/data/models/group_transactions_request_model.dart';
+import '../../../dashboard/data/models/group_users_data_model.dart';
 import '../../../dashboard/data/models/investment_goal_response_model.dart';
-import '../../../dashboard/data/models/transactions_data_model.dart';
-import '../../../dashboard/data/models/transactions_request_model.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../../../family_contributors/presentation/family_contributors_page.dart';
+import '../../../family_contributors/presentation/widgets/family_contributors_widget.dart';
 import '../../../koloflex/presentation/bloc/kolo_flex_bloc.dart';
 import '../../../koloflex/presentation/bloc/kolo_flex_event.dart';
 import '../../../koloflex/presentation/bloc/kolo_flex_state.dart';
@@ -27,12 +35,14 @@ import '../../../widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import '../../../widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 import '../../../widgets/inherited_state_container.dart';
+import '../../../widgets/invite_user/invite_family_member.dart';
 
 class KoloTransactionDetailScreen extends BaseBlocWidget {
   final InvestmentGoalModel? investmentGoalModel;
   final GroupModel? groupModel;
   final double interestAmount;
   final bool isPaid;
+  final KoloboxFundEnum koloboxFundEnum;
 
   const KoloTransactionDetailScreen({
     Key? key,
@@ -40,6 +50,7 @@ class KoloTransactionDetailScreen extends BaseBlocWidget {
     required this.interestAmount,
     required this.investmentGoalModel,
     required this.groupModel,
+    required this.koloboxFundEnum,
   }) : super(key: key);
 
   @override
@@ -61,9 +72,13 @@ class KoloTransactionDetailState
 
   StreamController<bool> emptyStreamController =
       StreamController<bool>.broadcast();
+  StreamController<bool> usersStreamController =
+      StreamController<bool>.broadcast();
   bool isEmpty = true;
 
-  List<Transactions> transactions = [];
+  List<GroupTransactions> transactions = [];
+  List<GroupUsers> groupUsers = [];
+  List<FamilyUserModel> familyUsers = [];
 
   KoloboxFundEnum koloboxFundEnum = KoloboxFundEnum.koloTarget;
   InvestmentGoalModel? investmentGoalModel;
@@ -75,29 +90,53 @@ class KoloTransactionDetailState
     investmentGoalModel = widget.investmentGoalModel;
     groupModel = widget.groupModel;
     interestAmount = widget.interestAmount;
+    koloboxFundEnum = widget.koloboxFundEnum;
     super.initState();
-    callTransactions();
+    callGroupTransactions();
   }
 
-  callTransactions() =>
-      BlocProvider.of<KoloFlexBloc>(context).add(GetTransactionsEvent(
+  callGroupTransactions() =>
+      BlocProvider.of<KoloFlexBloc>(context).add(GetGroupTransactionsEvent(
         model:
-            TransactionsRequestModel(productId: koloboxFundEnum.getProductId),
+            GroupTransactionsRequestModel(groupId: groupModel?.groupId ?? ''),
+      ));
+
+  callGroupUsers() =>
+      BlocProvider.of<KoloFlexBloc>(context).add(GetGroupUsersEvent(
+        model: GroupUsersRequestModel(groupId: groupModel?.groupId ?? ''),
+      ));
+
+  callFamilyUsers() =>
+      BlocProvider.of<KoloFlexBloc>(context).add(GetFamilyUsersEvent(
+        model: GetFamilyUserRequestModel(groupId: groupModel?.groupId ?? ''),
       ));
 
   @override
   Widget getCustomBloc() {
-    koloboxFundEnum = StateContainer.of(context).getKoloBoxEnum() ??
-        KoloboxFundEnum.koloTarget;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
       body: BlocListener<KoloFlexBloc, KoloFlexState>(
         listener: (_, state) {
-          if (state is GetTransactionsState) {
+          if (state is GetGroupTransactionsState) {
             transactions = state.model.transactions ?? [];
             isEmpty = transactions.isEmpty;
             emptyStreamController.add(isEmpty);
+            Future.delayed(const Duration(milliseconds: 300), () {
+              if (koloboxFundEnum == KoloboxFundEnum.koloGroup) {
+                callGroupUsers();
+              } else if (koloboxFundEnum == KoloboxFundEnum.koloFamily) {
+                callFamilyUsers();
+              }
+            });
+          }
+          if (state is GetGroupUsersState) {
+            groupUsers = state.model.users ?? [];
+            usersStreamController.add(true);
+          }
+          if (state is GetFamilyUsersState) {
+            familyUsers = state.model.users ?? [];
+            usersStreamController.add(true);
           }
         },
         child: getChild(),
@@ -286,8 +325,38 @@ class KoloTransactionDetailState
                           postIcon: imageDownload,
                         ),
                       ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Button(
+                          'Invite',
+                          backgroundColor: ColorList.lightBlue3Color,
+                          textColor: ColorList.primaryColor,
+                          overlayColor: ColorList.blueColor,
+                          borderRadius: 24,
+                          verticalPadding: 10,
+                          onPressed: () {
+                            onClickInvite();
+                          },
+                          postIcon: imageUserIcon,
+                        ),
+                      ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  StreamBuilder<bool>(
+                      stream: usersStreamController.stream,
+                      builder: (context, snapshot) {
+                        if (koloboxFundEnum == KoloboxFundEnum.koloGroup) {
+                          return getGroupUserListWidget();
+                        } else if (koloboxFundEnum ==
+                            KoloboxFundEnum.koloFamily) {
+                          return getFamilyUserListWidget();
+                        } else {
+                          return const SizedBox();
+                        }
+                      }),
                   const SizedBox(
                     height: 15,
                   ),
@@ -314,7 +383,8 @@ class KoloTransactionDetailState
                                       itemCount: transactions.length,
                                       itemBuilder: (_, index) =>
                                           TransactionsItemWidget(
-                                            transactions: transactions[index],
+                                            groupTransactions:
+                                                transactions[index],
                                             onPressed: () {
                                               BlocProvider.of<DashboardBloc>(
                                                       context)
@@ -322,7 +392,7 @@ class KoloTransactionDetailState
                                                       HideDisableBottomScreenEvent());
                                               showCustomBottomSheet(
                                                 DepositedWithdrawalInfoKoloboxWidget(
-                                                  transactions:
+                                                  groupTransactions:
                                                       transactions[index],
                                                 ),
                                                 height: 0.75,
@@ -335,7 +405,7 @@ class KoloTransactionDetailState
                                             },
                                           )),
                                   const SizedBox(
-                                    height: 20,
+                                    height: 20 + dashboardTabHeight,
                                   ),
                                 ],
                               );
@@ -580,6 +650,134 @@ class KoloTransactionDetailState
     );
   }
 
+  Column getGroupUserListWidget() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              koloboxFundEnum == KoloboxFundEnum.koloFamily
+                  ? 'Family Contributors'
+                  : 'Contributors',
+              style:
+                  AppStyle.b8Bold.copyWith(color: ColorList.blackSecondColor),
+            ),
+            if (groupUsers.length > 4) ...[
+              SizedBox(
+                width: 84,
+                child: Button(
+                  'See all',
+                  textColor: ColorList.white,
+                  backgroundColor: ColorList.blackSecondColor,
+                  overlayColor: ColorList.blueColor,
+                  borderRadius: 12,
+                  verticalPadding: 10,
+                  height: 30,
+                  textStyle:
+                      AppStyle.b10SemiBold.copyWith(color: ColorList.white),
+                  onPressed: () async {
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(HideDisableBottomScreenEvent());
+                    navigatePush(
+                        context,
+                        FamilyContributorsPage(
+                          koloboxFundEnum: koloboxFundEnum,
+                          groupUsers: groupUsers,
+                        )).then((value) {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ShowEnableBottomScreenEvent());
+                    });
+                  },
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+              childAspectRatio: 1.2,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: groupUsers.length,
+            itemBuilder: (_, index) => FamilyContributorsWidget(
+                  groupUser: groupUsers[index],
+                  koloboxFundEnum: widget.koloboxFundEnum,
+                )),
+      ],
+    );
+  }
+
+  Column getFamilyUserListWidget() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Family Contributors',
+              style:
+                  AppStyle.b8Bold.copyWith(color: ColorList.blackSecondColor),
+            ),
+            if (familyUsers.length > 4) ...[
+              SizedBox(
+                width: 84,
+                child: Button(
+                  'See all',
+                  textColor: ColorList.white,
+                  backgroundColor: ColorList.blackSecondColor,
+                  overlayColor: ColorList.blueColor,
+                  borderRadius: 12,
+                  verticalPadding: 10,
+                  height: 30,
+                  textStyle:
+                      AppStyle.b10SemiBold.copyWith(color: ColorList.white),
+                  onPressed: () async {
+                    BlocProvider.of<DashboardBloc>(context)
+                        .add(HideDisableBottomScreenEvent());
+                    navigatePush(
+                        context,
+                        FamilyContributorsPage(
+                          koloboxFundEnum: koloboxFundEnum,
+                          familyUsers: familyUsers,
+                        )).then((value) {
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(ShowEnableBottomScreenEvent());
+                    });
+                  },
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 14,
+              childAspectRatio: 1.2,
+            ),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: familyUsers.length,
+            itemBuilder: (_, index) => FamilyContributorsWidget(
+                  familyUserModel: familyUsers[index],
+                  koloboxFundEnum: widget.koloboxFundEnum,
+                )),
+      ],
+    );
+  }
+
   Widget getEmptyWidget(bool isRecent) => Column(
         children: [
           const SizedBox(
@@ -643,8 +841,8 @@ class KoloTransactionDetailState
 
   void onClickDeposit() {
     StateContainer.of(context).openFundMyKoloBox(
-      fundEnum: KoloboxFundEnum.koloTarget,
-      popUntil: KoloboxFundEnum.koloGroup.getFundPageValue(true),
+      fundEnum: koloboxFundEnum,
+      popUntil: koloboxFundEnum.getFundPageValue(true),
     );
     BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
     showCustomBottomSheet(DepositYourKoloboxWidgetPage(
@@ -654,23 +852,34 @@ class KoloTransactionDetailState
           .add(ShowEnableBottomScreenEvent());
       if (StateContainer.of(context).isSuccessful) {
         StateContainer.of(context).clearData();
-        callTransactions();
+        callGroupTransactions();
       }
     });
   }
 
   void onClickInvite() {
-    comingSoon();
-    // StateContainer.of(context).isFromDetail = true;
-    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    // showCustomBottomSheet(const InviteFamilyMemberWidget()).then((value) {
-    //   BlocProvider.of<DashboardBloc>(context)
-    //       .add(ShowEnableBottomScreenEvent());
-    //   StateContainer.of(context).isFromDetail = false;
-    //   isRecentEmpty = false;
-    //   isFailedEmpty = false;
-    //   leftRightStreamController.add(true);
-    // });
+    StateContainer.of(context).openFundMyKoloBox(
+        popUntil: widget.koloboxFundEnum.getFundPageValue(true));
+    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    showCustomBottomSheet(InviteFamilyMemberWidget(
+      groupModel: groupModel,
+      koloboxFundEnum: koloboxFundEnum,
+    )).then((value) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(ShowEnableBottomScreenEvent());
+      if (StateContainer.of(context).isSuccessful) {
+        StateContainer.of(context).clearData();
+        if (widget.koloboxFundEnum == KoloboxFundEnum.koloGroup) {
+          callGroupUsers();
+        } else if (widget.koloboxFundEnum == KoloboxFundEnum.koloFamily) {
+          callFamilyUsers();
+        }
+      }
+      // StateContainer.of(context).isFromDetail = false;
+      // isRecentEmpty = false;
+      // isFailedEmpty = false;
+      // leftRightStreamController.add(true);
+    });
   }
 
   Widget getRecentDepositWidget() {

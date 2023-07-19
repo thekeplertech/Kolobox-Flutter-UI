@@ -89,6 +89,7 @@ class _FundYourKoloboxWidgetState
         switch (fundEnum) {
           case KoloboxFundEnum.koloFlex:
           case KoloboxFundEnum.koloTarget:
+          case KoloboxFundEnum.koloFamily:
           case KoloboxFundEnum.koloGroup:
             showCustomBottomSheet(
               DepositYourKoloboxWidgetPage(
@@ -96,10 +97,6 @@ class _FundYourKoloboxWidgetState
                     'deposit_your_kolobox_${DateTime.now().millisecondsSinceEpoch}'),
               ),
             );
-            break;
-          case KoloboxFundEnum.koloFamily:
-            // case KoloboxFundEnum.koloTargetPlus:
-            comingSoon();
             break;
         }
       },

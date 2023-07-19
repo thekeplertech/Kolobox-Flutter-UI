@@ -4,6 +4,7 @@ import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/group_transactions_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
@@ -12,11 +13,13 @@ import '../../../../../core/colors/color_list.dart';
 import '../../../core/utils/date_helper.dart';
 
 class DepositedWithdrawalInfoKoloboxWidget extends BaseScreen {
-  final Transactions transactions;
+  final Transactions? transactions;
+  final GroupTransactions? groupTransactions;
 
   const DepositedWithdrawalInfoKoloboxWidget({
     Key? key,
-    required this.transactions,
+    this.transactions,
+    this.groupTransactions,
   }) : super(key: key);
 
   @override
@@ -59,17 +62,28 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
             height: 15,
           ),
           Text(
-            CurrencyTextInputFormatter.formatAmount(isDeposit()
-                ? widget.transactions.depositAmount
-                : widget.transactions.withdrawalAmount),
+            (widget.transactions != null
+                ? CurrencyTextInputFormatter.formatAmount(isDeposit()
+                    ? widget.transactions?.depositAmount
+                    : widget.transactions?.withdrawalAmount)
+                : (widget.groupTransactions != null
+                    ? CurrencyTextInputFormatter.formatAmount(
+                        widget.groupTransactions?.totalAmount)
+                    : '')),
             style: AppStyle.b5SemiBold.copyWith(color: ColorList.primaryColor),
           ),
           const SizedBox(
             height: 5,
           ),
           Text(
-            DateHelper.getDateFromDateTime(
-                widget.transactions.createdAt, 'MMM dd, yyyy - hh:mm a'),
+            (widget.transactions != null
+                ? DateHelper.getDateFromDateTime(
+                    widget.transactions?.createdAt, 'MMM dd, yyyy - hh:mm a')
+                : (widget.groupTransactions != null
+                    ? DateHelper.getDateFromDateTime(
+                        widget.groupTransactions?.createdAt,
+                        'MMM dd, yyyy - hh:mm a')
+                    : '')),
             style:
                 AppStyle.b9SemiBold.copyWith(color: ColorList.greyLight2Color),
           ),
@@ -85,7 +99,7 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
             height: 3,
           ),
           Text(
-            '092829-20991090009w0220',
+            widget.transactions?.id ?? (widget.groupTransactions?.id ?? ''),
             style: AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
           ),
           const SizedBox(
@@ -133,7 +147,8 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
 
   Widget getOptionWidget() {
     KoloboxFundEnum? koloboxFundEnum =
-        widget.transactions.productId?.getEnumFromProductId();
+        widget.transactions?.productId?.getEnumFromProductId() ??
+            widget.groupTransactions?.productId?.getEnumFromProductId();
     return GestureDetector(
       onTap: () async {
         // switch (fundEnum) {
@@ -185,6 +200,7 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
     );
   }
 
-  bool isDeposit() =>
-      double.parse(widget.transactions.depositAmount ?? '0') != 0;
+  bool isDeposit() => widget.transactions != null
+      ? double.parse(widget.transactions?.depositAmount ?? '0') != 0
+      : true;
 }

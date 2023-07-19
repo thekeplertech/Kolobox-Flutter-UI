@@ -60,11 +60,11 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
               },
               child: getChild(),
             ),
-            StreamBuilder<bool>(
-                initialData: isEmpty,
-                stream: emptyStreamController.stream,
-                builder: (_, __) =>
-                    isEmpty ? const SizedBox() : getBackground()),
+            // StreamBuilder<bool>(
+            //     initialData: isEmpty,
+            //     stream: emptyStreamController.stream,
+            //     builder: (_, __) =>
+            //         isEmpty ? const SizedBox() : getBackground()),
           ],
         ),
       );
@@ -187,22 +187,112 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    'Recent Transaction',
-                    style: AppStyle.b8SemiBold
-                        .copyWith(color: ColorList.blackSecondColor),
+                  Container(
+                    width: double.maxFinite,
+                    padding: const EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: ColorList.primaryColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Unlocked Funds',
+                          style: AppStyle.b9SemiBold
+                              .copyWith(color: ColorList.lightBlue12Color),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        StreamBuilder<bool>(
+                            stream: emptyStreamController.stream,
+                            builder: (context, snapshot) => Text(
+                                  CurrencyTextInputFormatter.formatAmount(
+                                      '0.0'),
+                                  style: AppStyle.b3SemiBold
+                                      .copyWith(color: ColorList.white),
+                                )),
+                      ],
+                    ),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 20,
                   ),
-                  StreamBuilder<bool>(
-                      initialData: isEmpty,
-                      stream: emptyStreamController.stream,
-                      builder: (_, __) {
-                        return isEmpty
-                            ? Center(child: getEmptyWidget())
-                            : getDataWidget();
-                      }),
+                  Container(
+                    width: double.maxFinite,
+                    padding: const EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: ColorList.primaryColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Locked Funds',
+                          style: AppStyle.b9SemiBold
+                              .copyWith(color: ColorList.lightBlue12Color),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        StreamBuilder<bool>(
+                            stream: emptyStreamController.stream,
+                            builder: (context, snapshot) => Text(
+                                  CurrencyTextInputFormatter.formatAmount(
+                                      '0.0'),
+                                  style: AppStyle.b3SemiBold
+                                      .copyWith(color: ColorList.white),
+                                )),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: double.maxFinite,
+                    padding: const EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: ColorList.primaryColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Withdrawable Funds',
+                          style: AppStyle.b9SemiBold
+                              .copyWith(color: ColorList.lightBlue12Color),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        StreamBuilder<bool>(
+                            stream: emptyStreamController.stream,
+                            builder: (context, snapshot) => Text(
+                                  CurrencyTextInputFormatter.formatAmount(
+                                      '0.0'),
+                                  style: AppStyle.b3SemiBold
+                                      .copyWith(color: ColorList.white),
+                                )),
+                      ],
+                    ),
+                  ),
+                  // Text(
+                  //   'Recent Transaction',
+                  //   style: AppStyle.b8SemiBold
+                  //       .copyWith(color: ColorList.blackSecondColor),
+                  // ),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
+                  // StreamBuilder<bool>(
+                  //     initialData: isEmpty,
+                  //     stream: emptyStreamController.stream,
+                  //     builder: (_, __) {
+                  //       return isEmpty
+                  //           ? Center(child: getEmptyWidget())
+                  //           : getDataWidget();
+                  //     }),
                   // const SizedBox(
                   //   height: 20,
                   // ),
@@ -228,7 +318,7 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
     );
   }
 
-  Widget getDataWidget() => Text('Data');
+  // Widget getDataWidget() => Text('Data');
 
   /*ListView.builder(
       shrinkWrap: true,
@@ -247,37 +337,37 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
             },
           ));*/
 
-  Widget getEmptyWidget() => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(
-            height: 120,
-          ),
-          Image.asset(imageWalletSuccessIconSelected),
-          const SizedBox(
-            height: 10,
-          ),
-          Text('You have not performed any transaction',
-              style:
-                  AppStyle.b9Medium.copyWith(color: ColorList.blackThirdColor)),
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: 140,
-            child: Button(
-              'Deposit',
-              backgroundColor: ColorList.lightBlue3Color,
-              textColor: ColorList.primaryColor,
-              overlayColor: ColorList.blueColor,
-              borderRadius: 24,
-              verticalPadding: 10,
-              onPressed: () => comingSoon(),
-              postIcon: imageDownload,
-            ),
-          ),
-        ],
-      );
+  // Widget getEmptyWidget() => Column(
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         const SizedBox(
+  //           height: 120,
+  //         ),
+  //         Image.asset(imageWalletSuccessIconSelected),
+  //         const SizedBox(
+  //           height: 10,
+  //         ),
+  //         Text('You have not performed any transaction',
+  //             style:
+  //                 AppStyle.b9Medium.copyWith(color: ColorList.blackThirdColor)),
+  //         const SizedBox(
+  //           height: 20,
+  //         ),
+  //         SizedBox(
+  //           width: 140,
+  //           child: Button(
+  //             'Deposit',
+  //             backgroundColor: ColorList.lightBlue3Color,
+  //             textColor: ColorList.primaryColor,
+  //             overlayColor: ColorList.blueColor,
+  //             borderRadius: 24,
+  //             verticalPadding: 10,
+  //             onPressed: () => comingSoon(),
+  //             postIcon: imageDownload,
+  //           ),
+  //         ),
+  //       ],
+  //     );
 
   @override
   void dispose() {

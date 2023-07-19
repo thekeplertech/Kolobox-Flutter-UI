@@ -47,8 +47,10 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
   void initState() {
     super.initState();
     if (FlavorConfig.isDev() && kDebugMode) {
+      // emailTextEditingController.text = 'pokedex2k17@gmail.com';
+      // passwordTextEditingController.text = 'kolobox@123';
       emailTextEditingController.text =
-          'parth1234567891234567890@mailinator.com';
+          'parth12345678912345678901234@mailinator.com';
       passwordTextEditingController.text = 'kolobox@123';
       // emailTextEditingController.text = 'tulbadex@gmail.com';
       // passwordTextEditingController.text = 'password';

@@ -1,4 +1,5 @@
 import 'package:kolobox_new_app/feature/dashboard/data/models/delete_bank_request_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/group_invite_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/update_profile_request_model.dart';
@@ -8,9 +9,14 @@ import '../../../../../core/http/rest_client.dart';
 import '../../../../../core/http/rest_helper.dart';
 import '../../../../../core/models/api_response.dart';
 import '../models/add_bank_request_model.dart';
+import '../models/create_family_request_model.dart';
+import '../models/create_family_user_request_model.dart';
 import '../models/create_group_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
 import '../models/earnings_request_model.dart';
+import '../models/get_family_user_request_model.dart';
+import '../models/group_transactions_request_model.dart';
+import '../models/group_users_request_model.dart';
 import '../models/transactions_request_model.dart';
 import '../models/update_bank_request_model.dart';
 import '../models/update_password_request_model.dart';
@@ -64,6 +70,25 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
   }
 
   @override
+  Future<ApiResponse> getGroupTransactions(
+      GroupTransactionsRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getGroupTransactions(model);
+  }
+
+  @override
+  Future<ApiResponse> getGroupUsers(GroupUsersRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getGroupUsers(model);
+  }
+
+  @override
+  Future<ApiResponse> getInviteGroup(GroupInviteRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getInviteGroup(model);
+  }
+
+  @override
   Future<ApiResponse> verifyPin(VerifyPinRequestModel model) async {
     RestHelper helper = await restClient!.getClient();
     return helper.verifyPin(model);
@@ -102,6 +127,25 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
   }
 
   @override
+  Future<ApiResponse> createFamily(CreateFamilyRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.createFamily(model);
+  }
+
+  @override
+  Future<ApiResponse> getFamilyUserList(GetFamilyUserRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getFamilyUserList(model);
+  }
+
+  @override
+  Future<ApiResponse> createFamilyUserList(
+      CreateFamilyUserRequestModel model) async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.createFamilyUserList(model);
+  }
+
+  @override
   Future<ApiResponse> getGroupTypes() async {
     RestHelper helper = await restClient!.getClient();
     return helper.getGroupTypes();
@@ -111,6 +155,12 @@ class RemoteDashboardDataSourceImpl implements RemoteDashboardDataSource {
   Future<ApiResponse> getGroupList() async {
     RestHelper helper = await restClient!.getClient();
     return helper.getGroupList();
+  }
+
+  @override
+  Future<ApiResponse> getFamilyList() async {
+    RestHelper helper = await restClient!.getClient();
+    return helper.getFamilyList();
   }
 
   @override

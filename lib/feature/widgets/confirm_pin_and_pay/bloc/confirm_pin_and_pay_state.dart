@@ -2,6 +2,8 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/select_product_res
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_response_model.dart';
 
+import '../../../dashboard/data/models/create_family_response_model.dart';
+import '../../../dashboard/data/models/create_group_response_model.dart';
 import '../../../dashboard/data/models/get_group_list_response_model.dart';
 import '../../../dashboard/data/models/get_group_tenor_response_model.dart';
 import '../../../dashboard/data/models/select_product_request_model.dart';
@@ -20,8 +22,15 @@ class VerifyPinState extends ConfirmPinAndPayState {
 class SelectProductState extends ConfirmPinAndPayState {
   final SelectProductRequestModel requestModel;
   final SelectProductResponseModel responseModel;
+  final CreateGroupResponseModel? createGroupResponseModel;
+  final CreateFamilyResponseModel? createFamilyResponseModel;
 
-  SelectProductState({required this.requestModel, required this.responseModel});
+  SelectProductState({
+    required this.requestModel,
+    required this.responseModel,
+    this.createGroupResponseModel,
+    this.createFamilyResponseModel,
+  });
 }
 
 class TopUpState extends ConfirmPinAndPayState {
@@ -40,10 +49,15 @@ class CreateInvestmentGoalState extends ConfirmPinAndPayState {
 }
 
 class CreateGroupState extends ConfirmPinAndPayState {
-  final String referenceCode;
-  final String amount;
+  final CreateGroupResponseModel responseModel;
 
-  CreateGroupState({required this.referenceCode, required this.amount});
+  CreateGroupState({required this.responseModel});
+}
+
+class CreateFamilyState extends ConfirmPinAndPayState {
+  final CreateFamilyResponseModel responseModel;
+
+  CreateFamilyState({required this.responseModel});
 }
 
 class GetTenorState extends ConfirmPinAndPayState {
@@ -56,4 +70,10 @@ class GetGroupState extends ConfirmPinAndPayState {
   final GetGroupListResponseModel model;
 
   GetGroupState({required this.model});
+}
+
+class GetFamilyState extends ConfirmPinAndPayState {
+  final GetGroupListResponseModel model;
+
+  GetFamilyState({required this.model});
 }

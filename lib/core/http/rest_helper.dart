@@ -15,9 +15,15 @@ import '../../feature/auth/login/data/models/update_pin_request_model.dart';
 import '../../feature/auth/register/data/models/register_request_model.dart';
 import '../../feature/auth/register/data/models/verify_user_request_model.dart';
 import '../../feature/dashboard/data/models/add_bank_request_model.dart';
+import '../../feature/dashboard/data/models/create_family_request_model.dart';
+import '../../feature/dashboard/data/models/create_family_user_request_model.dart';
 import '../../feature/dashboard/data/models/create_group_request_model.dart';
 import '../../feature/dashboard/data/models/create_investment_goal_request_model.dart';
 import '../../feature/dashboard/data/models/delete_bank_request_model.dart';
+import '../../feature/dashboard/data/models/get_family_user_request_model.dart';
+import '../../feature/dashboard/data/models/group_invite_request_model.dart';
+import '../../feature/dashboard/data/models/group_transactions_request_model.dart';
+import '../../feature/dashboard/data/models/group_users_request_model.dart';
 import '../../feature/dashboard/data/models/update_bank_request_model.dart';
 import '../../feature/dashboard/data/models/update_password_request_model.dart';
 import '../../feature/dashboard/data/models/verify_pin_request_model.dart';
@@ -70,6 +76,16 @@ abstract class RestHelper {
   @POST(ApiUrls.getTransactionsAPI)
   Future<ApiResponse> getTransactions(@Body() TransactionsRequestModel model);
 
+  @POST(ApiUrls.getGroupTransactionsAPI)
+  Future<ApiResponse> getGroupTransactions(
+      @Body() GroupTransactionsRequestModel model);
+
+  @POST(ApiUrls.getGroupUsersAPI)
+  Future<ApiResponse> getGroupUsers(@Body() GroupUsersRequestModel model);
+
+  @POST(ApiUrls.getInviteGroupAPI)
+  Future<ApiResponse> getInviteGroup(@Body() GroupInviteRequestModel model);
+
   @POST(ApiUrls.createPinAPI)
   Future<ApiResponse> createPin(@Body() CreatePinRequestModel model);
 
@@ -97,8 +113,25 @@ abstract class RestHelper {
   @POST(ApiUrls.createGroupAPI)
   Future<ApiResponse> createGroup(@Body() CreateGroupRequestModel model);
 
+  @POST(ApiUrls.createGroupAPI)
+  Future<ApiResponse> createFamily(@Body() CreateFamilyRequestModel model);
+
+  @POST(ApiUrls.getFamilyUserListAPI)
+  Future<ApiResponse> getFamilyUserList(
+      @Body() GetFamilyUserRequestModel model);
+
+  @POST(ApiUrls.createFamilyUserListAPI)
+  Future<ApiResponse> createFamilyUserList(
+      @Body() CreateFamilyUserRequestModel model);
+
+  // @GET(ApiUrls.getGroupListAPI)
+  // Future<ApiResponse> getGroupList();
+
   @GET(ApiUrls.getGroupListAPI)
   Future<ApiResponse> getGroupList();
+
+  @GET(ApiUrls.getFamilyListAPI)
+  Future<ApiResponse> getFamilyList();
 
   @GET(ApiUrls.groupTypesAPI)
   Future<ApiResponse> getGroupTypes();

@@ -6,7 +6,6 @@ import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
-import '../../../kolo_transaction_detail/presentation/widgets/family_contributors_widget.dart';
 import '../../../widgets/home_app_bar_widget.dart';
 
 class NotificationsScreen extends BaseBlocWidget {
@@ -61,47 +60,47 @@ class NotificationsScreenState
                 ),
               ] else
                 ...[],
-              if (false) ...[
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 28, right: 28, top: 15, bottom: 28),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Family Contributors',
-                        style: AppStyle.b4Bold
-                            .copyWith(color: ColorList.blackSecondColor),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'These are your investment partners',
-                        style: AppStyle.b9Regular
-                            .copyWith(color: ColorList.blackThirdColor),
-                      ),
-                      const SizedBox(
-                        height: 25,
-                      ),
-                      GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 14,
-                          mainAxisSpacing: 14,
-                          childAspectRatio: 1.2,
-                        ),
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 12,
-                        itemBuilder: (_, index) =>
-                            const FamilyContributorsWidget(),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              // if (false) ...[
+              //   Padding(
+              //     padding: const EdgeInsets.only(
+              //         left: 28, right: 28, top: 15, bottom: 28),
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           'Family Contributors',
+              //           style: AppStyle.b4Bold
+              //               .copyWith(color: ColorList.blackSecondColor),
+              //         ),
+              //         const SizedBox(
+              //           height: 5,
+              //         ),
+              //         Text(
+              //           'These are your investment partners',
+              //           style: AppStyle.b9Regular
+              //               .copyWith(color: ColorList.blackThirdColor),
+              //         ),
+              //         const SizedBox(
+              //           height: 25,
+              //         ),
+              //         GridView.builder(
+              //           gridDelegate:
+              //               const SliverGridDelegateWithFixedCrossAxisCount(
+              //             crossAxisCount: 2,
+              //             crossAxisSpacing: 14,
+              //             mainAxisSpacing: 14,
+              //             childAspectRatio: 1.2,
+              //           ),
+              //           physics: const NeverScrollableScrollPhysics(),
+              //           shrinkWrap: true,
+              //           itemCount: 12,
+              //           itemBuilder: (_, index) =>
+              //               const FamilyContributorsWidget(),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ],
             ],
           ),
         ),

@@ -6,6 +6,8 @@ import '../../../../../core/bloc/master_bloc.dart';
 import '../../../../../core/preference/pref_helper.dart';
 import '../../../../../di/injection_container.dart';
 import '../../../../core/bloc/master_event.dart';
+import '../../../dashboard/data/models/create_family_response_model.dart';
+import '../../../dashboard/data/models/create_group_response_model.dart';
 import 'confirm_pin_and_pay_event.dart';
 import 'confirm_pin_and_pay_state.dart';
 
@@ -31,11 +33,17 @@ class ConfirmPinAndPayBloc
     on<CreateGroupEvent>((event, emit) async {
       await callCreateGroupEvent(event, emit);
     });
+    on<CreateFamilyEvent>((event, emit) async {
+      await callCreateFamilyEvent(event, emit);
+    });
     on<GetTenorEvent>((event, emit) async {
       await callGetTenorEvent(event, emit);
     });
     on<GetGroupEvent>((event, emit) async {
       await callGetGroupEvent(event, emit);
+    });
+    on<GetFamilyEvent>((event, emit) async {
+      await callGetFamilyEvent(event, emit);
     });
   }
 
@@ -63,7 +71,11 @@ class ConfirmPinAndPayBloc
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(SelectProductState(
-          responseModel: r.model, requestModel: event.model));
+        responseModel: r.model,
+        requestModel: event.model,
+        createGroupResponseModel: event.createGroupResponseModel,
+        createFamilyResponseModel: event.createFamilyResponseModel,
+      ));
     });
   }
 
@@ -124,8 +136,23 @@ class ConfirmPinAndPayBloc
       baseBlocObject!.add(ErrorApiEvent());
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
-      emit(CreateGroupState(
-          amount: event.amount, referenceCode: event.referenceCode));
+      CreateGroupResponseModel model = r.model;
+      emit(CreateGroupState(responseModel: model));
+    });
+  }
+
+  Future<void> callCreateFamilyEvent(
+      CreateFamilyEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.createFamily(event.model);
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      CreateFamilyResponseModel model = r.model;
+      emit(CreateFamilyState(responseModel: model));
     });
   }
 
@@ -152,6 +179,19 @@ class ConfirmPinAndPayBloc
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(GetGroupState(model: r.model));
+    });
+  }
+
+  Future<void> callGetFamilyEvent(GetFamilyEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.getFamilyList();
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(GetFamilyState(model: r.model));
     });
   }
 }

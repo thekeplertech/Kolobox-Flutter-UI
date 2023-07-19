@@ -243,6 +243,7 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                                     interestAmount: KoloboxFundEnum.koloTarget
                                         .getInterest(),
                                     isPaid: !isLeft,
+                                    koloboxFundEnum: KoloboxFundEnum.koloTarget,
                                   ),
                                   routeName: koloTransactionDetailPageValue);
                             },

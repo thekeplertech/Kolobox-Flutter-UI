@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/data_source/remote_dashboard_data_source.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/create_group_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/earnings_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/get_all_my_banks_response_model.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/group_invite_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_data_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/domain/dashboard_repo.dart';
@@ -17,14 +19,24 @@ import '../../../../core/preference/pref_helper.dart';
 import '../../../auth/login/data/models/login_response_model.dart';
 import '../models/active_product_data_model.dart';
 import '../models/add_bank_request_model.dart';
+import '../models/create_family_request_model.dart';
+import '../models/create_family_response_model.dart';
+import '../models/create_family_user_request_model.dart';
 import '../models/create_group_request_model.dart';
 import '../models/create_investment_goal_request_model.dart';
 import '../models/delete_bank_request_model.dart';
 import '../models/earnings_request_model.dart';
 import '../models/get_banks_response_model.dart';
+import '../models/get_family_user_list_response_model.dart';
+import '../models/get_family_user_request_model.dart';
 import '../models/get_group_list_response_model.dart';
 import '../models/get_group_tenor_response_model.dart';
 import '../models/get_group_type_response_model.dart';
+import '../models/group_invite_data_model.dart';
+import '../models/group_transactions_data_model.dart';
+import '../models/group_transactions_request_model.dart';
+import '../models/group_users_data_model.dart';
+import '../models/group_users_request_model.dart';
 import '../models/investment_goal_response_model.dart';
 import '../models/my_earning_data_model.dart';
 import '../models/product_data_model.dart';
@@ -139,6 +151,36 @@ class DashboardRepoImpl extends DashboardRepo {
           (await remoteDashboardDataSource.getTransactions(model)).data)));
 
   @override
+  Future<Either<Failure, Success>> getGroupTransactions(
+          GroupTransactionsRequestModel model) =>
+      baseApiMethod(() => getGroupTransactionsFromAPI(model));
+
+  Future<Either<Failure, Success>> getGroupTransactionsFromAPI(
+          GroupTransactionsRequestModel model) async =>
+      Right(Success(GroupTransactionsDataModel.fromJson(
+          (await remoteDashboardDataSource.getGroupTransactions(model)).data)));
+
+  @override
+  Future<Either<Failure, Success>> getGroupUsers(
+          GroupUsersRequestModel model) =>
+      baseApiMethod(() => getGroupUsersFromAPI(model));
+
+  Future<Either<Failure, Success>> getGroupUsersFromAPI(
+          GroupUsersRequestModel model) async =>
+      Right(Success(GroupUsersDataModel.fromJson(
+          (await remoteDashboardDataSource.getGroupUsers(model)).data)));
+
+  @override
+  Future<Either<Failure, Success>> getInviteGroup(
+          GroupInviteRequestModel model) =>
+      baseApiMethod(() => getInviteGroupFromAPI(model));
+
+  Future<Either<Failure, Success>> getInviteGroupFromAPI(
+          GroupInviteRequestModel model) async =>
+      Right(Success(GroupInviteDataModel.fromJson(
+          (await remoteDashboardDataSource.getInviteGroup(model)).data)));
+
+  @override
   Future<Either<Failure, Success>> verifyPin(VerifyPinRequestModel model) =>
       baseApiMethod(() => verifyPinFromAPI(model));
 
@@ -195,6 +237,17 @@ class DashboardRepoImpl extends DashboardRepo {
   }
 
   @override
+  Future<Either<Failure, Success>> createFamilyUserList(
+          CreateFamilyUserRequestModel model) =>
+      baseApiMethod(() => createFamilyUserListFromAPI(model));
+
+  Future<Either<Failure, Success>> createFamilyUserListFromAPI(
+      CreateFamilyUserRequestModel model) async {
+    return Right(Success(
+        (await remoteDashboardDataSource.createFamilyUserList(model)).data));
+  }
+
+  @override
   Future<Either<Failure, Success>> createGroup(CreateGroupRequestModel model) =>
       baseApiMethod(() => createGroupFromAPI(model));
 
@@ -208,8 +261,27 @@ class DashboardRepoImpl extends DashboardRepo {
     if (pos != -1) {
       model.groupTypeId = types[pos].id ?? '';
     }
-    return Right(
-        Success((await remoteDashboardDataSource.createGroup(model)).data));
+    return Right(Success(CreateGroupResponseModel.fromJson(
+        (await remoteDashboardDataSource.createGroup(model)).data)));
+  }
+
+  @override
+  Future<Either<Failure, Success>> createFamily(
+          CreateFamilyRequestModel model) =>
+      baseApiMethod(() => createFamilyFromAPI(model));
+
+  Future<Either<Failure, Success>> createFamilyFromAPI(
+      CreateFamilyRequestModel model) async {
+    GetGroupTypeResponseModel typeModel = GetGroupTypeResponseModel.fromJson(
+        (await remoteDashboardDataSource.getGroupTypes()).data);
+    List<GroupTypeModel> types = typeModel.types ?? [];
+    int pos = types.indexWhere(
+        (element) => element.name == KoloboxFundEnum.koloFamily.getProductName);
+    if (pos != -1) {
+      model.groupTypeId = types[pos].id ?? '';
+    }
+    return Right(Success(CreateFamilyResponseModel.fromJson(
+        (await remoteDashboardDataSource.createFamily(model)).data)));
   }
 
   @override
@@ -221,12 +293,30 @@ class DashboardRepoImpl extends DashboardRepo {
           (await remoteDashboardDataSource.getGroupTypes()).data)));
 
   @override
+  Future<Either<Failure, Success>> getFamilyUserList(
+          GetFamilyUserRequestModel model) =>
+      baseApiMethod(() => getFamilyUserListFromAPI(model));
+
+  Future<Either<Failure, Success>> getFamilyUserListFromAPI(
+          GetFamilyUserRequestModel model) async =>
+      Right(Success(GetFamilyUserListResponseModel.fromJson(
+          (await remoteDashboardDataSource.getFamilyUserList(model)).data)));
+
+  @override
   Future<Either<Failure, Success>> getGroupList() =>
       baseApiMethod(() => getGroupListFromAPI());
 
   Future<Either<Failure, Success>> getGroupListFromAPI() async =>
       Right(Success(GetGroupListResponseModel.fromJson(
           (await remoteDashboardDataSource.getGroupList()).data)));
+
+  @override
+  Future<Either<Failure, Success>> getFamilyList() =>
+      baseApiMethod(() => getFamilyListFromAPI());
+
+  Future<Either<Failure, Success>> getFamilyListFromAPI() async =>
+      Right(Success(GetGroupListResponseModel.fromJson(
+          (await remoteDashboardDataSource.getFamilyList()).data)));
 
   @override
   Future<Either<Failure, Success>> getGroupTenors() =>
