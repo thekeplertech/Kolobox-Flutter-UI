@@ -4,6 +4,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/top_up_response_mo
 
 import '../../../dashboard/data/models/create_family_response_model.dart';
 import '../../../dashboard/data/models/create_group_response_model.dart';
+import '../../../dashboard/data/models/get_family_user_list_response_model.dart';
 import '../../../dashboard/data/models/get_group_list_response_model.dart';
 import '../../../dashboard/data/models/get_group_tenor_response_model.dart';
 import '../../../dashboard/data/models/select_product_request_model.dart';
@@ -76,4 +77,10 @@ class GetFamilyState extends ConfirmPinAndPayState {
   final GetGroupListResponseModel model;
 
   GetFamilyState({required this.model});
+}
+
+class GetFamilyUsersState extends ConfirmPinAndPayState {
+  final GetFamilyUserListResponseModel model;
+
+  GetFamilyUsersState({required this.model});
 }

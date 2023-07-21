@@ -8,11 +8,13 @@ import '../../core/ui/widgets/button.dart';
 import '../../routes/routes.dart';
 
 class KoloInfoWidget extends StatelessWidget {
+  final bool isWallet;
   final KoloboxFundEnum? koloboxFundEnum;
 
   const KoloInfoWidget({
     Key? key,
     this.koloboxFundEnum,
+    this.isWallet = false,
   }) : super(key: key);
 
   @override
@@ -67,7 +69,7 @@ class KoloInfoWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28),
               child: Text(
-                'Suspendisse auctor mauris ut sapien pharetra pharetra. Curabitur luctus tellus nunc, a auctor lorem sodales pellentesque. Nullam mollis felis odio\n\nSemper ligula imperdiet vel. Curabitur ultricies ac est non pretium. Sed orci risus, tincidunt ac pulvinar eget, consequat sit amet dui.',
+                getDesc(),
                 style: AppStyle.b8Regular
                     .copyWith(color: ColorList.blackThirdColor),
                 textAlign: TextAlign.center,
@@ -90,5 +92,23 @@ class KoloInfoWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getDesc() {
+    if (isWallet) {
+      return 'Only wallet screen will be:\nUnlocked\nLocked\nWithdrawable';
+    }
+    switch (koloboxFundEnum) {
+      case KoloboxFundEnum.koloFlex:
+        return 'This is an unlocked plan that allows flexibility and liquidity of funds. Tenor: Investment is made for a period of 30 days. . Access: Withdrawal can be made anytime subsequently. . Interest rate: 8% annual percentage rate (APR)';
+      case KoloboxFundEnum.koloTarget:
+        return 'This is a locked plan aimed at individuals trying to save towards a target – a car, rent, school fees etc. . Tenor: return is expected on this class of investment over a period of 3 Months (90days). . Access: Withdrawal is not allowed till due date. . Interest rate: 10% annual percentage rate (APR).';
+      case KoloboxFundEnum.koloGroup:
+        return 'This is a locked collective plan where customers can now invest as a group, saving towards better financial opportunities e.g. cooperative society, association etc. . How to Use: A user will serve as the Administrator; set up, name the group, invite members and recommend amount and frequency. . Tenor: A fixed return is expected on this investment class over 6 months (180 days). . Access: Withdrawal is not allowed till the due date. . Interest rate: 10% annual percentage rate (APR)';
+      case KoloboxFundEnum.koloFamily:
+        return 'This is a locked collective plan where customers can now invest as a group, saving towards better financial opportunities e.g. cooperative society, association etc. . Tenor: A fixed return is expected on this investment class over 6 months (180 days). . Access: Withdrawal is not allowed till the due date. . Interest rate: 10% annual percentage rate (APR)';
+      default:
+        return '';
+    }
   }
 }

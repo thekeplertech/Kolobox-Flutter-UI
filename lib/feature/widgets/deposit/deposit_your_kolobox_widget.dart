@@ -22,11 +22,14 @@ import '../../../core/ui/widgets/custom_text_field.dart';
 import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/date_helper.dart';
 import '../../../core/utils/utils.dart';
+import '../../dashboard/data/models/get_family_user_list_response_model.dart';
+import '../../dashboard/data/models/get_family_user_request_model.dart';
 import '../../dashboard/data/models/get_group_list_response_model.dart';
 import '../../dashboard/data/models/get_group_tenor_response_model.dart';
 import '../confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import '../confirm_pin_and_pay/bloc/confirm_pin_and_pay_state.dart';
 import '../recurring_deposit/select_recurring_period_widget.dart';
+import '../select_group/select_family_user_widget.dart';
 import '../select_group/select_family_widget.dart';
 import '../select_group/select_group_widget.dart';
 import '../select_tenor/select_tenor_widget.dart';
@@ -64,13 +67,17 @@ class _DepositYourKoloboxWidgetState
 
   StreamController<bool> groupStreamController =
       StreamController<bool>.broadcast();
+  StreamController<bool> familyUsersStreamController =
+      StreamController<bool>.broadcast();
 
   List<GroupTenorModel> tenors = [];
   List<GroupModel> groups = [];
   List<GroupModel> families = [];
+  List<FamilyUserModel> familyUsers = [];
   GroupTenorModel? selectedTenorModel;
   GroupModel? selectedGroupModel;
   GroupModel? selectedFamilyModel;
+  FamilyUserModel? selectedFamilyUserModel;
 
   KoloboxFundEnum? koloboxFundEnum;
   bool isInActive = false;
@@ -102,6 +109,12 @@ class _DepositYourKoloboxWidgetState
             families = state.model.types ?? [];
             Future.delayed(const Duration(milliseconds: 200), () {
               showFamilyDialog();
+            });
+          }
+          if (state is GetFamilyUsersState) {
+            familyUsers = state.model.users ?? [];
+            Future.delayed(const Duration(milliseconds: 200), () {
+              showFamilyUserDialog();
             });
           }
         },
@@ -534,6 +547,57 @@ class _DepositYourKoloboxWidgetState
                         } else {
                           BlocProvider.of<ConfirmPinAndPayBloc>(context)
                               .add(GetFamilyEvent());
+                        }
+                      },
+                      iconData: KoloBoxIcons.dropDownArrow,
+                    );
+                  }),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Select family',
+                style: AppStyle.b8Medium
+                    .copyWith(color: ColorList.blackSecondColor),
+              ),
+              const SizedBox(
+                height: 7,
+              ),
+              StreamBuilder<bool>(
+                  stream: familyUsersStreamController.stream,
+                  builder: (context, snapshot) {
+                    return CustomTextField(
+                      selectedFamilyUserModel?.firstname ??
+                          'Select family person',
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.words,
+                      onPressed: () {
+                        hideKeyboard();
+                        if (selectedFamilyModel == null) {
+                          Utils.showToast(
+                              context,
+                              ToastWidget(
+                                'Select family',
+                                borderColor: ColorList.redDarkColor,
+                                backgroundColor: ColorList.white,
+                                textColor: ColorList.black,
+                                messageIcon: imageCloseRed,
+                                closeWidget: Image.asset(
+                                  imageClose,
+                                  color: ColorList.black,
+                                ),
+                              ));
+                          return;
+                        }
+                        if (familyUsers.isNotEmpty) {
+                          showFamilyUserDialog();
+                        } else {
+                          BlocProvider.of<ConfirmPinAndPayBloc>(context)
+                              .add(GetFamilyUsersEvent(
+                            model: GetFamilyUserRequestModel(
+                                groupId: selectedFamilyModel?.groupId ?? ''),
+                          ));
                         }
                       },
                       iconData: KoloBoxIcons.dropDownArrow,
@@ -1220,6 +1284,22 @@ class _DepositYourKoloboxWidgetState
               ));
           return;
         }
+        if (selectedFamilyUserModel == null) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                'Select family person',
+                borderColor: ColorList.redDarkColor,
+                backgroundColor: ColorList.white,
+                textColor: ColorList.black,
+                messageIcon: imageCloseRed,
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.black,
+                ),
+              ));
+          return;
+        }
         if (saveAmountTextEditingController.text.isEmpty) {
           Utils.showToast(
               context,
@@ -1262,6 +1342,7 @@ class _DepositYourKoloboxWidgetState
           groupModel: selectedFamilyModel,
           targetDateTime: targetDateTime,
           targetName: targetNameTextEditingController.text,
+          familyUserModel: selectedFamilyUserModel,
         );
       } else {
         if (targetNameTextEditingController.text.isEmpty) {
@@ -1455,6 +1536,17 @@ class _DepositYourKoloboxWidgetState
       onPop: (model) {
         selectedFamilyModel = model;
         groupStreamController.add(true);
+      },
+    ));
+  }
+
+  showFamilyUserDialog() {
+    showCustomBottomSheet(SelectFamilyUserWidget(
+      selectedGroupModel: selectedFamilyUserModel,
+      groupModels: familyUsers,
+      onPop: (model) {
+        selectedFamilyUserModel = model;
+        familyUsersStreamController.add(true);
       },
     ));
   }

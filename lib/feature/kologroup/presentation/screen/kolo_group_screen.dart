@@ -358,13 +358,15 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
                 StateContainer.of(context)
                     .openFundMyKoloBox(fundEnum: KoloboxFundEnum.koloGroup);
                 navigatePush(
-                    context,
-                    KoloTransactionDetailPage(
-                      groupModel: groupModels[index],
-                      interestAmount: KoloboxFundEnum.koloGroup.getInterest(),
-                      isPaid: isLeft,
-                      koloboxFundEnum: KoloboxFundEnum.koloGroup,
-                    ));
+                  context,
+                  KoloTransactionDetailPage(
+                    groupModel: groupModels[index],
+                    interestAmount: KoloboxFundEnum.koloGroup.getInterest(),
+                    isPaid: isLeft,
+                    koloboxFundEnum: KoloboxFundEnum.koloGroup,
+                  ),
+                  routeName: koloTransactionDetailPageValue,
+                );
               },
             ),
           ),

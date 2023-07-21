@@ -74,6 +74,8 @@ class _DepositSummaryWidgetState
                   targetDateTime: StateContainer.of(context).getTargetDate(),
                   targetName: StateContainer.of(context).getTargetName(),
                   paymentEnum: PaymentGatewayEnum.payStack,
+                  familyUserModel:
+                      StateContainer.of(context).getFamilyUserModel(),
                 );
               } else if (isKoloFamily()) {
                 StateContainer.of(context).openFundMyKoloBox(
@@ -92,6 +94,8 @@ class _DepositSummaryWidgetState
                   targetDateTime: StateContainer.of(context).getTargetDate(),
                   targetName: StateContainer.of(context).getTargetName(),
                   paymentEnum: PaymentGatewayEnum.payStack,
+                  familyUserModel:
+                      StateContainer.of(context).getFamilyUserModel(),
                 );
               }
               callPayment(
@@ -130,7 +134,11 @@ class _DepositSummaryWidgetState
                       getOnlyAmount(StateContainer.of(context).getAmount()),
                   groupId: state.responseModel.id ?? '',
                   subUserId: isKoloFamily()
-                      ? prefHelper?.getLoginResponseModel().id ?? ''
+                      ? (StateContainer.of(context)
+                                  .getFamilyUserModel()
+                                  ?.subUserId ??
+                              prefHelper?.getLoginResponseModel().id) ??
+                          ''
                       : '',
                 ),
                 createGroupResponseModel: state.responseModel,
@@ -155,7 +163,11 @@ class _DepositSummaryWidgetState
                       getOnlyAmount(StateContainer.of(context).getAmount()),
                   groupId: state.responseModel.id ?? '',
                   subUserId: isKoloFamily()
-                      ? prefHelper?.getLoginResponseModel().id ?? ''
+                      ? (StateContainer.of(context)
+                                  .getFamilyUserModel()
+                                  ?.subUserId ??
+                              prefHelper?.getLoginResponseModel().id) ??
+                          ''
                       : '',
                 ),
                 createFamilyResponseModel: state.responseModel,
@@ -463,6 +475,7 @@ class _DepositSummaryWidgetState
       targetName: StateContainer.of(context).getTargetName(),
       paymentEnum: PaymentGatewayEnum.payStack,
       isCreateGroup: StateContainer.of(context).isCreateGroup(),
+      familyUserModel: StateContainer.of(context).getFamilyUserModel(),
     );
 
     if (isKoloFlex()) {
@@ -541,7 +554,10 @@ class _DepositSummaryWidgetState
         } else if (isKoloFamily() &&
             StateContainer.of(context).getGroupModel() != null) {
           groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
-          subUserId = prefHelper?.getLoginResponseModel().id ?? '';
+          subUserId =
+              StateContainer.of(context).getFamilyUserModel()?.subUserId ??
+                  prefHelper?.getLoginResponseModel().id ??
+                  '';
         }
         BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
             productId:
@@ -603,7 +619,11 @@ class _DepositSummaryWidgetState
                     getOnlyAmount(StateContainer.of(context).getAmount()),
                 groupId: '',
                 subUserId: isKoloFamily()
-                    ? prefHelper?.getLoginResponseModel().id ?? ''
+                    ? (StateContainer.of(context)
+                                .getFamilyUserModel()
+                                ?.subUserId ??
+                            prefHelper?.getLoginResponseModel().id) ??
+                        ''
                     : '',
               )));
         }

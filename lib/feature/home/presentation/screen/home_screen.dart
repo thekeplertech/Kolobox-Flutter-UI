@@ -166,7 +166,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                         child: ProductItemWidget(
                           title: 'KOLO GROUP',
                           text:
-                              ': This is a locked collective plan where customers can now invest as a group, saving towards better financial opportunities e.g. cooperative society, association etc. . How to Use: A user will serve as the Administrator; set up, name the group, invite members and recommend amount and frequency. . Tenor: A fixed return is expected on this investment class over 6 months (180 days). . Access: Withdrawal is not allowed till the due date. . Interest rate: 10% annual percentage rate (APR)',
+                              'This is a locked collective plan where customers can now invest as a group, saving towards better financial opportunities e.g. cooperative society, association etc. . How to Use: A user will serve as the Administrator; set up, name the group, invite members and recommend amount and frequency. . Tenor: A fixed return is expected on this investment class over 6 months (180 days). . Access: Withdrawal is not allowed till the due date. . Interest rate: 10% annual percentage rate (APR)',
                         ),
                       ),
                       SizedBox(

@@ -11,3 +11,5 @@ class GetWalletHistoryState extends WalletState {
 
   GetWalletHistoryState({required this.model});
 }
+
+class GetProfileState extends WalletState {}

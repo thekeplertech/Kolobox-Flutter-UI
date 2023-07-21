@@ -7,6 +7,7 @@ import '../../../dashboard/data/models/create_family_request_model.dart';
 import '../../../dashboard/data/models/create_family_response_model.dart';
 import '../../../dashboard/data/models/create_group_request_model.dart';
 import '../../../dashboard/data/models/create_group_response_model.dart';
+import '../../../dashboard/data/models/get_family_user_request_model.dart';
 
 abstract class ConfirmPinAndPayEvent {}
 
@@ -62,3 +63,9 @@ class GetTenorEvent extends ConfirmPinAndPayEvent {}
 class GetGroupEvent extends ConfirmPinAndPayEvent {}
 
 class GetFamilyEvent extends ConfirmPinAndPayEvent {}
+
+class GetFamilyUsersEvent extends ConfirmPinAndPayEvent {
+  final GetFamilyUserRequestModel model;
+
+  GetFamilyUsersEvent({required this.model});
+}

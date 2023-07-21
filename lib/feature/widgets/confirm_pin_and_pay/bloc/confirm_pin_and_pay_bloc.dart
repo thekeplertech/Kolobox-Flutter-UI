@@ -45,6 +45,9 @@ class ConfirmPinAndPayBloc
     on<GetFamilyEvent>((event, emit) async {
       await callGetFamilyEvent(event, emit);
     });
+    on<GetFamilyUsersEvent>((event, emit) async {
+      await callFamilyUsersEvent(event, emit);
+    });
   }
 
   Future<void> callVerifyPinEvent(VerifyPinEvent event, Emitter emit) async {
@@ -192,6 +195,20 @@ class ConfirmPinAndPayBloc
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(GetFamilyState(model: r.model));
+    });
+  }
+
+  Future<void> callFamilyUsersEvent(
+      GetFamilyUsersEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.getFamilyUserList(event.model);
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(GetFamilyUsersState(model: r.model));
     });
   }
 }

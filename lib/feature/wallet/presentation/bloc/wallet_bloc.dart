@@ -24,6 +24,9 @@ class WalletBloc extends BaseBloc<WalletEvent, WalletState> {
     on<GetWalletHistoryEvent>((event, emit) async {
       await callWalletHistoryEvent(event, emit);
     });
+    on<GetProfileEvent>((event, emit) async {
+      await callGetProfileEvent(event, emit);
+    });
   }
 
   Future<void> callWalletHistoryEvent(
@@ -37,6 +40,19 @@ class WalletBloc extends BaseBloc<WalletEvent, WalletState> {
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(GetWalletHistoryState(model: r.model));
+    });
+  }
+
+  Future<void> callGetProfileEvent(GetProfileEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.getProfile();
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(GetProfileState());
     });
   }
 }

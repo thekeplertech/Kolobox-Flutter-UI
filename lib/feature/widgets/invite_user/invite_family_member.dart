@@ -73,7 +73,9 @@ class _InviteFamilyMemberWidgetState
             height: 20,
           ),
           Text(
-            'Invitation email',
+            widget.koloboxFundEnum == KoloboxFundEnum.koloFamily
+                ? 'Invitation Name'
+                : 'Invitation email',
             style: TextStyle(
               color: ColorList.blackSecondColor,
               fontSize: 12,
@@ -84,8 +86,16 @@ class _InviteFamilyMemberWidgetState
             height: 7,
           ),
           CustomTextField(
-            'Enter user email to invite',
-            keyboardType: TextInputType.emailAddress,
+            widget.koloboxFundEnum == KoloboxFundEnum.koloFamily
+                ? 'Enter user name to invite'
+                : 'Enter user email to invite',
+            keyboardType: widget.koloboxFundEnum == KoloboxFundEnum.koloFamily
+                ? TextInputType.name
+                : TextInputType.emailAddress,
+            textCapitalization:
+                widget.koloboxFundEnum == KoloboxFundEnum.koloFamily
+                    ? TextCapitalization.words
+                    : TextCapitalization.none,
             textInputAction: TextInputAction.done,
             controller: emailAddressTextEditingController,
           ),
@@ -160,7 +170,8 @@ class _InviteFamilyMemberWidgetState
                     ));
                 return;
               }
-              if (!Utils.emailValid(emailAddressTextEditingController.text)) {
+              if (!Utils.emailValid(emailAddressTextEditingController.text) &&
+                  widget.koloboxFundEnum == KoloboxFundEnum.koloGroup) {
                 Utils.showToast(
                     context,
                     ToastWidget(

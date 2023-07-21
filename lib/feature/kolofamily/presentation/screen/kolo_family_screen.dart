@@ -367,13 +367,15 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
                 StateContainer.of(context)
                     .openFundMyKoloBox(fundEnum: KoloboxFundEnum.koloFamily);
                 navigatePush(
-                    context,
-                    KoloTransactionDetailPage(
-                      groupModel: groupModels[index],
-                      interestAmount: KoloboxFundEnum.koloFamily.getInterest(),
-                      isPaid: isLeft,
-                      koloboxFundEnum: KoloboxFundEnum.koloFamily,
-                    ));
+                  context,
+                  KoloTransactionDetailPage(
+                    groupModel: groupModels[index],
+                    interestAmount: KoloboxFundEnum.koloFamily.getInterest(),
+                    isPaid: isLeft,
+                    koloboxFundEnum: KoloboxFundEnum.koloFamily,
+                  ),
+                  routeName: koloTransactionDetailPageValue,
+                );
               },
             ),
           ),

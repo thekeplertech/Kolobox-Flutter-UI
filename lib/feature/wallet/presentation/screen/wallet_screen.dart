@@ -17,7 +17,6 @@ import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
-import '../../../home/data/models/wallet_data_model.dart';
 import '../../../widgets/kolo_info_widget.dart';
 
 class WalletScreen extends BaseBlocWidget {
@@ -28,19 +27,17 @@ class WalletScreen extends BaseBlocWidget {
 }
 
 class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
-  bool isEmpty = true;
   StreamController<bool> emptyStreamController =
       StreamController<bool>.broadcast();
 
-  WalletDataModel? walletDataModel;
+  // WalletDataModel? walletDataModel;
 
   @override
   void initState() {
     super.initState();
   }
 
-  callWalletHistory() =>
-      BlocProvider.of<WalletBloc>(context).add(GetWalletHistoryEvent());
+  callProfile() => BlocProvider.of<WalletBloc>(context).add(GetProfileEvent());
 
   @override
   Widget getCustomBloc() => Scaffold(
@@ -51,11 +48,9 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
             BlocListener<WalletBloc, WalletState>(
               listener: (_, state) {
                 if (state is ClickOnWalletState) {
-                  // callWalletHistory();
-                } else if (state is GetWalletHistoryState) {
-                  walletDataModel = state.model;
-                  isEmpty = walletDataModel?.walletHistory?.isEmpty ?? true;
-                  emptyStreamController.add(isEmpty);
+                  callProfile();
+                } else if (state is GetProfileState) {
+                  emptyStreamController.add(true);
                 }
               },
               child: getChild(),
@@ -128,7 +123,9 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                   onTap: () {
                     BlocProvider.of<DashboardBloc>(context)
                         .add(HideDisableBottomScreenEvent());
-                    showCustomBottomSheet(const KoloInfoWidget()).then((value) {
+                    showCustomBottomSheet(const KoloInfoWidget(
+                      isWallet: true,
+                    )).then((value) {
                       BlocProvider.of<DashboardBloc>(context)
                           .add(ShowEnableBottomScreenEvent());
                     });
@@ -161,42 +158,6 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                     child: Column(
                       children: [
                         Text(
-                          'Balance',
-                          style: AppStyle.b9SemiBold
-                              .copyWith(color: ColorList.lightBlue12Color),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        StreamBuilder<bool>(
-                            stream: emptyStreamController.stream,
-                            builder: (context, snapshot) => Text(
-                                  CurrencyTextInputFormatter.formatAmount(
-                                      walletDataModel
-                                              ?.userWallet?.accountBalance ??
-                                          prefHelper
-                                              ?.getProfileDataModel()
-                                              .wallet
-                                              ?.accountBalance),
-                                  style: AppStyle.b3SemiBold
-                                      .copyWith(color: ColorList.white),
-                                )),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: double.maxFinite,
-                    padding: const EdgeInsets.all(25),
-                    decoration: BoxDecoration(
-                      color: ColorList.primaryColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
                           'Unlocked Funds',
                           style: AppStyle.b9SemiBold
                               .copyWith(color: ColorList.lightBlue12Color),
@@ -208,7 +169,10 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                             stream: emptyStreamController.stream,
                             builder: (context, snapshot) => Text(
                                   CurrencyTextInputFormatter.formatAmount(
-                                      '0.0'),
+                                      prefHelper
+                                          ?.getProfileDataModel()
+                                          .wallet
+                                          ?.accountBalance),
                                   style: AppStyle.b3SemiBold
                                       .copyWith(color: ColorList.white),
                                 )),
@@ -239,7 +203,10 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                             stream: emptyStreamController.stream,
                             builder: (context, snapshot) => Text(
                                   CurrencyTextInputFormatter.formatAmount(
-                                      '0.0'),
+                                      prefHelper
+                                          ?.getProfileDataModel()
+                                          .wallet
+                                          ?.bookBalance),
                                   style: AppStyle.b3SemiBold
                                       .copyWith(color: ColorList.white),
                                 )),
@@ -269,8 +236,11 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                         StreamBuilder<bool>(
                             stream: emptyStreamController.stream,
                             builder: (context, snapshot) => Text(
-                                  CurrencyTextInputFormatter.formatAmount(
-                                      '0.0'),
+                                  CurrencyTextInputFormatter.formatAmountDouble(
+                                      prefHelper
+                                          ?.getProfileDataModel()
+                                          .wallet
+                                          ?.withDrawableFunds),
                                   style: AppStyle.b3SemiBold
                                       .copyWith(color: ColorList.white),
                                 )),

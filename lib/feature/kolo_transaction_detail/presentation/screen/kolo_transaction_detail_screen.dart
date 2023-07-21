@@ -23,6 +23,8 @@ import '../../../dashboard/data/models/group_transactions_data_model.dart';
 import '../../../dashboard/data/models/group_transactions_request_model.dart';
 import '../../../dashboard/data/models/group_users_data_model.dart';
 import '../../../dashboard/data/models/investment_goal_response_model.dart';
+import '../../../dashboard/data/models/transactions_data_model.dart';
+import '../../../dashboard/data/models/transactions_request_model.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../family_contributors/presentation/family_contributors_page.dart';
@@ -76,7 +78,8 @@ class KoloTransactionDetailState
       StreamController<bool>.broadcast();
   bool isEmpty = true;
 
-  List<GroupTransactions> transactions = [];
+  List<Transactions> transactions = [];
+  List<GroupTransactions> groupTransactions = [];
   List<GroupUsers> groupUsers = [];
   List<FamilyUserModel> familyUsers = [];
 
@@ -92,8 +95,18 @@ class KoloTransactionDetailState
     interestAmount = widget.interestAmount;
     koloboxFundEnum = widget.koloboxFundEnum;
     super.initState();
-    callGroupTransactions();
+    if (koloboxFundEnum == KoloboxFundEnum.koloTarget) {
+      callTransactions();
+    } else {
+      callGroupTransactions();
+    }
   }
+
+  callTransactions() =>
+      BlocProvider.of<KoloFlexBloc>(context).add(GetTransactionsEvent(
+        model:
+            TransactionsRequestModel(productId: koloboxFundEnum.getProductId),
+      ));
 
   callGroupTransactions() =>
       BlocProvider.of<KoloFlexBloc>(context).add(GetGroupTransactionsEvent(
@@ -118,9 +131,14 @@ class KoloTransactionDetailState
       appBar: const NoAppBar(),
       body: BlocListener<KoloFlexBloc, KoloFlexState>(
         listener: (_, state) {
-          if (state is GetGroupTransactionsState) {
+          if (state is GetTransactionsState) {
             transactions = state.model.transactions ?? [];
             isEmpty = transactions.isEmpty;
+            emptyStreamController.add(isEmpty);
+          }
+          if (state is GetGroupTransactionsState) {
+            groupTransactions = state.model.transactions ?? [];
+            isEmpty = groupTransactions.isEmpty;
             emptyStreamController.add(isEmpty);
             Future.delayed(const Duration(milliseconds: 300), () {
               if (koloboxFundEnum == KoloboxFundEnum.koloGroup) {
@@ -325,21 +343,24 @@ class KoloTransactionDetailState
                           postIcon: imageDownload,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Button(
-                          'Invite',
-                          backgroundColor: ColorList.lightBlue3Color,
-                          textColor: ColorList.primaryColor,
-                          overlayColor: ColorList.blueColor,
-                          borderRadius: 24,
-                          verticalPadding: 10,
-                          onPressed: () {
-                            onClickInvite();
-                          },
-                          postIcon: imageUserIcon,
+                      if (widget.koloboxFundEnum !=
+                          KoloboxFundEnum.koloTarget) ...[
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Button(
+                            'Invite',
+                            backgroundColor: ColorList.lightBlue3Color,
+                            textColor: ColorList.primaryColor,
+                            overlayColor: ColorList.blueColor,
+                            borderRadius: 24,
+                            verticalPadding: 10,
+                            onPressed: () {
+                              onClickInvite();
+                            },
+                            postIcon: imageUserIcon,
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                   const SizedBox(
@@ -363,7 +384,9 @@ class KoloTransactionDetailState
                   StreamBuilder<bool>(
                       stream: emptyStreamController.stream,
                       builder: (context, snapshot) {
-                        return transactions.isEmpty
+                        return (koloboxFundEnum == KoloboxFundEnum.koloTarget
+                                ? transactions.isEmpty
+                                : groupTransactions.isEmpty)
                             ? getEmptyWidget(true)
                             : Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -380,11 +403,22 @@ class KoloTransactionDetailState
                                       shrinkWrap: true,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      itemCount: transactions.length,
+                                      itemCount: koloboxFundEnum ==
+                                              KoloboxFundEnum.koloTarget
+                                          ? transactions.length
+                                          : groupTransactions.length,
                                       itemBuilder: (_, index) =>
                                           TransactionsItemWidget(
+                                            transactions: koloboxFundEnum ==
+                                                    KoloboxFundEnum.koloTarget
+                                                ? transactions[index]
+                                                : null,
                                             groupTransactions:
-                                                transactions[index],
+                                                koloboxFundEnum ==
+                                                        KoloboxFundEnum
+                                                            .koloTarget
+                                                    ? null
+                                                    : groupTransactions[index],
                                             onPressed: () {
                                               BlocProvider.of<DashboardBloc>(
                                                       context)
@@ -392,8 +426,19 @@ class KoloTransactionDetailState
                                                       HideDisableBottomScreenEvent());
                                               showCustomBottomSheet(
                                                 DepositedWithdrawalInfoKoloboxWidget(
+                                                  transactions:
+                                                      koloboxFundEnum ==
+                                                              KoloboxFundEnum
+                                                                  .koloTarget
+                                                          ? transactions[index]
+                                                          : null,
                                                   groupTransactions:
-                                                      transactions[index],
+                                                      koloboxFundEnum ==
+                                                              KoloboxFundEnum
+                                                                  .koloTarget
+                                                          ? null
+                                                          : groupTransactions[
+                                                              index],
                                                 ),
                                                 height: 0.75,
                                               ).then((value) {
@@ -706,7 +751,7 @@ class KoloTransactionDetailState
             ),
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: groupUsers.length,
+            itemCount: groupUsers.length > 4 ? 4 : groupUsers.length,
             itemBuilder: (_, index) => FamilyContributorsWidget(
                   groupUser: groupUsers[index],
                   koloboxFundEnum: widget.koloboxFundEnum,
@@ -769,7 +814,7 @@ class KoloTransactionDetailState
             ),
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: familyUsers.length,
+            itemCount: familyUsers.length > 4 ? 4 : familyUsers.length,
             itemBuilder: (_, index) => FamilyContributorsWidget(
                   familyUserModel: familyUsers[index],
                   koloboxFundEnum: widget.koloboxFundEnum,
