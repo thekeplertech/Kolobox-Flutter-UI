@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/constants/app_constants.dart';
 import 'package:kolobox_new_app/core/enums/kolobox_fund_enum.dart';
 import 'package:kolobox_new_app/core/enums/period_enum.dart';
-import 'package:kolobox_new_app/feature/dashboard/data/models/get_family_user_list_response_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/get_group_tenor_response_model.dart';
 
 import '../../core/enums/payment_gateway_enum.dart';
-import '../dashboard/data/models/get_group_list_response_model.dart';
 
 class _InheritedStateContainer extends InheritedWidget {
   final StateContainerState data;
@@ -49,8 +47,9 @@ class StateContainerState extends State<StateContainer> {
   String? _popUntil;
   PeriodEnum? _periodEnum;
   GroupTenorModel? _groupTenorModel;
-  GroupModel? _groupModel;
-  FamilyUserModel? _familyUserModel;
+  String? _groupId; // group id or family group id
+  String? _groupName;
+  String? _familyUserId;
   DateTime? _targetDate;
   String? _targetName;
   bool? _isCreateGroup;
@@ -81,9 +80,11 @@ class StateContainerState extends State<StateContainer> {
 
   GroupTenorModel? getGroupTenorModel() => _groupTenorModel;
 
-  GroupModel? getGroupModel() => _groupModel;
+  String? getGroupId() => _groupId;
 
-  FamilyUserModel? getFamilyUserModel() => _familyUserModel;
+  String? getGroupName() => _groupName;
+
+  String? getFamilyUserId() => _familyUserId;
 
   String getPopUntil() => _popUntil ?? '/';
 
@@ -102,8 +103,9 @@ class StateContainerState extends State<StateContainer> {
     PaymentGatewayEnum? paymentEnum,
     PeriodEnum? periodEnum,
     GroupTenorModel? groupTenorModel,
-    GroupModel? groupModel,
-    FamilyUserModel? familyUserModel,
+    String? groupId,
+    String? groupName,
+    String? familyUserId,
     String? popUntil,
     bool? isWallet,
   }) {
@@ -120,8 +122,9 @@ class StateContainerState extends State<StateContainer> {
     _paymentGatewayEnum = paymentEnum;
     _periodEnum = periodEnum;
     _groupTenorModel = groupTenorModel;
-    _groupModel = groupModel;
-    _familyUserModel = familyUserModel;
+    _groupId = groupId;
+    _groupName = groupName;
+    _familyUserId = familyUserId;
     if (popUntil != null) {
       _popUntil = popUntil;
     }
@@ -142,8 +145,9 @@ class StateContainerState extends State<StateContainer> {
     _isCreateGroup = null;
     _paymentGatewayEnum = null;
     _groupTenorModel = null;
-    _groupModel = null;
-    _familyUserModel = null;
+    _groupId = null;
+    _groupName = null;
+    _familyUserId = null;
     _popUntil = null;
     _isWallet = null;
     _isFundYourKoloBox = null;

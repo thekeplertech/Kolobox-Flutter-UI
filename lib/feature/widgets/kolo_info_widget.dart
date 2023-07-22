@@ -96,7 +96,7 @@ class KoloInfoWidget extends StatelessWidget {
 
   String getDesc() {
     if (isWallet) {
-      return 'Only wallet screen will be:\nUnlocked\nLocked\nWithdrawable';
+      return 'Wallet Balances\nUnlocked Funds refer to investments in a flexible plan that allows you easy access to liquid funds just after a 30-day tenor and subsequently once every month\nLocked Funds refer to investments where funds are locked for tenors between 90, 180 days and above.\nWithdrawable Funds refer to matured funds from all products accessible to the user.';
     }
     switch (koloboxFundEnum) {
       case KoloboxFundEnum.koloFlex:

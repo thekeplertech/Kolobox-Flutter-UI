@@ -525,7 +525,7 @@ class _DepositYourKoloboxWidgetState
                 height: 15,
               ),
               Text(
-                'Select family',
+                'Select Family',
                 style: AppStyle.b8Medium
                     .copyWith(color: ColorList.blackSecondColor),
               ),
@@ -556,7 +556,7 @@ class _DepositYourKoloboxWidgetState
                 height: 15,
               ),
               Text(
-                'Select family',
+                'Select family member',
                 style: AppStyle.b8Medium
                     .copyWith(color: ColorList.blackSecondColor),
               ),
@@ -568,7 +568,7 @@ class _DepositYourKoloboxWidgetState
                   builder: (context, snapshot) {
                     return CustomTextField(
                       selectedFamilyUserModel?.firstname ??
-                          'Select family person',
+                          'Select family member',
                       keyboardType: TextInputType.name,
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.words,
@@ -1152,9 +1152,11 @@ class _DepositYourKoloboxWidgetState
           targetAmount: amountTextEditingController.text,
           periodEnum: selectedPeriodEnum,
           groupTenorModel: selectedTenorModel,
-          groupModel: selectedGroupModel,
+          groupId: selectedGroupModel?.groupId,
+          groupName: selectedGroupModel?.name,
           targetDateTime: targetDateTime,
           targetName: targetNameTextEditingController.text,
+          familyUserId: '',
         );
       } else {
         if (targetNameTextEditingController.text.isEmpty) {
@@ -1288,7 +1290,7 @@ class _DepositYourKoloboxWidgetState
           Utils.showToast(
               context,
               ToastWidget(
-                'Select family person',
+                'Select family member',
                 borderColor: ColorList.redDarkColor,
                 backgroundColor: ColorList.white,
                 textColor: ColorList.black,
@@ -1339,10 +1341,11 @@ class _DepositYourKoloboxWidgetState
           targetAmount: amountTextEditingController.text,
           periodEnum: selectedPeriodEnum,
           groupTenorModel: selectedTenorModel,
-          groupModel: selectedFamilyModel,
+          groupId: selectedFamilyModel?.groupId,
+          groupName: selectedFamilyModel?.name,
           targetDateTime: targetDateTime,
           targetName: targetNameTextEditingController.text,
-          familyUserModel: selectedFamilyUserModel,
+          familyUserId: selectedFamilyUserModel?.subUserId,
         );
       } else {
         if (targetNameTextEditingController.text.isEmpty) {
@@ -1536,6 +1539,9 @@ class _DepositYourKoloboxWidgetState
       onPop: (model) {
         selectedFamilyModel = model;
         groupStreamController.add(true);
+        familyUsers.clear();
+        selectedFamilyUserModel = null;
+        familyUsersStreamController.add(true);
       },
     ));
   }

@@ -51,8 +51,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFlexValue;
       case KoloboxFundEnum.koloTarget:
         return koloTargetValue;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return koloTargetPlusValue;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return koloTargetPlusValue;
       case KoloboxFundEnum.koloFamily:
         return koloFamilyValue;
       case KoloboxFundEnum.koloGroup:
@@ -67,8 +67,8 @@ extension EnumExtensions on KoloboxFundEnum {
       case KoloboxFundEnum.koloFamily:
       case KoloboxFundEnum.koloGroup:
         return true;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return false;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return false;
     }
   }
 
@@ -82,8 +82,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return KoloBoxIcons.koloFamily;
       case KoloboxFundEnum.koloGroup:
         return KoloBoxIcons.koloGroup;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return KoloBoxIcons.koloTarget;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return KoloBoxIcons.koloTarget;
     }
   }
 
@@ -97,8 +97,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return ColorList.koloFamilyIconColor;
       case KoloboxFundEnum.koloGroup:
         return ColorList.koloGroupIconColor;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return ColorList.koloFlexTextColor;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return ColorList.koloFlexTextColor;
     }
   }
 
@@ -108,8 +108,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return ColorList.koloFlexColor;
       case KoloboxFundEnum.koloTarget:
         return ColorList.koloTargetColor;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return ColorList.koloTargetPlusColor;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return ColorList.koloTargetPlusColor;
       case KoloboxFundEnum.koloFamily:
         return ColorList.koloFamilyColor;
       case KoloboxFundEnum.koloGroup:
@@ -123,8 +123,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return ColorList.koloFlexTextColor;
       case KoloboxFundEnum.koloTarget:
         return ColorList.primaryColor;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return ColorList.blackSecondColor;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return ColorList.blackSecondColor;
       case KoloboxFundEnum.koloFamily:
         return ColorList.koloFamilyTextColor;
       case KoloboxFundEnum.koloGroup:
@@ -138,8 +138,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return imageFlexIcon;
       case KoloboxFundEnum.koloTarget:
         return imageTargetIcon;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return imageTargetPlusIcon;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return imageTargetPlusIcon;
       case KoloboxFundEnum.koloFamily:
         return imageTargetPlusIcon;
       case KoloboxFundEnum.koloGroup:
@@ -167,8 +167,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFlexProductName;
       case KoloboxFundEnum.koloTarget:
         return koloTargetProductName;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return koloTargetPlusProductName;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return koloTargetPlusProductName;
       case KoloboxFundEnum.koloFamily:
         return koloFamilyProductName;
       case KoloboxFundEnum.koloGroup:
@@ -203,8 +203,8 @@ extension EnumExtensions on KoloboxFundEnum {
         return koloFlexPageValue;
       case KoloboxFundEnum.koloTarget:
         return koloTargetPageValue;
-    // case KoloboxFundEnum.koloTargetPlus:
-    //   return koloTargetPlusPageValue;
+      // case KoloboxFundEnum.koloTargetPlus:
+      //   return koloTargetPlusPageValue;
       case KoloboxFundEnum.koloFamily:
         return koloFamilyPageValue;
       case KoloboxFundEnum.koloGroup:
@@ -217,7 +217,7 @@ extension EnumExtensions on KoloboxFundEnum {
     ActiveProductDataModel? active = helper.getActiveProductDataModel();
 
     int? index = active?.products?.indexWhere((element) =>
-    element.productId == getProductId &&
+        element.productId == getProductId &&
         (element.verified ?? false) &&
         !(element.canceled ?? true));
 
@@ -231,13 +231,31 @@ extension EnumExtensions on KoloboxFundEnum {
   String getEarningsAmountValue() {
     PrefHelper helper = sl();
     MyEarningDataModel? myEarning = helper.getMyEarningDataModel();
-    List<MyEarningsData>earning = myEarning?.earnings ?? [];
+    List<MyEarningsData> earning = myEarning?.earnings ?? [];
     double amount = 0;
 
     for (var element in earning) {
       if (element.name == getProductName &&
           (element.verified ?? false) &&
           !(element.canceled ?? true)) {
+        amount += element.amount ?? 0;
+      }
+    }
+
+    return amount.toString();
+  }
+
+  String getEarningsAmountValueByGroup(String groupId) {
+    PrefHelper helper = sl();
+    MyEarningDataModel? myEarning = helper.getMyEarningDataModel();
+    List<MyEarningsData> earning = myEarning?.earnings ?? [];
+    double amount = 0;
+
+    for (var element in earning) {
+      if (element.name == getProductName &&
+          (element.verified ?? false) &&
+          !(element.canceled ?? true) &&
+          element.groupId == groupId) {
         amount += element.amount ?? 0;
       }
     }
@@ -264,7 +282,7 @@ extension EnumExtensions on KoloboxFundEnum {
     ProductDataModel? active = helper.getProductDataModel();
 
     int? index =
-    active?.products?.indexWhere((element) => element.id == getProductId);
+        active?.products?.indexWhere((element) => element.id == getProductId);
 
     if (index != null && index != -1) {
       return active?.products?[index].minimumAmount ?? '0.0';
@@ -278,7 +296,7 @@ extension EnumExtensions on KoloboxFundEnum {
     ProductDataModel? model = helper.getProductDataModel();
 
     int? index =
-    model?.products?.indexWhere((element) => element.id == getProductId);
+        model?.products?.indexWhere((element) => element.id == getProductId);
 
     if (index != null && index != -1) {
       // logger?.d("tenor value ${this} ${model?.products?[index].tenor}");
@@ -307,7 +325,7 @@ extension EnumExtensions on KoloboxFundEnum {
     MyEarningDataModel? model = helper.getMyEarningDataModel();
 
     int? index = model?.earnings?.indexWhere((element) =>
-    element.name == getProductName &&
+        element.name == getProductName &&
         (element.verified ?? false) &&
         !(element.canceled ?? true));
 
@@ -323,7 +341,7 @@ extension EnumExtensions on KoloboxFundEnum {
     MyEarningDataModel? model = helper.getMyEarningDataModel();
 
     int? index = model?.earnings?.indexWhere((element) =>
-    element.name == getProductName &&
+        element.name == getProductName &&
         (element.verified ?? false) &&
         !(element.canceled ?? true));
 
@@ -339,7 +357,7 @@ extension EnumExtensions on KoloboxFundEnum {
     MyEarningDataModel? model = helper.getMyEarningDataModel();
 
     int? index = model?.earnings?.indexWhere((element) =>
-    element.name == getProductName &&
+        element.name == getProductName &&
         (element.verified ?? false) &&
         !(element.canceled ?? true));
 
@@ -366,7 +384,7 @@ extension EnumExtensions on KoloboxFundEnum {
         return 0;
       }
       DateTime dateTime =
-      DateHelper.getDateTime(active?.products?[index].startDate ?? '');
+          DateHelper.getDateTime(active?.products?[index].startDate ?? '');
       int tenor = getTenorValue();
       // logger?.d('start date and tenor $dateTime $tenor');
       dateTime = dateTime.add(Duration(days: tenor));
@@ -374,9 +392,7 @@ extension EnumExtensions on KoloboxFundEnum {
 
       if (DateTime.now().isBefore(dateTime)) {
         // logger?.d("before $this ${(active?.products?[index].startDate)}");
-        tenor = dateTime
-            .difference(DateTime.now())
-            .inDays;
+        tenor = dateTime.difference(DateTime.now()).inDays;
       } else {
         // logger?.d("not before $this ${(active?.products?[index].startDate)}");
         tenor = 0;
@@ -409,8 +425,8 @@ extension EnumIdExtensions on String {
         return KoloboxFundEnum.koloFlex;
       case koloTargetProductName:
         return KoloboxFundEnum.koloTarget;
-    // case koloTargetPlusProductName:
-    //   return KoloboxFundEnum.koloTarget;
+      // case koloTargetPlusProductName:
+      //   return KoloboxFundEnum.koloTarget;
       case koloGroupProductName:
         return KoloboxFundEnum.koloGroup;
       case koloFamilyProductName:

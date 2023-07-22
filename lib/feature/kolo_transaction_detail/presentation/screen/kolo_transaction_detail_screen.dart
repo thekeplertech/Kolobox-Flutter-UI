@@ -188,7 +188,8 @@ class KoloTransactionDetailState
                   ),
                   Text(
                     CurrencyTextInputFormatter.formatAmount(
-                        koloboxFundEnum.getEarningsAmountValue()),
+                        koloboxFundEnum.getEarningsAmountValueByGroup(
+                            groupModel?.groupId ?? '')),
                     style:
                         AppStyle.b2Bold.copyWith(color: ColorList.primaryColor),
                   ),

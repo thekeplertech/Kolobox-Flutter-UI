@@ -84,17 +84,17 @@ class _SelectGroupWidgetState extends BaseScreenState<SelectGroupWidget> {
                           overlayColor: ColorList.blueColor,
                           textColor: ColorList.blackSecondColor,
                           borderSide: BorderSide(
-                              color: groupModels[index].id ==
-                                      selectedGroupModel?.id
+                              color: groupModels[index].groupId ==
+                                      selectedGroupModel?.groupId
                                   ? ColorList.primaryColor
                                   : ColorList.greyLight7Color,
                               width: 1),
                           borderRadius: 12,
-                          textStyle:
-                              (groupModels[index].id == selectedGroupModel?.id
-                                      ? AppStyle.b7SemiBold
-                                      : AppStyle.b8Regular)
-                                  .copyWith(color: ColorList.blackSecondColor),
+                          textStyle: (groupModels[index].groupId ==
+                                      selectedGroupModel?.groupId
+                                  ? AppStyle.b7SemiBold
+                                  : AppStyle.b8Regular)
+                              .copyWith(color: ColorList.blackSecondColor),
                           onPressed: () {
                             selectedGroupModel = groupModels[index];
                             groupStreamController.add(true);

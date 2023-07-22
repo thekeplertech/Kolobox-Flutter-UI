@@ -397,12 +397,9 @@ class TransactionSuccessfulScreenState
     // Call for top up api
     String groupId = '';
     String subUserId = '';
-    if (isKoloGroup()) {
-      groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
-    }
-    if (isKoloFamily()) {
-      groupId = StateContainer.of(context).getGroupModel()?.groupId ?? '';
-      subUserId = prefHelper?.getLoginResponseModel().id ?? '';
+    if (isKoloGroup() || isKoloFamily()) {
+      groupId = StateContainer.of(context).getGroupId() ?? '';
+      subUserId = StateContainer.of(context).getFamilyUserId() ?? '';
     }
     if (isInActive) {
       BlocProvider.of<ConfirmPinAndPayBloc>(context).add(TopUpEvent(
@@ -427,9 +424,7 @@ class TransactionSuccessfulScreenState
             depositAmount:
                 getOnlyAmount(StateContainer.of(context).getAmount()),
             groupId: groupId,
-            subUserId: isKoloFamily()
-                ? prefHelper?.getLoginResponseModel().id ?? ''
-                : '',
+            subUserId: subUserId,
           )));
     }
   }

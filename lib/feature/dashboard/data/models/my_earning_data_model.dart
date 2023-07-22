@@ -22,6 +22,7 @@ class MyEarningDataModel {
 class MyEarningsData {
   double? amount;
   String? id;
+  String? groupId;
   String? startDate;
   bool? canceled;
   bool? verified;
@@ -35,6 +36,7 @@ class MyEarningsData {
   MyEarningsData(
       {this.amount,
       this.id,
+      this.groupId,
       this.startDate,
       this.canceled,
       this.verified,
@@ -50,6 +52,7 @@ class MyEarningsData {
         ? 0.0
         : double.tryParse(json['amount'].toString());
     id = json['id'] ?? '';
+    groupId = json['group_id'] ?? '';
     startDate = json['start_date'] ?? '';
     canceled = json['canceled'] ?? false;
     verified = json['verified'] ?? false;
@@ -67,6 +70,7 @@ class MyEarningsData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['amount'] = amount;
     data['id'] = id;
+    data['group_id'] = groupId;
     data['start_date'] = startDate;
     data['canceled'] = canceled;
     data['verified'] = verified;
