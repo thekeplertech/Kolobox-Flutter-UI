@@ -7,6 +7,7 @@ import '../../../../core/apirepo/base_api_repo.dart';
 import '../../../../core/http/network_info.dart';
 import '../../../../core/models/failure.dart';
 import '../../../../core/models/success.dart';
+import '../data/models/account_transfer_request_model.dart';
 import '../data/models/add_bank_request_model.dart';
 import '../data/models/create_family_request_model.dart';
 import '../data/models/create_family_user_request_model.dart';
@@ -97,4 +98,7 @@ abstract class DashboardRepo extends BaseApiRepo {
 
   Future<Either<Failure, Success>> updatePassword(
       UpdatePasswordRequestModel model);
+
+  Future<Either<Failure, Success>> accountTransfer(
+      AccountTransferRequestModel model);
 }

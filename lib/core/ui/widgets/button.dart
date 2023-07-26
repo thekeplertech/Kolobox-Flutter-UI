@@ -55,15 +55,20 @@ class Button extends StatelessWidget {
         child: Container(
           height: height,
           width: double.maxFinite,
-          padding: EdgeInsets.symmetric(vertical: verticalPadding),
+          padding:
+              EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                text,
-                style: textStyle ??
-                    AppStyle.b7SemiBold
-                        .copyWith(color: textColor ?? ColorList.white),
+              Expanded(
+                child: Text(
+                  text,
+                  style: textStyle ??
+                      AppStyle.b7SemiBold
+                          .copyWith(color: textColor ?? ColorList.white),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
               ),
               if (postIcon != null) ...[
                 const SizedBox(width: 12),

@@ -17,6 +17,8 @@ import '../../../../core/enums/kolobox_fund_enum.dart';
 import '../../../../core/models/api_response.dart';
 import '../../../../core/preference/pref_helper.dart';
 import '../../../auth/login/data/models/login_response_model.dart';
+import '../models/account_transfer_request_model.dart';
+import '../models/account_transfer_response_model.dart';
 import '../models/active_product_data_model.dart';
 import '../models/add_bank_request_model.dart';
 import '../models/create_family_request_model.dart';
@@ -402,5 +404,16 @@ class DashboardRepoImpl extends DashboardRepo {
       UpdatePasswordRequestModel model) async {
     return Right(
         Success((await remoteDashboardDataSource.updatePassword(model)).data));
+  }
+
+  @override
+  Future<Either<Failure, Success>> accountTransfer(
+          AccountTransferRequestModel model) =>
+      baseApiMethod(() => accountTransferFromAPI(model));
+
+  Future<Either<Failure, Success>> accountTransferFromAPI(
+      AccountTransferRequestModel model) async {
+    return Right(Success(AccountTransferResponseModel.fromJson(
+        (await remoteDashboardDataSource.accountTransfer(model)).data)));
   }
 }

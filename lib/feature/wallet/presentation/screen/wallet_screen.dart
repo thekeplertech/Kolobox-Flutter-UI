@@ -12,12 +12,14 @@ import 'package:kolobox_new_app/feature/wallet/presentation/bloc/wallet_state.da
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/image_constants.dart';
+import '../../../../core/enums/kolobox_fund_enum.dart';
 import '../../../../core/ui/widgets/button.dart';
 import '../../../../core/ui/widgets/no_app_bar.dart';
 import '../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
 import '../../../dashboard/presentation/bloc/dashboard_bloc.dart';
 import '../../../dashboard/presentation/bloc/dashboard_event.dart';
 import '../../../widgets/kolo_info_widget.dart';
+import '../../../widgets/withdrawal/withdrawal_to_bank_kolobox_widget_page.dart';
 
 class WalletScreen extends BaseBlocWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -246,6 +248,37 @@ class WalletScreenState extends BaseBlocWidgetState<WalletScreen> {
                                 )),
                       ],
                     ),
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: Button(
+                          'Withdraw',
+                          backgroundColor: ColorList.primaryColor,
+                          textColor: ColorList.white,
+                          overlayColor: ColorList.blueColor,
+                          borderRadius: 24,
+                          verticalPadding: 10,
+                          onPressed: () {
+                            BlocProvider.of<DashboardBloc>(context)
+                                .add(HideDisableBottomScreenEvent());
+                            showCustomBottomSheet(
+                                const WithdrawalToBankKoloboxWidgetPage(
+                              koloboxFundEnum: KoloboxFundEnum.koloFlex,
+                              popUntil: '/',
+                            )).then((value) {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(ShowEnableBottomScreenEvent());
+                              emptyStreamController.add(true);
+                            });
+                          },
+                          postIcon: imageWithdrawIcon,
+                        ),
+                      ),
+                    ],
                   ),
                   // Text(
                   //   'Recent Transaction',

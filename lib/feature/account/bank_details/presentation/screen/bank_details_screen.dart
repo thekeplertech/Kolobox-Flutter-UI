@@ -23,8 +23,11 @@ import '../bloc/bank_detail_bloc.dart';
 import '../bloc/bank_detail_state.dart';
 
 class BankDetailsScreen extends BaseBlocWidget {
+  final bool isFromWithdrawPopUp;
+
   const BankDetailsScreen({
     Key? key,
+    required this.isFromWithdrawPopUp,
   }) : super(key: key);
 
   @override
@@ -170,7 +173,10 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
   }
 
   onClickAddBankAccount() {
-    BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+    if (!widget.isFromWithdrawPopUp) {
+      BlocProvider.of<DashboardBloc>(context)
+          .add(HideDisableBottomScreenEvent());
+    }
     showCustomBottomSheet(AddBankDetailsPage(
       banks: allBankData,
       bankDetailEnum: selectedBankDetailEnum,
@@ -184,8 +190,10 @@ class BankDetailsState extends BaseBlocWidgetState<BankDetailsScreen> {
         );
       },
     )).then((value) {
-      BlocProvider.of<DashboardBloc>(context)
-          .add(ShowEnableBottomScreenEvent());
+      if (!widget.isFromWithdrawPopUp) {
+        BlocProvider.of<DashboardBloc>(context)
+            .add(ShowEnableBottomScreenEvent());
+      }
     });
   }
 

@@ -30,6 +30,9 @@ class BankDetailBloc extends BaseBloc<BankDetailEvent, BankDetailState> {
     on<UpdateMyBanksEvent>((event, emit) async {
       await callUpdateMyBanksEvent(event, emit);
     });
+    on<AccountTransferEvent>((event, emit) async {
+      await callAccountTransferEvent(event, emit);
+    });
   }
 
   Future<void> callGetAllMyBanksEvent(
@@ -98,6 +101,25 @@ class BankDetailBloc extends BaseBloc<BankDetailEvent, BankDetailState> {
     }, (r) {
       baseBlocObject!.add(LoadedApiEvent());
       emit(UpdateMyBanksState());
+    });
+  }
+
+  Future<void> callAccountTransferEvent(
+      AccountTransferEvent event, Emitter emit) async {
+    baseBlocObject!.add(LoadApiEvent());
+    final result = await dashboardRepo.accountTransfer(event.model);
+    await dashboardRepo.getProfile();
+    await helper.setHomeApiCall(false);
+    await helper.setKoloboxApiCall(false);
+    await helper.setWalletApiCall(false);
+    await helper.setAccountApiCall(false);
+
+    result.fold((l) {
+      baseBlocObject!.objectModel = l;
+      baseBlocObject!.add(ErrorApiEvent());
+    }, (r) {
+      baseBlocObject!.add(LoadedApiEvent());
+      emit(AccountTransferState(responseModel: r.model));
     });
   }
 }

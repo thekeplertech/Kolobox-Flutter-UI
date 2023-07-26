@@ -14,6 +14,7 @@ import 'package:kolobox_new_app/feature/koloflex/presentation/bloc/kolo_flex_blo
 import 'package:kolobox_new_app/feature/widgets/deposit/deposit_your_kolobox_widget_page.dart';
 import 'package:kolobox_new_app/feature/widgets/deposited_withdrawal_info/deposited_withdrawal_info_kolobox_widget.dart';
 import 'package:kolobox_new_app/feature/widgets/kolo_info_widget.dart';
+import 'package:kolobox_new_app/feature/widgets/withdrawal/withdrawal_to_bank_kolobox_widget_page.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../core/ui/widgets/button.dart';
@@ -442,28 +443,28 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
       }
     }
 
-    if (KoloboxFundEnum.koloTarget.isInActiveProduct()) {
-      int targetRemainingTenor =
-          KoloboxFundEnum.koloTarget.tenorAvailableForWithdrawal();
-      int targetTotalTenor = KoloboxFundEnum.koloTarget.getTenorValue();
-      if (targetRemainingTenor == 0 || targetTotalTenor == 0) {
-        availableForWithdrawals.add(AccountDataModel(
-          name: 'Kolo Target',
-          amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
-          remainingTenor: targetRemainingTenor,
-          totalTenor: targetTotalTenor,
-          startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
-        ));
-      } else {
-        balances.add(AccountDataModel(
-          name: 'Kolo Target',
-          amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
-          remainingTenor: targetRemainingTenor,
-          totalTenor: targetTotalTenor,
-          startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
-        ));
-      }
-    }
+    // if (KoloboxFundEnum.koloTarget.isInActiveProduct()) {
+    //   int targetRemainingTenor =
+    //       KoloboxFundEnum.koloTarget.tenorAvailableForWithdrawal();
+    //   int targetTotalTenor = KoloboxFundEnum.koloTarget.getTenorValue();
+    //   if (targetRemainingTenor == 0 || targetTotalTenor == 0) {
+    //     availableForWithdrawals.add(AccountDataModel(
+    //       name: 'Kolo Target',
+    //       amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
+    //       remainingTenor: targetRemainingTenor,
+    //       totalTenor: targetTotalTenor,
+    //       startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
+    //     ));
+    //   } else {
+    //     balances.add(AccountDataModel(
+    //       name: 'Kolo Target',
+    //       amount: KoloboxFundEnum.koloTarget.getDepositAmountValue(),
+    //       remainingTenor: targetRemainingTenor,
+    //       totalTenor: targetTotalTenor,
+    //       startDate: KoloboxFundEnum.koloTarget.getStartDateValue(),
+    //     ));
+    //   }
+    // }
 
     // if (KoloboxFundEnum.koloTargetPlus.isInActiveProduct()) {
     //   int targetPlusRemainingTenor =
@@ -488,51 +489,51 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
     //   }
     // }
 
-    if (KoloboxFundEnum.koloFamily.isInActiveProduct()) {
-      int familyRemainingTenor =
-          KoloboxFundEnum.koloFamily.tenorAvailableForWithdrawal();
-      int familyTotalTenor = KoloboxFundEnum.koloFamily.getTenorValue();
-      if (familyRemainingTenor == 0 || familyTotalTenor == 0) {
-        availableForWithdrawals.add(AccountDataModel(
-          name: 'Kolo Family',
-          amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
-          remainingTenor: familyRemainingTenor,
-          totalTenor: familyTotalTenor,
-          startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
-        ));
-      } else {
-        balances.add(AccountDataModel(
-          name: 'Kolo Family',
-          amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
-          remainingTenor: familyRemainingTenor,
-          totalTenor: familyTotalTenor,
-          startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
-        ));
-      }
-    }
+    // if (KoloboxFundEnum.koloFamily.isInActiveProduct()) {
+    //   int familyRemainingTenor =
+    //       KoloboxFundEnum.koloFamily.tenorAvailableForWithdrawal();
+    //   int familyTotalTenor = KoloboxFundEnum.koloFamily.getTenorValue();
+    //   if (familyRemainingTenor == 0 || familyTotalTenor == 0) {
+    //     availableForWithdrawals.add(AccountDataModel(
+    //       name: 'Kolo Family',
+    //       amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
+    //       remainingTenor: familyRemainingTenor,
+    //       totalTenor: familyTotalTenor,
+    //       startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
+    //     ));
+    //   } else {
+    //     balances.add(AccountDataModel(
+    //       name: 'Kolo Family',
+    //       amount: KoloboxFundEnum.koloFamily.getDepositAmountValue(),
+    //       remainingTenor: familyRemainingTenor,
+    //       totalTenor: familyTotalTenor,
+    //       startDate: KoloboxFundEnum.koloFamily.getStartDateValue(),
+    //     ));
+    //   }
+    // }
 
-    if (KoloboxFundEnum.koloGroup.isInActiveProduct()) {
-      int groupRemainingTenor =
-          KoloboxFundEnum.koloGroup.tenorAvailableForWithdrawal();
-      int groupTotalTenor = KoloboxFundEnum.koloGroup.getTenorValue();
-      if (groupRemainingTenor == 0 || groupTotalTenor == 0) {
-        availableForWithdrawals.add(AccountDataModel(
-          name: 'Kolo Group',
-          amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
-          remainingTenor: groupRemainingTenor,
-          totalTenor: groupTotalTenor,
-          startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
-        ));
-      } else {
-        balances.add(AccountDataModel(
-          name: 'Kolo Group',
-          amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
-          remainingTenor: groupRemainingTenor,
-          totalTenor: groupTotalTenor,
-          startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
-        ));
-      }
-    }
+    // if (KoloboxFundEnum.koloGroup.isInActiveProduct()) {
+    //   int groupRemainingTenor =
+    //       KoloboxFundEnum.koloGroup.tenorAvailableForWithdrawal();
+    //   int groupTotalTenor = KoloboxFundEnum.koloGroup.getTenorValue();
+    //   if (groupRemainingTenor == 0 || groupTotalTenor == 0) {
+    //     availableForWithdrawals.add(AccountDataModel(
+    //       name: 'Kolo Group',
+    //       amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
+    //       remainingTenor: groupRemainingTenor,
+    //       totalTenor: groupTotalTenor,
+    //       startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
+    //     ));
+    //   } else {
+    //     balances.add(AccountDataModel(
+    //       name: 'Kolo Group',
+    //       amount: KoloboxFundEnum.koloGroup.getDepositAmountValue(),
+    //       remainingTenor: groupRemainingTenor,
+    //       totalTenor: groupTotalTenor,
+    //       startDate: KoloboxFundEnum.koloGroup.getStartDateValue(),
+    //     ));
+    //   }
+    // }
 
     return Column(
       children: [
@@ -569,15 +570,16 @@ class KoloFlexScreenState extends BaseBlocWidgetState<KoloFlexScreen> {
                       // });
                     },
                     onWithdrawal: () {
-                      // comingSoon();
-                      // BlocProvider.of<DashboardBloc>(context)
-                      //     .add(HideDisableBottomScreenEvent());
-                      // showCustomBottomSheet(
-                      //         const WithdrawalSelectionKoloboxWidget())
-                      //     .then((value) {
-                      //   BlocProvider.of<DashboardBloc>(context)
-                      //       .add(ShowEnableBottomScreenEvent());
-                      // });
+                      BlocProvider.of<DashboardBloc>(context)
+                          .add(HideDisableBottomScreenEvent());
+                      showCustomBottomSheet(
+                          const WithdrawalToBankKoloboxWidgetPage(
+                        koloboxFundEnum: KoloboxFundEnum.koloFlex,
+                        popUntil: koloFlexPageValue,
+                      )).then((value) {
+                        BlocProvider.of<DashboardBloc>(context)
+                            .add(ShowEnableBottomScreenEvent());
+                      });
                     },
                   )),
           const SizedBox(

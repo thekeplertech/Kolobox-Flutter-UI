@@ -7,24 +7,32 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../core/colors/color_list.dart';
 import '../../core/constants/image_constants.dart';
 import '../../core/ui/widgets/button.dart';
+import '../../core/ui/widgets/toast_widget.dart';
+import '../../core/utils/utils.dart';
 import '../../routes/routes.dart';
 
 class ConfirmWithPinWidget extends BaseScreen {
-  const ConfirmWithPinWidget({Key? key}) : super(key: key);
+  final Function(String) onPopUp;
+
+  const ConfirmWithPinWidget({
+    Key? key,
+    required this.onPopUp,
+  }) : super(key: key);
 
   @override
   State<ConfirmWithPinWidget> createState() => _ConfirmWithPinWidgetState();
 }
 
 class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
-  // This widget is not used
+  final TextEditingController pinTextEditingController =
+      TextEditingController();
 
   @override
   Widget body(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding:
-        const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
+            const EdgeInsets.only(top: 17, left: 28, right: 28, bottom: 31),
         child: Column(
           children: [
             Align(
@@ -42,7 +50,7 @@ class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
             Text(
               'Confirm with PIN',
               style:
-              AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
+                  AppStyle.b4Bold.copyWith(color: ColorList.blackSecondColor),
             ),
             const SizedBox(
               height: 6,
@@ -50,7 +58,7 @@ class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
             Text(
               'Enter your secure 4 digit pin to confirm',
               style:
-              AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
+                  AppStyle.b8Medium.copyWith(color: ColorList.blackThirdColor),
             ),
             const SizedBox(
               height: 30,
@@ -78,6 +86,7 @@ class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
                   FilteringTextInputFormatter.digitsOnly,
                 ],
                 onChanged: (String value) {},
+                controller: pinTextEditingController,
               ),
             ),
             const SizedBox(
@@ -90,7 +99,25 @@ class _ConfirmWithPinWidgetState extends BaseScreenState<ConfirmWithPinWidget> {
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
               onPressed: () {
-                // navigatePush(context, const TransactionSuccessfulPage());
+                if (pinTextEditingController.text.isEmpty ||
+                    pinTextEditingController.text.length != 4) {
+                  Utils.showToast(
+                      context,
+                      ToastWidget(
+                        'Enter 4 digit pin',
+                        borderColor: ColorList.redDarkColor,
+                        backgroundColor: ColorList.white,
+                        textColor: ColorList.black,
+                        messageIcon: imageCloseRed,
+                        closeWidget: Image.asset(
+                          imageClose,
+                          color: ColorList.black,
+                        ),
+                      ));
+                  return;
+                }
+                widget.onPopUp(pinTextEditingController.text);
+                goBack(context);
               },
             ),
           ],

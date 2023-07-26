@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kolobox_new_app/core/base/base_screen.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
-import 'package:kolobox_new_app/feature/widgets/withdrawal/withdrawal_summary_kolobox_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
@@ -119,7 +118,7 @@ class _WithdrawalToMyWalletKoloboxWidgetState
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
               onPressed: () {
-                showCustomBottomSheet(const WithdrawalSummaryKoloboxWidget());
+                // showCustomBottomSheet(const WithdrawalSummaryKoloboxWidget());
               },
             ),
           ],

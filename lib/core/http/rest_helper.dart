@@ -14,6 +14,7 @@ import '../../feature/auth/login/data/models/login_request_model.dart';
 import '../../feature/auth/login/data/models/update_pin_request_model.dart';
 import '../../feature/auth/register/data/models/register_request_model.dart';
 import '../../feature/auth/register/data/models/verify_user_request_model.dart';
+import '../../feature/dashboard/data/models/account_transfer_request_model.dart';
 import '../../feature/dashboard/data/models/add_bank_request_model.dart';
 import '../../feature/dashboard/data/models/create_family_request_model.dart';
 import '../../feature/dashboard/data/models/create_family_user_request_model.dart';
@@ -161,4 +162,8 @@ abstract class RestHelper {
 
   @PUT(ApiUrls.updatePasswordAPI)
   Future<ApiResponse> updatePassword(@Body() UpdatePasswordRequestModel model);
+
+  @POST(ApiUrls.accountTransferAPI)
+  Future<ApiResponse> accountTransfer(
+      @Body() AccountTransferRequestModel model);
 }

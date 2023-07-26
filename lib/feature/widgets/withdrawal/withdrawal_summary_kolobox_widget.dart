@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:kolobox_new_app/core/base/base_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kolobox_new_app/core/base/base_bloc_widget.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/core/utils/utils.dart';
+import 'package:kolobox_new_app/feature/dashboard/data/models/account_transfer_request_model.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
 import '../../../core/constants/kolo_box_icon.dart';
+import '../../../core/enums/kolobox_fund_enum.dart';
 import '../../../core/ui/widgets/button.dart';
+import '../../../core/ui/widgets/currency_text_input_formatter.dart';
+import '../../../core/ui/widgets/toast_widget.dart';
+import '../../account/bank_details/presentation/bloc/bank_detail_bloc.dart';
+import '../../account/bank_details/presentation/bloc/bank_detail_event.dart';
+import '../../account/bank_details/presentation/bloc/bank_detail_state.dart';
+import '../../dashboard/data/models/get_all_my_banks_response_model.dart';
+import '../../dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../dashboard/presentation/bloc/dashboard_event.dart';
+import '../confirm_with_pin_widget.dart';
 
-class WithdrawalSummaryKoloboxWidget extends BaseScreen {
-  const WithdrawalSummaryKoloboxWidget({Key? key}) : super(key: key);
+class WithdrawalSummaryKoloboxWidget extends BaseBlocWidget {
+  final KoloboxFundEnum koloboxFundEnum;
+  final String amount;
+  final MyBankData myBankData;
+  final String popUntil;
+
+  const WithdrawalSummaryKoloboxWidget({
+    Key? key,
+    required this.koloboxFundEnum,
+    required this.amount,
+    required this.myBankData,
+    required this.popUntil,
+  }) : super(key: key);
 
   @override
   State<WithdrawalSummaryKoloboxWidget> createState() =>
@@ -17,9 +41,34 @@ class WithdrawalSummaryKoloboxWidget extends BaseScreen {
 }
 
 class _WithdrawalSummaryKoloboxWidgetState
-    extends BaseScreenState<WithdrawalSummaryKoloboxWidget> {
+    extends BaseBlocWidgetState<WithdrawalSummaryKoloboxWidget> {
   @override
-  Widget body(BuildContext context) {
+  Widget getCustomBloc() {
+    return BlocListener<BankDetailBloc, BankDetailState>(
+      listener: (_, state) {
+        if (state is AccountTransferState) {
+          Utils.showToast(
+              context,
+              ToastWidget(
+                state.responseModel.duration ?? '',
+                closeWidget: Image.asset(
+                  imageClose,
+                  color: ColorList.white,
+                ),
+              ),
+              isTab: true);
+          Future.delayed(const Duration(milliseconds: 300), () {
+            BlocProvider.of<DashboardBloc>(context).add(ClearBackStackEvent(
+              until: widget.popUntil,
+            ));
+          });
+        }
+      },
+      child: getChild(),
+    );
+  }
+
+  SingleChildScrollView getChild() {
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -78,7 +127,7 @@ class _WithdrawalSummaryKoloboxWidgetState
                       height: 5,
                     ),
                     Text(
-                      '₦ 100,000.00',
+                      CurrencyTextInputFormatter.formatAmount(widget.amount),
                       style: AppStyle.b4Bold.copyWith(color: ColorList.white),
                     ),
                   ],
@@ -117,10 +166,13 @@ class _WithdrawalSummaryKoloboxWidgetState
                       const SizedBox(
                         width: 10,
                       ),
-                      Text(
-                        'Zenith Bank',
-                        style: AppStyle.b8SemiBold
-                            .copyWith(color: ColorList.blackSecondColor),
+                      Expanded(
+                        child: Text(
+                          widget.myBankData.bankName ?? '',
+                          style: AppStyle.b8SemiBold
+                              .copyWith(color: ColorList.blackSecondColor),
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ],
                   ),
@@ -128,7 +180,7 @@ class _WithdrawalSummaryKoloboxWidgetState
                     height: 20,
                   ),
                   Text(
-                    '0949830020004',
+                    widget.myBankData.accountNumber ?? '',
                     style: AppStyle.b6Bold
                         .copyWith(color: ColorList.blackSecondColor),
                   ),
@@ -136,7 +188,7 @@ class _WithdrawalSummaryKoloboxWidgetState
                     height: 5,
                   ),
                   Text(
-                    'Dami Anoreq',
+                    widget.myBankData.accountName ?? '',
                     style: AppStyle.b8Medium
                         .copyWith(color: ColorList.blackSecondColor),
                   ),
@@ -152,8 +204,21 @@ class _WithdrawalSummaryKoloboxWidgetState
               textColor: ColorList.white,
               overlayColor: ColorList.blueColor,
               borderRadius: 32,
-              onPressed: () {
-                // showCustomBottomSheet(const ConfirmWithPinWidget());
+              onPressed: () async {
+                showCustomBottomSheet(ConfirmWithPinWidget(
+                  onPopUp: (pin) {
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      BlocProvider.of<BankDetailBloc>(context)
+                          .add(AccountTransferEvent(
+                              model: AccountTransferRequestModel(
+                        amount: widget.amount,
+                        pin: pin,
+                        id: widget.myBankData.id ?? '',
+                        productId: widget.koloboxFundEnum.getActiveId,
+                      )));
+                    });
+                  },
+                ));
               },
             ),
           ],

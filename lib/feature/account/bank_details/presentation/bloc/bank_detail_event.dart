@@ -1,3 +1,4 @@
+import 'package:kolobox_new_app/feature/dashboard/data/models/account_transfer_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/update_bank_request_model.dart';
 
 import '../../../../dashboard/data/models/add_bank_request_model.dart';
@@ -27,4 +28,10 @@ class UpdateMyBanksEvent extends BankDetailEvent {
   final UpdateBankRequestModel model;
 
   UpdateMyBanksEvent({required this.bankId, required this.model});
+}
+
+class AccountTransferEvent extends BankDetailEvent {
+  final AccountTransferRequestModel model;
+
+  AccountTransferEvent({required this.model});
 }

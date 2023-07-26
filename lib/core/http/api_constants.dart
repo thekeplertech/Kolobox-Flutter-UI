@@ -37,6 +37,7 @@ class ApiUrls {
   static const String deleteMyBanksAPI = "user/me/bank/{bankId}";
   static const String updateProfileAPI = "user/me/update";
   static const String updatePasswordAPI = "user/me/password/change_password";
+  static const String accountTransferAPI = "user/account/transfer";
 }
 
 const String USERS_API = "users";

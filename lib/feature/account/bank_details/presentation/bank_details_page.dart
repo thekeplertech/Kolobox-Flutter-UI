@@ -7,8 +7,11 @@ import '../../../../core/bloc/master_bloc.dart';
 import 'screen/bank_details_screen.dart';
 
 class BankDetailsPage extends BasePage {
+  final bool isFromWithdrawPopUp;
+
   const BankDetailsPage({
     Key? key,
+    this.isFromWithdrawPopUp = false,
   }) : super(key: key);
 
   @override
@@ -21,6 +24,7 @@ class BankDetailsPageState extends BasePageState<BankDetailsPage> {
       BlocProvider<BankDetailBloc>(
         create: (context) =>
             BankDetailBloc(BlocProvider.of<MasterBloc>(context)),
-        child: const BankDetailsScreen(),
+        child:
+            BankDetailsScreen(isFromWithdrawPopUp: widget.isFromWithdrawPopUp),
       );
 }

@@ -8,6 +8,7 @@ import 'package:kolobox_new_app/feature/dashboard/data/models/transactions_reque
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
 
 import '../../../../../core/models/api_response.dart';
+import '../models/account_transfer_request_model.dart';
 import '../models/add_bank_request_model.dart';
 import '../models/create_family_request_model.dart';
 import '../models/create_family_user_request_model.dart';
@@ -83,4 +84,6 @@ abstract class RemoteDashboardDataSource {
   Future<ApiResponse> updateProfile(UpdateProfileRequestModel model);
 
   Future<ApiResponse> updatePassword(UpdatePasswordRequestModel model);
+
+  Future<ApiResponse> accountTransfer(AccountTransferRequestModel model);
 }

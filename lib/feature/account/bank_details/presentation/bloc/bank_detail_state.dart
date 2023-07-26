@@ -1,3 +1,4 @@
+import '../../../../dashboard/data/models/account_transfer_response_model.dart';
 import '../../../../dashboard/data/models/get_all_my_banks_response_model.dart';
 import '../../../../dashboard/data/models/get_banks_response_model.dart';
 
@@ -22,3 +23,9 @@ class AddMyBanksState extends BankDetailState {}
 class DeleteMyBanksState extends BankDetailState {}
 
 class UpdateMyBanksState extends BankDetailState {}
+
+class AccountTransferState extends BankDetailState {
+  final AccountTransferResponseModel responseModel;
+
+  AccountTransferState({required this.responseModel});
+}
