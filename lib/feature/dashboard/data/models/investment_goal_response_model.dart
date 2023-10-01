@@ -20,15 +20,16 @@ class InvestmentGoalModel {
   double? percentageAmountSaved;
   double? percentageDaysUsed;
 
-  InvestmentGoalModel(
-      {this.dueDate,
-      this.goalAmount,
-      this.purpose,
-      this.amountSaved,
-      this.daysLeft,
-      this.totalDays,
-      this.percentageAmountSaved,
-      this.percentageDaysUsed});
+  bool isActive = true;
+
+  InvestmentGoalModel({this.dueDate,
+    this.goalAmount,
+    this.purpose,
+    this.amountSaved,
+    this.daysLeft,
+    this.totalDays,
+    this.percentageAmountSaved,
+    this.percentageDaysUsed});
 
   InvestmentGoalModel.fromJson(Map<String, dynamic> json) {
     dueDate = json['due_date'] ?? '';

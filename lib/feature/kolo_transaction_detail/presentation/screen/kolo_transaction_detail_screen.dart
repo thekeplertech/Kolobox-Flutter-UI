@@ -295,7 +295,8 @@ class KoloTransactionDetailState
                               ),
                               Text(
                                 DateHelper.getDateFromDateTime(
-                                    koloboxFundEnum.getStartDateValue(),
+                                    koloboxFundEnum
+                                        .getStartDate(groupModel?.groupId),
                                     'dd MMM yyyy'),
                                 style: AppStyle.b9SemiBold.copyWith(
                                     color: ColorList.blackSecondColor),
@@ -311,8 +312,8 @@ class KoloTransactionDetailState
                               ),
                               Text(
                                 DateHelper.getDateFromDateTime(
-                                    investmentGoalModel?.dueDate ??
-                                        (groupModel?.createdAt ?? ''),
+                                    koloboxFundEnum
+                                        .getEndDate(groupModel?.groupId),
                                     'dd MMM yyyy'),
                                 style: AppStyle.b9SemiBold.copyWith(
                                     color: widget.isPaid

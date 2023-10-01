@@ -82,3 +82,7 @@ const testimonyTwoIcon = "assets/images/testi_2.png";
 const testimonyThreeIcon = "assets/images/testi_3.png";
 const testimonyFourIcon = "assets/images/testi_4.png";
 const testimonyFiveIcon = "assets/images/testi_5.png";
+const imageFacebook = "assets/images/facebook.png";
+const imageInstagram = "assets/images/instagram.png";
+const imageLinkedIn = "assets/images/linked_in.png";
+const imageTwitter = "assets/images/twitter.png";

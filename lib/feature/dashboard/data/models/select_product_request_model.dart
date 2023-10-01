@@ -4,6 +4,7 @@ class SelectProductRequestModel {
   final String productId;
   final String groupId;
   final String subUserId;
+  final String callBackUrl;
 
   SelectProductRequestModel({
     required this.depositAmount,
@@ -11,6 +12,7 @@ class SelectProductRequestModel {
     required this.productId,
     required this.groupId,
     required this.subUserId,
+    this.callBackUrl = 'https://www.kolobox.ng',
   });
 
   Map<String, dynamic> toJson() {
@@ -20,6 +22,7 @@ class SelectProductRequestModel {
     data['product_id'] = productId;
     data['group_id'] = groupId;
     data['subUser_id'] = subUserId;
+    data['callback_url'] = callBackUrl;
     return data;
   }
 }

@@ -55,6 +55,7 @@ dependencies:
   rxdart: ^0.27.7
   shared_preferences: ^2.0.15
   url_launcher: ^6.0.0
+  webview_flutter: ^4.2.0
 
 dev_dependencies:
   flutter_test:

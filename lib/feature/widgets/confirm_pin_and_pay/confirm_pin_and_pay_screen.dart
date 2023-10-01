@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
-import 'package:kolobox_new_app/core/pay_stack_payment_gateway/pay_stack_payment.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/feature/auth/login/data/models/update_pin_request_model.dart';
 import 'package:kolobox_new_app/feature/dashboard/data/models/verify_pin_request_model.dart';
@@ -17,12 +16,12 @@ import '../../../../core/ui/widgets/button.dart';
 import '../../../core/enums/confirm_pin_and_pay_action_enum.dart';
 import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/utils.dart';
-import '../../../di/injection_container.dart';
 import '../../../routes/routes.dart';
 import '../../auth/login/data/models/login_response_model.dart';
 import '../../auth/login/presentation/bloc/login_bloc.dart';
 import '../../auth/login/presentation/bloc/login_event.dart';
 import '../../auth/login/presentation/bloc/login_state.dart';
+import '../../pay_web_view/presentation/pay_web_view_page.dart';
 import '../../transaction_successful/presentation/transaction_successful_page.dart';
 import '../create_pin_widget.dart';
 
@@ -92,14 +91,16 @@ class ConfirmPinAndPayScreenState
                 // });
               } else if (state is SelectProductState) {
                 Future.delayed(const Duration(milliseconds: 200), () {
-                  callPayment(
+                  callPaymentString(
+                      state.responseModel.data?.authorizationUrl ?? '',
                       state.requestModel.depositAmount,
                       state.responseModel.data?.accessCode ?? '',
                       state.responseModel.data?.reference ?? '');
                 });
               } else if (state is TopUpState) {
                 Future.delayed(const Duration(milliseconds: 200), () {
-                  callPayment(
+                  callPaymentString(
+                      state.responseModel.topUpData?.authorizationUrl ?? '',
                       state.requestModel.depositAmount,
                       state.responseModel.topUpData?.accessCode ?? '',
                       state.responseModel.topUpData?.reference ?? '');
@@ -281,41 +282,85 @@ class ConfirmPinAndPayScreenState
   //   }
   // }
 
-  void callPayment(
-      String amount, String accessCode, String referenceCode) async {
-    PayStackPayment payStackPayment = sl();
-    await payStackPayment.checkout(
-      context,
-      amount,
-      prefHelper?.getLoginResponseModel().email ?? '',
-      referenceCode,
-      accessCode,
-      (referenceCode) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          navigatePush(
-              context,
-              TransactionSuccessfulPage(
-                referenceCode: referenceCode,
-                amount: amount,
-                isDeposited: true,
-                isSuccess: true,
-              ));
-        });
-      },
-      (errorMessage) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          navigatePush(
-              context,
-              TransactionSuccessfulPage(
-                referenceCode: referenceCode,
-                amount: amount,
-                isDeposited: true,
-                isSuccess: false,
-                errorMessage: errorMessage,
-              ));
-        });
-      },
-    );
+  // void callPayment(
+  //     String amount, String accessCode, String referenceCode) async {
+  //   PayStackPayment payStackPayment = sl();
+  //   await payStackPayment.checkout(
+  //     context,
+  //     amount,
+  //     prefHelper?.getLoginResponseModel().email ?? '',
+  //     referenceCode,
+  //     accessCode,
+  //     (referenceCode) {
+  //       Future.delayed(const Duration(milliseconds: 300), () {
+  //         navigatePush(
+  //             context,
+  //             TransactionSuccessfulPage(
+  //               referenceCode: referenceCode,
+  //               amount: amount,
+  //               isDeposited: true,
+  //               isSuccess: true,
+  //             ));
+  //       });
+  //     },
+  //     (errorMessage) {
+  //       Future.delayed(const Duration(milliseconds: 300), () {
+  //         navigatePush(
+  //             context,
+  //             TransactionSuccessfulPage(
+  //               referenceCode: referenceCode,
+  //               amount: amount,
+  //               isDeposited: true,
+  //               isSuccess: false,
+  //               errorMessage: errorMessage,
+  //             ));
+  //       });
+  //     },
+  //   );
+  // }
+
+  Future<void> callPaymentString(String authorizationUrl, String amount,
+      String accessCode, String referenceCode) async {
+    if (authorizationUrl.isEmpty) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        navigatePush(
+            context,
+            TransactionSuccessfulPage(
+              referenceCode: referenceCode,
+              amount: amount,
+              isDeposited: true,
+              isSuccess: false,
+              errorMessage: 'Authorization Url error',
+            ));
+      });
+    }
+    dynamic result = await navigatePush(
+        context, PayWebViewPage(authorizationUrl: authorizationUrl));
+
+    if (result == 'failed') {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        navigatePush(
+            context,
+            TransactionSuccessfulPage(
+              referenceCode: referenceCode,
+              amount: amount,
+              isDeposited: true,
+              isSuccess: false,
+              errorMessage: 'Transaction terminated.',
+            ));
+      });
+    } else {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        navigatePush(
+            context,
+            TransactionSuccessfulPage(
+              referenceCode: result,
+              amount: amount,
+              isDeposited: true,
+              isSuccess: true,
+            ));
+      });
+    }
   }
 
   void showDialogForCreatePin(LoginResponseModel model, String oldPin) {

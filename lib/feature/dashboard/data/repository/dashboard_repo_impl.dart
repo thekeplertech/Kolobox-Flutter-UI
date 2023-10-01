@@ -308,17 +308,67 @@ class DashboardRepoImpl extends DashboardRepo {
   Future<Either<Failure, Success>> getGroupList() =>
       baseApiMethod(() => getGroupListFromAPI());
 
-  Future<Either<Failure, Success>> getGroupListFromAPI() async =>
-      Right(Success(GetGroupListResponseModel.fromJson(
-          (await remoteDashboardDataSource.getGroupList()).data)));
+  Future<Either<Failure, Success>> getGroupListFromAPI() async {
+    GetGroupListResponseModel model = GetGroupListResponseModel.fromJson(
+        (await remoteDashboardDataSource.getGroupList()).data);
+
+    PrefHelper helper = sl();
+    MyEarningDataModel? earnings = helper.getMyEarningDataModel();
+
+    if (model.types != null) {
+      for (var group in model.types!) {
+        group.isActive = false;
+        if (earnings?.earnings != null) {
+          for (var earning in earnings!.earnings!) {
+            if (group.groupId == earning.groupId) {
+              if ((earning.canceled ?? true) && (earning.verified ?? false)) {
+                group.isActive = false;
+                group.dob = earning.endStart;
+              } else if (!(earning.canceled ?? true) &&
+                  (earning.verified ?? false)) {
+                group.isActive = true;
+                group.dob = earning.endStart;
+              }
+            }
+          }
+        }
+      }
+    }
+    return Right(Success(model));
+  }
 
   @override
   Future<Either<Failure, Success>> getFamilyList() =>
       baseApiMethod(() => getFamilyListFromAPI());
 
-  Future<Either<Failure, Success>> getFamilyListFromAPI() async =>
-      Right(Success(GetGroupListResponseModel.fromJson(
-          (await remoteDashboardDataSource.getFamilyList()).data)));
+  Future<Either<Failure, Success>> getFamilyListFromAPI() async {
+    GetGroupListResponseModel model = GetGroupListResponseModel.fromJson(
+        (await remoteDashboardDataSource.getFamilyList()).data);
+
+    PrefHelper helper = sl();
+    MyEarningDataModel? earnings = helper.getMyEarningDataModel();
+
+    if (model.types != null) {
+      for (var group in model.types!) {
+        group.isActive = false;
+        if (earnings?.earnings != null) {
+          for (var earning in earnings!.earnings!) {
+            if (group.groupId == earning.groupId) {
+              if ((earning.canceled ?? true) && (earning.verified ?? false)) {
+                group.isActive = false;
+                group.dob = earning.endStart;
+              } else if (!(earning.canceled ?? true) &&
+                  (earning.verified ?? false)) {
+                group.isActive = true;
+                group.dob = earning.endStart;
+              }
+            }
+          }
+        }
+      }
+    }
+    return Right(Success(model));
+  }
 
   @override
   Future<Either<Failure, Success>> getGroupTenors() =>

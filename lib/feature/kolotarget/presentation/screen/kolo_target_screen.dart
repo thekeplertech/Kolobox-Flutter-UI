@@ -160,63 +160,63 @@ class KoloTargetScreenState extends BaseBlocWidgetState<KoloTargetScreen> {
                     stream: leftRightStreamController.stream,
                     builder: (_, snapshot) => Column(
                       children: [
-                        Container(
-                          width: double.maxFinite,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: ColorList.greyLight6Color, width: 1),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          padding: const EdgeInsets.all(5),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Button(
-                                  'Active',
-                                  borderRadius: 12,
-                                  verticalPadding: 10,
-                                  height: 31,
-                                  backgroundColor:
-                                      isLeft ? null : ColorList.white,
-                                  overlayColor: ColorList.blueColor,
-                                  textStyle: AppStyle.b9SemiBold.copyWith(
-                                      color: isLeft
-                                          ? ColorList.white
-                                          : ColorList.blackThirdColor),
-                                  onPressed: () {
-                                    isLeft = true;
-                                    leftRightStreamController.add(isLeft);
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Expanded(
-                                child: Button(
-                                  'Paid',
-                                  borderRadius: 12,
-                                  verticalPadding: 10,
-                                  height: 31,
-                                  backgroundColor:
-                                      !isLeft ? null : ColorList.white,
-                                  overlayColor: ColorList.blueColor,
-                                  textStyle: AppStyle.b9SemiBold.copyWith(
-                                      color: !isLeft
-                                          ? ColorList.white
-                                          : ColorList.blackThirdColor),
-                                  onPressed: () {
-                                    isLeft = false;
-                                    leftRightStreamController.add(isLeft);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        // Container(
+                        //   width: double.maxFinite,
+                        //   decoration: BoxDecoration(
+                        //     border: Border.all(
+                        //         color: ColorList.greyLight6Color, width: 1),
+                        //     borderRadius: BorderRadius.circular(14),
+                        //   ),
+                        //   padding: const EdgeInsets.all(5),
+                        //   child: Row(
+                        //     children: [
+                        //       Expanded(
+                        //         child: Button(
+                        //           'Active',
+                        //           borderRadius: 12,
+                        //           verticalPadding: 10,
+                        //           height: 31,
+                        //           backgroundColor:
+                        //               isLeft ? null : ColorList.white,
+                        //           overlayColor: ColorList.blueColor,
+                        //           textStyle: AppStyle.b9SemiBold.copyWith(
+                        //               color: isLeft
+                        //                   ? ColorList.white
+                        //                   : ColorList.blackThirdColor),
+                        //           onPressed: () {
+                        //             isLeft = true;
+                        //             leftRightStreamController.add(isLeft);
+                        //           },
+                        //         ),
+                        //       ),
+                        //       const SizedBox(
+                        //         width: 5,
+                        //       ),
+                        //       Expanded(
+                        //         child: Button(
+                        //           'Paid',
+                        //           borderRadius: 12,
+                        //           verticalPadding: 10,
+                        //           height: 31,
+                        //           backgroundColor:
+                        //               !isLeft ? null : ColorList.white,
+                        //           overlayColor: ColorList.blueColor,
+                        //           textStyle: AppStyle.b9SemiBold.copyWith(
+                        //               color: !isLeft
+                        //                   ? ColorList.white
+                        //                   : ColorList.blackThirdColor),
+                        //           onPressed: () {
+                        //             isLeft = false;
+                        //             leftRightStreamController.add(isLeft);
+                        //           },
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 20,
+                        // ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(

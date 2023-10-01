@@ -3,12 +3,14 @@ class TopUpRequestModel {
   final String productId;
   final String groupId;
   final String subUserId;
+  final String callBackUrl;
 
   TopUpRequestModel({
     required this.depositAmount,
     required this.productId,
     required this.groupId,
     required this.subUserId,
+    this.callBackUrl = 'https://www.kolobox.ng',
   });
 
   Map<String, dynamic> toJson() {
@@ -17,6 +19,7 @@ class TopUpRequestModel {
     data['product_id'] = productId;
     data['group_id'] = groupId;
     data['subUser_id'] = subUserId;
+    data['callback_url'] = callBackUrl;
     return data;
   }
 }

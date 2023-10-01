@@ -144,7 +144,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                         child: ProductItemWidget(
                           title: 'KOLO FLEX',
                           text:
-                              'This is an unlocked plan that allows flexibility and liquidity of funds. Tenor: Investment is made for a period of 30 days. . Access: Withdrawal can be made anytime subsequently. . Interest rate: 8% annual percentage rate (APR)',
+                              'This is an unlocked plan that allows flexibility and liquidity of funds. Tenor: Investment is made for a period of 30 days. . Access: Withdrawal can be made anytime subsequently. . Interest rate: 6% annual percentage rate (APR)',
                         ),
                       ),
                       SizedBox(
@@ -155,7 +155,7 @@ class HomeScreenState extends BaseBlocWidgetState<HomeScreen> {
                         child: ProductItemWidget(
                           title: 'KOLO TARGET',
                           text:
-                              'This is a locked plan aimed at individuals trying to save towards a target – a car, rent, school fees etc. . Tenor: return is expected on this class of investment over a period of 3 Months (90days). . Access: Withdrawal is not allowed till due date. . Interest rate: 10% annual percentage rate (APR).',
+                              'This is a locked plan aimed at individuals trying to save towards a target – a car, rent, school fees etc. . Tenor: return is expected on this class of investment over a period of 3 Months (90days). . Access: Withdrawal is not allowed till due date. . Interest rate: 8% annual percentage rate (APR).',
                         ),
                       ),
                       SizedBox(

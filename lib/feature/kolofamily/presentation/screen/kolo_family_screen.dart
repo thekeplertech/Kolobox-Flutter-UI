@@ -40,7 +40,8 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
       StreamController<bool>.broadcast();
   bool isLeft = true;
 
-  List<GroupModel> groupModels = [];
+  List<GroupModel> activeGroupModels = [];
+  List<GroupModel> paidGroupModels = [];
 
   // bool isActiveEmpty = true;
   // bool isPaidEmpty = true;
@@ -65,7 +66,14 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
       body: BlocListener<KoloFamilyBloc, KoloFamilyState>(
         listener: (_, state) {
           if (state is GetFamilyState) {
-            groupModels = state.model.types ?? [];
+            activeGroupModels = state.model.types
+                    ?.where((element) => element.isActive)
+                    .toList() ??
+                [];
+            paidGroupModels = state.model.types
+                    ?.where((element) => !element.isActive)
+                    .toList() ??
+                [];
             leftRightStreamController.add(true);
           }
         },
@@ -166,7 +174,8 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
                     stream: leftRightStreamController.stream,
                     builder: (_, snapshot) => Column(
                       children: [
-                        if (groupModels.isNotEmpty) ...[
+                        if (activeGroupModels.isNotEmpty ||
+                            paidGroupModels.isNotEmpty) ...[
                           Button(
                             'Create New',
                             backgroundColor: ColorList.lightBlue3Color,
@@ -247,12 +256,12 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
                           ),
                         ),
                         if (isLeft) ...[
-                          if (groupModels.isEmpty)
+                          if (activeGroupModels.isEmpty)
                             getEmptyWidget(true)
                           else
                             getActiveWidget(),
                         ] else ...[
-                          if (groupModels.isEmpty)
+                          if (paidGroupModels.isEmpty)
                             getEmptyWidget(false)
                           else
                             getPaidWidget(),
@@ -358,18 +367,18 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: groupModels.length,
+          itemCount: activeGroupModels.length,
           itemBuilder: (_, index) => Padding(
             padding: const EdgeInsets.only(top: 15),
             child: KoloGroupItemWidget(
-              model: groupModels[index],
+              model: activeGroupModels[index],
               onPressed: () {
                 StateContainer.of(context)
                     .openFundMyKoloBox(fundEnum: KoloboxFundEnum.koloFamily);
                 navigatePush(
                   context,
                   KoloTransactionDetailPage(
-                    groupModel: groupModels[index],
+                    groupModel: activeGroupModels[index],
                     interestAmount: KoloboxFundEnum.koloFamily.getInterest(),
                     isPaid: isLeft,
                     koloboxFundEnum: KoloboxFundEnum.koloFamily,
@@ -393,11 +402,11 @@ class KoloFamilyScreenState extends BaseBlocWidgetState<KoloFamilyScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: groupModels.length,
+          itemCount: paidGroupModels.length,
           itemBuilder: (_, index) => Padding(
             padding: const EdgeInsets.only(top: 15),
             child: KoloGroupItemWidget(
-              model: groupModels[index],
+              model: paidGroupModels[index],
               isPaid: true,
               onPressed: () {
                 // navigatePush(

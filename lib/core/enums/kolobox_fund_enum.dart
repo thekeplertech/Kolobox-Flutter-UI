@@ -368,6 +368,38 @@ extension EnumExtensions on KoloboxFundEnum {
     }
   }
 
+  String getStartDate(String? groupId) {
+    PrefHelper helper = sl();
+    MyEarningDataModel? model = helper.getMyEarningDataModel();
+
+    int? index = model?.earnings?.indexWhere((element) =>
+        element.groupId == (groupId ?? getProductId) &&
+        (element.verified ?? false) &&
+        !(element.canceled ?? true));
+
+    if (index != null && index != -1) {
+      return model?.earnings?[index].startDate ?? '';
+    } else {
+      return '';
+    }
+  }
+
+  String getEndDate(String? groupId) {
+    PrefHelper helper = sl();
+    MyEarningDataModel? model = helper.getMyEarningDataModel();
+
+    int? index = model?.earnings?.indexWhere((element) =>
+        element.groupId == (groupId ?? getProductId) &&
+        (element.verified ?? false) &&
+        !(element.canceled ?? true));
+
+    if (index != null && index != -1) {
+      return model?.earnings?[index].endStart ?? '';
+    } else {
+      return '';
+    }
+  }
+
   int tenorAvailableForWithdrawal() {
     PrefHelper helper = sl();
     ProductDataModel? model = helper.getProductDataModel();

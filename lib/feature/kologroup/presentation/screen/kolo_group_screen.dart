@@ -40,7 +40,8 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
       StreamController<bool>.broadcast();
   bool isLeft = true;
 
-  List<GroupModel> groupModels = [];
+  List<GroupModel> activeGroupModels = [];
+  List<GroupModel> paidGroupModels = [];
 
   @override
   void initState() {
@@ -52,14 +53,20 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
 
   @override
   Widget getCustomBloc() {
-    // koloboxFundEnum = StateContainer.of(context).koloboxFundEnum;
     return Scaffold(
       backgroundColor: ColorList.white,
       appBar: const NoAppBar(),
       body: BlocListener<KoloGroupBloc, KoloGroupState>(
         listener: (_, state) {
           if (state is GetGroupState) {
-            groupModels = state.model.types ?? [];
+            activeGroupModels = state.model.types
+                    ?.where((element) => element.isActive)
+                    .toList() ??
+                [];
+            paidGroupModels = state.model.types
+                    ?.where((element) => !element.isActive)
+                    .toList() ??
+                [];
             leftRightStreamController.add(true);
           }
         },
@@ -160,7 +167,8 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
                     stream: leftRightStreamController.stream,
                     builder: (_, snapshot) => Column(
                       children: [
-                        if (groupModels.isNotEmpty) ...[
+                        if (activeGroupModels.isNotEmpty ||
+                            paidGroupModels.isNotEmpty) ...[
                           Button(
                             'Create New',
                             backgroundColor: ColorList.lightBlue3Color,
@@ -241,12 +249,12 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
                           ),
                         ),
                         if (isLeft) ...[
-                          if (groupModels.isEmpty)
+                          if (activeGroupModels.isEmpty)
                             getEmptyWidget(true)
                           else
                             getActiveWidget(),
                         ] else ...[
-                          if (groupModels.isEmpty)
+                          if (paidGroupModels.isEmpty)
                             getEmptyWidget(false)
                           else
                             getPaidWidget(),
@@ -349,18 +357,18 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: groupModels.length,
+          itemCount: activeGroupModels.length,
           itemBuilder: (_, index) => Padding(
             padding: const EdgeInsets.only(top: 15),
             child: KoloGroupItemWidget(
-              model: groupModels[index],
+              model: activeGroupModels[index],
               onPressed: () {
                 StateContainer.of(context)
                     .openFundMyKoloBox(fundEnum: KoloboxFundEnum.koloGroup);
                 navigatePush(
                   context,
                   KoloTransactionDetailPage(
-                    groupModel: groupModels[index],
+                    groupModel: activeGroupModels[index],
                     interestAmount: KoloboxFundEnum.koloGroup.getInterest(),
                     isPaid: isLeft,
                     koloboxFundEnum: KoloboxFundEnum.koloGroup,
@@ -384,11 +392,11 @@ class KoloGroupScreenState extends BaseBlocWidgetState<KoloGroupScreen> {
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: groupModels.length,
+          itemCount: paidGroupModels.length,
           itemBuilder: (_, index) => Padding(
             padding: const EdgeInsets.only(top: 15),
             child: KoloGroupItemWidget(
-              model: groupModels[index],
+              model: paidGroupModels[index],
               isPaid: true,
               onPressed: () {
                 // navigatePush(

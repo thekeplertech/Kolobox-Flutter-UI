@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kolobox_new_app/core/colors/color_list.dart';
 import 'package:kolobox_new_app/core/constants/image_constants.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
+import 'package:kolobox_new_app/feature/account/about_us/presentation/about_us_page.dart';
 import 'package:kolobox_new_app/feature/account/bank_details/presentation/bank_details_page.dart';
 import 'package:kolobox_new_app/feature/account/history/presentation/history_page.dart';
 import 'package:kolobox_new_app/feature/account/notification/presentation/notification_settings_page.dart';
@@ -69,12 +70,12 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               },
                               child: getSelectionOptionWidget(
                                   'History', imageHistoryIcon)),
-                          Divider(
-                              color: ColorList.greyDisableCircleColor,
-                              height: 1,
-                              thickness: 1),
-                          getSelectionOptionWidget('Account Verification',
-                              imageAccountVerificationIcon),
+                          // Divider(
+                          //     color: ColorList.greyDisableCircleColor,
+                          //     height: 1,
+                          //     thickness: 1),
+                          // getSelectionOptionWidget('Account Verification',
+                          //     imageAccountVerificationIcon),
                           Divider(
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
@@ -136,7 +137,19 @@ class SettingsScreenState extends BaseBlocWidgetState<SettingsScreen> {
                               color: ColorList.greyDisableCircleColor,
                               height: 1,
                               thickness: 1),
-                          getSelectionOptionWidget('About', imageAboutIcon),
+                          InkWell(
+                            onTap: () {
+                              BlocProvider.of<DashboardBloc>(context)
+                                  .add(HideDisableBottomScreenEvent());
+                              navigatePush(context, const AboutUsPage())
+                                  .then((value) {
+                                BlocProvider.of<DashboardBloc>(context)
+                                    .add(ShowEnableBottomScreenEvent());
+                              });
+                            },
+                            child: getSelectionOptionWidget(
+                                'About', imageAboutIcon),
+                          ),
                           Divider(
                               color: ColorList.greyDisableCircleColor,
                               height: 1,

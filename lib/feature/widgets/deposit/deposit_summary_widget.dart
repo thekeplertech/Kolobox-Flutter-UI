@@ -8,17 +8,14 @@ import 'package:kolobox_new_app/core/enums/period_enum.dart';
 import 'package:kolobox_new_app/core/ui/style/app_style.dart';
 import 'package:kolobox_new_app/core/ui/widgets/button.dart';
 import 'package:kolobox_new_app/core/ui/widgets/currency_text_input_formatter.dart';
+import 'package:kolobox_new_app/feature/pay_web_view/presentation/pay_web_view_page.dart';
 import 'package:kolobox_new_app/feature/widgets/confirm_pin_and_pay/bloc/confirm_pin_and_pay_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/inherited_state_container.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 
 import '../../../core/colors/color_list.dart';
 import '../../../core/constants/app_constants.dart';
-import '../../../core/pay_stack_payment_gateway/pay_stack_payment.dart';
-import '../../../core/ui/widgets/toast_widget.dart';
 import '../../../core/utils/date_helper.dart';
-import '../../../core/utils/utils.dart';
-import '../../../di/injection_container.dart';
 import '../../dashboard/data/models/create_family_request_model.dart';
 import '../../dashboard/data/models/create_group_request_model.dart';
 import '../../dashboard/data/models/create_investment_goal_request_model.dart';
@@ -87,18 +84,30 @@ class _DepositSummaryWidgetState
                   familyUserId: state.createGroupResponseModel?.subUser?.id,
                 );
               }
-              callPayment(
+              // callPayment(
+              //     state.requestModel.depositAmount,
+              //     state.responseModel.data?.accessCode ?? '',
+              //     state.responseModel.data?.reference ?? '');
+              callPaymentString(
+                  state.responseModel.data?.authorizationUrl ?? '',
                   state.requestModel.depositAmount,
                   state.responseModel.data?.accessCode ?? '',
                   state.responseModel.data?.reference ?? '');
             });
           } else if (state is TopUpState) {
             Future.delayed(const Duration(milliseconds: 200), () {
-              callPayment(
+              callPaymentString(
+                  state.responseModel.topUpData?.authorizationUrl ?? '',
                   state.requestModel.depositAmount,
                   state.responseModel.topUpData?.accessCode ?? '',
                   state.responseModel.topUpData?.reference ?? '');
             });
+            // Future.delayed(const Duration(milliseconds: 200), () {
+            //   callPayment(
+            //       state.requestModel.depositAmount,
+            //       state.responseModel.topUpData?.accessCode ?? '',
+            //       state.responseModel.topUpData?.reference ?? '');
+            // });
           } else if (state is CreateInvestmentGoalState) {
             // Goal created pay the save amount Go to success page
             Future.delayed(const Duration(milliseconds: 300), () {
@@ -470,24 +479,24 @@ class _DepositSummaryWidgetState
   void initiatePayment() {
     logger?.d('In Active Product $isInActive');
 
-    PayStackPayment payStackPayment = sl();
-
-    if (!payStackPayment.initialized) {
-      Utils.showToast(
-          context,
-          ToastWidget(
-            'Payment gateway is not initialized. Please try after a moment.',
-            borderColor: ColorList.redDarkColor,
-            backgroundColor: ColorList.white,
-            textColor: ColorList.black,
-            messageIcon: imageCloseRed,
-            closeWidget: Image.asset(
-              imageClose,
-              color: ColorList.black,
-            ),
-          ));
-      return;
-    }
+    // PayStackPayment payStackPayment = sl();
+    //
+    // if (!payStackPayment.initialized) {
+    //   Utils.showToast(
+    //       context,
+    //       ToastWidget(
+    //         'Payment gateway is not initialized. Please try after a moment.',
+    //         borderColor: ColorList.redDarkColor,
+    //         backgroundColor: ColorList.white,
+    //         textColor: ColorList.black,
+    //         messageIcon: imageCloseRed,
+    //         closeWidget: Image.asset(
+    //           imageClose,
+    //           color: ColorList.black,
+    //         ),
+    //       ));
+    //   return;
+    // }
 
     if (StateContainer.of(context).isCreateGroup() ?? false) {
       // create group and create family case
@@ -594,43 +603,82 @@ class _DepositSummaryWidgetState
     }
   }
 
-  void callPayment(
-      String amount, String accessCode, String referenceCode) async {
-    PayStackPayment payStackPayment = sl();
-    await payStackPayment.checkout(
-      context,
-      amount,
-      prefHelper?.getLoginResponseModel().email ?? '',
-      referenceCode,
-      accessCode,
-      (referenceCode) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          if (!isInActive && isKoloTarget()) {
-            // Create Goal
-            BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
-              CreateInvestmentGoalEvent(
-                model: CreateInvestmentGoalRequestModel(
-                  purpose: StateContainer.of(context).getTargetName() ?? '',
-                  amount: StateContainer.of(context).getTargetAmount(),
-                  dueDate: DateHelper.getTextFromDateTime(
-                      StateContainer.of(context).getTargetDate()!,
-                      'yyyy-MM-dd'),
-                ),
-                amount: amount,
-                referenceCode: referenceCode,
+  // void callPayment(String amount, String accessCode,
+  //     String referenceCode) async {
+  //   PayStackPayment payStackPayment = sl();
+  //   await payStackPayment.checkout(
+  //     context,
+  //     amount,
+  //     prefHelper
+  //         ?.getLoginResponseModel()
+  //         .email ?? '',
+  //     referenceCode,
+  //     accessCode,
+  //         (referenceCode) {
+  //       Future.delayed(const Duration(milliseconds: 300), () {
+  //         if (!isInActive && isKoloTarget()) {
+  //           // Create Goal
+  //           BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+  //             CreateInvestmentGoalEvent(
+  //               model: CreateInvestmentGoalRequestModel(
+  //                 purpose: StateContainer.of(context).getTargetName() ?? '',
+  //                 amount: StateContainer.of(context).getTargetAmount(),
+  //                 dueDate: DateHelper.getTextFromDateTime(
+  //                     StateContainer.of(context).getTargetDate()!,
+  //                     'yyyy-MM-dd'),
+  //               ),
+  //               amount: amount,
+  //               referenceCode: referenceCode,
+  //             ),
+  //           );
+  //         } else {
+  //           onSuccess(amount, referenceCode);
+  //         }
+  //       });
+  //     },
+  //         (errorMessage) {
+  //       Future.delayed(const Duration(milliseconds: 300), () {
+  //         onFailure(amount, referenceCode, errorMessage);
+  //       });
+  //     },
+  //   );
+  // }
+
+  Future<void> callPaymentString(String authorizationUrl, String amount,
+      String accessCode, String referenceCode) async {
+    if (authorizationUrl.isEmpty) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        onFailure(amount, referenceCode, 'Authorization Url error');
+      });
+    }
+    dynamic result = await navigatePush(
+        context, PayWebViewPage(authorizationUrl: authorizationUrl));
+
+    if (result == 'failed') {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        onFailure(amount, referenceCode, 'Transaction terminated.');
+      });
+    } else {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (!isInActive && isKoloTarget()) {
+          // Create Goal
+          BlocProvider.of<ConfirmPinAndPayBloc>(context).add(
+            CreateInvestmentGoalEvent(
+              model: CreateInvestmentGoalRequestModel(
+                purpose: StateContainer.of(context).getTargetName() ?? '',
+                amount: StateContainer.of(context).getTargetAmount(),
+                dueDate: DateHelper.getTextFromDateTime(
+                    StateContainer.of(context).getTargetDate()!, 'yyyy-MM-dd'),
               ),
-            );
-          } else {
-            onSuccess(amount, referenceCode);
-          }
-        });
-      },
-      (errorMessage) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          onFailure(amount, referenceCode, errorMessage);
-        });
-      },
-    );
+              amount: amount,
+              referenceCode: result,
+            ),
+          );
+        } else {
+          onSuccess(amount, result);
+        }
+      });
+    }
   }
 
   void onSuccess(String amount, String referenceCode) {
