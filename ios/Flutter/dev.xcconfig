@@ -1,0 +1,5 @@
+// This is a generated file; do not edit or check into version control.
+#include "Generated.xcconfig"
+FLUTTER_TARGET=lib/config/main_dev.dart
+PRODUCT_BUNDLE_IDENTIFIER=com.kolobox.kolobox.dev
+APP_NAME=Dev Kolobox
