@@ -406,19 +406,19 @@ class ForgotPasswordScreenState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    comingSoon();
-                  },
-                  child: Text(
-                    'Didn’t recieve OTP?',
-                    style: TextStyle(
-                      color: ColorList.blackThirdColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     comingSoon();
+                //   },
+                //   child: Text(
+                //     'Didn’t recieve OTP?',
+                //     style: TextStyle(
+                //       color: ColorList.blackThirdColor,
+                //       fontSize: 12,
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
+                // ),
                 StreamBuilder<int>(
                     stream: resendStreamController.stream,
                     builder: (context, snapshot) {

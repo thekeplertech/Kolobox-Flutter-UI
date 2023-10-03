@@ -870,21 +870,21 @@ class KoloTransactionDetailState
         ],
       );
 
-  void onClickRecurringDeposit() {
-    comingSoon();
-    // StateContainer.of(context).isFromDetail = true;
-    // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
-    // showCustomBottomSheet(const EnableRecurringDepositWidget()).then((value) {
-    //   BlocProvider.of<DashboardBloc>(context)
-    //       .add(ShowEnableBottomScreenEvent());
-    //   StateContainer.of(context).isFromDetail = false;
-    //   isRecentEmpty = false;
-    //   isFailedEmpty = false;
-    //   leftRightStreamController.add(true);
-    //   isRecurringDeposit = true;
-    //   recurringDepositStreamController.add(true);
-    // });
-  }
+  // void onClickRecurringDeposit() {
+  //   comingSoon();
+  // StateContainer.of(context).isFromDetail = true;
+  // BlocProvider.of<DashboardBloc>(context).add(HideDisableBottomScreenEvent());
+  // showCustomBottomSheet(const EnableRecurringDepositWidget()).then((value) {
+  //   BlocProvider.of<DashboardBloc>(context)
+  //       .add(ShowEnableBottomScreenEvent());
+  //   StateContainer.of(context).isFromDetail = false;
+  //   isRecentEmpty = false;
+  //   isFailedEmpty = false;
+  //   leftRightStreamController.add(true);
+  //   isRecurringDeposit = true;
+  //   recurringDepositStreamController.add(true);
+  // });
+  // }
 
   void onClickDeposit() {
     StateContainer.of(context).openFundMyKoloBox(
@@ -929,87 +929,87 @@ class KoloTransactionDetailState
     });
   }
 
-  Widget getRecentDepositWidget() {
-    return Column(
-      children: [
-        // ListView.builder(
-        //   shrinkWrap: true,
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   itemCount: 5,
-        //   itemBuilder: (_, index) => Padding(
-        //     padding: const EdgeInsets.only(top: 5),
-        //     child: TransactionsItemWidget(
-        //       onPressed: () {
-        //         onClickTransaction();
-        //       },
-        //     ),
-        //   ),
-        // ),
-        const SizedBox(
-          height: 20,
-        ),
-        Button(
-          'History',
-          backgroundColor: ColorList.greyLight10Color,
-          textColor: ColorList.blackSecondColor,
-          overlayColor: ColorList.blueColor,
-          borderRadius: 32,
-          onPressed: () {
-            comingSoon();
-          },
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Divider(
-            thickness: 1, height: 1, color: ColorList.greyDisableCircleColor),
-        const SizedBox(
-          height: 20,
-        ),
-        Button(
-          'Cancel Investment',
-          backgroundColor: ColorList.white,
-          textColor: ColorList.redDarkColor,
-          overlayColor: ColorList.redDark2Color,
-          borderRadius: 32,
-          onPressed: () {
-            comingSoon();
-            // StateContainer.of(context).isFromDetail = true;
-            // BlocProvider.of<DashboardBloc>(context)
-            //     .add(HideDisableBottomScreenEvent());
-            // showCustomBottomSheet(const CancelInvestmentWidget()).then((value) {
-            //   BlocProvider.of<DashboardBloc>(context)
-            //       .add(ShowEnableBottomScreenEvent());
-            //   StateContainer.of(context).isFromDetail = false;
-            // });
-          },
-        ),
-      ],
-    );
-  }
+  // Widget getRecentDepositWidget() {
+  //   return Column(
+  //     children: [
+  // ListView.builder(
+  //   shrinkWrap: true,
+  //   physics: const NeverScrollableScrollPhysics(),
+  //   itemCount: 5,
+  //   itemBuilder: (_, index) => Padding(
+  //     padding: const EdgeInsets.only(top: 5),
+  //     child: TransactionsItemWidget(
+  //       onPressed: () {
+  //         onClickTransaction();
+  //       },
+  //     ),
+  //   ),
+  // ),
+  // const SizedBox(
+  //   height: 20,
+  // ),
+  // Button(
+  //   'History',
+  //   backgroundColor: ColorList.greyLight10Color,
+  //   textColor: ColorList.blackSecondColor,
+  //   overlayColor: ColorList.blueColor,
+  //   borderRadius: 32,
+  //   onPressed: () {
+  //     comingSoon();
+  //   },
+  // ),
+  // const SizedBox(
+  //   height: 20,
+  // ),
+  // Divider(
+  //     thickness: 1, height: 1, color: ColorList.greyDisableCircleColor),
+  // const SizedBox(
+  //   height: 20,
+  // ),
+  // Button(
+  //   'Cancel Investment',
+  //   backgroundColor: ColorList.white,
+  //   textColor: ColorList.redDarkColor,
+  //   overlayColor: ColorList.redDark2Color,
+  //   borderRadius: 32,
+  //   onPressed: () {
+  //     comingSoon();
+  // StateContainer.of(context).isFromDetail = true;
+  // BlocProvider.of<DashboardBloc>(context)
+  //     .add(HideDisableBottomScreenEvent());
+  // showCustomBottomSheet(const CancelInvestmentWidget()).then((value) {
+  //   BlocProvider.of<DashboardBloc>(context)
+  //       .add(ShowEnableBottomScreenEvent());
+  //   StateContainer.of(context).isFromDetail = false;
+  // });
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Widget getFailedDepositWidget() {
-    return Column(
-      children: [
-        // ListView.builder(
-        //   shrinkWrap: true,
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   itemCount: 5,
-        //   itemBuilder: (_, index) => Padding(
-        //     padding: const EdgeInsets.only(top: 5),
-        //     child: TransactionsItemWidget(
-        //       onPressed: () {
-        //         onClickTransaction();
-        //       },
-        //     ),
-        //   ),
-        // ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
-    );
-  }
+  // Widget getFailedDepositWidget() {
+  //   return Column(
+  //     children: [
+  // ListView.builder(
+  //   shrinkWrap: true,
+  //   physics: const NeverScrollableScrollPhysics(),
+  //   itemCount: 5,
+  //   itemBuilder: (_, index) => Padding(
+  //     padding: const EdgeInsets.only(top: 5),
+  //     child: TransactionsItemWidget(
+  //       onPressed: () {
+  //         onClickTransaction();
+  //       },
+  //     ),
+  //   ),
+  // ),
+  // const SizedBox(
+  //   height: 20,
+  // ),
+  // ],
+  // );
+  // }
 
   void onClickTransaction() {
     // StateContainer.of(context).isFromDetail = true;

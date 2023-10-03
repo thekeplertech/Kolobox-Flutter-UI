@@ -98,16 +98,16 @@ class _BankItemWidgetState extends BaseScreenState<BankItemWidget> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () => comingSoon(),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                  child: Image.asset(
-                    copyIcon,
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () => comingSoon(),
+              //   child: Padding(
+              //     padding:
+              //         const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+              //     child: Image.asset(
+              //       copyIcon,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],

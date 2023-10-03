@@ -132,10 +132,10 @@ class AccountScreenState extends BaseBlocWidgetState<AccountScreen> {
         const SizedBox(
           height: 30,
         ),
-        getShareIdWidget(),
-        const SizedBox(
-          height: 20,
-        ),
+        // getShareIdWidget(),
+        // const SizedBox(
+        //   height: 20,
+        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

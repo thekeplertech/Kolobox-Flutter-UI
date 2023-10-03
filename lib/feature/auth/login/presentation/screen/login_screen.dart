@@ -16,6 +16,7 @@ import 'package:kolobox_new_app/feature/auth/login/data/models/login_response_mo
 import 'package:kolobox_new_app/feature/auth/login/presentation/bloc/login_bloc.dart';
 import 'package:kolobox_new_app/feature/widgets/pin_created_widget.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../core/base/base_bloc_widget.dart';
 import '../../../../../core/ui/widgets/no_overflow_scrollbar_behaviour.dart';
@@ -236,7 +237,12 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                             style: AppStyle.b8Medium
                                 .copyWith(color: ColorList.primaryColor),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => comingSoon(),
+                              ..onTap = () async {
+                                await launchUrl(
+                                  Uri.parse('https://kolobox.ng/tnc.html'),
+                                  mode: LaunchMode.externalApplication,
+                                );
+                              },
                           ),
                           TextSpan(
                             text: ' & ',
@@ -248,7 +254,13 @@ class LoginScreenState extends BaseBlocWidgetState<LoginScreen> {
                             style: AppStyle.b8Medium
                                 .copyWith(color: ColorList.primaryColor),
                             recognizer: TapGestureRecognizer()
-                              ..onTap = () => comingSoon(),
+                              ..onTap = () async {
+                                await launchUrl(
+                                  Uri.parse(
+                                      'https://www.kolobox.ng/privacy-policy.html'),
+                                  mode: LaunchMode.externalApplication,
+                                );
+                              },
                           ),
                         ]),
                       ),

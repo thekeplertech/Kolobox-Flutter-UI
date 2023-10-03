@@ -117,19 +117,19 @@ class _DepositedWithdrawalInfoKoloboxWidgetState
           const SizedBox(
             height: 20,
           ),
-          Button(
-            'Share',
-            backgroundColor: ColorList.lightBlue3Color,
-            textColor: ColorList.primaryColor,
-            overlayColor: ColorList.blueColor,
-            borderRadius: 32,
-            onPressed: () {
-              comingSoon();
-            },
-          ),
-          const SizedBox(
-            height: 20,
-          ),
+          // Button(
+          //   'Share',
+          //   backgroundColor: ColorList.lightBlue3Color,
+          //   textColor: ColorList.primaryColor,
+          //   overlayColor: ColorList.blueColor,
+          //   borderRadius: 32,
+          //   onPressed: () {
+          //     comingSoon();
+          //   },
+          // ),
+          // const SizedBox(
+          //   height: 20,
+          // ),
           Button(
             'Ok',
             backgroundColor: ColorList.primaryColor,

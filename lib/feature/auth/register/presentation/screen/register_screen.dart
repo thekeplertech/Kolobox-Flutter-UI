@@ -16,6 +16,7 @@ import 'package:kolobox_new_app/feature/auth/register/data/models/verify_user_re
 import 'package:kolobox_new_app/feature/auth/register/presentation/bloc/register_bloc.dart';
 import 'package:kolobox_new_app/routes/routes.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../config/flavor_config.dart';
 import '../../../../../core/base/base_bloc_widget.dart';
@@ -287,7 +288,13 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
                                   style: AppStyle.b9Medium
                                       .copyWith(color: ColorList.primaryColor),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => comingSoon(),
+                                    ..onTap = () async {
+                                      await launchUrl(
+                                        Uri.parse(
+                                            'https://kolobox.ng/tnc.html'),
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    },
                                 ),
                                 TextSpan(
                                   text: ' & ',
@@ -299,7 +306,13 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
                                   style: AppStyle.b9Medium
                                       .copyWith(color: ColorList.primaryColor),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () => comingSoon(),
+                                    ..onTap = () async {
+                                      await launchUrl(
+                                        Uri.parse(
+                                            'https://www.kolobox.ng/privacy-policy.html'),
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    },
                                 ),
                               ]),
                             ),
@@ -916,19 +929,19 @@ class RegisterScreenState extends BaseBlocWidgetState<RegisterScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              onTap: () {
-                comingSoon();
-              },
-              child: Text(
-                'Didn’t recieve OTP?',
-                style: TextStyle(
-                  color: ColorList.blackThirdColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     comingSoon();
+            //   },
+            //   child: Text(
+            //     'Didn’t recieve OTP?',
+            //     style: TextStyle(
+            //       color: ColorList.blackThirdColor,
+            //       fontSize: 12,
+            //       fontWeight: FontWeight.w500,
+            //     ),
+            //   ),
+            // ),
             Text(
               'Resend in 0:30 Sec',
               style: TextStyle(
